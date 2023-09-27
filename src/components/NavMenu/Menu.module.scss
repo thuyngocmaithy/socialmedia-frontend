@@ -1,0 +1,21 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+}
+.menu-item-text {
+    // display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    border-radius: 4px;
+    color: var(--text-color);
+    transition: background-color ease-in-out 200ms;
+}
+
+.menu-item-text {
+    &.active {
+        background-color: #000;
+        color: var(--white);
+    }
+}

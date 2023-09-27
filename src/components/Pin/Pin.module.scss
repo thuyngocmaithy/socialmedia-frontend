@@ -1,0 +1,123 @@
+.wrapper {
+    width: 252px;
+    padding: 10px;
+}
+.container-image {
+    background-color: rgb(201, 178, 177);
+    box-sizing: border-box;
+    position: relative;
+    cursor: zoom-in;
+    border-radius: 16px;
+    height: 350px;
+    margin-bottom: 10px;
+}
+.image {
+    width: 100%;
+    border: 0;
+    height: 350px;
+    vertical-align: middle;
+    border-radius: 16px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+// CUSTOMER ICON
+.kVc {
+    display: block;
+}
+.R19 {
+    color: #111111;
+}
+
+.gUZ {
+    fill: currentColor;
+    stroke-width: 0;
+    vertical-align: middle;
+}
+// Button
+.option-top {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 10px 0 0;
+}
+.saveBtn {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #e60023;
+    padding: 14px;
+    border-radius: 24px;
+    cursor: pointer;
+    z-index: 3;
+    position: relative;
+}
+// OPTION_BOTTOM
+.option-bottom {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    display: flex;
+    justify-content: flex-end;
+}
+.link-image {
+    width: 65%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left: 8px;
+}
+.btn-text,
+.btn,
+.btn-end {
+    background-color: rgba(255, 255, 255, 0.8);
+    perspective: 1px;
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin: 10px 10px;
+
+    &:hover {
+        background-color: #f0f0f0;
+    }
+}
+.btn-text,
+.btn {
+    margin-right: -2px;
+}
+.btn-text {
+    display: flex;
+    width: 132px;
+    border-radius: 18px;
+    font-weight: bold;
+}
+
+// INFO_USER
+.link-avatar {
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+}
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    margin-right: 12px;
+    border-radius: 50%;
+    object-fit: cover; //ảnh giữ được tỷ lệ, tràn hình tròn của border radius
+    cursor: pointer;
+}
+.info-pin {
+    h3 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin: 10px 0 5px 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+}
