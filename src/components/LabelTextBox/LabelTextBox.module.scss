@@ -1,0 +1,39 @@
+.wrapper {
+    display: grid;
+    font-size: 60px;
+
+    label {
+        font-size: large;
+
+    }
+
+    input {
+        padding: 10px;
+        /* Khoảng cách bên trong input */
+        border: 2px solid whitesmoke;
+        /* Viền */
+        border-radius: 10px;
+        /* Góc bo tròn viền */
+        font-size: 16px;
+        /* Kích thước chữ */
+        width: 250px;
+        /* Chiều rộng */
+        transition: border-color 0.3s ease-in-out;
+
+        &:hover {
+            border-color: #007bff !important;
+            /* Màu viền thay đổi khi hover */
+        }
+
+        &:focus {
+            outline: 2px black;
+            /* Loại bỏ đường viền xanh khi focus (trên các trình duyệt phổ biến) */
+            border-color: black;
+            /* Màu viền khi focus */
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            /* Hiệu ứng bóng đổ */
+        }
+    }
+
+
+}

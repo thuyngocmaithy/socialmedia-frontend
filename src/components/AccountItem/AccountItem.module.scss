@@ -3,7 +3,7 @@
     align-items: center;
     padding: 6px 16px;
     cursor: pointer;
-
+    
     &:hover {
         background: rgba(22, 24, 35, 0.03);
     }
@@ -22,7 +22,7 @@
 }
 
 .name {
-    font-size: 1.6rem;
+    font-size: 30px;
     font-weight: 500;
 }
 
@@ -32,6 +32,6 @@
 }
 
 .username {
-    font-size: 1.4rem;
+    font-size: 20px;
     color: rgba(22, 24, 35, 0.5);
 }

@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import Switch from '@mui/material/Switch';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
+import { Router, Route, Link, NavLink } from 'react-router-dom';
 
 import styles from './Header.module.scss';
 import Menu from '../../components/Popper/Menu';
@@ -51,6 +51,7 @@ function Header() {
         },
     ];
 
+    const userpage = { title: 'Userpage', to: config.routes.personal }
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
@@ -58,7 +59,7 @@ function Header() {
                 <Link to={config.routes.home} className={cx('logo-link')}>
                     <LogoPinterest className={cx('gUZ', 'GjR', 'kVc')} />
                 </Link>
-
+            
                 <NavMenu menu={menuNavbarLeft} />
 
                 {/* THANH TÌM KIẾM */}
@@ -77,8 +78,10 @@ function Header() {
                         widthBody="maxContent"
                     />
 
-                    <Link className={cx('link-avatar')} to="">
-                        <Image src="../avt.jpg" className={cx('action', 'user-avatar')} alt="Nguyen Van A" />
+                    <Link className={cx('link-avatar')} to={config.routes.personal}>
+                        <Image src="../avt.jpg" className={cx('action', 'user-avatar')} alt="Nguyen Van A" onClick={userpage} />
+                        {/* truy cập trang cá nhân ở đây */}
+                   
                     </Link>
                     <Menu className={cx('action')} items={userMenu} onChange={handleMenuChange}>
                         <button className={cx('more-btn')}>
