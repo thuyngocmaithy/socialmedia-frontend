@@ -1,49 +1,46 @@
-$default-text-color : black;
-$default-background-color : white;
-$circle-radius : 50%;
-
-
+$default-text-color: black;
+$default-background-color: white;
+$circle-radius: 50%;
 
 .wrapper {
     display: flex;
     flex-wrap: wrap;
     margin-right: 20%;
-    margin-top: 4%;
+    margin-top: 2%;
     margin-left: 30%;
+    margin-bottom: 10%;
 
-    h2 {
-        font-weight: bold;
+    h1 {
         color: red;
-        font-size: large;
+        font-weight: bold;
     }
 
-    p {
+    .discription {
+        margin-top: 10px;
         font-size: medium;
-        color: blue;
+        color: black;
+        width: 520px;
     }
 
     .mainEditor {
         font-size: 100px;
         margin-top: 20px;
         background-color: white;
-        width: 500px;
+        width: 550px;
 
         .name-and-lastname {
             display: flex;
-            /* Sử dụng Flexbox */
             align-items: center;
-            /* Căn giữa các phần tử theo chiều dọc */
         }
 
         .setUserProfilePhoto {
             display: grid;
-            /* Sử dụng lưới */
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            /* Cột có độ rộng tối thiểu 150px và co tỷ lệ 1fr */
             gap: 10px;
-            /* Khoảng cách giữa các đối tượng */
 
             .UserPhoto {
+                justify-content: center;
+                align-items: center;
 
                 img {
                     width: 150px;
@@ -54,12 +51,13 @@ $circle-radius : 50%;
             }
 
             .setUserProfilePhoto-btn {
+                display: flex;
+                justify-content: center;
+                align-items: center;
 
-
-                .btn {
+                .btn-change {
                     width: 150px;
                     height: 50px;
-
                     border-radius: 15px;
                     font-size: 18px;
                     font-weight: bold;
@@ -70,15 +68,32 @@ $circle-radius : 50%;
                         background: rgb(210, 189, 189);
                     }
                 }
-
-
             }
-
-
-
         }
-
     }
 
+    @media (max-width: 768px) {
+        margin-right: 10%;
+        margin-left: 10%;
 
+        .discription {
+            width: 100%;
+        }
+
+        .mainEditor {
+            width: 100%;
+
+            .setUserProfilePhoto {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+
+            .setUserProfilePhoto-btn {
+                .btn-change {
+                    width: 100px;
+                    height: 40px;
+                    font-size: 16px;
+                }
+            }
+        }
+    }
 }

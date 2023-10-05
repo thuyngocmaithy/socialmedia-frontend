@@ -5,15 +5,17 @@
 
 
     label {
+        font-weight: bold !important;
         font-size: large;
         font-weight: lighter;
         margin-left: 3px;
+        margin-bottom: 10px;
     }
 
     input {
         padding: 10px;
         /* Khoảng cách bên trong input */
-        border: 2px solid whitesmoke;
+        border: 2px solid;
         /* Viền */
         border-radius: 10px;
         /* Góc bo tròn viền */
@@ -23,9 +25,13 @@
         /* Chiều rộng */
         transition: border-color 0.3s ease-in-out;
 
+        .inputClassname {
+            position: fixed;
+        }
+
         &:hover {
             border-color: #007bff !important;
-            border: solid 5px;
+            border: solid 3px;
             /* Màu viền thay đổi khi hover */
         }
 
@@ -50,19 +56,19 @@
 
     //dung` cho rieng le
     .small {
-        width: 200px !important;
+        width: 240px !important;
         height: 45px !important;
     }
 
     //dung cho binh thuong
     .medium {
-        width: 400px !important;
+        width: 500px !important;
         height: 50px !important;
     }
 
     //dung` cho story
     .large {
-        width: 450px !important;
+        width: 500px !important;
         height: 100px !important;
     }
 

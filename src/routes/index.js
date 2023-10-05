@@ -3,7 +3,7 @@ import config from '../config';
 // Pages
 import Home from '../pages/Home';
 import Create from '../pages/Create';
-import UserProfile from '../pages/User';
+import UserProfile from '../pages/User/UserProfile';
 
 //Không đăng nhập vẫn vào được
 const publicRoutes = [
