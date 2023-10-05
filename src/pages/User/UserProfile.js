@@ -4,9 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../components/LabelTextBox/LabelTextBox.module.scss'
 
 
-import AccountItem from '../../components/AccountItem';
+
 import Image from '../../components/Image';
-import Button from '../../components/Button';
 import LabelTextBox from '../../components/LabelTextBox';
 const cx = classNames.bind(styles);
 
@@ -50,4 +49,4 @@ function UserProfile() {
         </>
     );
 }
-export default Personal;
+export default UserProfile;
