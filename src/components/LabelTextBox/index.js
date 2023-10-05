@@ -3,25 +3,19 @@ import style from './LabelTextBox.module.scss';
 import PropTypes from 'prop-types';
 import { useState, forwardRef } from 'react';
 
-function LabelTextBox({ headerName,
+function LabelTextBox({
+    headerName,
     placeholder,
-    width,
-    height,
     label,
     text,
     editable = true,
     hoverable = true,
     onChange,
+    selectedSize,
     ...passProps
 
 }) {
 
-
-    let UserData = {
-        headerName: 'họ tên',
-        label: 'username : ',
-        placeholder: 'nhập họ tên',
-    };
 
 
     const cx = classNames.bind(style);
@@ -33,21 +27,39 @@ function LabelTextBox({ headerName,
         }
     };
 
-
+    let inputClassname = '';
+    switch (selectedSize) {
+        case 'small':
+            inputClassname = 'small';
+            break;
+        case 'medium':
+            inputClassname = 'medium';
+            break;
+        case 'large':
+            inputClassname = 'large';
+            break;
+        default:
+            // Nếu không có selectedSize hoặc không khớp, sử dụng một class mặc định hoặc không có class
+            break;
+    }
+    // console.log(inputClassname);
+    const wrapperClasses = cx('wrapper');
     return (
         <>
 
-            <div className={cx('wrapper')}>
-                <h6>{UserData.headerName}</h6>
-                <label>{UserData.label}</label>
-                <input id="input text"
+            <div className={wrapperClasses}>
+                <h6>{headerName}</h6>
+                <label>{label}</label>
+                <input id="input-text"
                     type="text"
-                    placeholder={UserData.placeholder}
+                    placeholder={placeholder}
                     value={inputValue}
                     disabled={!editable}
                     onChange={handleChange}
+                    className={cx(inputClassname)}
 
                 />
+                {/* href */}
 
             </div>
 
@@ -59,13 +71,12 @@ LabelTextBox.propTypes = {
 
     headerName: PropTypes.string,
     placeholder: PropTypes.string,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
     label: PropTypes.string,
     text: PropTypes.string,
     editable: PropTypes.bool,
     hoverable: PropTypes.bool,
     onChange: PropTypes.func,
+    selectedSize: PropTypes.oneOf(['small', 'medium', 'large']),
 
 };
 

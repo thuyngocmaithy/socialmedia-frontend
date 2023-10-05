@@ -1,10 +1,13 @@
 .wrapper {
     display: grid;
     font-size: 60px;
+    padding: 10px;
+
 
     label {
         font-size: large;
-
+        font-weight: lighter;
+        margin-left: 3px;
     }
 
     input {
@@ -22,17 +25,45 @@
 
         &:hover {
             border-color: #007bff !important;
+            border: solid 5px;
             /* Màu viền thay đổi khi hover */
         }
 
         &:focus {
-            outline: 2px black;
+            outline: 2px #007bff;
             /* Loại bỏ đường viền xanh khi focus (trên các trình duyệt phổ biến) */
-            border-color: black;
+            border-color: 5px #007bff;
             /* Màu viền khi focus */
             box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
             /* Hiệu ứng bóng đổ */
+
         }
+
+    }
+
+    input::placeholder {
+
+        font-size: 15px;
+        color: #000;
+
+    }
+
+    //dung` cho rieng le
+    .small {
+        width: 200px !important;
+        height: 45px !important;
+    }
+
+    //dung cho binh thuong
+    .medium {
+        width: 400px !important;
+        height: 50px !important;
+    }
+
+    //dung` cho story
+    .large {
+        width: 450px !important;
+        height: 100px !important;
     }
 
 
