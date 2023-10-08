@@ -3,12 +3,13 @@ import styles from './UserProfile.module.scss'
 
 import { useState } from "react"
 
-import PopupForm from '../../components/Popper/PopupForm/PopupForm';
-import Image from '../../components/Image';
-import LabelTextBox from '../../components/LabelTextBox';
+import PopupForm from '../../../components/Popper/PopupForm/PopupForm';
+import Image from '../../../components/Image';
+import LabelTextBox from '../../../components/LabelTextBox';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../../components/LabelTextBox/LabelTextBox.module.scss'
-import BottomBar from '../../components/BottomBar/BottomBar';
+// import '../../components/LabelTextBox/LabelTextBox.module.scss'
+import BottomBar from '../../../components/BottomBar/BottomBar';
+import Options from '../../../components/Options/Options';
 const cx = classNames.bind(styles);
 
 function UserProfile() {
@@ -19,6 +20,11 @@ function UserProfile() {
         size: 'small',
     };
 
+    const genders = {
+        male: 'Nam',
+        female: 'Nữ',
+        orther: 'khác',
+    };
 
     const [isPopupVisible, setPopupVisible] = useState(false);
 
@@ -33,10 +39,11 @@ function UserProfile() {
     return (
         <>
             <div className={cx('wrapper')}>
-                <h1>Chỉnh sửa hồ sơ</h1>
 
-                <p className={cx('discription')}>Hãy giữ riêng tư thông tin cá nhân của bạn. Thông tin bạn thêm vào đây hiển thị cho bất kỳ ai có thể xem hồ sơ của bạn.</p>
                 <div className={cx('mainEditor')}>
+                    <h1>Chỉnh sửa hồ sơ</h1>
+
+                    <p className={cx('discription')}>Hãy giữ riêng tư thông tin cá nhân của bạn. Thông tin bạn thêm vào đây hiển thị cho bất kỳ ai có thể xem hồ sơ của bạn.</p>
                     <div className={cx('setUserProfilePhoto')}>
 
                         <div className={cx('UserPhoto')}>
@@ -51,16 +58,15 @@ function UserProfile() {
                         </div>
                     </div>
                     <div className={cx('name-and-lastname')}>
-                        <LabelTextBox placeholder={UserData.placeholder} label={UserData.label} size={UserData.size} selectedSize={UserData.size} />
+                        <LabelTextBox placeholder={UserData.placeholder} label={UserData.label} selectedSize={UserData.size} />
                         <LabelTextBox placeholder={'Nhập họ'} label={'Họ'} size={UserData.size} selectedSize={UserData.size} />
                     </div>
+
                     <LabelTextBox placeholder={'Giới thiệu câu chuyện của bạn'} label={'Giới thiệu'} selectedSize={'large'} />
                     <LabelTextBox placeholder={'Thêm liên kết để hướng lưu lượng vào trang web'} label={'Trang web'} selectedSize={'medium'} />
                     <LabelTextBox placeholder={'Tên người dùng'} label={'Tên người dùng'} selectedSize={'medium'} />
+
                 </div>
-
-
-
 
             </div >
 

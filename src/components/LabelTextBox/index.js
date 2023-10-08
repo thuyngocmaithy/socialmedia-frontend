@@ -1,31 +1,33 @@
-import classNames from "classnames/bind";
+import React, { useState, useEffect } from 'react';
+import classNames from 'classnames/bind';
 import style from './LabelTextBox.module.scss';
 import PropTypes from 'prop-types';
-import { useState, forwardRef } from 'react';
 
 function LabelTextBox({
-    headerName,
+    name,
     placeholder,
     label,
+    type,
     text,
     editable = true,
     hoverable = true,
     onChange,
     selectedSize,
     ...passProps
-
 }) {
-
-
-
     const cx = classNames.bind(style);
-    const [inputValue, setinputValue] = useState("");
+    const [inputValue, setInputValue] = useState(text); // Sử dụng giá trị text từ prop
 
     const handleChange = (event) => {
         if (editable) {
-            setinputValue(event.target.value);
+            setInputValue(event.target.value);
         }
     };
+
+    useEffect(() => {
+        // Update giá trị inputValue khi prop text thay đổi
+        setInputValue(text);
+    }, [text]);
 
     let inputClassname = '';
     switch (selectedSize) {
@@ -42,43 +44,34 @@ function LabelTextBox({
             // Nếu không có selectedSize hoặc không khớp, sử dụng một class mặc định hoặc không có class
             break;
     }
-    // console.log(inputClassname);
+
     const wrapperClasses = cx('wrapper');
     return (
-        <>
-
-            <div className={wrapperClasses}>
-                <h6>{headerName}</h6>
-                <label>{label}</label>
-                <input id="input-text"
-                    type="text"
-                    placeholder={placeholder}
-                    value={inputValue}
-                    disabled={!editable}
-                    onChange={handleChange}
-                    className={cx(inputClassname)}
-
-                />
-                {/* href */}
-
-            </div>
-
-        </>
+        <div className={wrapperClasses}>
+            <label>{label}</label>
+            <input
+                id="input-text"
+                type={type}
+                placeholder={placeholder}
+                value={inputValue}
+                disabled={!editable}
+                onChange={handleChange}
+                className={cx(inputClassname)}
+            />
+        </div>
     );
 }
 
 LabelTextBox.propTypes = {
-
-    headerName: PropTypes.string,
+    name: PropTypes.string,
     placeholder: PropTypes.string,
     label: PropTypes.string,
+    type: PropTypes.oneOf(['text', 'date', 'password', 'radio']),
     text: PropTypes.string,
     editable: PropTypes.bool,
     hoverable: PropTypes.bool,
     onChange: PropTypes.func,
     selectedSize: PropTypes.oneOf(['small', 'medium', 'large']),
-
 };
-
 
 export default LabelTextBox;

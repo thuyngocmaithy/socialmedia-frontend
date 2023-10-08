@@ -3,6 +3,8 @@ $default-background-color: white;
 $circle-radius: 50%;
 
 .wrapper {
+
+
     display: flex;
     flex-wrap: wrap;
     margin-right: 20%;
@@ -10,19 +12,23 @@ $circle-radius: 50%;
     margin-left: 30%;
     margin-bottom: 10%;
 
-    h1 {
-        color: red;
-        font-weight: bold;
-    }
 
-    .discription {
-        margin-top: 10px;
-        font-size: medium;
-        color: black;
-        width: 520px;
-    }
 
     .mainEditor {
+
+
+        h1 {
+            color: red;
+            font-weight: bold;
+        }
+
+        .discription {
+            margin-top: 10px;
+            font-size: medium;
+            color: black;
+            width: 520px;
+        }
+
         font-size: 100px;
         margin-top: 20px;
         background-color: white;
@@ -31,7 +37,10 @@ $circle-radius: 50%;
         .name-and-lastname {
             display: flex;
             align-items: center;
+
         }
+
+
 
         .setUserProfilePhoto {
             display: grid;
@@ -70,6 +79,29 @@ $circle-radius: 50%;
                 }
             }
         }
+    }
+
+
+    .GenderOption {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .GenderOptionLabel {
+        font-size: large;
+        font-weight: bold;
+        margin-bottom: 10px;
+        /* Đặt khoảng cách dưới giữa label và select */
+    }
+
+    select {
+        padding: 10px;
+        border: 2px solid;
+        border-radius: 10px;
+        font-size: 16px;
+        width: 240px;
+        transition: border-color 0.3s ease-in-out;
     }
 
     @media (max-width: 768px) {
