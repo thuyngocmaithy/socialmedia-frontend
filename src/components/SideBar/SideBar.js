@@ -1,58 +1,43 @@
+import React from 'react';
+import { NavLink, Route, Switch, Navigate, Routes } from 'react-router-dom'; // Import NavLink for navigation
 import classNames from 'classnames/bind';
-import { useState } from 'react'
-
-import styles from './SideBar.module.scss'
+import styles from './SideBar.module.scss';
 import MenuItem from '../NavMenu/MenuItem';
 
 function SideBar() {
-
     const cx = classNames.bind(styles);
+
     const SideBarItems = [
         {
-            title: 'UserMainSettings',
-            to: '/user'
+            title: 'UserProfile',
+            to: '/user/profile',
         },
-
         {
             title: 'Private About User',
             to: '/user/private',
-        }
+        },
     ];
 
-    const [selectedItem, setSelectedItem] = useState('user');
-    const handleItemClick = (item) => {
-        setSelectedItem(item);
-    };
-
-    const renderMenuItems = () => {
-        return SideBarItems.map((item, index) => {
-            return (
-                <MenuItem
-                    key={index}
-                    data={item}
-                    onClick={() => {
-                        if (item.to) {
-
-                        }
-                        else {
-
-                        }
-                    }}
-                />)
-        }
-        )
-    };
-
-
-    return (<>
-
+    return (
         <div className={cx('sidebar')}>
-            {renderMenuItems()}
+            <ul>
+                {SideBarItems.map((item, index) => (
+                    <MenuItem
+                        key={index}
+                        data={item}
+
+                    />
+                ))}
+                {/* Thêm Route bổ sung cho trang UserProfile */}
+                {/* <Routes>
+                    <Route exact path="/user">
+
+                    </Route>
+                </Routes> */}
+                <Navigate to="/user/profile" /> {/* Điều hướng đến trang UserProfile */}
+            </ul>
         </div>
-
-
-
-    </>);
+    );
 }
 
 export default SideBar;

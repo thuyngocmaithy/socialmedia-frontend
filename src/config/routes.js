@@ -1,8 +1,9 @@
 const routes = {
     home: '/',
     create: '/create',
-    user: '/user',
+    userProfile: '/user/profile',
     userPrivate: '/user/private',
+    users: '/user',
 };
 
 export default routes;

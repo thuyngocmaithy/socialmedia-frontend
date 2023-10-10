@@ -2,8 +2,14 @@ $default-text-color: black;
 $default-background-color: white;
 $circle-radius: 50%;
 
-.wrapper {
 
+
+.allpages {
+    display: flex;
+
+}
+
+.wrapper {
 
     display: flex;
     flex-wrap: wrap;
@@ -13,8 +19,12 @@ $circle-radius: 50%;
     margin-bottom: 10%;
 
 
-
     .mainEditor {
+
+        font-size: 100px;
+        margin-top: 20px;
+        background-color: white;
+        width: 550px;
 
 
         h1 {
@@ -28,11 +38,6 @@ $circle-radius: 50%;
             color: black;
             width: 520px;
         }
-
-        font-size: 100px;
-        margin-top: 20px;
-        background-color: white;
-        width: 550px;
 
         .name-and-lastname {
             display: flex;

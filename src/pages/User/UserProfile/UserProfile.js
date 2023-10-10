@@ -6,8 +6,9 @@ import { useState } from "react"
 import PopupForm from '../../../components/Popper/PopupForm/PopupForm';
 import Image from '../../../components/Image';
 import LabelTextBox from '../../../components/LabelTextBox';
+import SideBar from '../../../components/SideBar/SideBar';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import '../../components/LabelTextBox/LabelTextBox.module.scss'
+
 import BottomBar from '../../../components/BottomBar/BottomBar';
 import Options from '../../../components/Options/Options';
 const cx = classNames.bind(styles);

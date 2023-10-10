@@ -51,7 +51,7 @@ function Header() {
         },
     ];
 
-    const userpage = { title: 'Userpage', to: config.routes.user }
+    const userpage = { title: 'Userpage', to: config.routes.userProfile }
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
@@ -78,7 +78,7 @@ function Header() {
                         widthBody="maxContent"
                     />
 
-                    <Link className={cx('link-avatar')} to={config.routes.user}>
+                    <Link className={cx('link-avatar')} to={config.routes.userProfile}>
                         <Image src="../avt.jpg" className={cx('action', 'user-avatar')} alt="Nguyen Van A" onClick={userpage} />
                         {/* truy cập trang cá nhân ở đây */}
 
