@@ -5,7 +5,7 @@ import Home from '../pages/Home';
 import Create from '../pages/Create';
 import UserProfile from '../pages/User/UserProfile/UserProfile';
 import PrivateUserPage from '../pages/User/PrivateUserPage/PrivateUserPage';
-import User from '../pages/User/User';
+import userPassword from '../pages/User/UserPassword/UserPassword';
 
 //Không đăng nhập vẫn vào được
 const publicRoutes = [
@@ -13,7 +13,7 @@ const publicRoutes = [
     { path: config.routes.create, component: Create },
     { path: config.routes.userProfile, component: UserProfile },
     { path: config.routes.userPrivate, component: PrivateUserPage },
-    { path: config.routes.userProfile, component: User }
+    { path: config.routes.userPassword, component: userPassword }
 
 ];
 

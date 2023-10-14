@@ -1,7 +1,9 @@
 import classNames from 'classnames/bind';
 import styles from './UserProfile.module.scss'
 
-import { useState } from "react"
+import { useState } from "react";
+
+import { NavLink, Route, Switch, Navigate, Routes, BrowserRouter } from 'react-router-dom'; // Import NavLink for navigation
 
 import PopupForm from '../../../components/Popper/PopupForm/PopupForm';
 import Image from '../../../components/Image';
@@ -10,7 +12,6 @@ import SideBar from '../../../components/SideBar/SideBar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import BottomBar from '../../../components/BottomBar/BottomBar';
-import Options from '../../../components/Options/Options';
 const cx = classNames.bind(styles);
 
 function UserProfile() {
@@ -19,12 +20,6 @@ function UserProfile() {
         label: 'Tên ',
         placeholder: 'Nhập tên',
         size: 'small',
-    };
-
-    const genders = {
-        male: 'Nam',
-        female: 'Nữ',
-        orther: 'khác',
     };
 
     const [isPopupVisible, setPopupVisible] = useState(false);
@@ -37,9 +32,15 @@ function UserProfile() {
         setPopupVisible(false);
     };
 
+
+
+
+
     return (
         <>
             <div className={cx('wrapper')}>
+
+                <SideBar />
 
                 <div className={cx('mainEditor')}>
                     <h1>Chỉnh sửa hồ sơ</h1>
@@ -70,7 +71,6 @@ function UserProfile() {
                 </div>
 
             </div >
-
             <BottomBar />
         </>
     );

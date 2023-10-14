@@ -5,9 +5,8 @@
 
 
     label {
-        font-weight: bold !important;
         font-size: large;
-        font-weight: lighter;
+        font-weight: rgb(205, 205, 205);
         margin-left: 3px;
         margin-bottom: 10px;
     }
@@ -15,7 +14,8 @@
     input {
         padding: 10px;
         /* Khoảng cách bên trong input */
-        border: 2px solid;
+        border: 2px solid rgb(205, 205, 205);
+
         /* Viền */
         border-radius: 10px;
         /* Góc bo tròn viền */
@@ -31,7 +31,7 @@
 
         &:hover {
             border-color: #007bff !important;
-            border: solid 3px;
+            border: solid 2px;
             /* Màu viền thay đổi khi hover */
         }
 
@@ -55,9 +55,6 @@
     }
 
 
-
-
-
     //dung` cho rieng le
     .small {
         width: 240px !important;
@@ -67,6 +64,11 @@
     //dung cho binh thuong
     .medium {
         width: 500px !important;
+        height: 50px !important;
+    }
+
+    .medium2 {
+        width: 550px !important;
         height: 50px !important;
     }
 

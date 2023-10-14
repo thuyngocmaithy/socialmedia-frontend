@@ -3,7 +3,7 @@ const routes = {
     create: '/create',
     userProfile: '/user/profile',
     userPrivate: '/user/private',
-    users: '/user',
+    userPassword: '/user/password',
 };
 
 export default routes;

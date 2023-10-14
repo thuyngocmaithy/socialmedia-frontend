@@ -38,4 +38,11 @@
         background-color: whitesmoke;
         color: #333;
     }
+
+    .has-changes {
+        background-color: red;
+        /* Đổi màu nền của nút khi có sự thay đổi */
+        color: white;
+        /* Đổi màu chữ khi có sự thay đổi */
+    }
 }

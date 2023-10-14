@@ -1,6 +1,8 @@
 import classNames from 'classnames/bind';
 import { useState } from "react";
 import Switch from '@mui/material/Switch';
+import { NavLink, Route, Navigate, Routes, BrowserRouter } from 'react-router-dom'; // Import NavLink for navigation
+
 
 
 import BottomBar from '../../../components/BottomBar/BottomBar';
@@ -8,6 +10,7 @@ import LabelTextBox from '../../../components/LabelTextBox';
 import styles from '../PrivateUserPage/PrivateUserPage.module.scss'
 import Options from '../../../components/Options/Options';
 import Button from '../../../components/Button';
+import SideBar from '../../../components/SideBar/SideBar';
 
 
 
@@ -36,15 +39,44 @@ function PrivateUserPage() {
         setIsToggled(!isToggled); // Khi nút được nhấn, thay đổi trạng thái toggle
     };
 
+
+    const SideBarItems = [
+        {
+            title: 'User Profile ',
+            to: '/user/profile',
+        },
+        {
+            title: 'Private User',
+            to: '/user/private',
+        },
+    ];
+
     return (<>
+
         <div className={cx('wrapper')} >
+
+            {/* <div className={cx('sidebar')}>
+                {SideBarItems.map
+                    (
+                        (item, index) => (
+                            <NavLink to={item.to} key={index} className={cx('menu-item-text')} >
+                                {item.title}
+                            </NavLink>
+                        )
+                    )
+                }
+            </div> */}
+
+            <SideBar />
+
+
             <div className={cx('MainInfo')}>
                 <h1> Quản lý tài khoản</h1>
                 <p className={cx('discription')}>
                     Thực hiện thay đổi đối với thông tin cá nhân hoặc loại tài khoản của bạn.
                 </p>
                 <div className={cx('PrivateUserInfo')}>
-                    <h2 className={cx('Title')}>Tài khoản riêng tư của bạn</h2>
+                    {/* <h2 className={cx('Title')}>Tài khoản riêng tư của bạn</h2>
                     <LabelTextBox className={cx('EmailInfo')}
                         label={'Email - riêng tư'}
                         placeholder={'Email'}
@@ -57,24 +89,25 @@ function PrivateUserPage() {
                     />
                     <button className={cx('Button-change-password')}  >
                         đổi mật khẩu
-                    </button>
+                    </button> */}
 
+
+
+                    <LabelTextBox placeholder={'Ngày sinh '} label={'Ngày sinh: '} type={'date'} selectedSize={'medium2'} />
+
+                    <Options type='gender' selectedSize={'medium'} />
+                    <Options type='country' selectedSize={'medium'} />
+                    <Options type='language' selectedSize={'medium'} />
                     <div className={cx('checkedPrivate')}>
                         <div className={cx('leftDiscription')}>
                             <p className={cx('labelCheckPrivate')}>
-                                Công khai riêng tư :
+                                Tài khoản riêng tư :
                             </p>
                         </div>
                         <div className={cx('rightDiscription')}>
                             <Button switchToggle={<Switch {...label1} />} />
                         </div>
                     </div>
-
-
-                    <LabelTextBox placeholder={'Ngày sinh'} label={'Ngày sinh'} type={'date'} selectedSize={'small'} />
-                    <Options type='gender' />
-                    <Options type='country' />
-                    <Options type='language' />
 
 
                 </div>

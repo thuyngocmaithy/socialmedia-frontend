@@ -37,6 +37,9 @@ function LabelTextBox({
         case 'medium':
             inputClassname = 'medium';
             break;
+        case 'medium2':
+            inputClassname = 'medium2';
+            break;
         case 'large':
             inputClassname = 'large';
             break;
@@ -71,7 +74,7 @@ LabelTextBox.propTypes = {
     editable: PropTypes.bool,
     hoverable: PropTypes.bool,
     onChange: PropTypes.func,
-    selectedSize: PropTypes.oneOf(['small', 'medium', 'large']),
+    selectedSize: PropTypes.oneOf(['small', 'medium', 'medium2', 'large']),
 };
 
 export default LabelTextBox;
