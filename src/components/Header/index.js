@@ -13,6 +13,7 @@ import { LogoPinterest, MessageIcon, NotificationIcon } from '../Icons';
 import NavMenu from '../NavMenu';
 import SimplePopper from '../SimplePopper';
 import NotificationPopper from '../SimplePopper/NotificationPopper';
+import ConversationPopper from '../SimplePopper/ConversationPopper';
 
 const cx = classNames.bind(styles);
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
@@ -73,7 +74,8 @@ function Header() {
                     />
                     <SimplePopper
                         title={<MessageIcon className={cx('action', 'gUZ', 'ztu', 'U9O', 'kVc')} />}
-                        body={'Tin nhắn'}
+                        // body={'Tin nhắn'}
+                        body={<ConversationPopper />}
                         widthBody="maxContent"
                     />
 

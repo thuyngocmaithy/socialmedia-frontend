@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './NotificationPopper.module.scss';
 import NotificationCard from './NotificationCard';
+import Search from '../../Search';
 
 const cx = classNames.bind(styles);
 const NEWS_HUB = [
@@ -36,6 +37,7 @@ function NotificationPopper() {
     return (
         <div className={cx('wrapper-notification-popper')}>
             <h2 className={cx('title')}>Updates</h2>
+            <Search/>
             {NEWS_HUB.map((news, index) => {
                 return <NotificationCard key={index} content={news.content} time={news.time} images={news.images} />;
             })}
