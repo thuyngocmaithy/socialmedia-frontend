@@ -13,11 +13,11 @@ import { LogoPinterest, MessageIcon, NotificationIcon } from '../Icons';
 import NavMenu from '../NavMenu';
 import SimplePopper from '../SimplePopper';
 import NotificationPopper from '../SimplePopper/NotificationPopper';
-// import Register from '../../Register/Register';
+// import Register from '../Register/Register';
 
 const cx = classNames.bind(styles);
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
-// MENU KHI CHƯA ĐĂNG NHẬP
+// MENU
 const MENU_ITEMS = [
     {
         switchToggle: <Switch {...label} />,
@@ -36,19 +36,8 @@ function Header() {
         {
             icon: <FontAwesomeIcon icon={faArrowRightFromBracket} />,
             title: 'Log out',
-            to: '/login',
-            // to: config.routes.register,
-        },
-    ];
-
-    const menuNavbarLeft = [
-        {
-            title: 'Home',
-            to: config.routes.home,
-        },
-        {
-            title: 'Create',
-            to: config.routes.create,
+            // to: <Resiter/>,
+            to: config.routes.register,
         },
     ];
 
@@ -62,31 +51,7 @@ function Header() {
 
                 <NavMenu menu={menuNavbarLeft} />
 
-                {/* THANH TÌM KIẾM */}
-                <Search />
-
-                {/* ACTIONS */}
-                <div className={cx('actions')}>
-                    <SimplePopper
-                        title={<NotificationIcon className={cx('action', 'gUZ', 'ztu', 'U9O', 'kVc')} />}
-                        body={<NotificationPopper />}
-                        widthBody="maxContent"
-                    />
-                    <SimplePopper
-                        title={<MessageIcon className={cx('action', 'gUZ', 'ztu', 'U9O', 'kVc')} />}
-                        body={'Tin nhắn'}
-                        widthBody="maxContent"
-                    />
-
-                    <Link className={cx('link-avatar')} to="">
-                        <Image src="../avt.jpg" className={cx('action', 'user-avatar')} alt="Nguyen Van A" />
-                    </Link>
-                    <Menu className={cx('action')} items={userMenu} onChange={handleMenuChange}>
-                        <button className={cx('more-btn')}>
-                            <FontAwesomeIcon icon={faChevronDown} />
-                        </button>
-                    </Menu>
-                </div>
+                
             </div>
         </header>
     );
