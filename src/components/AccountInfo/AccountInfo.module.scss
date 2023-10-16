@@ -1,0 +1,26 @@
+.wrapper {
+    width: 252px;
+    padding-top: 36px;
+
+    span {
+        font-size: 14px;
+        color: #111111;
+    }
+}
+
+// INFO_USER
+.link-avatar {
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+    cursor: default;
+}
+
+.user-avatar {
+    width: 52px;
+    height: 52px;
+    margin-right: 12px;
+    border-radius: 50%;
+    object-fit: cover; //ảnh giữ được tỷ lệ, tràn hình tròn của border radius
+    cursor: default;
+}
