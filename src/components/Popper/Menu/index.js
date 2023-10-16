@@ -10,12 +10,12 @@ import styles from './Menu.module.scss';
 
 const cx = classNames.bind(styles);
 
-const defaultFn = () => {};
+const defaultFn = () => { };
 
 function Menu({ children, items = [], hideOnClick = false, onChange = defaultFn }) {
     const [history, setHistory] = useState([{ data: items }]);
     const current = history[history.length - 1]; //Phần tử cuối (children)
-
+    //render ra items
     const renderItems = () => {
         return current.data.map((item, index) => {
             const isParent = !!item.children; //!! để convert về boolean

@@ -5,6 +5,9 @@ import Home from '../pages/Home';
 import Create from '../pages/Create';
 import Board from '../pages/Board';
 import Profile, { PinCreated, PinSaved } from '../pages/Profile';
+import InfoProfile from '../pages/Settings/InfoProfile';
+import AccountSetting from '../pages/Settings/AccountSetting';
+import ChangePassword from '../pages/Settings/ChangePassword';
 
 //Không đăng nhập vẫn vào được
 const publicRoutes = [
@@ -14,6 +17,10 @@ const publicRoutes = [
     { path: config.routes.pinCreatedOfUser, component: PinCreated },
     { path: config.routes.pinSavedOfUser, component: PinSaved },
     { path: config.routes.board, component: Board },
+    { path: config.routes.infoProfile, component: InfoProfile },
+    { path: config.routes.accountSetting, component: AccountSetting },
+    { path: config.routes.changePassword, component: ChangePassword },
+
 ];
 
 //Không đăng nhập => chuyển login

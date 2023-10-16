@@ -7,8 +7,9 @@ import Image from '../../components/Image';
 import Button from '../../components/Button';
 import { AccountOtherContext } from '../../context/AccountOtherContext';
 import { useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import * as userServices from '../../services/userServices';
+
 
 const cx = classNames.bind(styles);
 
@@ -59,9 +60,11 @@ function Wrapper({ children, className }) {
                                 Kết bạn
                             </Button>
                         ) : (
-                            <Button className={cx('editBtn')} primary>
-                                Chỉnh sửa hồ sơ
-                            </Button>
+                            <Link to="/thuyngocmaithyy/settings/edit-profile">
+                                <Button className={cx('editBtn')} primary>
+                                    Chỉnh sửa hồ sơ
+                                </Button>
+                            </Link>
                         )}
                     </div>
                     <div className={cx('pins-of-user')}>

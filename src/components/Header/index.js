@@ -76,9 +76,11 @@ function Header() {
                         widthBody="maxContent"
                     />
 
+
                     <Link className={cx('link-avatar')} to="/thuyngocmaithyy">
                         <Image src="../avt.jpg" className={cx('action', 'user-avatar')} alt="Nguyen Van A" />
                     </Link>
+
                     <Menu className={cx('action')} items={userMenu} onChange={handleMenuChange}>
                         <button className={cx('more-btn')}>
                             <FontAwesomeIcon icon={faChevronDown} />
