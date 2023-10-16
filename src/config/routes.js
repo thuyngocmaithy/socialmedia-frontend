@@ -8,6 +8,8 @@ const routes = {
     infoProfile: '/:username/settings/edit-profile',
     accountSetting: '/:username/settings/account-setting',
     changePassword: '/:username/settings/password',
+    register: '/register',
+    login: '/login'
 };
 
 export default routes;
