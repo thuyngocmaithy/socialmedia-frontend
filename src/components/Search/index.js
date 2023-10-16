@@ -12,7 +12,7 @@ import { useDebounce } from '../../hooks';
 
 const cx = classNames.bind(styles);
 
-function Search() {
+function Search({ className, width = '750px' }) {
     const [searchValue, setSearchValue] = useState('');
     const [searchResult, setSearchResult] = useState([]);
     const [showResult, setShowResult] = useState(false);
@@ -75,13 +75,13 @@ function Search() {
     return (
         /*Using a wrapper <div> tag around the reference element solves this 
         by creating a new parentNode context.*/
-        <div>
+        <div className={className} style={{ width: width }}>
             <HeadlessTippy
                 interactive //tippy được tương tác mà không ẩn đi
                 visible={showResult && searchResult.length > 0} //Visible là Hiển thị không cần hover
                 // Hiển thị khi kết quả tìm kiếm có length > 0
                 render={(attrs) => (
-                    <div className={cx('search-result')} tabIndex="-1" {...attrs}>
+                    <div style={{ width: width }} className={cx('search-result')} tabIndex="-1" {...attrs}>
                         <PopperWrapper>
                             <h4 className={cx('search-title')}>Accounts</h4>
                             {searchResult.map((result) => (
@@ -93,7 +93,7 @@ function Search() {
                 onClickOutside={handleHideResult}
             //Bấm ngoài khu vực tippy
             >
-                <div className={cx('search')}>
+                <div className={cx('search')} style={{ width: width }}>
                     <input
                         ref={inputRef} //Lấy DOM element
                         value={searchValue}

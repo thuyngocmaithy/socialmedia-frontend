@@ -1,0 +1,88 @@
+.wrapper-message {
+    overflow: hidden;
+    height: 475px;
+    width: 312px;
+    position: relative;
+}
+
+.message-header {
+    width: 100%;
+    display: flex;
+    position: relative;
+}
+
+.message-header .wrapper-back-btn {
+    position: absolute;
+    padding: 0.8rem;
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+
+    &:hover {
+        background-color: #dddcdc;
+    }
+}
+
+.message-header .wrapper-back-btn .back-btn {
+    font-size: 24px;
+    background-color: inherit;
+    cursor: pointer;
+}
+
+.message-header .sender-name {
+    flex: 10;
+    text-align: center;
+    padding: 0.8rem;
+}
+
+//BODY
+.message-list {
+    padding-top: 0.8rem;
+    min-height: 380px;
+    max-height: 380px;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+}
+
+// FOOTER
+.message-send-option {
+    position: absolute;
+    display: flex;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.message-send-option input {
+    flex: 2;
+    padding: 1rem;
+    border-radius: 16px;
+    margin-right: 4px;
+    font-size: 16px;
+}
+
+.message-send-option .wrapper-send_heart-btn {
+    padding: 0.8rem;
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+
+    &:hover {
+        background-color: #dddcdc;
+    }
+}
+
+.message-send-option .send_heart-btn {
+    font-size: 24px;
+    background-color: inherit;
+    cursor: pointer;
+}

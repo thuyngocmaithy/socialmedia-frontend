@@ -1,9 +1,4 @@
 .wrapper {
-    --search-border-radius: 92px;
-    --search-height: 46px;
-    --search-top-spacer: 9px;
-    --search-button-width: 52px;
-
     position: fixed;
     top: 0;
     left: 0;
@@ -56,9 +51,11 @@
         background-color: rgba(22, 24, 35, 0.06);
     }
 }
+
 .link-avatar {
     height: 48px;
 }
+
 .more-btn {
     font-size: 1.8rem;
     padding: 4px 8px;
@@ -79,6 +76,7 @@
     object-fit: cover; //ảnh giữ được tỷ lệ, tràn hình tròn của border radius
     cursor: pointer;
 }
+
 // ICON
 .GjR {
     color: #e60023;

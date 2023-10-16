@@ -8,24 +8,26 @@ $circle-radius: 50%;
     width: 100%;
     justify-content: center;
     color: black;
+
+    h2 {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: white;
+        font-size: xx-large;
+        margin-left: 30px;
+    }
+
+    h1 {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: black;
+        font-size: xx-large;
+    }
+
 }
 
-h2 {
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: white;
-    font-size: xx-large;
-    margin-left: 30px;
-}
-
-h1 {
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: black;
-    font-size: xx-large;
-}
 
 .register-page {
     display: flex;
