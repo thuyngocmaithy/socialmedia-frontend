@@ -3,7 +3,6 @@ import { faChevronDown, faArrowRightFromBracket } from '@fortawesome/free-solid-
 import Switch from '@mui/material/Switch';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
-
 import styles from './Header.module.scss';
 import Menu from '../../components/Popper/Menu';
 import Image from '../../components/Image';
@@ -77,7 +76,7 @@ function Header() {
                         widthBody="maxContent"
                     />
 
-                    <Link className={cx('link-avatar')} to="">
+                    <Link className={cx('link-avatar')} to="/thuyngocmaithyy">
                         <Image src="../avt.jpg" className={cx('action', 'user-avatar')} alt="Nguyen Van A" />
                     </Link>
                     <Menu className={cx('action')} items={userMenu} onChange={handleMenuChange}>

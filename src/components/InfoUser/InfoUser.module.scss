@@ -1,0 +1,36 @@
+.info {
+    text-align: center;
+    margin: 20px 0 15px 0;
+}
+.user-avatar {
+    border-radius: 50%;
+    object-fit: cover; //ảnh giữ được tỷ lệ, tràn hình tròn của border radius
+    width: 120px;
+    height: 120px;
+}
+.fullname {
+    margin-top: 8px;
+    font-size: 3.6rem;
+    font-weight: 600;
+    color: #111111;
+}
+.username {
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 1.4rem;
+    color: #5f5f5f;
+}
+.count-friend {
+    margin-top: 8px;
+    font-weight: 600;
+    font-size: 1.6rem;
+    color: #111;
+    cursor: pointer;
+}
+.shareBtn {
+    margin-top: 12px;
+}
+.editBtn,
+.addFriendBtn {
+    margin-left: 8px;
+}

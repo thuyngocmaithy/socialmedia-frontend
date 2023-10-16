@@ -37,7 +37,7 @@ const PopupBody = styled('div')(
     `,
 );
 
-function SimplePopper({ title, body, className }) {
+function SimplePopper({ title, body, className, placement = 'bottom' }) {
     const [anchor, setAnchor] = useState(null);
     const [open, setOpen] = useState(false);
 
@@ -60,7 +60,7 @@ function SimplePopper({ title, body, className }) {
                 {title}
             </span>
             {open ? (
-                <Popup id={id} open={open} anchor={anchor} className={cx('wrapper-popper')}>
+                <Popup id={id} open={open} anchor={anchor} className={cx('wrapper-popper')} placement={placement}>
                     <ClickAwayListener onClickAway={handleClickAway}>
                         <PopupBody>{body}</PopupBody>
                     </ClickAwayListener>
