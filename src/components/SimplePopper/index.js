@@ -5,6 +5,8 @@ import classNames from 'classnames/bind';
 import styles from './SimplePopper.module.scss';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 
+
+
 const cx = classNames.bind(styles);
 
 const grey = {
@@ -33,11 +35,11 @@ const PopupBody = styled('div')(
         font-weight: 500;
         opacity: 1;
         margin: 0.25rem 0;    
-        z-index: 1;
+        z-index: 10;
     `,
 );
 
-function SimplePopper({ title, body, className }) {
+function SimplePopper({ title, body, className, left = '0', placement = 'bottom' }) {
     const [anchor, setAnchor] = useState(null);
     const [open, setOpen] = useState(false);
 
@@ -54,19 +56,21 @@ function SimplePopper({ title, body, className }) {
         setAnchor(null);
     };
 
+    const offset = { top: 10, left: 200 };
     return (
         <div>
             <span className={className} aria-describedby={id} onClick={handleClick}>
                 {title}
             </span>
             {open ? (
-                <Popup id={id} open={open} anchor={anchor} className={cx('wrapper-popper')}>
+                <Popup style={{ left: left, zIndex: '10' }} id={id} open={open} anchor={anchor} className={cx('wrapper- popper')} placement={placement} offset={offset}>
                     <ClickAwayListener onClickAway={handleClickAway}>
-                        <PopupBody>{body}</PopupBody>
+                        <PopupBody >{body}</PopupBody>
                     </ClickAwayListener>
                 </Popup>
-            ) : null}
-        </div>
+            ) : null
+            }
+        </div >
     );
 }
 export default SimplePopper;

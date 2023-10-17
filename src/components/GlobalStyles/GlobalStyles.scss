@@ -8,12 +8,16 @@
     --white: #fff;
     --text-color: #333;
     --color-text-icon-brand-primary: #e60023;
-    --message-menu-background-color: rgb(246,248,250);
+    --message-menu-background-color: rgb(246, 248, 250);
     --message-menu-hover-color: #e9e9e9;
     --message-menu-font-size: 16px;
     --normal-font-weight: 400;
+<<<<<<< HEAD
     --message-user-font-size: 14px;
     
+=======
+
+>>>>>>> 02e458a4b0c2087a9f0f05c36c23889fa7d6c641
     --font-family: 'Noto Sans', sans-serif;
 
     // Search
@@ -21,12 +25,18 @@
     --search-height: 46px;
     --search-top-spacer: 9px;
     --search-button-width: 52px;
-    
+
     //  Default layout
     --default-layout-header-height: 70px;
     --default-layout-width: 1350px;
     --default-layout-horizontal-spacer: 24px;
     --g-ncols: 12px;
+
+    //Search
+    --search-border-radius: 92px;
+    --search-height: 46px;
+    --search-top-spacer: 9px;
+    --search-button-width: 52px;
 }
 
 * {
@@ -94,7 +104,7 @@ body {
         padding: 8px 9px;
     }
 
-    .tippy-box[data-placement^='bottom'] > .tippy-arrow:before {
+    .tippy-box[data-placement^='bottom']>.tippy-arrow:before {
         top: -8px;
     }
 }

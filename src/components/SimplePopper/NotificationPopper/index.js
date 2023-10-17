@@ -37,7 +37,6 @@ function NotificationPopper() {
     return (
         <div className={cx('wrapper-notification-popper')}>
             <h2 className={cx('title')}>Updates</h2>
-            <Search/>
             {NEWS_HUB.map((news, index) => {
                 return <NotificationCard key={index} content={news.content} time={news.time} images={news.images} />;
             })}

@@ -236,6 +236,19 @@ export const MessageIcon = ({ width = '2.4rem', height = '2.4rem', className }) 
         <path d="M18 12.5a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 18 12.5m-6 0a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 12 12.5m-6 0a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 6 12.5M12 0C5.925 0 1 4.925 1 11c0 2.653.94 5.086 2.504 6.986L2 24l5.336-3.049A10.93 10.93 0 0 0 12 22c6.075 0 11-4.925 11-11S18.075 0 12 0"></path>
     </svg>
 );
+export const EditIcon = ({ width = '1.6rem', height = '1.6rem', className }) => (
+    <svg
+        className={className}
+        width={width}
+        height={height}
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        aria-label=""
+        role="img"
+    >
+        <path d="m13.386 6.018 4.596 4.596L7.097 21.499 1 22.999l1.501-6.096L13.386 6.018zm8.662-4.066a3.248 3.248 0 0 1 0 4.596l-2.298 2.3-4.596-4.598 2.298-2.299a3.248 3.248 0 0 1 4.596 0z"></path>
+    </svg>
+);
 
 export const ShareIcon = ({ width = '1.6rem', height = '1.6rem', className }) => (
     <svg
@@ -260,6 +273,40 @@ export const DownloadIcon = ({ width = '1.6rem', height = '1.6rem', className })
 export const AccessIcon = ({ width = '0.9rem', height = '0.9rem', className }) => (
     <svg className={className} width={width} height={height} viewBox="0 0 24 24" aria-label="liên kết" role="img">
         <path d="M4.928 1a2.357 2.357 0 1 0 0 4.714h10.024L1.69 18.976a2.36 2.36 0 0 0 0 3.334 2.35 2.35 0 0 0 1.668.69c.603 0 1.206-.229 1.667-.69l13.26-13.263v10.024a2.358 2.358 0 1 0 4.715 0V1H4.928Z"></path>
+    </svg>
+);
+
+export const FilterIcon = ({ width = '2rem', height = '2rem', className }) => (
+    <svg
+        className={className}
+        width={width}
+        height={height}
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        aria-label=""
+        role="img"
+    >
+        <path d="M9 19.5a1.75 1.75 0 1 1 .001-3.501A1.75 1.75 0 0 1 9 19.5M22.25 16h-8.321c-.724-2.034-2.646-3.5-4.929-3.5S4.795 13.966 4.071 16H1.75a1.75 1.75 0 0 0 0 3.5h2.321C4.795 21.534 6.717 23 9 23s4.205-1.466 4.929-3.5h8.321a1.75 1.75 0 0 0 0-3.5M15 4.5a1.75 1.75 0 1 1-.001 3.501A1.75 1.75 0 0 1 15 4.5M1.75 8h8.321c.724 2.034 2.646 3.5 4.929 3.5s4.205-1.466 4.929-3.5h2.321a1.75 1.75 0 0 0 0-3.5h-2.321C19.205 2.466 17.283 1 15 1s-4.205 1.466-4.929 3.5H1.75a1.75 1.75 0 0 0 0 3.5"></path>
+    </svg>
+);
+
+export const CreateBoardIcon = ({ width = '2rem', height = '2rem', className }) => (
+    <svg
+        className={className}
+        width={width}
+        height={height}
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        aria-label=""
+        role="img"
+    >
+        <path d="M22 10h-8V2a2 2 0 0 0-4 0v8H2a2 2 0 0 0 0 4h8v8a2 2 0 0 0 4 0v-8h8a2 2 0 0 0 0-4"></path>
+    </svg>
+);
+
+export const SelectedIcon = ({ width = '1.2rem', height = '1.2rem', className }) => (
+    <svg className={className} width={width} height={height} viewBox="0 0 24 24" aria-label="Selected item" role="img">
+        <path d="M9.17 21.75.73 12.79c-.97-1.04-.97-2.71 0-3.75a2.403 2.403 0 0 1 3.53 0l4.91 5.22L19.74 3.03c.98-1.04 2.55-1.04 3.53 0 .97 1.03.97 2.71 0 3.74L9.17 21.75z"></path>
     </svg>
 );
 

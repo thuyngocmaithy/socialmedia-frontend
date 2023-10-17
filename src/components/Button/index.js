@@ -9,16 +9,19 @@ function Button({
     to,
     href,
     primary = false,
+    red = false,
     outline = false,
     text = false,
     rounded = false,
     disabled = false,
     small = false,
     large = false,
+    contentLeft = false,
     children,
     className, //thêm prop className dùng để đặt className => custom riêng
     leftIcon,
     rightIcon,
+    activeIcon,
     switchToggle,
     onClick,
     ...passProps
@@ -62,6 +65,7 @@ function Button({
     const classes = cx('wrapper', {
         [className]: className, //khi có className sẽ lấy value của className
         primary,
+        red,
         // Nếu có truyền primary vào button, primary sẽ được thêm vào className của <Comp>
         outline,
         text,
@@ -69,6 +73,7 @@ function Button({
         disabled,
         small,
         large,
+        contentLeft,
     });
 
     return (
@@ -77,6 +82,7 @@ function Button({
             <span className={cx('title')}>{children}</span>
             {/* Sử dụng span trong button để khi thêm icon sẽ dễ xử lý */}
             {rightIcon && <span className={cx('icon')}>{rightIcon}</span>}
+            {activeIcon && <span className={cx('activeIcon')}>{activeIcon}</span>}
             {switchToggle && <span className={cx('switch')}>{switchToggle}</span>}
         </Comp>
     );
@@ -86,6 +92,7 @@ Button.propTypes = {
     to: PropTypes.string,
     href: PropTypes.string,
     primary: PropTypes.bool,
+    red: PropTypes.bool,
     outline: PropTypes.bool,
     text: PropTypes.bool,
     rounded: PropTypes.bool,

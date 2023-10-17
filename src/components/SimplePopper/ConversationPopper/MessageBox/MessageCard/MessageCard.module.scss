@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .wrapper-message-card {
     display: flex;
     align-items: flex-start;
@@ -30,4 +31,38 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+=======
+.wrapper-message-card {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    overflow: scroll;
+}
+
+.send_message_name {
+    font-size: var(--message-user-font-size);
+    font-weight: 550;
+}
+
+.send-message-body {
+    background-color: #E9E9E9;
+    padding: 0.9rem;
+    border-radius: 12px;
+}
+
+.wrapper-send-message {
+    display: flex;
+}
+
+.wrapper-receive-message {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.wrapper-receive-message .message-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+>>>>>>> 02e458a4b0c2087a9f0f05c36c23889fa7d6c641
 }

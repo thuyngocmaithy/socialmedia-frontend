@@ -1,8 +1,11 @@
+<<<<<<< HEAD
 .search,
 .search-result {
     width: 750px;
 }
 
+=======
+>>>>>>> 02e458a4b0c2087a9f0f05c36c23889fa7d6c641
 .search {
     position: relative;
     height: var(--search-height);
@@ -24,7 +27,7 @@
     }
 
     // khi gõ chữ vào input => đổi màu search btn
-    input:not(:placeholder-shown) ~ .search-btn {
+    input:not(:placeholder-shown)~.search-btn {
         color: rgba(22, 24, 35, 0.75);
     }
 
@@ -49,9 +52,11 @@
     font-weight: 600;
     color: rgba(22, 24, 35, 0.5);
 }
+
 .clear-btn {
     cursor: pointer;
 }
+
 .clear-btn,
 .loading-btn {
     position: absolute;

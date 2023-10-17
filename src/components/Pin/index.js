@@ -2,20 +2,22 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import classNames from 'classnames/bind';
 import styles from './Pin.module.scss';
-import { ShareIcon, DownloadIcon, AccessIcon } from '../Icons';
-import SimplePopper from '../SimplePopper';
+import { ShareIcon, DownloadIcon, AccessIcon, EditIcon } from '../Icons';
 import { Link } from 'react-router-dom';
 import Image from '../../components/Image';
+import Button from '../Button';
 
 const cx = classNames.bind(styles);
 
-function Pin({ image, linkImage, title, userImage, username }) {
+function Pin({ image, linkImage, title, userImage, username, pinCreated = false, handleEdit }) {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container-image')}>
                 <img className={cx('image')} src={image} alt="" />
                 <div className={cx('option-top')}>
-                    <button className={cx('saveBtn')}>Lưu</button>
+                    <Button className={cx('saveBtn')} red>
+                        Lưu
+                    </Button>
                 </div>
                 <div className={cx('option-bottom')}>
                     {linkImage && (
@@ -24,29 +26,41 @@ function Pin({ image, linkImage, title, userImage, username }) {
                             <span className={cx('link-image')}>{linkImage}</span>
                         </button>
                     )}
+                    {pinCreated && (
+                        <Tippy delay={[0, 100]} content="Chỉnh sửa" placement="bottom">
+                            <button className={cx('btn')} onClick={handleEdit}>
+                                <EditIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
+                            </button>
+                        </Tippy>
+                    )}
+
                     <Tippy delay={[0, 100]} content="Chia sẻ" placement="bottom">
-                        <button className={cx('btn')}>
+                        <button className={cx(pinCreated ? 'btn-end' : 'btn')}>
                             <ShareIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
                         </button>
                     </Tippy>
-                    <Tippy delay={[0, 100]} content="Lưu ảnh" placement="bottom">
-                        <button className={cx('btn-end')}>
-                            <DownloadIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
-                        </button>
-                    </Tippy>
+                    {pinCreated ? null : (
+                        <Tippy delay={[0, 100]} content="Lưu ảnh" placement="bottom">
+                            <button className={cx('btn-end')}>
+                                <DownloadIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
+                            </button>
+                        </Tippy>
+                    )}
                 </div>
             </div>
-            <div className={cx('info-pin')}>
-                {title && <h3>{title}</h3>}
-                {username && (
-                    <div className={cx('info-user')}>
-                        <Link className={cx('link-avatar')} to="">
-                            <Image src={userImage} className={cx('user-avatar')} alt={username} />
-                            <span>{username}</span>
-                        </Link>
-                    </div>
-                )}
-            </div>
+            {pinCreated ? null : (
+                <div className={cx('info-pin')}>
+                    {title && <h3>{title}</h3>}
+                    {username && (
+                        <div className={cx('info-user')}>
+                            <Link className={cx('link-avatar')} to="">
+                                <Image src={userImage} className={cx('user-avatar')} alt={username} />
+                                <span>{username}</span>
+                            </Link>
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 }
