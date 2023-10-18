@@ -1,34 +1,5 @@
-.sidebar {
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
-    border: black !important;
-
-
-
-    .menu-item-text {
-        padding: 8px 12px;
-        font-size: 1.9rem;
-        font-weight: 900;
-        border-radius: 10px;
-        color: black;
-        cursor: pointer;
-
-        &:hover {
-            // 
-            background: #fbf3f3;
-            /* Gạch dưới khi hover */
-        }
-
-        &.active {
-            text-decoration: underline solid;
-            // border-bottom: solid;
-            background: #fbf3f3;
-        }
-
-    }
-
-
-
-
+.wrapper {
+    width: 356px;
+    padding: 20px 0 26px 8px;
+    margin-left: -18px;
 }

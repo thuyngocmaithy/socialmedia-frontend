@@ -1,0 +1,80 @@
+// INFO_USER
+.info {
+    text-align: center;
+    margin: 20px 0 15px 0;
+}
+.user-avatar {
+    border-radius: 50%;
+    object-fit: cover; //ảnh giữ được tỷ lệ, tràn hình tròn của border radius
+    width: 120px;
+    height: 120px;
+}
+.fullname {
+    margin-top: 8px;
+    font-size: 3.6rem;
+    font-weight: 600;
+    color: #111111;
+}
+.username {
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 1.4rem;
+    color: #5f5f5f;
+}
+.count-friend {
+    margin-top: 8px;
+    font-weight: 600;
+    font-size: 1.6rem;
+    color: #111;
+    cursor: pointer;
+}
+.shareBtn {
+    margin-top: 12px;
+}
+.editBtn,
+.addFriendBtn {
+    margin-left: 8px;
+}
+
+// PIN-CREATED, PIN_SAVED
+.menu-pin {
+    justify-content: center;
+}
+.pin-created,
+.pin-saved {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top: 20px;
+}
+.wrapper-menu-pin {
+    position: sticky;
+    top: var(--default-layout-header-height);
+    z-index: 10;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 8px 8px -8px;
+    transition: box-shadow 300ms ease-in-out 0s;
+    background-color: #ffffff;
+    padding: 15px 0;
+}
+.action {
+    width: 48px;
+    height: 48px;
+    padding: 14px 10px;
+    cursor: pointer;
+    border-radius: 50%;
+
+    &:hover {
+        background-color: rgba(22, 24, 35, 0.06);
+    }
+}
+.icon {
+    display: block;
+    color: #111111;
+    fill: currentColor;
+    stroke-width: 0;
+}
+.option {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 10px -15px 10px;
+}

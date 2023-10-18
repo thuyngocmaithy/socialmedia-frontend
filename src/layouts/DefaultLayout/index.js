@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
-import Header from '../../components/Header';
+import { HeaderDefault } from '../../components/Header';
 import styles from './DefaultLayout.module.scss';
 
 const cx = classNames.bind(styles);
@@ -8,7 +8,7 @@ const cx = classNames.bind(styles);
 function DefaultLayout({ children }) {
     return (
         <div className={cx('wrapper')}>
-            <Header />
+            <HeaderDefault />
             <div className={cx('container')}>
                 <div className={cx('content')}>{children}</div>
             </div>

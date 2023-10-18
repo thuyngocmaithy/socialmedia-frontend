@@ -2,9 +2,9 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 100px;
-    padding: 9px 16px;
-    border-radius: 4px;
+    min-width: 60px;
+    padding: 12px 16px;
+    border-radius: 24px;
     font-size: 1.6rem;
     font-weight: 600;
     font-family: var(--font-family);
@@ -23,16 +23,30 @@
         opacity: 0.5;
     }
 }
+.contentLeft {
+    justify-content: left;
+}
+.active {
+    justify-content: space-between;
 
+    .activeIcon {
+        display: inline-block;
+    }
+}
 .icon + .title,
 .title + .icon {
     margin-left: 8px;
 }
 
 .icon {
-    display: inline-block;
+    display: inline-grid;
     width: 24px;
     text-align: center;
+}
+.activeIcon {
+    width: 24px;
+    text-align: center;
+    display: none;
 }
 
 .switch {
@@ -53,13 +67,24 @@
 
 // types primary được viết sau => ưu tiên hơn
 .primary {
-    color: var(--white);
-    background-color: var(--primary);
-    border-color: var(--primary);
+    color: #111111;
+    background-color: #efefef;
+    border-color: #efefef;
 
     &:hover {
-        background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), #1c1a1a;
-        border-color: var(--primary);
+        background: #e2e2e2;
+        border-color: #e2e2e2;
+    }
+}
+
+.red {
+    color: #ffffff;
+    background-color: #e60023;
+    border-color: #e60023;
+
+    &:hover {
+        background: #ad081b;
+        border-color: #ad081b;
     }
 }
 
@@ -73,12 +98,6 @@
     }
     &.active {
         background-color: red;
-    }
-}
-
-.text {
-    &:hover {
-        text-decoration: underline;
     }
 }
 

@@ -8,7 +8,7 @@ function LabelTextBox({
     placeholder,
     label,
     type,
-    text,
+    text = '',
     editable = true,
     hoverable = true,
     onChange,
@@ -40,6 +40,7 @@ function LabelTextBox({
         case 'medium2':
             inputClassname = 'medium2';
             break;
+
         case 'large':
             inputClassname = 'large';
             break;
@@ -53,7 +54,6 @@ function LabelTextBox({
         <div className={wrapperClasses}>
             <label>{label}</label>
             <input
-                id="input-text"
                 type={type}
                 placeholder={placeholder}
                 value={inputValue}
