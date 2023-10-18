@@ -10,7 +10,6 @@ import { useContext, useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import * as userServices from '../../services/userServices';
 
-
 const cx = classNames.bind(styles);
 
 function Wrapper({ children, className }) {
@@ -25,7 +24,7 @@ function Wrapper({ children, className }) {
     useEffect(() => {
         const fetchApi = async () => {
             const resultInfo = await userServices.getUser(pathname);
-            const resultFriend = await userServices.getCountFriend(resultInfo.userId);
+            const resultFriend = await userServices.getCountFriend(resultInfo.id);
             setInfo(resultInfo);
             setcountFriend(resultFriend);
         };

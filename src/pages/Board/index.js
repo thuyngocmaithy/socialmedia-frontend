@@ -1,9 +1,9 @@
 import classNames from 'classnames/bind';
 import styles from './Board.module.scss';
 import Pin from '../../components/Pin';
-import SimplePopper from '../../components/SimplePopper';
+import Popper from '../../components/Popper';
 import { FilterIcon } from '../../components/Icons';
-import OptionPopper from '../../components/SimplePopper/OptionPopper';
+import OptionPopper from '../../components/Popper/OptionPopper';
 import { useLocation } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
@@ -85,7 +85,7 @@ function Board() {
         <div className={cx('wrapper')}>
             <h1 className={cx('title')}>{boardname}</h1>
             <div className={cx('option')}>
-                <SimplePopper
+                <Popper
                     title={<FilterIcon className={cx('action', 'icon')} />}
                     body={<OptionPopper data={filterBoardPopper} />}
                     widthBody="maxContent"

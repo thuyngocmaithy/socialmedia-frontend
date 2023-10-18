@@ -9,11 +9,4 @@ export const getAllPin = async (username) => {
     }
 };
 
-export const getPinByBoardId = async (id) => {
-    try {
-        const res = await httpRequest.get(`pins/boardId/${id}`);
-        return res;
-    } catch (error) {
-        console.log(error);
-    }
-};
+

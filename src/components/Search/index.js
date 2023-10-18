@@ -6,8 +6,8 @@ import classNames from 'classnames/bind';
 
 import * as searchServices from '../../services/searchServices';
 import styles from './Search.module.scss';
-import { Wrapper as PopperWrapper } from '../../components/Popper';
-import AccountItem from '../../components/AccountItem';
+import { Wrapper as PopperWrapper } from '../../components/Popup';
+import AccountItemSearch from '../AccountItemSearch';
 import { useDebounce } from '../../hooks';
 
 const cx = classNames.bind(styles);
@@ -85,13 +85,13 @@ function Search({ className, width = '750px' }) {
                         <PopperWrapper>
                             <h4 className={cx('search-title')}>Accounts</h4>
                             {searchResult.map((result) => (
-                                <AccountItem key={result.id} data={result} />
+                                <AccountItemSearch key={result.id} data={result} />
                             ))}
                         </PopperWrapper>
                     </div>
                 )}
                 onClickOutside={handleHideResult}
-            //Bấm ngoài khu vực tippy
+                //Bấm ngoài khu vực tippy
             >
                 <div className={cx('search')} style={{ width: width }}>
                     <input

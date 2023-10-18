@@ -5,6 +5,7 @@ import styles from './Pin.module.scss';
 import { ShareIcon, DownloadIcon, AccessIcon, EditIcon } from '../Icons';
 import { Link } from 'react-router-dom';
 import Image from '../../components/Image';
+import AccountInfo from '../AccountInfo';
 import Button from '../Button';
 
 const cx = classNames.bind(styles);
@@ -51,14 +52,15 @@ function Pin({ image, linkImage, title, userImage, username, pinCreated = false,
             {pinCreated ? null : (
                 <div className={cx('info-pin')}>
                     {title && <h3>{title}</h3>}
-                    {username && (
+                    {/* {username && (
                         <div className={cx('info-user')}>
                             <Link className={cx('link-avatar')} to="">
                                 <Image src={userImage} className={cx('user-avatar')} alt={username} />
                                 <span>{username}</span>
                             </Link>
                         </div>
-                    )}
+                    )} */}
+                    <AccountInfo userImage={userImage} username={username} />
                 </div>
             )}
         </div>

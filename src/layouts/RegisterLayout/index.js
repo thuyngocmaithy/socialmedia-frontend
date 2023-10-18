@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
-import HeaderRegister from '../../components/Header';
+import { HeaderRegister } from '../../components/Header';
 import styles from './RegisterLayout.module.scss';
 
 const cx = classNames.bind(styles);
