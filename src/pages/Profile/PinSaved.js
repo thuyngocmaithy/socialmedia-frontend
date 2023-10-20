@@ -65,7 +65,7 @@ function PinSaved() {
 
     useEffect(() => {
         const fetchApi = async () => {
-            const result = await boardServices.getAllBoard(pathname);
+            const result = await boardServices.getBoardByUsername(pathname);
             setListBoard(result);
 
             const promises = result.map(async (board) => {

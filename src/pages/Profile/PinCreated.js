@@ -25,7 +25,7 @@ function PinCreated() {
 
     useEffect(() => {
         const fetchApi = async () => {
-            const result = await pinServices.getAllPin(pathname);
+            const result = await pinServices.getPinsByUsername(pathname);
             setListPin(result);
         };
         fetchApi();

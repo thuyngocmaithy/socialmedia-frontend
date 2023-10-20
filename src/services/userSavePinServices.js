@@ -8,3 +8,15 @@ export const getPinByUserIdAndBoardId = async (userId, boardId) => {
         console.log(error);
     }
 };
+export const save = async (userSavePin) => {
+    try {
+        const res = await httpRequest.post(`userSavePin/add`, userSavePin, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
