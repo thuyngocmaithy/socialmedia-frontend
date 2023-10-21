@@ -23,7 +23,7 @@ function Wrapper({ children, className }) {
 
     useEffect(() => {
         const fetchApi = async () => {
-            const resultInfo = await userServices.getUser(pathname);
+            const resultInfo = await userServices.getUserByUsername(pathname);
             const resultFriend = await userServices.getCountFriend(resultInfo.id);
             setInfo(resultInfo);
             setcountFriend(resultFriend);
@@ -59,7 +59,7 @@ function Wrapper({ children, className }) {
                                 Kết bạn
                             </Button>
                         ) : (
-                            <Link to="/thuyngocmaithyy/settings/edit-profile">
+                            <Link to="/thuyngocmaithyy/edit-profile">
                                 <Button className={cx('editBtn')} primary>
                                     Chỉnh sửa hồ sơ
                                 </Button>

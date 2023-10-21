@@ -13,6 +13,7 @@ import NavMenu from '../../NavMenu';
 import Popper from '../../Popper';
 import NotificationPopper from '../../Popper/NotificationPopper';
 import ConversationPopper from '../../Popper/ConversationPopper';
+import { memo } from 'react';
 
 const cx = classNames.bind(styles);
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
@@ -92,4 +93,4 @@ function HeaderDefault() {
         </header>
     );
 }
-export default HeaderDefault;
+export default memo(HeaderDefault);

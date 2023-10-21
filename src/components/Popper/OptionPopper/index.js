@@ -15,7 +15,6 @@ function OptionPopper({ data }) {
 
     return (
         <div className={cx('wrapper')} style={{ width: data.width }}>
-            {console.log('re-render')}
             <p className={cx('title')}>{data.title}</p>
             {data.item.map((item) => {
                 return (
@@ -24,7 +23,6 @@ function OptionPopper({ data }) {
                         className={cx(active === item.id ? 'active' : undefined)}
                         onClick={() => {
                             handleClick(item.id);
-                            // item.handleClick();
                         }}
                         activeIcon={<SelectedIcon />}
                         contentLeft

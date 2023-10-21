@@ -10,6 +10,7 @@ import AccountSetting from '../pages/Settings/AccountSetting';
 import ChangePassword from '../pages/Settings/ChangePassword';
 import { Register } from '../pages/Account';
 import { Login } from '../pages/Account';
+import Notification from '../components/Notification';
 
 // Layout
 import { RegisterLayout } from '../layouts';

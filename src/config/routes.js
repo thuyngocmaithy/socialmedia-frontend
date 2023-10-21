@@ -4,12 +4,12 @@ const routes = {
     profile: '/:username',
     pinCreatedOfUser: '/:username/_created',
     pinSavedOfUser: '/:username/_saved',
-    board: '/:username/:boardname',
-    infoProfile: '/:username/settings/edit-profile',
-    accountSetting: '/:username/settings/account-setting',
-    changePassword: '/:username/settings/password',
+    board: '/:username/board/:boardname',
+    infoProfile: '/:username/edit-profile',
+    accountSetting: '/:username/account-setting',
+    changePassword: '/:username/password',
     register: '/register',
-    login: '/login'
+    login: '/login',
 };
 
 export default routes;

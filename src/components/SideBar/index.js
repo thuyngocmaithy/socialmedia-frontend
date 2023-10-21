@@ -17,19 +17,19 @@ function SideBar() {
     const SideBarItems = [
         {
             title: 'Chỉnh sửa hồ sơ',
-            to: '/thuyngocmaithyy/settings/edit-profile',
+            to: '/thuyngocmaithyys/edit-profile',
             icon: <UserIcon />,
             activeIcon: <UserActiveIcon />,
         },
         {
             title: 'Quản lý tài khoản',
-            to: '/thuyngocmaithyy/settings/account-setting',
+            to: '/thuyngocmaithyys/account-setting',
             icon: <AccountSettingIcon />,
             activeIcon: <AccountSettingActiveIcon />,
         },
         {
             title: 'Đổi mật khẩu',
-            to: '/thuyngocmaithyy/settings/password',
+            to: '/thuyngocmaithyys/password',
             icon: <KeyIcon />,
             activeIcon: <KeyActiveIcon />,
         },

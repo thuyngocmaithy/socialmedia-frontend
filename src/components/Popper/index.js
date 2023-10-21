@@ -5,8 +5,6 @@ import classNames from 'classnames/bind';
 import styles from './Popper.module.scss';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 
-
-
 const cx = classNames.bind(styles);
 
 const grey = {
@@ -39,7 +37,7 @@ const PopupBody = styled('div')(
     `,
 );
 
-function Popper({ title, body, className, left = '0', placement = 'bottom' }) {
+function Popper({ idPopper, contentTitle, title, body, className, left = '0', placement = 'bottom' }) {
     const [anchor, setAnchor] = useState(null);
     const [open, setOpen] = useState(false);
 
@@ -49,7 +47,7 @@ function Popper({ title, body, className, left = '0', placement = 'bottom' }) {
     };
 
     // const open = Boolean(anchor);
-    const id = open ? 'simple-popper' : null;
+    const id = open ? `${idPopper}` : null;
 
     const handleClickAway = () => {
         setOpen(false);
@@ -58,19 +56,27 @@ function Popper({ title, body, className, left = '0', placement = 'bottom' }) {
 
     const offset = { top: 10, left: 200 };
     return (
-        <div>
-            <span className={className} aria-describedby={id} onClick={handleClick}>
+        <div className={className}>
+            <span aria-describedby={id} onClick={handleClick}>
+                {contentTitle}
                 {title}
             </span>
             {open ? (
-                <Popup style={{ left: left, zIndex: '10' }} id={id} open={open} anchor={anchor} className={cx('wrapper- popper')} placement={placement} offset={offset}>
+                <Popup
+                    style={{ left: left, zIndex: '10' }}
+                    id={id}
+                    open={open}
+                    anchor={anchor}
+                    className={cx('wrapper-popper')}
+                    placement={placement}
+                    offset={offset}
+                >
                     <ClickAwayListener onClickAway={handleClickAway}>
-                        <PopupBody >{body}</PopupBody>
+                        <PopupBody>{body}</PopupBody>
                     </ClickAwayListener>
                 </Popup>
-            ) : null
-            }
-        </div >
+            ) : null}
+        </div>
     );
 }
 export default Popper;
