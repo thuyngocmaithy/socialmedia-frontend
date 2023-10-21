@@ -1,0 +1,101 @@
+$default-text-color: black;
+$default-background-color: white;
+$circle-radius: 50%;
+.wrapper {
+    .container-infoProfile {
+        margin-top: 20px;
+        margin-left: 30px;
+        background-color: white;
+        width: 550px;
+
+        h1 {
+            color: red;
+            font-weight: bold;
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+
+        .discription {
+            margin: 10px 0;
+            font-size: medium;
+            color: black;
+            width: 520px;
+        }
+
+        .name-and-lastname {
+            display: flex;
+            align-items: center;
+        }
+
+        .setUserProfilePhoto {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+
+            .UserPhoto {
+                justify-content: center;
+                align-items: center;
+
+                img {
+                    width: 150px;
+                    height: 150px;
+                    border-radius: 50%;
+                    background: transparent !important;
+                }
+            }
+
+            .setUserProfilePhoto-btn {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }
+
+    .GenderOption {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .GenderOptionLabel {
+        font-size: large;
+        font-weight: bold;
+        margin-bottom: 10px;
+        /* Đặt khoảng cách dưới giữa label và select */
+    }
+
+    select {
+        padding: 10px;
+        border: 2px solid;
+        border-radius: 10px;
+        font-size: 16px;
+        width: 240px;
+        transition: border-color 0.3s ease-in-out;
+    }
+
+    @media (max-width: 768px) {
+        margin-right: 10%;
+        margin-left: 10%;
+
+        .discription {
+            width: 100%;
+        }
+
+        .container-infoProfile {
+            width: 100%;
+
+            .setUserProfilePhoto {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+
+            .setUserProfilePhoto-btn {
+                .changeImageBtn {
+                    width: 100px;
+                    height: 40px;
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}

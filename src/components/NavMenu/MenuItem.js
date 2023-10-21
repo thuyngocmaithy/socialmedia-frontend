@@ -5,11 +5,17 @@ import styles from './Menu.module.scss';
 
 const cx = classNames.bind(styles);
 
-function MenuItem({ title, to }) {
+function MenuItem({ title, to, activeUnderline = false, activeDefault }) {
     return (
         <>
-            <NavLink className={(nav) => cx('menu-item-text', { active: nav.isActive })} to={to}>
+            <NavLink
+                className={(nav) => cx('menu-item', { activeUnderline }, { activeDefault }, { active: nav.isActive })}
+                to={to}
+            >
                 <span className={cx('title')}>{title}</span>
+                <div className={cx('underline-wrapper')}>
+                    <div className={cx('underline')}></div>
+                </div>
             </NavLink>
         </>
     );

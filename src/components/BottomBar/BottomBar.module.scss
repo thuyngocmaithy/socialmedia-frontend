@@ -1,0 +1,16 @@
+.bot-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 5);
+    z-index: 10;
+}
+.saveBtn {
+    margin-left: 8px;
+}

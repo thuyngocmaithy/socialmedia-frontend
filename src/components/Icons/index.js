@@ -236,6 +236,19 @@ export const MessageIcon = ({ width = '2.4rem', height = '2.4rem', className }) 
         <path d="M18 12.5a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 18 12.5m-6 0a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 12 12.5m-6 0a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 6 12.5M12 0C5.925 0 1 4.925 1 11c0 2.653.94 5.086 2.504 6.986L2 24l5.336-3.049A10.93 10.93 0 0 0 12 22c6.075 0 11-4.925 11-11S18.075 0 12 0"></path>
     </svg>
 );
+export const EditIcon = ({ width = '1.6rem', height = '1.6rem', className }) => (
+    <svg
+        className={className}
+        width={width}
+        height={height}
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        aria-label=""
+        role="img"
+    >
+        <path d="m13.386 6.018 4.596 4.596L7.097 21.499 1 22.999l1.501-6.096L13.386 6.018zm8.662-4.066a3.248 3.248 0 0 1 0 4.596l-2.298 2.3-4.596-4.598 2.298-2.299a3.248 3.248 0 0 1 4.596 0z"></path>
+    </svg>
+);
 
 export const ShareIcon = ({ width = '1.6rem', height = '1.6rem', className }) => (
     <svg
@@ -260,5 +273,212 @@ export const DownloadIcon = ({ width = '1.6rem', height = '1.6rem', className })
 export const AccessIcon = ({ width = '0.9rem', height = '0.9rem', className }) => (
     <svg className={className} width={width} height={height} viewBox="0 0 24 24" aria-label="liên kết" role="img">
         <path d="M4.928 1a2.357 2.357 0 1 0 0 4.714h10.024L1.69 18.976a2.36 2.36 0 0 0 0 3.334 2.35 2.35 0 0 0 1.668.69c.603 0 1.206-.229 1.667-.69l13.26-13.263v10.024a2.358 2.358 0 1 0 4.715 0V1H4.928Z"></path>
+    </svg>
+);
+
+export const FilterIcon = ({ width = '2rem', height = '2rem', className }) => (
+    <svg
+        className={className}
+        width={width}
+        height={height}
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        aria-label=""
+        role="img"
+    >
+        <path d="M9 19.5a1.75 1.75 0 1 1 .001-3.501A1.75 1.75 0 0 1 9 19.5M22.25 16h-8.321c-.724-2.034-2.646-3.5-4.929-3.5S4.795 13.966 4.071 16H1.75a1.75 1.75 0 0 0 0 3.5h2.321C4.795 21.534 6.717 23 9 23s4.205-1.466 4.929-3.5h8.321a1.75 1.75 0 0 0 0-3.5M15 4.5a1.75 1.75 0 1 1-.001 3.501A1.75 1.75 0 0 1 15 4.5M1.75 8h8.321c.724 2.034 2.646 3.5 4.929 3.5s4.205-1.466 4.929-3.5h2.321a1.75 1.75 0 0 0 0-3.5h-2.321C19.205 2.466 17.283 1 15 1s-4.205 1.466-4.929 3.5H1.75a1.75 1.75 0 0 0 0 3.5"></path>
+    </svg>
+);
+
+export const CreateBoardIcon = ({ width = '2rem', height = '2rem', className }) => (
+    <svg
+        className={className}
+        width={width}
+        height={height}
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        aria-label=""
+        role="img"
+    >
+        <path d="M22 10h-8V2a2 2 0 0 0-4 0v8H2a2 2 0 0 0 0 4h8v8a2 2 0 0 0 4 0v-8h8a2 2 0 0 0 0-4"></path>
+    </svg>
+);
+
+export const SelectedIcon = ({ width = '1.2rem', height = '1.2rem', className }) => (
+    <svg className={className} width={width} height={height} viewBox="0 0 24 24" aria-label="Selected item" role="img">
+        <path d="M9.17 21.75.73 12.79c-.97-1.04-.97-2.71 0-3.75a2.403 2.403 0 0 1 3.53 0l4.91 5.22L19.74 3.03c.98-1.04 2.55-1.04 3.53 0 .97 1.03.97 2.71 0 3.74L9.17 21.75z"></path>
+    </svg>
+);
+
+export const CreateMessageIcon = ({ width = '1.6rem', height = '1.6rem', className }) => (
+    <svg
+        className={className}
+        height={height}
+        width={width}
+        fill="white"
+        viewBox="0 0 24 24"
+        aria-label="Compose new message"
+        role="img"
+    >
+        <path d="M23.3458 0.633387C22.4924 -0.211454 21.1083 -0.211454 20.2549 0.633387L18.7363 2.13571L21.8272 5.1931L23.3727 3.66441C24.2268 2.82023 24.1999 1.47756 23.3458 0.633387ZM17.762 3.10349L9.39669 11.3893L8.35883 15.6412L12.4876 14.4467L20.8963 6.23791L17.762 3.10349ZM4.70156 1.01393C2.10496 1.01393 0 3.16788 0 5.82491V19.1887C0 21.8458 2.10496 23.9997 4.70156 23.9997H18.2838C20.8804 23.9997 22.9854 21.8458 22.9854 19.1887V14.074C22.9854 13.1884 22.2838 12.5068 21.4182 12.5068C20.5527 12.5068 19.851 13.1884 19.851 14.074V19.1887C19.851 20.0744 19.1494 20.7924 18.2838 20.7924H4.70156C3.83603 20.7924 3.13437 20.0744 3.13437 19.1887V5.82491C3.13437 4.93923 3.83603 4.22125 4.70156 4.22125H9.92552C10.7911 4.22125 11.4927 3.50326 11.4927 2.61759C11.4927 1.73191 10.7911 1.01393 9.92552 1.01393H4.70156Z"></path>
+    </svg>
+);
+
+export const UserIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className={className}
+        height={height}
+        width={width}
+        fill="currentColor"
+        viewBox="0 0 16 16"
+    >
+        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z" />
+    </svg>
+);
+
+export const UserActiveIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className={className}
+        height={height}
+        width={width}
+        fill="currentColor"
+        viewBox="0 0 16 16"
+    >
+        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+    </svg>
+);
+
+export const AccountSettingIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className={className}
+        height={height}
+        width={width}
+        fill="currentColor"
+        viewBox="0 0 16 16"
+    >
+        <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
+        <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
+    </svg>
+);
+
+export const AccountSettingActiveIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className={className}
+        height={height}
+        width={width}
+        fill="currentColor"
+        viewBox="0 0 16 16"
+    >
+        <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z" />
+    </svg>
+);
+
+export const KeyIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className={className}
+        height={height}
+        width={width}
+        fill="currentColor"
+        viewBox="0 0 16 16"
+    >
+        <path d="M0 8a4 4 0 0 1 7.465-2H14a.5.5 0 0 1 .354.146l1.5 1.5a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0L13 9.207l-.646.647a.5.5 0 0 1-.708 0L11 9.207l-.646.647a.5.5 0 0 1-.708 0L9 9.207l-.646.647A.5.5 0 0 1 8 10h-.535A4 4 0 0 1 0 8zm4-3a3 3 0 1 0 2.712 4.285A.5.5 0 0 1 7.163 9h.63l.853-.854a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.793-.793-1-1h-6.63a.5.5 0 0 1-.451-.285A3 3 0 0 0 4 5z" />
+        <path d="M4 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+    </svg>
+);
+
+export const KeyActiveIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className={className}
+        height={height}
+        width={width}
+        fill="currentColor"
+        viewBox="0 0 16 16"
+    >
+        <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+    </svg>
+);
+
+export const GoogleIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
+    <svg
+        className={className}
+        height={height}
+        width={width}
+        xmlns="http://www.w3.org/2000/svg"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+        id="Capa_1"
+        style={{ enableBackground: 'new 0 0 150 150' }}
+        version="1.1"
+        viewBox="0 0 150 150"
+        xmlSpace="preserve"
+    >
+        <style type="text/css">
+            {`.st0{fill:#1A73E8;}
+	.st1{fill:#EA4335;}
+	.st2{fill:#4285F4;}
+	.st3{fill:#FBBC04;}
+	.st4{fill:#34A853;}
+	.st5{fill:#4CAF50;}
+	.st6{fill:#1E88E5;}
+	.st7{fill:#E53935;}
+	.st8{fill:#C62828;}
+	.st9{fill:#FBC02D;}
+	.st10{fill:#1565C0;}
+	.st11{fill:#2E7D32;}
+	.st12{fill:#F6B704;}
+	.st13{fill:#E54335;}
+	.st14{fill:#4280EF;}
+	.st15{fill:#34A353;}
+	.st16{clip-path:url(#SVGID_2_);}
+	.st17{fill:#188038;}
+	.st18{opacity:0.2;fill:#FFFFFF;enable-background:new    ;}
+	.st19{opacity:0.3;fill:#0D652D;enable-background:new    ;}
+	.st20{clip-path:url(#SVGID_4_);}
+	.st21{opacity:0.3;fill:url(#_45_shadow_1_);enable-background:new    ;}
+	.st22{clip-path:url(#SVGID_6_);}
+	.st23{fill:#FA7B17;}
+	.st24{opacity:0.3;fill:#174EA6;enable-background:new    ;}
+	.st25{opacity:0.3;fill:#A50E0E;enable-background:new    ;}
+	.st26{opacity:0.3;fill:#E37400;enable-background:new    ;}
+	.st27{fill:url(#Finish_mask_1_);}
+	.st28{fill:#FFFFFF;}
+	.st29{fill:#0C9D58;}
+	.st30{opacity:0.2;fill:#004D40;enable-background:new    ;}
+	.st31{opacity:0.2;fill:#3E2723;enable-background:new    ;}
+	.st32{fill:#FFC107;}
+	.st33{opacity:0.2;fill:#1A237E;enable-background:new    ;}
+	.st34{opacity:0.2;}
+	.st35{fill:#1A237E;}
+	.st36{fill:url(#SVGID_7_);}
+	.st37{fill:#FBBC05;}
+	.st38{clip-path:url(#SVGID_9_);fill:#E53935;}
+	.st39{clip-path:url(#SVGID_11_);fill:#FBC02D;}
+	.st40{clip-path:url(#SVGID_13_);fill:#E53935;}
+	.st41{clip-path:url(#SVGID_15_);fill:#FBC02D;}
+`}
+        </style>
+        <g>
+            <path
+                className="st14"
+                d="M120,76.1c0-3.1-0.3-6.3-0.8-9.3H75.9v17.7h24.8c-1,5.7-4.3,10.7-9.2,13.9l14.8,11.5   C115,101.8,120,90,120,76.1L120,76.1z"
+            />
+            <path
+                className="st15"
+                d="M75.9,120.9c12.4,0,22.8-4.1,30.4-11.1L91.5,98.4c-4.1,2.8-9.4,4.4-15.6,4.4c-12,0-22.1-8.1-25.8-18.9   L34.9,95.6C42.7,111.1,58.5,120.9,75.9,120.9z"
+            />
+            <path
+                className="st12"
+                d="M50.1,83.8c-1.9-5.7-1.9-11.9,0-17.6L34.9,54.4c-6.5,13-6.5,28.3,0,41.2L50.1,83.8z"
+            />
+            <path
+                className="st13"
+                d="M75.9,47.3c6.5-0.1,12.9,2.4,17.6,6.9L106.6,41C98.3,33.2,87.3,29,75.9,29.1c-17.4,0-33.2,9.8-41,25.3   l15.2,11.8C53.8,55.3,63.9,47.3,75.9,47.3z"
+            />
+        </g>
     </svg>
 );

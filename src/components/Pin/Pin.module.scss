@@ -1,6 +1,9 @@
 .wrapper {
     width: 252px;
     padding: 10px;
+    + .wrapper {
+        padding-left: 5px;
+    }
 }
 .container-image {
     background-color: rgb(201, 178, 177);
@@ -10,6 +13,14 @@
     border-radius: 16px;
     height: 350px;
     margin-bottom: 10px;
+    &:hover {
+        .option-top {
+            display: flex;
+        }
+        .option-bottom {
+            display: flex;
+        }
+    }
 }
 .image {
     width: 100%;
@@ -18,6 +29,7 @@
     vertical-align: middle;
     border-radius: 16px;
     position: absolute;
+    object-fit: cover;
     top: 0;
     left: 0;
 }
@@ -36,27 +48,55 @@
 }
 // Button
 .option-top {
+    display: none;
+    justify-content: space-between;
+    padding: 10px 10px 0 10px;
+}
+.option-top.active {
     display: flex;
-    justify-content: flex-end;
-    padding: 10px 10px 0 0;
+}
+.select-board-btn {
+    z-index: 3;
+    border-radius: 50%;
+    background-color: transparent;
+}
+.select-board {
+    span {
+        background-color: #f0f0f0;
+        border-radius: 24px;
+        padding: 9px 16px;
+        font-size: 16px;
+        cursor: pointer;
+        svg {
+            margin-left: 8px;
+        }
+    }
 }
 .saveBtn {
-    font-size: 16px;
-    font-weight: 600;
-    color: #ffffff;
-    background-color: #e60023;
-    padding: 14px;
-    border-radius: 24px;
     cursor: pointer;
-    z-index: 3;
     position: relative;
+    padding: 7px !important;
+    z-index: 3;
 }
+.selectBtn {
+    width: 24px;
+    height: 24px;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+
+    &:hover {
+        background-color: #dad5d5;
+    }
+}
+
 // OPTION_BOTTOM
 .option-bottom {
     position: absolute;
     bottom: 0px;
     right: 0px;
-    display: flex;
+    display: none;
     justify-content: flex-end;
 }
 .link-image {

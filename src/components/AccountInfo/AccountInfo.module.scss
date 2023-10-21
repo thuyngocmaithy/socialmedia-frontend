@@ -1,0 +1,16 @@
+// INFO_USER
+.link-avatar {
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+    cursor: default;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    margin-right: 12px;
+    border-radius: 50%;
+    object-fit: cover; //ảnh giữ được tỷ lệ, tràn hình tròn của border radius
+    cursor: default;
+}
