@@ -17,3 +17,17 @@ export const getBoardById = async (id) => {
         console.log(error);
     }
 };
+
+export const save = async (board) => {
+    try {
+        const res = await httpRequest.post(`boards/add`, board, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': true,
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+}
