@@ -2,13 +2,14 @@ import classNames from 'classnames/bind';
 import styles from './Profile.module.scss';
 import Wrapper from './Wrapper';
 import Board from '../../components/Board';
-import SimplePopper from '../../components/SimplePopper';
+import Popper from '../../components/Popper';
 import { FilterIcon, CreateBoardIcon } from '../../components/Icons';
-import OptionPopper from '../../components/SimplePopper/OptionPopper';
+import OptionPopper from '../../components/Popper/OptionPopper';
 import { AccountOtherContext } from '../../context/AccountOtherContext';
 import { useContext, useState, useEffect } from 'react';
-import * as pinServices from '../../services/pinServices';
+import * as userSavePinServices from '../../services/userSavePinServices';
 import * as boardServices from '../../services/boardServices';
+import * as userServices from '../../services/userServices';
 import { useLocation } from 'react-router-dom';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -64,11 +65,11 @@ function PinSaved() {
 
     useEffect(() => {
         const fetchApi = async () => {
-            const result = await boardServices.getAllBoard(pathname);
+            const result = await boardServices.getBoardByUsername(pathname);
             setListBoard(result);
 
             const promises = result.map(async (board) => {
-                const resultPin = await pinServices.getPinByBoardId(board.boardId);
+                const resultPin = await userSavePinServices.getPinByUserIdAndBoardId(pathname, board.id);
                 let detailBoard = [];
                 resultPin.map((pin) => {
                     return (detailBoard = [...detailBoard, pin.image]);
@@ -102,13 +103,13 @@ function PinSaved() {
             <div className={cx('wrapper-pin-saved')}>
                 {accountOther ? null : (
                     <div className={cx('option')}>
-                        <SimplePopper
+                        <Popper
                             title={<FilterIcon className={cx('action', 'icon')} />}
                             body={<OptionPopper data={filterBoardPopper} />}
                             widthBody="maxContent"
                             placement="bottom-start"
                         />
-                        <SimplePopper
+                        <Popper
                             title={<CreateBoardIcon className={cx('action', 'icon')} />}
                             body={<OptionPopper data={createBoardPopper} />}
                             widthBody="maxContent"

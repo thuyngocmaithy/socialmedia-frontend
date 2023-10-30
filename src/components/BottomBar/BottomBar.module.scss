@@ -9,33 +9,8 @@
     background-color: white;
     padding: 10px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 5);
-    z-index: 999;
-
-    .reset-btn,
-    .save-btn {
-        width: 120px;
-        height: 40px;
-        border-radius: 20px;
-        margin: 0 5px;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        border: none;
-        outline: none;
-        transition: background-color 0.3s ease;
-
-        &:hover {
-            background-color: #ebebeb;
-        }
-    }
-
-    .reset-btn {
-        background-color: whitesmoke;
-        color: #333;
-    }
-
-    .save-btn {
-        background-color: whitesmoke;
-        color: #333;
-    }
+    z-index: 10;
+}
+.saveBtn {
+    margin-left: 8px;
 }

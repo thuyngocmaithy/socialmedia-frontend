@@ -5,7 +5,7 @@
 }
 
 .OptionsLabel {
-    font-size: large;
+    font-size: 14px;
     font-weight: rgb(205, 205, 205);
     margin-left: 3px;
     margin-bottom: 10px;
@@ -42,14 +42,10 @@ select {
         /* Màu viền khi focus */
         box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
         /* Hiệu ứng bóng đổ */
-
     }
-
 }
 
 select::placeholder {
-
     font-size: 15px;
     color: #000;
-
 }

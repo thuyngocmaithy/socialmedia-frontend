@@ -100,14 +100,23 @@ body {
         padding: 8px 9px;
     }
 
-    .tippy-box[data-placement^='bottom']>.tippy-arrow:before {
+    .tippy-box[data-placement^='bottom'] > .tippy-arrow:before {
         top: -8px;
     }
 }
 
 // CUSTOM POPPER
 body {
+    //CUSTOM POPPER
     .MuiPopper-root {
         transform: translate3d(887.667px, 59.3333px, 0px) !important;
+    }
+    // CUSTOM ALERT MUI
+    .MuiAlert-icon,
+    .MuiAlert-action {
+        align-items: center;
+    }
+    .css-ama7zo-MuiPaper-root-MuiAlert-root {
+        background-color: #000;
     }
 }

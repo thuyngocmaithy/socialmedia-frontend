@@ -1,0 +1,42 @@
+.wrapper-message-card {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    overflow: scroll;
+}
+
+.message_name {
+    font-size: var(--message-user-font-size);
+    font-weight: 550;
+}
+
+.message_body {
+    background-color: #E9E9E9;
+    padding: 0.9rem;
+    border-radius: 12px;
+    min-width: 10rem;
+}
+
+.wrapper-sender-message {
+    display: flex;
+}
+
+.wrapper-sender-message .sender-avatar {
+    height: 24px;
+    width: 24px;
+    align-self: flex-end;
+    margin-bottom: 0.8rem;
+    margin-right: 0.6rem;
+}
+
+.wrapper-receiver-message {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.wrapper-receiver-message .message-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}

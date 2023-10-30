@@ -5,6 +5,7 @@ import 'tippy.js/dist/tippy.css';
 import { EditIcon } from '../Icons';
 import Image from '../Image';
 import images from '../../assets/images';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -16,7 +17,7 @@ function Board({ title, detailBoard, accountOther, handleEdit }) {
     };
     return (
         detailBoard && (
-            <a href={`${link}`} className={cx('wrapper')}>
+            <Link to={`/thuyngocmaithyy/board/${link}`} className={cx('wrapper')}>
                 <div className={cx('container-image')}>
                     <div className={cx('images')}>
                         <div className={cx('image-left')}>
@@ -60,7 +61,7 @@ function Board({ title, detailBoard, accountOther, handleEdit }) {
                     <span className={cx('quantity-pin')}>{detailBoard.length} ghim</span>
                     <span className={cx('time-created')}>2 ngày</span>
                 </div>
-            </a>
+            </Link>
         )
     );
 }

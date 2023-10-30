@@ -8,8 +8,9 @@ import Profile, { PinCreated, PinSaved } from '../pages/Profile';
 import InfoProfile from '../pages/Settings/InfoProfile';
 import AccountSetting from '../pages/Settings/AccountSetting';
 import ChangePassword from '../pages/Settings/ChangePassword';
-import Register from '../pages/Register';
-import Login from '../pages/Login';
+import { Register } from '../pages/Account';
+import { Login } from '../pages/Account';
+import Notification from '../components/Notification';
 
 // Layout
 import { RegisterLayout } from '../layouts';
@@ -27,7 +28,6 @@ const publicRoutes = [
     { path: config.routes.changePassword, component: ChangePassword },
     { path: config.routes.register, component: Register, layout: RegisterLayout },
     { path: config.routes.login, component: Login, layout: RegisterLayout },
-
 ];
 
 //Không đăng nhập => chuyển login

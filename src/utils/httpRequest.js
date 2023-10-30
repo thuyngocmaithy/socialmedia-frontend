@@ -6,7 +6,16 @@ const httpRequest = axios.create({
 
 export const get = async (path, options = {}) => {
     const response = await httpRequest.get(path, options);
+    // response.headers("Access-Control-Allow-Origin", "*");
     return response.data;
 };
 
+export const post = async (path, data, options = {}) => {
+    try {
+        const response = await httpRequest.post(path, data, options);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
 export default httpRequest;

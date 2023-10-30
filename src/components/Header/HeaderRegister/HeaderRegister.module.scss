@@ -1,9 +1,4 @@
 .wrapper {
-    --search-border-radius: 92px;
-    --search-height: 46px;
-    --search-top-spacer: 9px;
-    --search-button-width: 52px;
-
     position: fixed;
     top: 0;
     left: 0;
@@ -29,51 +24,19 @@
 .logo-link {
     display: flex;
 }
-
-// category
-.category {
-    padding: 0 0.6vw;
-    font-size: 1vw;
-    font-weight: 700;
-    line-height: 2vw;
-    background-color: transparent;
+.name {
+    color: #cc0000;
+    font-size: 20px;
+    font-weight: 600;
+    margin-left: 8px;
 }
-
 // Actions
 .actions {
     display: flex;
     align-items: center;
 }
-
-.action {
-    width: 48px;
-    height: 48px;
-    padding: 12px;
-    cursor: pointer;
-    border-radius: 50%;
-
-    &:hover {
-        background-color: rgba(22, 24, 35, 0.06);
-    }
-}
-
-.link-avatar {
-    height: 48px;
-}
-
-.more-btn {
-    font-size: 1.8rem;
-    padding: 4px 8px;
-    background-color: transparent;
-    cursor: pointer;
-}
-
-.action-btn {
-    font-size: 2.2rem;
-    color: #161823;
-    background-color: transparent;
-    padding: 4px 12px;
-    cursor: pointer;
+.signUpBtn {
+    margin-left: 8px;
 }
 
 // ICON

@@ -1,33 +1,22 @@
 $default-text-color: black;
 $default-background-color: white;
 $circle-radius: 50%;
-
-
-
 .wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    // margin-right: 20%;
-    margin-top: 2%;
-    // margin-left: 30%;
-    margin-bottom: 10%;
-
-
-    .mainEditor {
-        margin-left: 20%;
+    .container-infoProfile {
         margin-top: 20px;
+        margin-left: 30px;
         background-color: white;
         width: 550px;
-
 
         h1 {
             color: red;
             font-weight: bold;
             font-size: 30px;
+            margin-bottom: 20px;
         }
 
         .discription {
-            margin-top: 10px;
+            margin: 10px 0;
             font-size: medium;
             color: black;
             width: 520px;
@@ -36,10 +25,7 @@ $circle-radius: 50%;
         .name-and-lastname {
             display: flex;
             align-items: center;
-
         }
-
-
 
         .setUserProfilePhoto {
             display: grid;
@@ -62,24 +48,9 @@ $circle-radius: 50%;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-
-                .btn-change {
-                    width: 150px;
-                    height: 50px;
-                    border-radius: 15px;
-                    font-size: 18px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    border: black !important;
-
-                    &:hover {
-                        background: #fbf3f3;
-                    }
-                }
             }
         }
     }
-
 
     .GenderOption {
         display: flex;
@@ -111,7 +82,7 @@ $circle-radius: 50%;
             width: 100%;
         }
 
-        .mainEditor {
+        .container-infoProfile {
             width: 100%;
 
             .setUserProfilePhoto {
@@ -119,7 +90,7 @@ $circle-radius: 50%;
             }
 
             .setUserProfilePhoto-btn {
-                .btn-change {
+                .changeImageBtn {
                     width: 100px;
                     height: 40px;
                     font-size: 16px;

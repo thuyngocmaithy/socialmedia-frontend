@@ -9,18 +9,14 @@ const cx = classNames.bind(styles);
 
 function AccountInfo({ userImage, username }) {
     return (
-        <div className={cx('wrapper')}>
-            <div className={cx('info-pin')}>
-                {username && (
-                    <div className={cx('info-user')}>
-                        <Link className={cx('link-avatar')} to="">
-                            <Image src={userImage} className={cx('user-avatar')} alt={username} />
-                            <span>{username}</span>
-                        </Link>
-                    </div>
-                )}
+        username && (
+            <div className={cx('info-user')}>
+                <Link className={cx('link-avatar')} to="">
+                    <Image src={userImage} className={cx('user-avatar')} alt={username} />
+                    <span>{username}</span>
+                </Link>
             </div>
-        </div>
+        )
     );
 }
 
