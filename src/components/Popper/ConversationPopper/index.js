@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState, useRef, useLayoutEffect } from 'react';
+// import { useLocation } from 'react-router-dom';
 import ConversationMenu from './ConversationMenu';
 import MessageBox from './MessageBox';
 import * as messageServices from '../../../services/messageServices';
@@ -36,7 +36,7 @@ function ConversationPopper() {
             setCurrentInfor({});
         } else {
             setMessageIsShown(true);
-            console.log(chatWith)
+            // console.log(chatWith)
             chattingWithList.current.forEach((cons) => {
                 if (cons.user.id === chatWith) {
                     setCurrentInfor({
