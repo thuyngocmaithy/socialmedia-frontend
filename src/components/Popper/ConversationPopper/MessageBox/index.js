@@ -1,14 +1,23 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styles from './MessageBox.module.scss'
+import styles from './MessageBox.module.scss';
 import { faAngleLeft, faHeart, faCircleArrowRight } from '@fortawesome/free-solid-svg-icons';
-import classNames from 'classnames/bind'
+import classNames from 'classnames/bind';
 import MessageCard from './MessageCard';
-import { useState, useLayoutEffect } from 'react'
-import * as messageServices from '../../../../services/messageServices'
+import { useState, useLayoutEffect, useContext, useEffect, useRef } from 'react';
+import * as messageServices from '../../../../services/messageServices';
+import { UserIDContext } from '../../ConversationPopper/index';
 
 const cx = classNames.bind(styles);
-const USER_ID = 1;
+
 function MessageBox({ handleChange, chatWith }) {
+    let USER_ID = useContext(UserIDContext);
+
+    const messagesEndRef = useRef(null);
+    const scrollToBottom = () => {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    };
+    useEffect(scrollToBottom, [chatWith.messages]);
+
     // Get lastest message id
     let [lastestMessageId, setLastestMessageId] = useState(0);
     useLayoutEffect(() => {
@@ -31,6 +40,7 @@ function MessageBox({ handleChange, chatWith }) {
             setNewMessage('');
         }
     }
+
     // Add new message
     const [newMessage, setNewMessage] = useState('');
     const formattedDate = () => {
@@ -48,17 +58,18 @@ function MessageBox({ handleChange, chatWith }) {
         message.content = newMessage;
         message.id = lastestMessageId;
         setLastestMessageId(lastestMessageId =>lastestMessageId+1);
-        // messageIdIncrement();
         message.send_at = formattedDate();
         chatWith.messages = [...chatWith.messages, message];
         setNewMessage('');
-        console.log(lastestMessageId) 
-    }
+        setIsEntering(false);
+    }   
     const handleKeyDown = (e) => {
         if(e.key === 'Enter') {
             handleSendMessage();
+            setIsEntering(false);
         }
     }
+
     return (
         <div className={cx('wrapper-message')}>
             <div className={cx('message-header')}>
@@ -79,6 +90,7 @@ function MessageBox({ handleChange, chatWith }) {
                             return <MessageCard key={message.id} message={message}></MessageCard>
                         })
                     }
+                    <div ref={messagesEndRef} />
                 </div>
             </div>
 

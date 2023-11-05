@@ -1,5 +1,5 @@
-import { useState, useRef, useLayoutEffect } from 'react';
-// import { useLocation } from 'react-router-dom';
+import { useState, useRef, useLayoutEffect, createContext, useContext } from 'react';
+import { StompContext } from '../../../context/StompContext';
 import ConversationMenu from './ConversationMenu';
 import MessageBox from './MessageBox';
 import * as messageServices from '../../../services/messageServices';
@@ -8,12 +8,16 @@ import classNames from 'classnames/bind';
 import styles from './ConversationPopper.module.scss';
 
 const cx = classNames.bind(styles);
-const USER_ID = "1";
+export const UserIDContext = createContext('');
+
+let USER_ID = 0 ;
 function ConversationPopper() {
+    let stompClient = useContext(StompContext);
+
     const [load, setLoad] = useState(false);
     const chattingWithList = useRef([]);
-    // let chattingWithList = [];
     useLayoutEffect(() => {
+        USER_ID = prompt("Nhap USER_ID: ");
         const fetchApi = async () => {
             setLoad(true);
             chattingWithList.current = await participantServices.getFriendChattingWith(USER_ID);
@@ -23,6 +27,15 @@ function ConversationPopper() {
             })
             setLoad(false);
         };
+        console.log(stompClient)
+        // stompClient.connect({}, function(frame) {
+        //     console.log('Connected: ' + frame);
+        // //     stompClient.subscribe('/topic/greetings', function(greeting){
+        // //         addMessage(greeting);
+        // //         console.log(JSON.parse(greeting.body).content)
+        // //         addMessage(JSON.parse(greeting.body).content )
+        // //     });
+        // });
         // console.log(chattingWithList);
         fetchApi();
     }, []);
@@ -50,13 +63,15 @@ function ConversationPopper() {
         }
     };
     return (
-        <div className={cx('wrapper-conversation-popper')}>
-            {!messageIsShown ? (
-                <ConversationMenu handleChange={changeConversation} chattingWithList={chattingWithList} />
-            ) : (
-                <MessageBox handleChange={changeConversation} chatWith={currentInfor} />
-            )}
-        </div>
+        <UserIDContext.Provider value={parseInt(USER_ID)} >
+            <div className={cx('wrapper-conversation-popper')}>
+                {!messageIsShown ? (
+                    <ConversationMenu handleChange={changeConversation} chattingWithList={chattingWithList} />
+                ) : (
+                    <MessageBox handleChange={changeConversation} chatWith={currentInfor} />
+                )}
+            </div>
+        </UserIDContext.Provider>
     );
 }
 

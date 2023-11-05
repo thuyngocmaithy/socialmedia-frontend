@@ -2,10 +2,12 @@ import { Fragment } from 'react';
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { publicRoutes } from './routes';
 import DefaultLayout from './layouts';
+import { StompProvider } from './context/StompContext'; 
 
 function App() {
     return (
-        <Router>
+        <StompProvider>
+            <Router>
             <div className="App">
                 <Routes>
                     {publicRoutes.map((route, index) => {
@@ -33,6 +35,7 @@ function App() {
                 </Routes>
             </div>
         </Router>
+        </StompProvider>
     );
 }
 
