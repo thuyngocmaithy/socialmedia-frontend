@@ -5,8 +5,8 @@ const UserIdContext = createContext('');
 function UserIdProvider({ children }) {
     const id = prompt("Nhap ID: ");
     return (
-        <UserIdContext.Provider value={id}>{children}</UserIdContext.Provider>
+        <UserIdContext.Provider value={parseInt(id)}>{children}</UserIdContext.Provider>
     );
 }
 
-export default { UserIdProvider, UserIdContext};
+export { UserIdProvider, UserIdContext };

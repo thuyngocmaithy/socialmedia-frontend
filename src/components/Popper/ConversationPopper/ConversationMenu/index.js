@@ -3,6 +3,7 @@ import ConversationList from "./ConversationList";
 import styles from './ConversationMenu.module.scss';
 import classNames from "classnames/bind";
 import { CreateMessageIcon } from "../../../Icons";
+import { useEffect } from "react";
 
 const cx = classNames.bind(styles);
 function ConversationMenu({ handleChange, chattingWithList }) {

@@ -1,77 +1,54 @@
-import { useState, useRef, useLayoutEffect, createContext, useContext } from 'react';
-import { StompContext } from '../../../context/StompContext';
+import { useState, createContext, useContext, useEffect } from 'react';
 import ConversationMenu from './ConversationMenu';
 import MessageBox from './MessageBox';
-import * as messageServices from '../../../services/messageServices';
-import * as participantServices from '../../../services/participantServices';
 import classNames from 'classnames/bind';
 import styles from './ConversationPopper.module.scss';
-
+import { ConversationContext } from '../../../context/ConversationContext';
 const cx = classNames.bind(styles);
 export const UserIDContext = createContext('');
 
-let USER_ID = 0 ;
 function ConversationPopper() {
-    let stompClient = useContext(StompContext);
-
-    const [load, setLoad] = useState(false);
-    const chattingWithList = useRef([]);
-    useLayoutEffect(() => {
-        USER_ID = prompt("Nhap USER_ID: ");
-        const fetchApi = async () => {
-            setLoad(true);
-            chattingWithList.current = await participantServices.getFriendChattingWith(USER_ID);
-            chattingWithList.current.forEach(async (item) => {
-                item.messages = await messageServices.getMessageByConversationId(item.conversation.id);
-                item.lastMessage = item.messages.at(-1).content;
-            })
-            setLoad(false);
-        };
-        console.log(stompClient)
-        // stompClient.connect({}, function(frame) {
-        //     console.log('Connected: ' + frame);
-        // //     stompClient.subscribe('/topic/greetings', function(greeting){
-        // //         addMessage(greeting);
-        // //         console.log(JSON.parse(greeting.body).content)
-        // //         addMessage(JSON.parse(greeting.body).content )
-        // //     });
-        // });
-        // console.log(chattingWithList);
-        fetchApi();
-    }, []);
-
+    const chattingWithList = useContext(ConversationContext);
     const [messageIsShown, setMessageIsShown] = useState(false);
     const [currentInfor, setCurrentInfor] = useState({});
-    // const 
+    // useEffect(() => console.log(chattingWithList))
     const changeConversation = (chatWith = '') => {
         if (messageIsShown) {
             setMessageIsShown(false);
             setCurrentInfor({});
         } else {
-            setMessageIsShown(true);
-            // console.log(chatWith)
             chattingWithList.current.forEach((cons) => {
                 if (cons.user.id === chatWith) {
                     setCurrentInfor({
-                        // id: cons.user.id,
+                        conversation_id: cons.conversation.id,
                         name: cons.user.fullname,
                         avatar: cons.user.avatar,
                         messages: cons.messages,
                     });
                 }
             });
+            setMessageIsShown(true);
         }
     };
+
+    // Set last message again
+    const handleGetNewMessage = (conversation_id, messages) => {
+        chattingWithList.current.forEach((item) => {
+            if(item.conversation.id === conversation_id) {
+                item.lastMessage = messages.at(-1).content;
+                item.messages = messages;
+                // console.log(item);
+            }
+        });
+    }
     return (
-        <UserIDContext.Provider value={parseInt(USER_ID)} >
-            <div className={cx('wrapper-conversation-popper')}>
-                {!messageIsShown ? (
-                    <ConversationMenu handleChange={changeConversation} chattingWithList={chattingWithList} />
-                ) : (
-                    <MessageBox handleChange={changeConversation} chatWith={currentInfor} />
-                )}
-            </div>
-        </UserIDContext.Provider>
+        <div className={cx('wrapper-conversation-popper')}>
+            {!messageIsShown ? (
+                <ConversationMenu handleChange={changeConversation} chattingWithList={chattingWithList} />
+            ) : (
+                <MessageBox handleChange={changeConversation} handleGetNewMessage={handleGetNewMessage} chatWith={currentInfor} />
+            )}
+        </div>
     );
 }
 

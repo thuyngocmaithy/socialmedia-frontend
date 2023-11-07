@@ -4,12 +4,12 @@ import ReceiverMessage from './ReceiverMessage';
 import SenderMessage from './SenderMessage';
 import HeartMessage from './HeartMessage';
 import { useContext } from 'react';
-import { UserIDContext } from '../../index'
+import { UserIdContext } from '../../../../../context/UserIdContext'
 
 const cx = className.bind(styles)
 
 function MessageCard({ message }) {
-    const USER_ID = useContext(UserIDContext);
+    const USER_ID = useContext(UserIdContext);
     const isSender = (message.user.id===USER_ID?false:true);
     const isHeartMessage = (message.content===''?true:false);
     return (
