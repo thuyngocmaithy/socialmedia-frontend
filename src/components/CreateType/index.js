@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react';
-import styles from './CreateBoard.module.scss';
+import styles from './CreateType.module.scss';
 import classNames from 'classnames/bind';
 import Button from '../Button';
-import * as boardServices from '../../services/boardServices';
-import * as userServices from '../../services/userServices';
+import * as typeServices from '../../services/typeServices';
+// import * as userServices from '../../services/userServices';
 
 
-function CreateBoard({ handleTurnOnCreateBoard, handleChooseBoard}) {
+function CreateType({ handleTurnOnCreateType, handleChooseType}) {
 
     const cx = classNames.bind(styles);
 
@@ -27,30 +27,29 @@ function CreateBoard({ handleTurnOnCreateBoard, handleChooseBoard}) {
 
 
 //save btn onclick
-    const handleSaveBoard = () => {
+    const handleSaveType = () => {
         const fetchApi = async () => {
-            const userId = 1;
-            const user = await userServices.getUserById(userId);
-            const name = val;
-            const description = 'bangtest';
-            const board = {user, name, description};
+            // const userId = 1;
+            // const user = await userServices.getUserById(userId);
+            const typeName = val;
+            const Type = {typeName};
 
-            const result = await boardServices.save(board);
+            const result = await typeServices.save(Type);
             // if (result) {
             //     onSaveResult(true);
             // }
-            handleChooseBoard(board);
+            handleChooseType(Type);
         };
         fetchApi();
-        handleTurnOnCreateBoard(false);
+        handleTurnOnCreateType(false);
     };
 
     return (
         <div className={cx('popup-background')}>
-            <div className={cx('gray-background')} onClick={() => handleTurnOnCreateBoard(false)}></div>
+            <div className={cx('gray-background')} onClick={() => handleTurnOnCreateType(false)}></div>
             <div className={cx('popup-container')}>
                 <div className={cx('popup-top')}>
-                    <h2>Tạo bảng</h2>
+                    <h2>Tạo Thể Loại</h2>
                 </div>
                 <div className={cx('input-title')}>
                     <p>Tên</p> 
@@ -68,13 +67,8 @@ function CreateBoard({ handleTurnOnCreateBoard, handleChooseBoard}) {
                     ></input>
                 </div>
                 <div className={cx('optionBtn')}>
-                    {/* {primary &&
-                        <Button className={cx('saveBtn')} primary>
-                            Tạo
-                        </Button>
-                    } */}
                     {red ?
-                        <Button className={cx('saveBtn')} red onClick={() => handleSaveBoard()}>
+                        <Button className={cx('saveBtn')} red onClick={() => handleSaveType()}>
                             Tạo
                         </Button>
                         :
@@ -89,4 +83,4 @@ function CreateBoard({ handleTurnOnCreateBoard, handleChooseBoard}) {
     );
 }
 
-export default CreateBoard;
+export default CreateType;

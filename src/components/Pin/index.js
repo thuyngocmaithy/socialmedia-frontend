@@ -3,18 +3,21 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import classNames from 'classnames/bind';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import { useState, useEffect } from 'react';
 import styles from './Pin.module.scss';
 import { ShareIcon, DownloadIcon, AccessIcon, EditIcon } from '../Icons';
+import { NavLink } from 'react-router-dom';
 import AccountInfo from '../AccountInfo';
 import Button from '../Button';
 import SelectBoardPopper from '../Popper/SelectBoardPopper';
-import { useState, useEffect } from 'react';
 import Popper from '../Popper';
-import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import * as userSavePinServices from '../../services/userSavePinServices';
 import * as pinServices from '../../services/pinServices';
 import * as boardServices from '../../services/boardServices';
 import * as userServices from '../../services/userServices';
+import config from '../../config';
+
 
 const cx = classNames.bind(styles);
 
@@ -44,10 +47,16 @@ function Pin({ id, image, linkImage, title, userImage, username, pinCreated = fa
         };
         fetchApi();
     };
+
+   
+
     return (
-        <div className={cx('wrapper')}>
+        <div className={cx('wrapper')} >
             <div className={cx('container-image')}>
-                <img className={cx('image')} src={image} alt="" />
+                {/* <NavLink className={(nav) => cx('menu-item')} to={config.routes.pin} > */}
+                <NavLink className={(nav) => cx('menu-item')} to={`/pin/${id}`} >
+                    <img className={cx('image')} src={image} alt="" />
+                </NavLink>
                 {pinCreated ? null : (
                     <div className={cx('option-top', { active: activeOptionTop })}>
                         <ClickAwayListener onClickAway={handleClickAway}>
@@ -59,7 +68,7 @@ function Pin({ id, image, linkImage, title, userImage, username, pinCreated = fa
                                     className={cx('select-board')}
                                     body={<SelectBoardPopper />}
                                     widthBody="maxContent"
-                                />
+                                    />
                             </button>
                         </ClickAwayListener>
 
@@ -99,7 +108,7 @@ function Pin({ id, image, linkImage, title, userImage, username, pinCreated = fa
             </div>
             {pinCreated ? null : (
                 <div className={cx('info-pin')}>
-                    {title && <h3>{title}</h3>}
+                    {/* {title && <h3>{title}</h3>} */}
                     <AccountInfo userImage={userImage} username={username} />
                 </div>
             )}

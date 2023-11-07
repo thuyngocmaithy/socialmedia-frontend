@@ -19,6 +19,7 @@ function SelectBoardPopper({handleTurnOnCreateBoard, handleChooseBoard}) {
                 const resultPin = await userSavePinServices.getPinByUserIdAndBoardId('thuyngocmaithyy', board.id);
                 let detailBoard = [];
                 resultPin.map((pin) => {
+                    // return (detailBoard = [...detailBoard]);
                     return (detailBoard = [...detailBoard, pin.image]);
                 });
                 return detailBoard;
@@ -53,9 +54,6 @@ function SelectBoardPopper({handleTurnOnCreateBoard, handleChooseBoard}) {
     const selectBoard = (board) => {
         // console.log(board);
         handleChooseBoard(board);
-        // handleCreateBoard(board)
-        // console.log(document.getElementsByClassName('.information'));
-        // document.getElementsByClassName('.information').textContent = board.name;
     }
     return (
         <div className={cx('wrapper')}>

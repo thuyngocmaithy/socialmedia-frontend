@@ -10,6 +10,7 @@ const routes = {
     changePassword: '/:username/password',
     register: '/register',
     login: '/login',
+    pin: '/pin/:pinid',
 };
 
 export default routes;
