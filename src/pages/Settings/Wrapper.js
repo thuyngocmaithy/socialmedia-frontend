@@ -5,14 +5,14 @@ import BottomBar from '../../components/BottomBar';
 
 const cx = classNames.bind(styles);
 
-function Wrapper({ children, bottom = true }) {
+function Wrapper({ children, bottom = true, onSave }) {
     return (
         <>
             <div className={cx('container-wrapper')}>
                 <SideBar />
                 {children}
             </div>
-            {bottom && <BottomBar />}
+            {bottom && <BottomBar onSave={onSave} />}
         </>
     );
 }

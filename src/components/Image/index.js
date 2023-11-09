@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import images from '../../assets/images';
 import styles from './Image.module.scss';
 
-const Image = forwardRef(({ src, alt, className, fallback: customFallback = images.noImage, ...props }, ref) => {
+const Image = forwardRef(({ src, alt, className, onChange, fallback: customFallback = images.noImage, ...props }, ref) => {
     //Nhận tất cả props ở bên ngoài
 
     const [fallback, setFallback] = useState('');
@@ -23,6 +23,7 @@ const Image = forwardRef(({ src, alt, className, fallback: customFallback = imag
             alt={alt}
             {...props}
             onError={handleError}
+            onChange={onChange}
         />
     ); ///truyền tất cả props vào
     // fallback || src
@@ -34,6 +35,7 @@ Image.propTypes = {
     alt: PropTypes.string,
     className: PropTypes.string,
     fallback: PropTypes.string,
+    onChange: PropTypes.func,
 };
 
 export default Image;

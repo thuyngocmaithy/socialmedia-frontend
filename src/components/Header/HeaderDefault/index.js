@@ -79,7 +79,7 @@ function HeaderDefault() {
                         widthBody="maxContent"
                     />
 
-                    <Link className={cx('link-avatar')} to="/thuyngocmaithyy">
+                    <Link className={cx('link-avatar')} to="/lethanhhai/edit-profile">
                         <Image src="../avt.jpg" className={cx('action', 'user-avatar')} alt="Nguyen Van A" />
                     </Link>
 

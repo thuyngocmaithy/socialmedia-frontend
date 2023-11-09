@@ -18,11 +18,7 @@ function LabelTextBox({
     const cx = classNames.bind(style);
     const [inputValue, setInputValue] = useState(text); // Sử dụng giá trị text từ prop
 
-    const handleChange = (event) => {
-        if (editable) {
-            setInputValue(event.target.value);
-        }
-    };
+
 
     useEffect(() => {
         // Update giá trị inputValue khi prop text thay đổi
@@ -56,9 +52,9 @@ function LabelTextBox({
             <input
                 type={type}
                 placeholder={placeholder}
-                value={inputValue}
+                defaultValue={inputValue}
                 disabled={!editable}
-                onChange={handleChange}
+                onChange={onChange}
                 className={cx(inputClassname)}
             />
         </div>
