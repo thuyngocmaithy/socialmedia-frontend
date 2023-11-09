@@ -21,8 +21,8 @@ const initFormValue = {
 function Register() {
     const [formValue, setFormValue] = useState(initFormValue);
 
-    const handleChange = (event) => {
-        const { value, name } = event.target;
+    const handleChange = (name, value) => {
+        // const { value, name } = event.target;
         setFormValue({
             ...formValue,
             [name]: value,

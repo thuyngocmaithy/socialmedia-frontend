@@ -16,17 +16,49 @@ const initFormValue = {
 function Login() {
     const [formValue, setFormValue] = useState(initFormValue);
 
-    const handleChange = (event) => {
-        const { value, name } = event.target;
+    const handleChange = (name, value) => {
         setFormValue({
             ...formValue,
             [name]: value,
         });
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log('form value', formValue);
+    // const handleSubmit = (event) => {
+    //     event.preventDefault();
+    //     const email = formValue.email + '@gmail.com'; // Tạo email từ tên đăng nhập
+    //     console.log('email', email);
+    //     console.log('password', formValue.password);
+    //     console.log('form value', formValue);
+    // };
+
+    //alert('Đăng nhập thành công\n' + 'email:\t' + formValue.email + '\npassword:\t' + formValue.password);
+    // alert('Đăng nhập thất bại\n' + 'email:\t' + formValue.email + '\npassword:\t' + formValue.password);
+    // alert('Lỗi');
+
+    const handleLogin = () => {
+        // Gửi yêu cầu đăng nhập
+        fetch('/users/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formValue),
+        })
+            .then((response) => response.text())
+            .then((data) => {
+                // Xử lý phản hồi từ server
+                if (data === 'Login successful') {
+                    // Đăng nhập thành công, thực hiện hành động phù hợp ở đây
+                    console.log('Đăng nhập thành công');
+                    alert(
+                        'Đăng nhập thành công\n' + 'email:\t' + formValue.email + '\npassword:\t' + formValue.password,
+                    );
+                } else {
+                    // Đăng nhập thất bại, hiển thị thông báo cho người dùng
+                    console.log('Đăng nhập thất bại');
+                    alert('Đăng nhập thất bại\n' + 'email:\t' + formValue.email + '\npassword:\t' + formValue.password);
+                }
+            });
     };
 
     return (
@@ -34,7 +66,7 @@ function Login() {
             <div className={cx('container-form')}>
                 <h1 className={cx('title')}>Login account</h1>
 
-                <form onSubmit={handleSubmit}>
+                <form>
                     <div className={cx('infomation')}>
                         <LabelTextBox
                             placeholder={'Email'}
@@ -56,7 +88,9 @@ function Login() {
                     </div>
 
                     <div className={cx('submit-btn')}>
-                        <Button red>Login</Button>
+                        <Button red onClick={handleLogin}>
+                            Login
+                        </Button>
                     </div>
                 </form>
             </div>
