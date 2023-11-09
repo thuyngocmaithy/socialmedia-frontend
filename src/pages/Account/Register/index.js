@@ -5,6 +5,7 @@ import LabelTextBox from '../../../components/LabelTextBox';
 import Wrapper from '../Wrapper';
 import Button from '../../../components/Button';
 import { GoogleIcon } from '../../../components/Icons';
+import * as registerServices from '../../../services/registerServices';
 
 // logout xử lý ở phần header
 const cx = classNames.bind(styles);
@@ -21,17 +22,49 @@ const initFormValue = {
 function Register() {
     const [formValue, setFormValue] = useState(initFormValue);
 
-    const handleChange = (event) => {
-        const { value, name } = event.target;
+    const handleChange = (name, value) => {
         setFormValue({
             ...formValue,
             [name]: value,
         });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log('form value', formValue);
+
+        // Kiểm tra xem password và confirmPassword có giống nhau không
+        if (formValue.password !== formValue.confirmPassword) {
+            console.error('Password and Confirm Password do not match');
+            console.log('password: ' + formValue.password, 'confirm password: ' + formValue.confirmPassword);
+            return;
+        }
+
+        // Tạo đối tượng người dùng từ thông tin nhập
+        const userToSave = {
+            fullname: formValue.firstName + ' ' + formValue.lastName,
+            username: formValue.email.split('@')[0],
+            birthday: formValue.birthday,
+            password: formValue.password,
+        };
+
+        // Gửi yêu cầu đăng ký đến máy chủ
+        try {
+            const response = await registerServices.save(
+                userToSave.fullname,
+                userToSave.username,
+                userToSave.birthday,
+                userToSave.password,
+            );
+
+            if (response) {
+                console.log(response);
+            } else {
+                console.log(response);
+            }
+        } catch (error) {
+            console.error('An error occurred:', error);
+            // Xử lý lỗi nếu có lỗi kết nối hoặc xử lý khác
+        }
     };
 
     return (

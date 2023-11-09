@@ -1,6 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-import Switch from '@mui/material/Switch';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import styles from './HeaderRegister.module.scss';
@@ -9,31 +6,8 @@ import { LogoPinterest } from '../../Icons';
 import Button from '../../Button';
 
 const cx = classNames.bind(styles);
-const label = { inputProps: { 'aria-label': 'Switch demo' } };
-// MENU
-const MENU_ITEMS = [
-    {
-        switchToggle: <Switch {...label} />,
-        title: 'Dark Mode',
-    },
-];
 
 function HeaderRegister() {
-    const handleMenuChange = (menuItem) => {
-        console.log(menuItem);
-    };
-
-    // MENU SAU KHI ĐĂNG NHẬP
-    const userMenu = [
-        ...MENU_ITEMS,
-        {
-            icon: <FontAwesomeIcon icon={faArrowRightFromBracket} />,
-            title: 'Log out',
-            // to: <Resiter/>,
-            to: config.routes.register,
-        },
-    ];
-
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
@@ -43,8 +17,10 @@ function HeaderRegister() {
                     <h1 className={cx('name')}>DATH</h1>
                 </Link>
                 <div className={cx('actions')}>
-                    <Button red>Log in</Button>
-                    <Button primary className={cx('signUpBtn')}>
+                    <Button red to={config.routes.login}>
+                        Log in
+                    </Button>
+                    <Button primary className={cx('signUpBtn')} to={config.routes.register}>
                         Sign up
                     </Button>
                 </div>
