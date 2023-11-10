@@ -30,9 +30,11 @@ export default function ActionAlerts({ content, action }) {
                 severity="success"
                 sx={{ fontSize: '16px', fontWeight: '600', textAlign: 'center', justifyContent: 'center' }}
                 action={
-                    <Button primary small>
-                        {action}
-                    </Button>
+                    action ? (
+                        <Button primary small>
+                            {action}
+                        </Button>
+                    ) : null
                 }
             >
                 {content}

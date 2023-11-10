@@ -6,9 +6,9 @@ import Button from '../../../components/Button';
 
 const cx = classNames.bind(styles);
 
-function ChangePassword() {
+function ChangePassword({ admin = false }) {
     return (
-        <Wrapper bottom={false}>
+        <Wrapper bottom={false} admin>
             <div className={cx('container-changepassword')}>
                 <h1 className={cx('Title')}>Đổi mật khẩu</h1>
                 <p className={cx('discription')}>Thực hiện thay đổi đối với thông tin bảo mật tài khoản của bạn</p>

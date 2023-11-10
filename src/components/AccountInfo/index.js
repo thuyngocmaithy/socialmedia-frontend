@@ -1,4 +1,3 @@
-import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
@@ -7,13 +6,18 @@ import styles from './AccountInfo.module.scss';
 
 const cx = classNames.bind(styles);
 
-function AccountInfo({ userImage, username }) {
+function AccountInfo({ userImage, username, width = '32px', fontSize = '1.4rem', fontWeight = 'medium' }) {
     return (
         username && (
             <div className={cx('info-user')}>
                 <Link className={cx('link-avatar')} to="">
-                    <Image src={userImage} className={cx('user-avatar')} alt={username} />
-                    <span>{username}</span>
+                    <Image
+                        style={{ width: width, height: width }}
+                        src={userImage}
+                        className={cx('user-avatar')}
+                        alt={username}
+                    />
+                    <span style={{ fontSize: fontSize, fontWeight: fontWeight }}>{username}</span>
                 </Link>
             </div>
         )

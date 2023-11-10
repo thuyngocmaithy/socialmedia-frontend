@@ -31,7 +31,8 @@
 .wrapper {
     display: flex;
     align-items: center;
-    height: 493px;
+    // height: 493px;
+    height: calc(100vh - 70px);
     object-fit: cover;
     overflow: hidden;
     position: relative;

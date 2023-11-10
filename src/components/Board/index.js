@@ -9,15 +9,14 @@ import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-function Board({ title, detailBoard, accountOther, handleEdit }) {
-    const link = title.replace(' ', '-').toLowerCase();
+function Board({ id, title, detailBoard, accountOther, handleEdit }) {
     const handleEditClick = (event) => {
         event.preventDefault();
         handleEdit();
     };
     return (
         detailBoard && (
-            <Link to={`/thuyngocmaithyy/board/${link}`} className={cx('wrapper')}>
+            <Link to={`/thuyngocmaithyy/board/${id}`} className={cx('wrapper')}>
                 <div className={cx('container-image')}>
                     <div className={cx('images')}>
                         <div className={cx('image-left')}>
@@ -49,7 +48,7 @@ function Board({ title, detailBoard, accountOther, handleEdit }) {
                     {accountOther ? null : (
                         <div className={cx('option')}>
                             <Tippy delay={[0, 100]} content="Chỉnh sửa" placement="bottom">
-                                <button className={cx('btn')} onClick={handleEditClick}>
+                                <button className={cx('editBtn')} onClick={handleEditClick}>
                                     <EditIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
                                 </button>
                             </Tippy>

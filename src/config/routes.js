@@ -10,6 +10,19 @@ const routes = {
     changePassword: '/:username/password',
     register: '/register',
     login: '/login',
+    admin: '/admin/dashboard',
+    userAdmin: '/admin/user',
+    typeAdmin: '/admin/type-post',
+    contentReportAdmin: '/admin/content-report',
+    postAdmin: '/admin/post',
+    commentAdmin: '/admin/comment',
+    settingWeb: '/admin/setting-web',
+    statistic: '/admin/statistic',
+    functionAdmin: '/admin/function',
+    permissionAdmin: '/admin/permission',
+    infoProfileAdmin: '/admin/:username/edit-profile',
+    accountSettingAdmin: '/admin/:username/account-setting',
+    changePasswordAdmin: '/admin/:username/password',
 };
 
 export default routes;

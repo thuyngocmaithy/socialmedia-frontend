@@ -9,7 +9,7 @@ import Button from '../../../components/Button';
 
 const cx = classNames.bind(styles);
 
-function UserProfile() {
+function UserProfile({ admin = false }) {
     let UserData = {
         headerName: 'họ tên',
         label: 'Tên ',
@@ -29,7 +29,7 @@ function UserProfile() {
 
     return (
         <div className={cx('wrapper')}>
-            <Wrapper>
+            <Wrapper admin>
                 <div className={cx('container-infoProfile')}>
                     <h1>Chỉnh sửa hồ sơ</h1>
                     <p className={cx('discription')}>
@@ -62,17 +62,21 @@ function UserProfile() {
                             selectedSize={UserData.size}
                         />
                     </div>
+                    {admin === false && (
+                        <>
+                            <LabelTextBox
+                                placeholder={'Giới thiệu câu chuyện của bạn'}
+                                label={'Giới thiệu'}
+                                selectedSize={'large'}
+                            />
+                            <LabelTextBox
+                                placeholder={'Thêm liên kết để hướng lưu lượng vào trang web'}
+                                label={'Trang web'}
+                                selectedSize={'medium'}
+                            />
+                        </>
+                    )}
 
-                    <LabelTextBox
-                        placeholder={'Giới thiệu câu chuyện của bạn'}
-                        label={'Giới thiệu'}
-                        selectedSize={'large'}
-                    />
-                    <LabelTextBox
-                        placeholder={'Thêm liên kết để hướng lưu lượng vào trang web'}
-                        label={'Trang web'}
-                        selectedSize={'medium'}
-                    />
                     <LabelTextBox placeholder={'Tên người dùng'} label={'Tên người dùng'} selectedSize={'medium'} />
                 </div>
             </Wrapper>

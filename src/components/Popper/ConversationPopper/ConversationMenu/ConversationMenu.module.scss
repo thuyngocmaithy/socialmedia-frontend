@@ -13,8 +13,6 @@
     padding-bottom: 1rem;
     display: flex;
     flex-direction: column;
-
-
 }
 
 .mini-menu .title {
@@ -43,7 +41,7 @@
     height: 42px;
     width: 42px;
     border-radius: 50%;
-    background-color: var(--color-text-icon-brand-primary);
+    background-color: var(--color-red);
     align-items: center;
     justify-content: center;
 }
@@ -55,7 +53,6 @@
     cursor: pointer;
     margin-left: 12px;
 }
-
 
 // MESSAGE LIST
 .wrapper-conversation-list {
@@ -85,7 +82,7 @@
     }
 }
 
-.wrapper-conversation-card>img {
+.wrapper-conversation-card > img {
     flex: 1;
     min-width: 62px;
     max-height: 62px;

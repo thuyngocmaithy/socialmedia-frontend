@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import images from '../../assets/images';
 import styles from './Image.module.scss';
 
-const Image = forwardRef(({ src, alt, className, fallback: customFallback = images.noImage, ...props }, ref) => {
+const Image = forwardRef(({ src, alt, className, style, fallback: customFallback = images.noImage, ...props }, ref) => {
     //Nhận tất cả props ở bên ngoài
 
     const [fallback, setFallback] = useState('');
@@ -17,6 +17,7 @@ const Image = forwardRef(({ src, alt, className, fallback: customFallback = imag
         <img
             ref={ref}
             className={classNames(styles.wrapper, className)}
+            style={style}
             // Mặc định sẽ có className wrapper
             // className có khi truyền từ bên ngoài vào
             src={fallback || src}

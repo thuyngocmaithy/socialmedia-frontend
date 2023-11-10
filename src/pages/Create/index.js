@@ -50,7 +50,7 @@ function Create() {
     };
 
     const avt = {
-        avatar: '../avt.jpg',
+        avatar: '../../avt.jpg',
         username: 'Cynthia Anna',
     };
 

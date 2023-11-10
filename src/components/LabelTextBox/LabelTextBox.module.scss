@@ -10,7 +10,8 @@
         margin-bottom: 10px;
     }
 
-    input {
+    input,
+    textarea {
         padding: 10px;
         /* Khoảng cách bên trong input */
         border: 2px solid rgb(205, 205, 205);
@@ -44,7 +45,8 @@
         }
     }
 
-    input::placeholder {
+    input::placeholder,
+    textarea::placeholder {
         font-size: 15px;
         color: #000;
     }
@@ -68,6 +70,11 @@
 
     //dung` cho story
     .large {
+        width: 500px !important;
+        height: 100px !important;
+    }
+
+    .sizeTextArea {
         width: 500px !important;
         height: 100px !important;
     }

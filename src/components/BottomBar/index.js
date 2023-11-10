@@ -9,7 +9,7 @@ function BottomBar() {
     return (
         <div className={cx('bot-bar')}>
             <Button primary>Thiết lập lại</Button>
-            <Button className={cx('saveBtn')} primary>
+            <Button className={cx('saveBtn')} red>
                 Lưu
             </Button>
         </div>

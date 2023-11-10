@@ -34,20 +34,6 @@ function PopupForm({ onClose }) {
                 <div className={cx('popup-top')}>
                     <h2>Thay đổi ảnh của bạn</h2>
                 </div>
-                {/* <div className={cx('popup-bottom')}>
-                    <Button className={cx('picChosen')} onClick={handleButtonClick} red>
-                        {fileButtonText}
-                    </Button>
-                    <input
-                        ref={fileInputRef}
-                        id="input-file"
-                        title="Chọn ảnh"
-                        type="file"
-                        accept="image/png, image/gif, image/jpg, .png, .jpg, .jpeg"
-                        onChange={handleImageChange}
-                        style={{ display: 'none' }}
-                    />
-                </div> */}
                 <div className={cx('choose-image')}>
                     <LoadImage />
                 </div>
@@ -59,8 +45,6 @@ function PopupForm({ onClose }) {
                         Lưu
                     </Button>
                 </div>
-
-                {/* <button onClick={onClose}>Đóng</button> */}
             </div>
         </div>
     );

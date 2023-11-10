@@ -20,3 +20,12 @@ export const save = async (userSavePin) => {
         console.log(error);
     }
 };
+
+export const getPinByBoardId = async (boardId) => {
+    try {
+        const res = await httpRequest.get(`userSavePin/boardId/${boardId}`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};

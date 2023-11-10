@@ -17,3 +17,47 @@ export const getPinById = async (id) => {
         console.log(error);
     }
 };
+
+export const update = async (id, pin) => {
+    try {
+        const res = await httpRequest.put(`pins/edit/${id}`, pin, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const deleteById = async (id) => {
+    try {
+        const res = await httpRequest.post(`pins/delete/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const countAll = async () => {
+    try {
+        const res = await httpRequest.get(`pins/countAll`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const percent7days = async () => {
+    try {
+        const res = await httpRequest.get(`pins/percent7days`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
