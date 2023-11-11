@@ -526,3 +526,77 @@ export const GoogleIcon = ({ width = '3rem', height = '3rem', className }) => (
         </g>
     </svg>
 );
+export const SearchIcon = ({ className }) => (
+    <div
+        className={className}
+        style={{
+            width: '48px',
+            height: '48px',
+            alignContent: 'center',
+            alignItems: 'center',
+            display: 'inline-block',
+            padding: '10px',
+            borderRadius: '50%',
+        }}
+    >
+        <svg height="20" width="20" viewBox="0 0 24 24" aria-hidden="true" aria-label="" role="img">
+            <path d="M10 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6m13.12 2.88-4.26-4.26A9.842 9.842 0 0 0 20 10c0-5.52-4.48-10-10-10S0 4.48 0 10s4.48 10 10 10c1.67 0 3.24-.41 4.62-1.14l4.26 4.26a3 3 0 0 0 4.24 0 3 3 0 0 0 0-4.24"></path>
+        </svg>
+    </div>
+);
+
+export const People = ({ className }) => (
+    <div
+        className={className}
+        style={{
+            width: '48px',
+            height: '48px',
+            alignContent: 'center',
+            alignItems: 'center',
+            cursor: 'pointer',
+            padding: '10px',
+            borderRadius: '50%',
+        }}
+    >
+        <svg
+            style={{
+                display: 'block',
+                margin: 'auto',
+            }}
+            height="20"
+            width="20"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            aria-label=""
+            role="img"
+        >
+            <path d="M8 11a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9zm10 3c3.314 0 6 2.713 6 6.061V22H0v-1.919C0 15.618 3.582 12 8 12c2.614 0 4.927 1.272 6.387 3.23A5.927 5.927 0 0 1 18 14zm0-1a3.25 3.25 0 1 1 0-6.5 3.25 3.25 0 0 1 0 6.5z"></path>
+        </svg>
+    </div>
+);
+
+export const LinkedIcon = ({ className }) => (
+    <div
+        className={className}
+        style={{
+            width: '48px',
+            height: '48px',
+            alignContent: 'center',
+            alignItems: 'center',
+            padding: '10px',
+            borderRadius: '50%',
+        }}
+    >
+        <svg
+            className="Hn_ gUZ R19 U9O kVc"
+            height="25"
+            width="25"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            aria-label=""
+            role="img"
+        >
+            <path d="m21 7.24-4.05 4.05-1.06-1.06.67-.67a1.5 1.5 0 1 0-2.12-2.12l-.67.67-1.06-1.06L16.76 3zm-9.7 9.7L7.23 21 3 16.76l4.05-4.05 1.06 1.06-.67.67a1.5 1.5 0 0 0 2.12 2.12l.67-.67zM14.63.89l-4.05 4.05a3 3 0 0 0 0 4.24l1.06 1.06-1.42 1.42-1.06-1.06a3 3 0 0 0-4.24 0L.88 14.64a3 3 0 0 0 0 4.24l4.24 4.24a3 3 0 0 0 4.24 0l4.05-4.05a3 3 0 0 0 0-4.24l-1.06-1.06 1.42-1.42 1.06 1.06a3 3 0 0 0 4.24 0l4.05-4.05a3 3 0 0 0 0-4.24L18.88.88a3 3 0 0 0-4.24 0z"></path>
+        </svg>
+    </div>
+);

@@ -10,6 +10,7 @@ import * as userServices from '../../services/userServices';
 const cx = classNames.bind(styles);
 
 function Home() {
+    // COUNT ACCESS
     const { updateCounter, countData } = useCountAccess();
     const [hasExecuted, setHasExecuted] = useState(false);
 
@@ -39,6 +40,7 @@ function Home() {
         }
     }, [updateCounter, countData.currentMonth, hasExecuted]);
 
+    //RENDER LIST PIN
     const [LIST_PIN, setListPin] = useState([]);
     useEffect(() => {
         const fetchApi = async () => {
