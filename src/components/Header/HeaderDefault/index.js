@@ -13,28 +13,32 @@ import NavMenu from '../../NavMenu';
 import Popper from '../../Popper';
 import NotificationPopper from '../../Popper/NotificationPopper';
 import ConversationPopper from '../../Popper/ConversationPopper';
-import { ThemeContext } from '../../../context/ThemeContext';
-import { useContext } from 'react';
+import { memo } from 'react';
 
 const cx = classNames.bind(styles);
+const label = { inputProps: { 'aria-label': 'Switch demo' } };
+// MENU KHI CHƯA ĐĂNG NHẬP
+const MENU_ITEMS = [
+    {
+        switchToggle: <Switch {...label} />,
+        title: 'Dark Mode',
+    },
+];
 
 function HeaderDefault() {
-    const { theme, toggleTheme } = useContext(ThemeContext);
-    // MENU KHI CHƯA ĐĂNG NHẬP
-    const MENU_ITEMS = [
-        {
-            switchToggle: <Switch inputProps={{ 'aria-label': 'controlled' }} onChange={toggleTheme} />,
-            title: 'Dark Mode',
-        },
-    ];
+    const handleMenuChange = (menuItem) => {
+        console.log(menuItem);
+    };
+
     // MENU SAU KHI ĐĂNG NHẬP
     const userMenu = [
         ...MENU_ITEMS,
         {
             icon: <FontAwesomeIcon icon={faArrowRightFromBracket} />,
             title: 'Log out',
-            to: '/logout',
-            separate: true,
+            // to: '/logout',
+            // separate: true,
+            to: config.routes.login,
         },
     ];
 
@@ -50,11 +54,11 @@ function HeaderDefault() {
     ];
 
     return (
-        <header className={cx('wrapper', theme === 'dark' ? 'dark' : '')}>
+        <header className={cx('wrapper')}>
             <div className={cx('inner')}>
                 {/* LOGO */}
                 <Link to={config.routes.home} className={cx('logo-link')}>
-                    <LogoPinterest className={cx('logo')} />
+                    <LogoPinterest className={cx('logo', 'gUZ', 'GjR', 'kVc')} />
                 </Link>
 
                 <NavMenu menu={menuNavbarLeft} />
@@ -65,23 +69,23 @@ function HeaderDefault() {
                 {/* ACTIONS */}
                 <div className={cx('actions')}>
                     <Popper
-                        title={<NotificationIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
+                        title={<NotificationIcon className={cx('action', 'gUZ', 'ztu', 'U9O', 'kVc')} />}
                         body={<NotificationPopper />}
                         widthBody="maxContent"
                     />
                     <Popper
-                        title={<MessageIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
+                        title={<MessageIcon className={cx('action', 'gUZ', 'ztu', 'U9O', 'kVc')} />}
                         body={<ConversationPopper />}
                         left="-48px"
                         widthBody="maxContent"
                     />
 
                     <Link className={cx('link-avatar')} to="/thuyngocmaithyy">
-                        <Image src="../../avt.jpg" className={cx('action', 'user-avatar')} alt="Nguyen Van A" />
+                        <Image src="../avt.jpg" className={cx('action', 'user-avatar')} alt="Nguyen Van A" />
                     </Link>
 
-                    <MenuSettingHeader className={cx('action')} items={userMenu}>
-                        <button className={cx('more-btn', theme === 'dark' ? 'dark' : '')}>
+                    <MenuSettingHeader className={cx('action')} items={userMenu} onChange={handleMenuChange}>
+                        <button className={cx('more-btn')}>
                             <FontAwesomeIcon icon={faChevronDown} />
                         </button>
                     </MenuSettingHeader>
@@ -90,4 +94,4 @@ function HeaderDefault() {
         </header>
     );
 }
-export default HeaderDefault;
+export default memo(HeaderDefault);
