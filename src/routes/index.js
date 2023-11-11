@@ -4,6 +4,7 @@ import config from '../config';
 import Home from '../pages/Home';
 import Create from '../pages/Create';
 import Board from '../pages/Board';
+import DisplayPin from '../pages/Pin';
 import Profile, { PinCreated, PinSaved } from '../pages/Profile';
 import InfoProfile from '../pages/Settings/InfoProfile';
 import AccountSetting from '../pages/Settings/AccountSetting';
@@ -63,6 +64,8 @@ const publicRoutes = [
         component: (props) => <ChangePassword {...props} admin={true} />,
         layout: (props) => <AdminLayout {...props} account={true} />,
     },
+    { path: config.routes.pin, component: DisplayPin },
+
 ];
 
 //Không đăng nhập => chuyển login

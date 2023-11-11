@@ -13,6 +13,7 @@ export const save = async (userSavePin) => {
         const res = await httpRequest.post(`userSavePin/add`, userSavePin, {
             headers: {
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': true,
             },
         });
         return res;

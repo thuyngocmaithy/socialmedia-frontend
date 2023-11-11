@@ -36,6 +36,7 @@ export const add = async (board) => {
         const res = await httpRequest.post(`boards/add`, board, {
             headers: {
                 'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': true,
             },
         });
         return res;

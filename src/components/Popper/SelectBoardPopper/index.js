@@ -5,10 +5,11 @@ import Search from '../../Search';
 import { useState, useEffect } from 'react';
 import * as boardServices from '../../../services/boardServices';
 import * as userSavePinServices from '../../../services/userSavePinServices';
+import CreateBoard from '../../CreateBoard';
 
 const cx = classNames.bind(styles);
 
-function SelectBoardPopper() {
+function SelectBoardPopper({handleTurnOnCreateBoard, handleChooseBoard}) {
     const [listBoard, setListBoard] = useState([]);
     useEffect(() => {
         const fetchApi = async () => {
@@ -18,6 +19,7 @@ function SelectBoardPopper() {
                 const resultPin = await userSavePinServices.getPinByUserIdAndBoardId('thuyngocmaithyy', board.id);
                 let detailBoard = [];
                 resultPin.map((pin) => {
+                    // return (detailBoard = [...detailBoard]);
                     return (detailBoard = [...detailBoard, pin.image]);
                 });
                 return detailBoard;
@@ -42,15 +44,28 @@ function SelectBoardPopper() {
         fetchApi();
     }, []);
 
+//create board
+    // const [createBoard, setCreateBoard] = useState(false);
+    const handleCreateBoard = () => {
+        handleTurnOnCreateBoard(true);
+    }
+
+//select board
+    const selectBoard = (board) => {
+        // console.log(board);
+        handleChooseBoard(board);
+    }
     return (
         <div className={cx('wrapper')}>
             <Search className={cx('search-conversation')} width="300px" />
             <p className={cx('information')}>Tất cả các bảng</p>
             <div className={cx('list-board')}>
                 {listBoard.map((item, index) => {
-                    console.log(item.detailBoard[0]);
+                    // console.log(item.detailBoard[0]);
                     return (
-                        <button key={index} className={cx('item-board')}>
+                        <button key={index} className={cx('item-board')} onClick={() => {
+                                selectBoard(item); 
+                            }}>
                             <img src={item.detailBoard[0]} alt="" />
                             <p>{item.name}</p>
                         </button>
@@ -58,7 +73,7 @@ function SelectBoardPopper() {
                 })}
             </div>
 
-            <div className={cx('bottom-create')}>
+            <div className={cx('bottom-create')} onClick={() => handleCreateBoard()}>
                 <button className={cx('createBtn')}>
                     <CreateBoardIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
                 </button>

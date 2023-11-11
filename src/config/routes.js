@@ -23,6 +23,7 @@ const routes = {
     infoProfileAdmin: '/admin/:username/edit-profile',
     accountSettingAdmin: '/admin/:username/account-setting',
     changePasswordAdmin: '/admin/:username/password',
+    pin: '/pin/:pinid',
 };
 
 export default routes;
