@@ -6,17 +6,20 @@ import GlobalStyles from './components/GlobalStyles';
 import { AccountOtherProvider } from './context/AccountOtherContext';
 import { CountAccessProvider } from './context/CountAccessContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { AccountLoginProvider } from './context/AccountLoginContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     // <React.StrictMode>
     <ThemeProvider>
         <GlobalStyles>
-            <AccountOtherProvider>
-                <CountAccessProvider>
-                    <App />
-                </CountAccessProvider>
-            </AccountOtherProvider>
+            <AccountLoginProvider>
+                <AccountOtherProvider>
+                    <CountAccessProvider>
+                        <App />
+                    </CountAccessProvider>
+                </AccountOtherProvider>
+            </AccountLoginProvider>
         </GlobalStyles>
     </ThemeProvider>,
     // </React.StrictMode>

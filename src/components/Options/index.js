@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import style from './Option.module.scss';
 
 const cx = classNames.bind(style);
 
-function Options({ name, type, title = '', data = [], select }) {
+function Options({ name, type, title = '', data = [], select, onChange }) {
     const options =
         type === 'country'
             ? ['Vietnam', 'United States', 'Canada', 'United Kingdom', 'Australia']
             : type === 'language'
-            ? ['English', 'Spanish', 'French', 'German', 'Chinese']
+            ? ['Tiếng Việt', 'English', 'Spanish', 'French', 'German', 'Chinese']
             : type === 'gender'
             ? ['Nam', 'Nữ', 'Khác']
             : data;
@@ -23,6 +23,9 @@ function Options({ name, type, title = '', data = [], select }) {
             ? 'Giới tính'
             : title;
     const [selectedValue, setSelectedValue] = React.useState(select);
+    useEffect(() => {
+        setSelectedValue(select);
+    }, [select]);
 
     const handleSelectChange = (event) => {
         const newValue = event.target.value;
@@ -32,13 +35,15 @@ function Options({ name, type, title = '', data = [], select }) {
     return (
         <div className={cx('Options')}>
             <label className={cx('OptionsLabel')}>{label}:</label>
-            <select name={name} value={selectedValue} onChange={handleSelectChange}>
+            <select name={name} value={selectedValue} onChange={onChange ? onChange : handleSelectChange}>
                 <option value="">Chọn {label.toLowerCase()}</option>
-                {options.map((option, index) => (
-                    <option key={index} value={data ? option.id : option}>
-                        {data ? option.typeName : option}
-                    </option>
-                ))}
+                {options.map((option, index) => {
+                    return (
+                        <option key={index} value={data.length !== 0 ? option.id : option}>
+                            {data.length !== 0 ? option.typeName : option}
+                        </option>
+                    );
+                })}
             </select>
         </div>
     );

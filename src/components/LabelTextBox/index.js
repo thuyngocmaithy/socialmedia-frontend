@@ -66,7 +66,7 @@ function LabelTextBox({
                     placeholder={placeholder}
                     value={inputValue}
                     disabled={!editable}
-                    onChange={handleChange}
+                    onChange={onChange ? onChange : handleChange}
                 ></textarea>
             ) : (
                 <input
@@ -75,7 +75,7 @@ function LabelTextBox({
                     placeholder={placeholder}
                     value={inputValue}
                     disabled={!editable}
-                    onChange={handleChange}
+                    onChange={onChange ? onChange : handleChange}
                     className={cx(inputClassname)}
                 />
             )}

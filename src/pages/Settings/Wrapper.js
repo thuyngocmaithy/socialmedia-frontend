@@ -6,7 +6,7 @@ import { UserIcon, AccountSettingIcon, KeyIcon } from '../../components/Icons';
 
 const cx = classNames.bind(styles);
 
-function Wrapper({ children, bottom = true, admin = false }) {
+function Wrapper({ children, bottom = true, admin = false, onSave }) {
     const SideBarItems = [
         {
             title: 'Chỉnh sửa hồ sơ',
@@ -31,7 +31,7 @@ function Wrapper({ children, bottom = true, admin = false }) {
                 <SideBar SideBarItems={SideBarItems} />
                 {children}
             </div>
-            {bottom && <BottomBar />}
+            {bottom && <BottomBar onSave={onSave} />}
         </>
     );
 }
