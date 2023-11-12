@@ -7,6 +7,9 @@ import { AccountOtherProvider } from './context/AccountOtherContext';
 import { CountAccessProvider } from './context/CountAccessContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { AccountLoginProvider } from './context/AccountLoginContext';
+import { StompProvider } from './context/StompContext';
+import { ConversationProvider } from './context/ConversationContext';
+import { MessageProvider } from './context/MessageContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -16,7 +19,13 @@ root.render(
             <AccountLoginProvider>
                 <AccountOtherProvider>
                     <CountAccessProvider>
-                        <App />
+                        <StompProvider>
+                            <ConversationProvider>
+                                <MessageProvider>
+                                    <App />
+                                </MessageProvider>
+                            </ConversationProvider>
+                        </StompProvider>
                     </CountAccessProvider>
                 </AccountOtherProvider>
             </AccountLoginProvider>

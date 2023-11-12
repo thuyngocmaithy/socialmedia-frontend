@@ -45,20 +45,24 @@ function Wrapper({ children, className }) {
     const menuPins = [
         {
             title: 'Đã tạo',
-            to: '/thuyngocmaithyy/_created',
+            to: `/${info.username}/_created`,
         },
         {
             title: 'Đã lưu',
-            to: '/thuyngocmaithyy/_saved',
+            to: `/${info.username}/_saved`,
         },
     ];
 
     return (
         <div className={cx('wrapper', className)}>
-            {info && countFriend && (
+            {Object.keys(info).length !== 0 && countFriend !== null && (
                 <>
                     <div className={cx('info')}>
-                        <Image src={info.avatar} className={cx('user-avatar')} alt={info.username} />
+                        <Image
+                            src={info.avatar && `data:image/jpeg;base64,${info.avatar}`}
+                            className={cx('user-avatar')}
+                            alt={info.username}
+                        />
                         <h1 className={cx('fullname')}>{info.fullname}</h1>
                         <p className={cx('username')}>@{info.username}</p>
                         <h4 className={cx('count-friend')} onClick={() => handleRenderFriend()}>
@@ -73,7 +77,7 @@ function Wrapper({ children, className }) {
                                 Kết bạn
                             </Button>
                         ) : (
-                            <Link to="/thuyngocmaithyy/edit-profile">
+                            <Link to={`/${info.username}/edit-profile`}>
                                 <Button className={cx('editBtn')} primary>
                                     Chỉnh sửa hồ sơ
                                 </Button>

@@ -13,7 +13,7 @@ function AccountInfo({ userImage, username, width = '32px', fontSize = '1.4rem',
                 <Link className={cx('link-avatar')} to="">
                     <Image
                         style={{ width: width, height: width }}
-                        src={userImage}
+                        src={userImage && `data:image/jpeg;base64,${userImage}`}
                         className={cx('user-avatar')}
                         alt={username}
                     />

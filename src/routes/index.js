@@ -29,14 +29,7 @@ import { AdminLayout } from '../layouts';
 //Không đăng nhập vẫn vào được
 const publicRoutes = [
     { path: config.routes.home, component: Home },
-    { path: config.routes.create, component: Create },
-    { path: config.routes.profile, component: Profile },
-    { path: config.routes.pinCreatedOfUser, component: PinCreated },
-    { path: config.routes.pinSavedOfUser, component: PinSaved },
-    { path: config.routes.board, component: Board },
-    { path: config.routes.infoProfile, component: InfoProfile },
-    { path: config.routes.accountSetting, component: AccountSetting },
-    { path: config.routes.changePassword, component: ChangePassword },
+
     { path: config.routes.register, component: Register, layout: RegisterLayout },
     { path: config.routes.login, component: Login, layout: RegisterLayout },
     { path: config.routes.admin, component: Dashboard, layout: AdminLayout },
@@ -65,10 +58,18 @@ const publicRoutes = [
         layout: (props) => <AdminLayout {...props} account={true} />,
     },
     { path: config.routes.pin, component: DisplayPin },
-
 ];
 
 //Không đăng nhập => chuyển login
-const privateRoutes = [];
+const privateRoutes = [
+    { path: config.routes.create, component: Create },
+    { path: config.routes.profile, component: Profile },
+    { path: config.routes.pinCreatedOfUser, component: PinCreated },
+    { path: config.routes.pinSavedOfUser, component: PinSaved },
+    { path: config.routes.board, component: Board },
+    { path: config.routes.infoProfile, component: InfoProfile },
+    { path: config.routes.accountSetting, component: AccountSetting },
+    { path: config.routes.changePassword, component: ChangePassword },
+];
 
 export { publicRoutes, privateRoutes };

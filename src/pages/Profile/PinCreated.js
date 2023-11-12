@@ -225,7 +225,6 @@ function PinCreated() {
                         )}
                     </>
                 )}
-
                 {alertType === 'edit' && <ActionAlerts content={`Đã chỉnh sửa thành công`} />}
                 {alertType === 'delete' && <ActionAlerts content={`Đã xóa thành công`} />}
             </Wrapper>

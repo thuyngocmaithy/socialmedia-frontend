@@ -7,12 +7,25 @@ import Button from '../../../components/Button';
 import * as userServices from '../../../services/userServices';
 import { useNavigate } from 'react-router-dom';
 import { GoogleIcon } from '../../../components/Icons';
+import Cookies from 'js-cookie';
 
 // logout xử lý ở phần header
 const cx = classNames.bind(styles);
 
 function Login() {
     const navigate = useNavigate();
+    // Hàm để đặt giá trị vào localStorage
+    function setLocalStorageWithExpiration(key, value, expirationMinutes) {
+        const expirationMS = expirationMinutes * 60 * 1000; // Chuyển đổi phút thành mili giây
+        const expirationTime = new Date().getTime() + expirationMS;
+
+        const data = {
+            value: value,
+            expirationTime: expirationTime,
+        };
+
+        localStorage.setItem(key, JSON.stringify(data));
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -23,7 +36,11 @@ function Login() {
             const result = await userServices.login(username, password);
             // console.log(result);
             if (result !== undefined) {
-                localStorage.setItem('userLogin', JSON.stringify(result));
+                // const expirationTime = new Date(new Date().getTime() + 60000);
+                // Cookies.set('userLogin', JSON.stringify(result), { expires: 1 });
+
+                // Sử dụng hàm đặt giá trị vào localStorage với thời gian hết hạn
+                setLocalStorageWithExpiration('userLogin', result, 30); // 30 phút
                 navigate('/');
             }
         };

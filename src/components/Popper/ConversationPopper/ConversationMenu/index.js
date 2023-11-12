@@ -1,17 +1,18 @@
-import Search from "../../../Search";
-import ConversationList from "./ConversationList";
+import Search from '../../../Search';
+import ConversationList from './ConversationList';
 import styles from './ConversationMenu.module.scss';
-import classNames from "classnames/bind";
-import { CreateMessageIcon } from "../../../Icons";
+import classNames from 'classnames/bind';
+import { CreateMessageIcon } from '../../../Icons';
+import { useEffect } from 'react';
 
 const cx = classNames.bind(styles);
-function ConversationMenu({ handleChange, conversationList }) {
+function ConversationMenu({ handleChange, chattingWithList }) {
     return (
         <div className={cx('wrapper-conservation-menu')}>
             <div className={cx('mini-menu')}>
                 <h2 className={cx('title')}>Inbox</h2>
 
-                <Search className={cx('search-conversation')} width='300px' />
+                <Search />
 
                 <div className={cx('wrapper-create-conversation')}>
                     <div className={cx('wrapper-icon')}>
@@ -20,7 +21,7 @@ function ConversationMenu({ handleChange, conversationList }) {
                     <button className={cx('create-conversation-button')}>Tạo cuộc trò chuyện</button>
                 </div>
             </div>
-            <ConversationList handleChange={handleChange} conversationList={conversationList}  ></ConversationList>
+            <ConversationList handleChange={handleChange} conversationList={chattingWithList}></ConversationList>
         </div>
     );
 }

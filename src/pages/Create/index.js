@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styles from './Create.module.scss';
 import AccountInfo from '../../components/AccountInfo';
 import Button from '../../components/Button';
@@ -15,10 +15,12 @@ import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import ActionAlerts from '../../components/Alert';
 import * as userServices from '../../services/userServices';
 import * as pinServices from '../../services/pinServices';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
 
 const cx = classNames.bind(styles);
 
 function Create() {
+    const userLogin = useContext(AccountLoginContext);
     //select board
     const [activeOptionTop, setActiveOptionTop] = useState(false);
 
@@ -127,19 +129,35 @@ function Create() {
         autoResize(contentRef);
     }, [value]);
 
-    // const [user, setUser] = React.useState();
+    const [user, setUser] = React.useState();
+    const [loading, setLoading] = React.useState(true);
     // const getUser = async () => {
     //     const userId = 1;
     //     const user = await userServices.getUserById(userId);
     //     setUser(user);
     // }
     // getUser();
-    const avt = {
-        // avatar: user.avatar,
-        // username: user.username,
-        avatar: '../avt.jpg',
-        username: 'Cynthia Anna',
-    };
+    useEffect(() => {
+        // Gửi yêu cầu GET để lấy thông tin người dùng
+        if (userLogin !== 0) {
+            userServices
+                .getUserById(userLogin)
+                .then((response) => {
+                    setUser(response);
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+        // setLoading(false);
+    }, [userLogin]);
+    // const avt = {
+    //     // avatar: user.avatar,
+    //     // username: user.username,
+    //     avatar: '../avt.jpg',
+    //     username: 'Cynthia Anna',
+    // };
 
     return (
         <div className={cx('wrapper-createPage')}>
@@ -198,7 +216,7 @@ function Create() {
                             </div>
                         </div>
                         <div className={cx('container-user')}>
-                            <AccountInfo userImage={avt.avatar} username={avt.username} />
+                            {loading === false && <AccountInfo userImage={user.avatar} username={user.username} />}
                         </div>
 
                         <div className={cx('content')}>
