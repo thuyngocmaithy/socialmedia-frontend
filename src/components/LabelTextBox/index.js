@@ -13,12 +13,17 @@ function LabelTextBox({
     hoverable = true,
     onChange,
     selectedSize,
+    area = false,
     ...passProps
 }) {
     const cx = classNames.bind(style);
     const [inputValue, setInputValue] = useState(text); // Sử dụng giá trị text từ prop
 
-
+    const handleChange = (event) => {
+        if (editable) {
+            setInputValue(event.target.value);
+        }
+    };
 
     useEffect(() => {
         // Update giá trị inputValue khi prop text thay đổi
@@ -40,6 +45,10 @@ function LabelTextBox({
         case 'large':
             inputClassname = 'large';
             break;
+
+        case 'sizeTextArea':
+            inputClassname = 'sizeTextArea';
+            break;
         default:
             // Nếu không có selectedSize hoặc không khớp, sử dụng một class mặc định hoặc không có class
             break;
@@ -49,14 +58,27 @@ function LabelTextBox({
     return (
         <div className={wrapperClasses}>
             <label>{label}</label>
-            <input
-                type={type}
-                placeholder={placeholder}
-                defaultValue={inputValue}
-                disabled={!editable}
-                onChange={onChange}
-                className={cx(inputClassname)}
-            />
+            {area ? (
+                <textarea
+                    name={name}
+                    alt=""
+                    className={cx(inputClassname)}
+                    placeholder={placeholder}
+                    value={inputValue}
+                    disabled={!editable}
+                    onChange={onChange ? onChange : handleChange}
+                ></textarea>
+            ) : (
+                <input
+                    name={name}
+                    type={type}
+                    placeholder={placeholder}
+                    value={inputValue}
+                    disabled={!editable}
+                    onChange={onChange ? onChange : handleChange}
+                    className={cx(inputClassname)}
+                />
+            )}
         </div>
     );
 }
@@ -70,7 +92,7 @@ LabelTextBox.propTypes = {
     editable: PropTypes.bool,
     hoverable: PropTypes.bool,
     onChange: PropTypes.func,
-    selectedSize: PropTypes.oneOf(['small', 'medium', 'medium2', 'large']),
+    selectedSize: PropTypes.oneOf(['small', 'medium', 'medium2', 'large', 'sizeTextArea']),
 };
 
 export default LabelTextBox;

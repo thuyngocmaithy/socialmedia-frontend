@@ -13,7 +13,10 @@ function MenuItem({ data, onClick }) {
             switchToggle={data.switchToggle}
             leftIcon={data.icon}
             to={data.to}
-            onClick={onClick}
+            onClick={() => {
+                onClick();
+                data.handleClickMenuItem();
+            }}
         >
             {data.title}
         </Button>

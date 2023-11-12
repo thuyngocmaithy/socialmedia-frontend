@@ -6,102 +6,53 @@ import Image from '../../../components/Image';
 import LabelTextBox from '../../../components/LabelTextBox';
 import Wrapper from '../Wrapper';
 import Button from '../../../components/Button';
-import { getUserById, changeUserInfo, ChangeUserAvatar } from '../../../services/userServices';
-import axios from 'axios';
-
-
-
-
 
 const cx = classNames.bind(styles);
 
 function UserProfile() {
-
-    const [userData, setUserData] = useState({});
-
-    const userID = "1";
-    useEffect(() => {
-        // Gửi yêu cầu GET để lấy thông tin người dùng
-        getUserById(1)
-            .then(response => {
-                setUserData(response);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }, [userID]);
-
-    const [userFullname, setUserFullname] = useState('');
-    const handlGetUserFullname = useCallback((event) => {
-        setUserFullname((prevFullname) => event.target.value);
-    }, []);
-
-    const [userIntroduce, setUserIntroduce] = useState('');
-    const handlGetUserIntroduce = useCallback((event) => {
-        setUserIntroduce((prevIntroduce) => event.target.value);
-    }, []);
-
-    const [userWebsite, setUserWebsite] = useState('');
-    const handleGetUserWebsite = useCallback((event) => {
-        setUserWebsite((prevWebsite) => event.target.value);
-    }, []);
-
-
-    const [username, setUsername] = useState('');
-    const handleGetUsername = useCallback((event) => {
-        setUsername((prevUsername) => event.target.value);
-    }, []);
-
-
+    let UserData = {
+        headerName: 'họ tên',
+        label: 'Tên ',
+        placeholder: 'Nhập tên',
+        size: 'small',
+    };
 
     const [isPopupVisible, setPopupVisible] = useState(false);
 
+    const handlePopupClose = (selectedImage) => {
+        // Xử lý tệp hình ảnh đã chọn ở đây (selectedImage)
+        console.log('Selected image:', selectedImage);
 
-    const [userPhoto, setUserPhoto] = useState(
-        'https://i.pinimg.com/140x140_RS/4d/3f/94/4d3f944a16455e5ad198b76ded8be591.jpg'
-    );
-    const [base64, setBase64] = useState();
-
-    const handleUserphoto = (selectedPhoto) => {
-        if (selectedPhoto) {
-            const imageURL = URL.createObjectURL(selectedPhoto);
-            setUserPhoto(imageURL); // Set image URL to state
-        }
-    };
-
-
-    const handlePopupClose = (selectedPhoto) => {
-        handleUserphoto(selectedPhoto);
-        console.log(userPhoto);
+        // Đóng popup
         setPopupVisible(false);
-        console.log(userData.avatar);
+    };
+    const handlePopupSave = (selectedPhoto) => {
+        handleUserphoto(selectedPhoto);
+        setPopupVisible(false);
 
-
-
-        axios.get(userPhoto, { responseType: 'blob' })
-            .then(response => {
+        axios
+            .get(userPhoto, { responseType: 'blob' })
+            .then((response) => {
                 const blob = response.data;
                 const reader = new FileReader();
                 reader.onload = () => {
                     const base64String = reader.result.split(',')[1];
                     setBase64(base64String);
-                    console.log(base64String);
-                    console.log(base64);
-                    // const String64 = atob(base64String);
-                    // console.log(String64);
-                    // console.log(typeof String64);
 
-
-                    // const encoder = new TextEncoder();
-                    // const byteArray = encoder.encode(String64);
-                    // console.log(typeof byteArray);
-                    ChangeUserAvatar(1, base64String)
-                        .then(response => { console.log(response) })
-                        .catch(error => { console.log(error) });
+                    ChangeUserAvatar(userLogin, base64String)
+                        .then((response) => {
+                            if (response) {
+                                showAlert('editAvatar');
+                                setSaveSuccess(true);
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
                 };
                 reader.readAsDataURL(blob);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error(error);
             });
     };
@@ -114,16 +65,15 @@ function UserProfile() {
             username: username,
         };
 
-        changeUserInfo(1, updatedUser)
-            .then(response => {
+        changeUserInfo(userLogin, updatedUser)
+            .then((response) => {
                 console.log(response);
             })
-            .catch(error => console.log(error));
-
+            .catch((error) => console.log(error));
     };
     return (
         <div className={cx('wrapper')}>
-            <Wrapper onSave={handleSave}>
+            <Wrapper>
                 <div className={cx('container-infoProfile')}>
                     <h1>Chỉnh sửa hồ sơ</h1>
                     <p className={cx('discription')}>
@@ -132,23 +82,28 @@ function UserProfile() {
                     </p>
                     <div className={cx('setUserProfilePhoto')}>
                         <div className={cx('UserPhoto')}>
-
-
-                            <Image src={userData.avatar && `data:image/jpeg;base64,${userData.avatar}`} />
+                            <Image
+                                src={'https://i.pinimg.com/140x140_RS/4d/3f/94/4d3f944a16455e5ad198b76ded8be591.jpg'}
+                            />
                         </div>
                         <div className={cx('setUserProfilePhoto-btn')}>
-                            <Button primary className={cx('changeImageBtn')} onClick={() => setPopupVisible(true)}>Thay đổi</Button>
-                            {isPopupVisible && <ChangeAvatar onClose={handlePopupClose} onSelectImage={handleUserphoto} />}
-
+                            <Button primary className={cx('changeImageBtn')} onClick={() => setPopupVisible(true)}>
+                                Thay đổi
+                            </Button>
+                            {isPopupVisible && <ChangeAvatar onClose={handlePopupClose} />}
                         </div>
                     </div>
                     <div className={cx('name-and-lastname')}>
                         <LabelTextBox
-                            placeholder={"Họ và Tên"}
-                            label={'Họ Tên'}
-                            selectedSize={"medium"}
-                            text={userData.fullname}
-                            onChange={handlGetUserFullname}
+                            placeholder={UserData.placeholder}
+                            label={UserData.label}
+                            selectedSize={UserData.size}
+                        />
+                        <LabelTextBox
+                            placeholder={'Nhập họ'}
+                            label={'Họ'}
+                            size={UserData.size}
+                            selectedSize={UserData.size}
                         />
                     </div>
 
@@ -156,23 +111,13 @@ function UserProfile() {
                         placeholder={'Giới thiệu câu chuyện của bạn'}
                         label={'Giới thiệu'}
                         selectedSize={'large'}
-                        text={userData.introduce}
-                        onChange={handlGetUserIntroduce}
                     />
                     <LabelTextBox
                         placeholder={'Thêm liên kết để hướng lưu lượng vào trang web'}
                         label={'Trang web'}
                         selectedSize={'medium'}
-                        text={userData.website}
-                        onChange={handleGetUserWebsite}
                     />
-                    <LabelTextBox
-                        placeholder={'Tên người dùng'}
-                        label={'Tên người dùng'}
-                        selectedSize={'medium'}
-                        text={userData.username}
-                        onChange={handleGetUsername}
-                    />
+                    <LabelTextBox placeholder={'Tên người dùng'} label={'Tên người dùng'} selectedSize={'medium'} />
                 </div>
             </Wrapper>
         </div>

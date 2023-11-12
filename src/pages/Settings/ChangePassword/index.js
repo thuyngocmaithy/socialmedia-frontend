@@ -3,51 +3,45 @@ import styles from './ChangePassword.module.scss';
 import LabelTextBox from '../../../components/LabelTextBox';
 import Wrapper from '../Wrapper';
 import Button from '../../../components/Button';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import { getUserById, changeUserPassword } from '../../../services/userServices';
+import { AccountLoginContext } from '../../../context/AccountLoginContext';
 
 const cx = classNames.bind(styles);
 
-function ChangePassword() {
-
+function ChangePassword({ admin = false }) {
+    const userLogin = useContext(AccountLoginContext);
     const [userData, setUserData] = useState({});
-    const userID = "1";
 
     const [currentPassword, setCurrentPassword] = useState('');
     const handlgetPassword = useCallback((event) => {
-        setCurrentPassword((prevPassword) => event.target.value);
+        setCurrentPassword(event.target.value);
     }, []);
 
     const [newPassword, setNewPassword] = useState('');
     const handlGetnewPassword = useCallback((event) => {
-        setNewPassword((prevPassword) => event.target.value);
+        setNewPassword(event.target.value);
     }, []);
+
     const [confirmPassword, setConfirmPassword] = useState('');
     const handlGetconfirmPassword = useCallback((event) => {
-        setConfirmPassword((prevPassword) => event.target.value);
+        setConfirmPassword(event.target.value);
     }, []);
 
     useEffect(() => {
         // Gửi yêu cầu GET để lấy thông tin người dùng
-        getUserById(1)
-            .then(response => {
+        getUserById(userLogin)
+            .then((response) => {
                 setUserData(response);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error(error);
             });
-    }, [userID]);
-
+    }, [userLogin]);
 
     const handlePasswordChange = () => {
         try {
-
             const currentPasswordFromServer = userData.password;
-            console.log('current password from server : ' + currentPasswordFromServer);
-            console.log('current password : ' + currentPassword);
-            console.log('new password : ' + newPassword);
-            console.log('confirm password : ' + confirmPassword);
-
 
             if (currentPasswordFromServer !== currentPassword) {
                 alert('Old password is incorrect');
@@ -57,41 +51,23 @@ function ChangePassword() {
                 alert('Confirm password is incorrect');
                 return;
             }
-            // getUserById(1)
-            //     .then(response => {
-            //         changeUserPassword(1, currentPassword, newPassword)
-            //             .then(response => {
-            //                 alert('changePassword is successful');
-            //             })
-            //             .catch(error => {
-            //                 console.log(error);
-            //             });
-            //     }).then(error => {
-            //         console.log("lỗi" + error);
-            //     });
 
-
-            changeUserPassword(1, currentPassword, newPassword)
-                .then(response => {
+            changeUserPassword(userLogin, currentPassword, newPassword)
+                .then((response) => {
                     alert(response);
                 })
-                .catch(error => {
+                .catch((error) => {
                     alert('currentPassword : ' + currentPassword);
                     console.log(error);
                 });
-        }
-
-        catch (error) {
+        } catch (error) {
             alert(error.message);
             console.log(error);
         }
-
-
     };
 
-
     return (
-        <Wrapper bottom={false}>
+        <Wrapper bottom={false} admin={admin}>
             <div className={cx('container-changepassword')}>
                 <h1 className={cx('Title')}>Đổi mật khẩu</h1>
                 <p className={cx('discription')}>Thực hiện thay đổi đối với thông tin bảo mật tài khoản của bạn</p>
@@ -111,9 +87,7 @@ function ChangePassword() {
                     type={'password'}
                     text={currentPassword}
                     onChange={handlgetPassword}
-
                 />
-
 
                 <LabelTextBox
                     className={cx('Password')}
@@ -130,11 +104,9 @@ function ChangePassword() {
                     placeholder={'Xác nhận mật khẩu'}
                     selectedSize={'medium'}
                     type={'password'}
-                    value={confirmPassword}
+                    text={confirmPassword}
                     onChange={handlGetconfirmPassword}
                 />
-
-
 
                 <Button className={cx('changeBtn')} primary onClick={handlePasswordChange}>
                     Đổi mật khẩu

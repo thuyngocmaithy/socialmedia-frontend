@@ -2,9 +2,6 @@ import axios from 'axios';
 
 const httpRequest = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
-    headers: {
-        "Content-type": "application/json"
-    }
 });
 
 export const get = async (path, options = {}) => {
@@ -29,5 +26,4 @@ export const put = async (path, data, options = {}) => {
         throw error;
     }
 };
-
 export default httpRequest;

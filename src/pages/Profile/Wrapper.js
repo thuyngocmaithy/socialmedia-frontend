@@ -9,12 +9,15 @@ import { AccountOtherContext } from '../../context/AccountOtherContext';
 import { useContext, useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import * as userServices from '../../services/userServices';
+import * as friendshipServices from '../../services/friendshipServices';
+import ListFriend from '../../components/Popup/ListFriend';
 
 const cx = classNames.bind(styles);
 
 function Wrapper({ children, className }) {
     const [info, setInfo] = useState({});
     const [countFriend, setcountFriend] = useState(null);
+    const [renderFriend, setRenderFriend] = useState(false);
 
     const accountOther = useContext(AccountOtherContext);
 
@@ -24,33 +27,48 @@ function Wrapper({ children, className }) {
     useEffect(() => {
         const fetchApi = async () => {
             const resultInfo = await userServices.getUserByUsername(pathname);
-            const resultFriend = await userServices.getCountFriend(resultInfo.id);
+            const resultFriend = await friendshipServices.getCountFriend(resultInfo.id);
             setInfo(resultInfo);
             setcountFriend(resultFriend);
         };
         fetchApi();
     }, [pathname]);
 
+    const handleRenderFriend = () => {
+        setRenderFriend(true);
+    };
+
+    const handleClose = () => {
+        setRenderFriend(false);
+    };
+
     const menuPins = [
         {
             title: 'Đã tạo',
-            to: '/thuyngocmaithyy/_created',
+            to: `/${info.username}/_created`,
         },
         {
             title: 'Đã lưu',
-            to: '/thuyngocmaithyy/_saved',
+            to: `/${info.username}/_saved`,
         },
     ];
 
     return (
         <div className={cx('wrapper', className)}>
-            {info && countFriend && (
+            {Object.keys(info).length !== 0 && countFriend !== null && (
                 <>
                     <div className={cx('info')}>
-                        <Image src={info.avatar} className={cx('user-avatar')} alt={info.username} />
+                        <Image
+                            src={info.avatar && `data:image/jpeg;base64,${info.avatar}`}
+                            className={cx('user-avatar')}
+                            alt={info.username}
+                        />
                         <h1 className={cx('fullname')}>{info.fullname}</h1>
                         <p className={cx('username')}>@{info.username}</p>
-                        <h4 className={cx('count-friend')}>{countFriend} Bạn bè</h4>
+                        <h4 className={cx('count-friend')} onClick={() => handleRenderFriend()}>
+                            {countFriend} Bạn bè
+                        </h4>
+                        {renderFriend && <ListFriend onClose={handleClose} idUser={info.id} />}
                         <Button className={cx('shareBtn')} primary>
                             Chia sẻ
                         </Button>
@@ -59,7 +77,7 @@ function Wrapper({ children, className }) {
                                 Kết bạn
                             </Button>
                         ) : (
-                            <Link to="/thuyngocmaithyy/edit-profile">
+                            <Link to={`/${info.username}/edit-profile`}>
                                 <Button className={cx('editBtn')} primary>
                                     Chỉnh sửa hồ sơ
                                 </Button>

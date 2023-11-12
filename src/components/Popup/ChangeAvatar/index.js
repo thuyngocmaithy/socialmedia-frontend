@@ -3,14 +3,11 @@ import styles from './ChangeAvatar.module.scss';
 import classNames from 'classnames/bind';
 import Button from '../../Button';
 import LoadImage from '../../LoadImage';
-function PopupForm({ onClose, onSelectImage }) {
+function PopupForm({ onClose, onSave, onSelectImage }) {
     const [selectedImage, setSelectedImage] = useState(null);
-    const [fileButtonText, setFileButtonText] = useState('Chọn ảnh');
 
     const handleSaveImage = () => {
-
-        onClose(selectedImage); // Close the popup
-
+        onSave(selectedImage); // Close the popup
     };
 
     const cx = classNames.bind(styles);
@@ -32,8 +29,6 @@ function PopupForm({ onClose, onSelectImage }) {
                         Lưu
                     </Button>
                 </div>
-
-
             </div>
         </div>
     );

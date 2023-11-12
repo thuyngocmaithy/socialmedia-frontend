@@ -8,12 +8,11 @@ import * as userSavePinServices from '../../../services/userSavePinServices';
 
 const cx = classNames.bind(styles);
 
-function SelectBoardPopper() {
+function SelectBoardPopper({ getData }) {
     const [listBoard, setListBoard] = useState([]);
     useEffect(() => {
         const fetchApi = async () => {
             const result = await boardServices.getBoardByUsername('thuyngocmaithyy');
-
             const promises = result.map(async (board) => {
                 const resultPin = await userSavePinServices.getPinByUserIdAndBoardId('thuyngocmaithyy', board.id);
                 let detailBoard = [];
@@ -48,9 +47,8 @@ function SelectBoardPopper() {
             <p className={cx('information')}>Tất cả các bảng</p>
             <div className={cx('list-board')}>
                 {listBoard.map((item, index) => {
-                    console.log(item.detailBoard[0]);
                     return (
-                        <button key={index} className={cx('item-board')}>
+                        <button key={index} className={cx('item-board')} onClick={() => getData(item)}>
                             <img src={item.detailBoard[0]} alt="" />
                             <p>{item.name}</p>
                         </button>

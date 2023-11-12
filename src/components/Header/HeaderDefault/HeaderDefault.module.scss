@@ -9,6 +9,10 @@
     height: var(--default-layout-header-height);
     box-shadow: 0px 1px 1px rgb(0 0 0 / 12%);
     background-color: var(--white);
+    &.dark {
+        background-color: var(--black);
+        box-shadow: 0px 1px 1px rgba(230, 222, 222, 0.874);
+    }
 }
 
 .inner {
@@ -19,7 +23,6 @@
     align-items: center;
     justify-content: space-between;
 }
-
 //Logo
 .logo-link {
     display: flex;
@@ -46,10 +49,25 @@
     padding: 12px;
     cursor: pointer;
     border-radius: 50%;
+    display: block;
+    fill: currentColor;
+    stroke-width: 0;
+    color: #5f5f5f;
 
     &:hover {
         background-color: rgba(22, 24, 35, 0.06);
     }
+
+    &.dark {
+        color: #dbdada;
+        &:hover {
+            background-color: #656565;
+        }
+    }
+}
+.logo {
+    color: var(--color-red);
+    fill: currentColor;
 }
 
 .link-avatar {
@@ -60,7 +78,11 @@
     font-size: 1.8rem;
     padding: 4px 8px;
     background-color: transparent;
+    color: #5f5f5f;
     cursor: pointer;
+    &.dark {
+        color: #dbdada;
+    }
 }
 
 .action-btn {
@@ -75,24 +97,4 @@
     border-radius: 50%;
     object-fit: cover; //ảnh giữ được tỷ lệ, tràn hình tròn của border radius
     cursor: pointer;
-}
-
-// ICON
-.GjR {
-    color: #e60023;
-    color: var(--color-text-icon-brand-primary);
-}
-
-.kVc {
-    display: block;
-}
-
-.gUZ {
-    fill: currentColor;
-    stroke-width: 0;
-    vertical-align: middle;
-}
-
-.ztu {
-    color: #5f5f5f;
 }

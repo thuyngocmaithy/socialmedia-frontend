@@ -20,14 +20,13 @@ function LoadImage({ onSelectImage }) {
             onSelectImage(file);
             console.log(file);
         }
-    }
+    };
     const handlePreviewIMG = (e) => {
         const file = e.target.files[0];
         file.preview = URL.createObjectURL(file);
         setIMG(file);
         setShowDiv(false);
         sendtoParent(file);
-
     };
     return (
         <div className={cx('imgFrame')} onClick={() => document.querySelector('.inputIMG').click()}>
@@ -49,7 +48,6 @@ function LoadImage({ onSelectImage }) {
                 onChange={handlePreviewIMG}
             />
             {img && <img src={img.preview} alt="userPhoto" />}
-
         </div>
     );
 }

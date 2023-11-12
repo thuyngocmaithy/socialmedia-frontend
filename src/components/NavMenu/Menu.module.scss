@@ -10,14 +10,22 @@
     font-weight: 600;
     border-radius: 8px;
     color: var(--text-color);
-    background-color: #ffffff;
+    background-color: var(--white);
     transition: background-color ease-in-out 200ms;
+    &.dark {
+        background-color: var(--black);
+        color: var(--white);
+    }
 }
 
 .menu-item {
     &.active {
-        background-color: #000;
+        background-color: var(--black);
         color: var(--white);
+        &.dark {
+            background-color: var(--white);
+            color: var(--black);
+        }
     }
 }
 .activeUnderline {

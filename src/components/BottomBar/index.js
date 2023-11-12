@@ -9,10 +9,13 @@ function BottomBar({ onSave }) {
     const refreshPage = () => {
         window.location.reload();
     };
+
     return (
         <div className={cx('bot-bar')}>
-            <Button primary onClick={refreshPage}>Thiết lập lại</Button>
-            <Button className={cx('saveBtn')} primary onClick={onSave}>
+            <Button primary onClick={refreshPage}>
+                Thiết lập lại
+            </Button>
+            <Button className={cx('saveBtn')} red onClick={onSave}>
                 Lưu
             </Button>
         </div>

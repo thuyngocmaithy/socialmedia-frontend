@@ -1,48 +1,29 @@
-import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom'; // Import NavLink for navigation
 import classNames from 'classnames/bind';
 import styles from './SideBar.module.scss';
-// import MenuItem from '../NavMenu/MenuItem';
+import Menu from './Menu';
+import MenuItem from './Menu/MenuItem';
 
+const cx = classNames.bind(styles);
 
-function SideBar() {
-    const cx = classNames.bind(styles);
-    const location = useLocation();
-    const SideBarItems = [
-        {
-            title: 'User Profile',
-            to: '/user/profile',
-        },
-        {
-            title: 'User Private',
-            to: '/user/private',
-        },
-
-        {
-            title: 'User Password',
-            to: '/user/password',
-        }
-    ];
-
+function SideBar({ SideBarItems, style, className, children, onclickMenuItem }) {
     return (
-        <div className={cx('sidebar')}>
-            {SideBarItems.map
-                (
-                    (item, index) => (
-                        <NavLink
-                            to={item.to}
+        <aside className={cx(className, 'wrapper')} style={style}>
+            {children}
+            <Menu>
+                {SideBarItems.map((item, index) => {
+                    return (
+                        <MenuItem
                             key={index}
-                            className={cx('menu-item-text', {
-                                active: location.pathname === item.to,
-                            })}
-                        >
-                            {item.title}
-                        </NavLink>
-                    )
-                )
-            }
-        </div >
+                            title={item.title}
+                            to={item.to}
+                            icon={item.icon}
+                            activeIcon={item.activeIcon ? item.activeIcon : null}
+                            onclickMenuItem={onclickMenuItem}
+                        />
+                    );
+                })}
+            </Menu>
+        </aside>
     );
 }
-
 export default SideBar;
