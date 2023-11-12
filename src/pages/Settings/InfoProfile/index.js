@@ -134,7 +134,7 @@ function UserProfile() {
                         <div className={cx('UserPhoto')}>
 
 
-                            <Image src={`data:image/jpeg;base64,${userData.avatar}`} />
+                            <Image src={userData.avatar && `data:image/jpeg;base64,${userData.avatar}`} />
                         </div>
                         <div className={cx('setUserProfilePhoto-btn')}>
                             <Button primary className={cx('changeImageBtn')} onClick={() => setPopupVisible(true)}>Thay đổi</Button>
