@@ -23,7 +23,7 @@ function Board({ id, title, detailBoard, accountOther, handleEdit }) {
                             <Image
                                 fallback={images.backgroundGray}
                                 className={cx('image-left')}
-                                src={detailBoard[0] !== undefined ? detailBoard[0] : ''}
+                                src={detailBoard[0] !== undefined ? `data:image/jpeg;base64,${detailBoard[0]}` : ''}
                                 alt=""
                             />
                         </div>
@@ -32,14 +32,14 @@ function Board({ id, title, detailBoard, accountOther, handleEdit }) {
                             <div className={cx('image-right')}>
                                 <Image
                                     fallback={images.backgroundGray}
-                                    src={detailBoard[1] !== undefined ? detailBoard[1] : ''}
+                                    src={detailBoard[1] !== undefined ? `data:image/jpeg;base64,${detailBoard[1]}` : ''}
                                     alt=""
                                 />
                             </div>
                             <div className={cx('image-right')}>
                                 <Image
                                     fallback={images.backgroundGray}
-                                    src={detailBoard[2] !== undefined ? detailBoard[2] : ''}
+                                    src={detailBoard[2] !== undefined ? `data:image/jpeg;base64,${detailBoard[2]}` : ''}
                                     alt=""
                                 />
                             </div>

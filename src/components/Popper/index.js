@@ -33,7 +33,7 @@ const PopupBody = styled('div')(
         font-weight: 500;
         opacity: 1;
         margin: 0.25rem 0;    
-        z-index: 10;
+        z-index: 5;
     `,
 );
 
@@ -72,7 +72,16 @@ function Popper({ idPopper, contentTitle, title, body, className, left = '0', pl
                     offset={offset}
                 >
                     <ClickAwayListener onClickAway={handleClickAway}>
-                        <PopupBody>{body}</PopupBody>
+                        <PopupBody
+                            style={{
+                                marginLeft:
+                                    id.split('selectBoard')[1] === '1' || parseInt(id.split('selectBoard')[1]) % 6 === 0
+                                        ? '190px'
+                                        : '0.25rem',
+                            }}
+                        >
+                            {body}
+                        </PopupBody>
                     </ClickAwayListener>
                 </Popup>
             ) : null}

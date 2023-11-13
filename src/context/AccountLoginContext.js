@@ -1,5 +1,4 @@
-import Cookies from 'js-cookie';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useMemo, useState } from 'react';
 
 const AccountLoginContext = createContext();
 
@@ -8,7 +7,7 @@ function AccountLoginProvider({ children }) {
     // const [userLogin, setUserLogin] = useState(0);
 
     // Hàm để lấy giá trị từ localStorage
-    function getLocalStorageWithExpiration(key) {
+    const getLocalStorageWithExpiration = (key) => {
         const data = localStorage.getItem(key);
         if (!data) {
             return null;
@@ -24,11 +23,10 @@ function AccountLoginProvider({ children }) {
         }
 
         return parsedData.value;
-    }
+    };
 
     const [userLogin, setUserLogin] = useState(() => {
         const initialData = getLocalStorageWithExpiration('userLogin');
-        console.log('initialData:' + initialData);
         return initialData || 0;
     });
 

@@ -5,6 +5,8 @@ import Search from '../../Search';
 import { useState, useEffect } from 'react';
 import * as boardServices from '../../../services/boardServices';
 import * as userSavePinServices from '../../../services/userSavePinServices';
+import Image from '../../Image';
+import images from '../../../assets/images';
 
 const cx = classNames.bind(styles);
 
@@ -49,7 +51,11 @@ function SelectBoardPopper({ getData }) {
                 {listBoard.map((item, index) => {
                     return (
                         <button key={index} className={cx('item-board')} onClick={() => getData(item)}>
-                            <img src={item.detailBoard[0]} alt="" />
+                            <Image
+                                src={item.detailBoard[0] && `data:image/jpeg;base64,${item.detailBoard[0]}`}
+                                alt=""
+                            />
+
                             <p>{item.name}</p>
                         </button>
                     );

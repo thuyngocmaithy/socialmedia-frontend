@@ -25,3 +25,29 @@ export const getListRequest = async (id) => {
         console.log(error);
     }
 };
+
+export const update = async (id, friendship) => {
+    try {
+        const res = await httpRequest.put(`/friendships/edit/${id}`, friendship, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const deleteById = async (id) => {
+    try {
+        const res = await httpRequest.post(`/friendships/delete/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};

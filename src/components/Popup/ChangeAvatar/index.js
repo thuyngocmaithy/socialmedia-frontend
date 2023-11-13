@@ -22,7 +22,7 @@ function PopupForm({ onClose, onSave, onSelectImage }) {
                     <LoadImage onSelectImage={onSelectImage} />
                 </div>
                 <div className={cx('optionBtn')}>
-                    <Button onClick={() => onClose(selectedImage)} primary>
+                    <Button onClick={onClose} primary>
                         Hủy
                     </Button>
                     <Button className={cx('saveBtn')} onClick={handleSaveImage} red>

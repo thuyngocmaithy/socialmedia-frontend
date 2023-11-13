@@ -5,7 +5,7 @@ import { faCircleArrowUp } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
-function LoadImage({ onSelectImage }) {
+function LoadImage({ height = '300px', width = '300px', onSelectImage }) {
     //preview img
     const [img, setIMG] = useState();
     const [showDiv, setShowDiv] = useState(true);
@@ -18,7 +18,6 @@ function LoadImage({ onSelectImage }) {
     const sendtoParent = (file) => {
         if (onSelectImage) {
             onSelectImage(file);
-            console.log(file);
         }
     };
     const handlePreviewIMG = (e) => {
@@ -31,7 +30,7 @@ function LoadImage({ onSelectImage }) {
     return (
         <div className={cx('imgFrame')} onClick={() => document.querySelector('.inputIMG').click()}>
             {showDiv && (
-                <div className={cx('upload-text')}>
+                <div style={{ height: height, width: width }} className={cx('upload-text')}>
                     <button className={cx('upload-btn')}>
                         <FontAwesomeIcon icon={faCircleArrowUp} />
                     </button>
@@ -47,7 +46,7 @@ function LoadImage({ onSelectImage }) {
                 accept="image/gif, image/jpeg, image/png"
                 onChange={handlePreviewIMG}
             />
-            {img && <img src={img.preview} alt="userPhoto" />}
+            {img && <img src={img.preview} style={{ height: height, width: width }} alt="userPhoto" />}
         </div>
     );
 }

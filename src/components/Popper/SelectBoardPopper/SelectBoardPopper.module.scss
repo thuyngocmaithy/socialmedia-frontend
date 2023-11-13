@@ -17,12 +17,12 @@
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     align-items: center;
     img {
-        border-radius: 14px;
-        padding: 5px;
-        width: 100%;
-        object-fit: cover;
+        // border-radius: 14px;
         width: 60px;
         height: 60px;
+        object-fit: cover;
+        border-radius: 5px;
+        padding: 5px;
         margin-left: 10px;
     }
     p {
@@ -49,7 +49,7 @@
 
     .createBtn {
         background-color: #f0f0f0;
-        border-radius: 10px;
+        border-radius: 5px;
         width: 50px;
         height: 50px;
         display: flex;
@@ -66,7 +66,3 @@
         background-color: #f0f0f0;
     }
 }
-
-// .createBoard {
-//     display: none;
-// }

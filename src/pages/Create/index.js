@@ -16,6 +16,11 @@ import ActionAlerts from '../../components/Alert';
 import * as userServices from '../../services/userServices';
 import * as pinServices from '../../services/pinServices';
 import { AccountLoginContext } from '../../context/AccountLoginContext';
+import axios from 'axios';
+import { async } from 'q';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import LabelTextBox from '../../components/LabelTextBox';
+import * as typeServices from '../../services/typeServices';
 
 const cx = classNames.bind(styles);
 
@@ -23,6 +28,7 @@ function Create() {
     const userLogin = useContext(AccountLoginContext);
     //select board
     const [activeOptionTop, setActiveOptionTop] = useState(false);
+    const [createSuccess, setCreateSuccess] = useState(false);
 
     const handleClickAway = () => {
         setActiveOptionTop(false);
@@ -31,26 +37,24 @@ function Create() {
         setActiveOptionTop(true);
     };
 
-    // HandleChooseBoard
-    const [currentBoard, setBoard] = useState({ name: 'Chọn bảng' });
-    const handleChooseBoard = (currentBoard) => {
-        setBoard(currentBoard);
-        // console.log(currentBoard.name);
-    };
-
     // HandleChooseType
     const [currentType, setType] = useState({ typeName: 'Chọn Thể Loại' });
     const handleChooseType = (currentType) => {
         setType(currentType);
-        // console.log(currentType.typeName);
     };
+    const handleSubmitCreate = async (event) => {
+        event.preventDefault();
+        const typeName = event.target.elements.typeName.value !== '' ? event.target.elements.typeName.value : null;
 
-    // Get IMG from LoadImage
-    const [img, setIMG] = useState();
-
-    const handleChangeIMGPath = (path) => {
-        setIMG(path);
-        // console.log(path);
+        const type = {
+            typeName,
+        };
+        const result = await typeServices.add(type);
+        if (result) {
+            setCreateSuccess(true);
+            setShowCreateType(false);
+            showAlert('createType');
+        }
     };
     //count length
     const [valContent, setValContent] = useState('');
@@ -62,41 +66,90 @@ function Create() {
     const handleCountTitle = (e) => {
         setValTitle(e.target.value);
     };
+    // Get IMG from LoadImage
+    const [imagePin, setImagePin] = useState('');
+    const [base64, setBase64] = useState('');
 
+    const handleChangeImage = (selectedPhoto) => {
+        if (selectedPhoto) {
+            const imageURL = URL.createObjectURL(selectedPhoto);
+            setImagePin(imageURL); // Set image URL to state
+        }
+    };
     //save pin
     const handleInsertPin = async () => {
-        const userId = 1;
-        const user = await userServices.getUserById(userId);
-        const image = img;
-        setBoard(currentBoard);
-        const board = currentBoard;
-        setType(currentType);
-        const type = currentType;
-        const title = valTitle;
-        const description = valContent;
-        if (image && board.name !== 'Chọn bảng' && type.typeName !== 'Chọn Thể Loại' && title && description) {
-            const pin = { description, image, title, board, type, user };
-            const result = await pinServices.save(pin);
+        const user = await userServices.getUserById(userLogin);
+        console.log(user);
+        let base64String = '';
+        axios
+            .get(imagePin, { responseType: 'blob' })
+            .then((response) => {
+                const blob = response.data;
+                const reader = new FileReader();
+                reader.onload = async () => {
+                    base64String = reader.result.split(',')[1];
+                    setBase64(base64String);
+                    const image = base64String;
+                    setType(currentType);
+                    const type = currentType;
+                    const title = valTitle;
+                    const description = valContent;
+                    let createdAt = new Date();
+                    createdAt = createdAt.toISOString();
+                    const link = null;
 
-            handleSaveResult(true);
-        } else {
-            alert('Nhập đầy đủ thông tin !!!');
-        }
-        // console.log(pin);
+                    if (image && type.typeName !== 'Chọn Thể Loại' && title && description) {
+                        const pin = {
+                            createdAt,
+                            description,
+                            image,
+                            link,
+                            title,
+                            type,
+                            user,
+                        };
+                        console.log(pin);
+                        const result = await pinServices.save(pin);
+                        if (result) {
+                            showAlert('save');
+                        }
+                    } else {
+                        alert('Nhập đầy đủ thông tin !!!');
+                    }
+                    // console.log(pin);
+                };
+                reader.readAsDataURL(blob);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     };
-    const [statusSave, setSatusSave] = useState(false);
+    //Hiển thị hộp thoại thông báo
+    const [alertType, setAlertType] = useState(null);
+    const [alertVisible, setAlertVisible] = useState(false);
 
-    const handleSaveResult = (result) => {
-        setSatusSave(result);
+    const showAlert = (type) => {
+        setAlertType(type);
+        setAlertVisible(true);
 
-        // Nếu result là true, đặt một timeout để đặt lại statusSave sau một khoảng thời gian
-        if (result) {
-            setTimeout(() => {
-                setSatusSave(false);
+        const timeoutId = setTimeout(() => {
+            setAlertVisible(false);
+            setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+        }, 2500);
+
+        return timeoutId;
+    };
+
+    useEffect(() => {
+        if (alertVisible) {
+            const timeoutId = setTimeout(() => {
+                setAlertVisible(false);
+                setAlertType(null); // Đặt alertType về null khi ẩn thông báo
             }, 2500);
+
+            return () => clearTimeout(timeoutId);
         }
-        window.location.reload();
-    };
+    }, [alertVisible]);
 
     // Turn on CreateBoard
     const [showCreateBoard, setShowCreateBoard] = React.useState(false);
@@ -106,8 +159,12 @@ function Create() {
 
     // Turn on CreateType
     const [showCreateType, setShowCreateType] = React.useState(false);
+
     const handleTurnOnCreateType = (isShown) => {
         setShowCreateType(isShown);
+    };
+    const handleCloseCreate = () => {
+        setShowCreateType(false);
     };
 
     //auto resize textarea
@@ -131,12 +188,7 @@ function Create() {
 
     const [user, setUser] = React.useState();
     const [loading, setLoading] = React.useState(true);
-    // const getUser = async () => {
-    //     const userId = 1;
-    //     const user = await userServices.getUserById(userId);
-    //     setUser(user);
-    // }
-    // getUser();
+
     useEffect(() => {
         // Gửi yêu cầu GET để lấy thông tin người dùng
         if (userLogin !== 0) {
@@ -150,38 +202,12 @@ function Create() {
                     console.error(error);
                 });
         }
-        // setLoading(false);
     }, [userLogin]);
-    // const avt = {
-    //     // avatar: user.avatar,
-    //     // username: user.username,
-    //     avatar: '../avt.jpg',
-    //     username: 'Cynthia Anna',
-    // };
 
     return (
         <div className={cx('wrapper-createPage')}>
             <div className={cx('createBox')}>
                 <div className={cx('wrapperBtns')}>
-                    <div className={cx('option-top', { active: activeOptionTop })}>
-                        <ClickAwayListener onClickAway={handleClickAway}>
-                            <button className={cx('select-board-btn')} onClick={() => handleDisplay()}>
-                                <Popper
-                                    // idPopper={id}
-                                    contentTitle={currentBoard.name}
-                                    title={<FontAwesomeIcon icon={faChevronDown} />}
-                                    className={cx('select-board')}
-                                    body={
-                                        <SelectBoardPopper
-                                            handleTurnOnCreateBoard={handleTurnOnCreateBoard}
-                                            handleChooseBoard={handleChooseBoard}
-                                        />
-                                    }
-                                    widthBody="maxContent"
-                                />
-                            </button>
-                        </ClickAwayListener>
-                    </div>
                     <div className={cx('save-pin')}>
                         <Button className={cx('save-btn')} onClick={() => handleInsertPin()} red>
                             Lưu
@@ -190,7 +216,7 @@ function Create() {
                 </div>
                 {/* end header  */}
                 <div className={cx('mainContent')}>
-                    <LoadImage handleChangeIMGPath={handleChangeIMGPath}></LoadImage>
+                    <LoadImage height="565px" width="355px" onSelectImage={handleChangeImage}></LoadImage>
                     {/* end upload IMG */}
                     <div className={cx('insertData')}>
                         <div className={cx('title')}>
@@ -265,21 +291,32 @@ function Create() {
                 </div>
             </div>
 
-            {showCreateBoard && (
-                <div className={cx('createBoard')}>
-                    <CreateBoard
-                        handleTurnOnCreateBoard={handleTurnOnCreateBoard}
-                        handleChooseBoard={handleChooseBoard}
-                    />
-                </div>
-            )}
+            <Dialog fullWidth={true} maxWidth="sm" open={showCreateType} onClose={handleCloseCreate}>
+                <form onSubmit={handleSubmitCreate}>
+                    <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
+                        Thêm loại bài đăng
+                    </DialogTitle>
+                    <DialogContent>
+                        <LabelTextBox
+                            name={'typeName'}
+                            placeholder={'Tên loại'}
+                            label={'Tên loại'}
+                            selectedSize={'medium'}
+                        />
+                    </DialogContent>
+                    <DialogActions sx={{ marginBottom: '10px' }}>
+                        <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseCreate}>
+                            Hủy
+                        </Button>
+                        <Button sx={{ fontSize: '14px' }} red type="submit">
+                            Tạo
+                        </Button>
+                    </DialogActions>
+                </form>
+            </Dialog>
 
-            {showCreateType && (
-                <div className={cx('createType')}>
-                    <CreateType handleTurnOnCreateType={handleTurnOnCreateType} handleChooseType={handleChooseType} />
-                </div>
-            )}
-            {statusSave && <ActionAlerts content={`Đã lưu pin`} action="UNDO" />}
+            {alertType === 'save' && <ActionAlerts content={`Tạo thành công`} />}
+            {alertType === 'createType' && <ActionAlerts content={`Đã thêm thể loại`} />}
         </div>
     );
 }
