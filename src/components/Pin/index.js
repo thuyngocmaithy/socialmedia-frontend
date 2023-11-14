@@ -8,38 +8,40 @@ import { ShareIcon, DownloadIcon, AccessIcon, EditIcon, SearchIcon, People } fro
 import AccountInfo from '../AccountInfo';
 import Button from '../Button';
 import SelectBoardPopper from '../Popper/SelectBoardPopper';
-import { useState, useEffect, useRef, useContext } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Popper from '../Popper';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import * as userSavePinServices from '../../services/userSavePinServices';
 import * as pinServices from '../../services/pinServices';
 import * as boardServices from '../../services/boardServices';
 import * as userServices from '../../services/userServices';
-import SharePopper from '../Popper/SharePopper';
-import { NavLink } from 'react-router-dom';
-import { AccountLoginContext } from '../../context/AccountLoginContext';
-import DialogConfirmLogin from '../DialogConfirmLogin';
+import { Popover } from '@mui/material';
+import ShareMenu from './ShareMenu';
 
 const cx = classNames.bind(styles);
 
-function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated = false, handleEdit, onSaveResult }) {
-    const userLogin = useContext(AccountLoginContext);
+function Pin({ id, image, linkImage, title, userImage, username, pinCreated = false, handleEdit, onSaveResult }) {
     const [activeOptionTop, setActiveOptionTop] = useState(false);
-    const [activeOptionBottom, setActiveOptionBottom] = useState(false);
-    const [openConfirmLogin, setOpenConfirmLogin] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
 
-    const handleOpenShare = () => {
-        setActiveOptionBottom(true);
+    const divRef = useRef();
+
+    const handleOpenShare = (event) => {
+        setAnchorEl(divRef.current);
     };
+
+    const handleCloseShare = () => {
+        setAnchorEl(null);
+    };
+
+    const openedShare = Boolean(anchorEl);
+    const shareMenuId = openedShare ? 'simple-popover' : undefined;
 
     const handleDisplay = () => {
         setActiveOptionTop(true);
     };
     const handleClickAwaySelectBoard = () => {
         setActiveOptionTop(false);
-    };
-    const handleClickAwayShare = () => {
-        setActiveOptionBottom(false);
     };
 
     const [data, setData] = useState('');
@@ -71,12 +73,27 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
         }
     };
 
-    const download = (url, title) => {
-        const linkSource = `data:image/jpeg;base64,${url}`;
-        const downloadLink = document.createElement('a');
-        downloadLink.href = linkSource;
-        downloadLink.download = `${title}.png`;
-        downloadLink.click();
+    const download = (url) => {
+        console.log(url);
+        const splittedUrl = url.split('.');
+        const ext = splittedUrl[splittedUrl.length - 1];
+        fetch(url, {
+            method: 'GET',
+            headers: {},
+        })
+            .then((response) => {
+                response.arrayBuffer().then(function (buffer) {
+                    const url = window.URL.createObjectURL(new Blob([buffer]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', `image.${ext}`);
+                    document.body.appendChild(link);
+                    link.click();
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
 
     const openImage = (url) => {
@@ -91,16 +108,14 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
     return (
         <>
             <div className={cx('wrapper')}>
-                <div className={cx('container-image')}>
-                    <NavLink className={(nav) => cx('menu-item')} to={`/pin/${id}`}>
-                        <img className={cx('image')} src={image && `data:image/jpeg;base64,${image}`} alt="" />
-                    </NavLink>
+                <div ref={divRef} className={cx('container-image')}>
+                    <img className={cx('image')} src={image} alt="" />
                     {pinCreated ? null : (
                         <div className={cx('option-top', { active: activeOptionTop })}>
-                            <ClickAwayListener onClickAway={handleClickAwaySelectBoard}>
+                            <ClickAwayListener onClickAway={handleClickAway}>
                                 <button className={cx('select-board-btn')} onClick={handleDisplay}>
                                     <Popper
-                                        idPopper={`selectBoard${stt}`}
+                                        idPopper={id}
                                         contentTitle={data.name || 'Chọn bảng'}
                                         title={<FontAwesomeIcon icon={faChevronDown} />}
                                         className={cx('select-board')}
@@ -115,7 +130,7 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
                             </Button>
                         </div>
                     )}
-                    <div className={cx('option-bottom', { active: activeOptionBottom })}>
+                    <div className={cx('option-bottom')}>
                         {linkImage && (
                             <button onClick={() => openImage(linkImage)} className={cx('btn-text')}>
                                 <AccessIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
@@ -130,23 +145,17 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
                             </Tippy>
                         )}
 
-                        <ClickAwayListener onClickAway={handleClickAwayShare}>
+                        <Tippy delay={[0, 100]} content="Chia sẻ" placement="bottom">
                             <button onClick={handleOpenShare} className={cx(pinCreated ? 'btn-end' : 'btn')}>
-                                <Popper
-                                    idPopper={`share${id}`}
-                                    contentTitle={<ShareIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />}
-                                    className={cx('share-menu')}
-                                    body={<SharePopper />}
-                                    widthBody="maxContent"
-                                />
+                                <ShareIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
                             </button>
-                        </ClickAwayListener>
+                        </Tippy>
 
                         {pinCreated ? null : (
                             <Tippy delay={[0, 100]} content="Lưu ảnh" placement="bottom">
                                 <button
-                                    onClick={() => {
-                                        download(image, title);
+                                    onClick={function (e) {
+                                        download(image);
                                     }}
                                     className={cx('btn-end')}
                                 >
@@ -163,9 +172,7 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
                     </div>
                 )}
             </div>
-            {openConfirmLogin && <DialogConfirmLogin open={openConfirmLogin} setOpen={setOpenConfirmLogin} />}
-
-            {/* <Popover
+            <Popover
                 id={shareMenuId}
                 anchorOrigin={{
                     vertical: 'bottom',
@@ -179,7 +186,7 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
                 anchorEl={anchorEl}
             >
                 <ShareMenu />
-            </Popover> */}
+            </Popover>
         </>
     );
 }

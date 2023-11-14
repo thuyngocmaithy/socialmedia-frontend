@@ -12,7 +12,6 @@ import { ThemeContext } from '../../../context/ThemeContext';
 const cx = classNames.bind(styles);
 
 function SelectBoardPopper({ getData }) {
-    const { theme } = useContext(ThemeContext);
     const [listBoard, setListBoard] = useState([]);
     useEffect(() => {
         const fetchApi = async () => {
@@ -52,16 +51,8 @@ function SelectBoardPopper({ getData }) {
             <div className={cx('list-board')}>
                 {listBoard.map((item, index) => {
                     return (
-                        <button
-                            key={index}
-                            className={cx('item-board', theme === 'dark' ? 'dark' : '')}
-                            onClick={() => getData(item)}
-                        >
-                            <Image
-                                src={item.detailBoard[0] && `data:image/jpeg;base64,${item.detailBoard[0]}`}
-                                alt=""
-                            />
-
+                        <button key={index} className={cx('item-board')} onClick={() => getData(item)}>
+                            <img src={item.detailBoard[0]} alt="" />
                             <p>{item.name}</p>
                         </button>
                     );

@@ -19,6 +19,12 @@ function LabelTextBox({
     const cx = classNames.bind(style);
     const [inputValue, setInputValue] = useState(text); // Sử dụng giá trị text từ prop
 
+    // const handleChange = (event) => {
+    //     if (editable) {
+    //         setInputValue(event.target.value);
+    //     }
+    // };
+
     const handleChange = (event) => {
         if (editable) {
             const newValue = event.target.value;

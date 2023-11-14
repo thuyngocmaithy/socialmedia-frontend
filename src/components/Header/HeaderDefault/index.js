@@ -69,8 +69,9 @@ function HeaderDefault() {
         {
             icon: <FontAwesomeIcon icon={faArrowRightFromBracket} />,
             title: 'Log out',
-            handleClickMenuItem: logout,
-            separate: true,
+            // to: '/logout',
+            // separate: true,
+            to: config.routes.login,
         },
     ];
 

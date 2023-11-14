@@ -16,7 +16,25 @@ export const HomeIcon = ({ width = '3rem', height = '3rem', className }) => (
     </svg>
 );
 
-export const UserGroupIcon = ({ width = '3rem', height = '3rem', className }) => (
+export const HomeActiveIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
+    <svg
+        className={className}
+        width={width}
+        height={height}
+        data-e2e=""
+        viewBox="0 0 48 48"
+        fill="currentColor"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M24.9505 7.84001C24.3975 7.38666 23.6014 7.38666 23.0485 7.84003L6.94846 21.04C6.45839 21.4418 6.2737 22.1083 6.48706 22.705C6.70041 23.3017 7.26576 23.7 7.89949 23.7H10.2311L11.4232 36.7278C11.5409 38.0149 12.6203 39 13.9128 39H21.5C22.0523 39 22.5 38.5523 22.5 38V28.3153C22.5 27.763 22.9477 27.3153 23.5 27.3153H24.5C25.0523 27.3153 25.5 27.763 25.5 28.3153V38C25.5 38.5523 25.9477 39 26.5 39H34.0874C35.3798 39 36.4592 38.0149 36.577 36.7278L37.7691 23.7H40.1001C40.7338 23.7 41.2992 23.3017 41.5125 22.705C41.7259 22.1082 41.5412 21.4418 41.0511 21.04L24.9505 7.84001Z"
+        ></path>
+    </svg>
+);
+
+export const UserGroupIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
     <svg
         className={className}
         width={width}
@@ -44,7 +62,24 @@ export const UserGroupIcon = ({ width = '3rem', height = '3rem', className }) =>
     </svg>
 );
 
-export const LiveIcon = ({ width = '3rem', height = '3rem', className }) => (
+export const UserGroupActiveIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
+    <svg
+        className={className}
+        width={width}
+        height={height}
+        data-e2e=""
+        viewBox="0 0 48 48"
+        fill="currentColor"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path d="M25.5 17C25.5 21.1421 22.1421 24.5 18 24.5C13.8579 24.5 10.5 21.1421 10.5 17C10.5 12.8579 13.8579 9.5 18 9.5C22.1421 9.5 25.5 12.8579 25.5 17Z"></path>
+        <path d="M7.10396 34.7906C8.78769 30.2189 12.8204 27 18.0009 27C23.1818 27 27.2107 30.2213 28.8958 34.7898C29.3075 35.906 28.6141 37 27.5 37H8.5C7.38629 37 6.69289 35.9067 7.10396 34.7906Z"></path>
+        <path d="M40.6308 37H32C31.2264 34.1633 30.0098 31.5927 28.144 29.7682C29.5384 28.9406 31.1829 28.5 33 28.5C37.239 28.5 40.536 30.8992 41.9148 35.0108C42.2516 36.0154 41.5423 37 40.6308 37Z"></path>
+        <path d="M33 26.5C36.0376 26.5 38.5 24.0376 38.5 21C38.5 17.9624 36.0376 15.5 33 15.5C29.9624 15.5 27.5 17.9624 27.5 21C27.5 24.0376 29.9624 26.5 33 26.5Z"></path>
+    </svg>
+);
+
+export const LiveIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
     <svg
         className={className}
         width={width}
@@ -63,7 +98,25 @@ export const LiveIcon = ({ width = '3rem', height = '3rem', className }) => (
     </svg>
 );
 
-export const ArowLeftIcon = ({ width = '3rem', height = '3rem', className }) => (
+export const LiveActiveIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
+    <svg
+        className={className}
+        width={width}
+        height={height}
+        data-e2e=""
+        viewBox="0 0 48 48"
+        fill="currentColor"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path d="M6.5 17.5714C6.5 14.7292 8.86029 12.5 11.6782 12.5H27.8621C30.6799 12.5 33.0402 14.7292 33.0402 17.5714V18.6843L36.745 15.9435C37.6399 15.2815 38.8324 15.1731 39.8318 15.6537C40.8365 16.1369 41.5 17.1486 41.5 18.2857V29.7143C41.5 30.8514 40.8365 31.8631 39.8318 32.3463C38.8324 32.8269 37.6399 32.7185 36.745 32.0565L33.0402 29.3158V30.4286C33.0402 33.2708 30.6799 35.5 27.8621 35.5H11.6782C8.86029 35.5 6.5 33.2708 6.5 30.4286V17.5714Z"></path>
+        <path
+            d="M23.25 23.134C23.9167 23.5189 23.9167 24.4811 23.25 24.866L17.25 28.3301C16.5833 28.715 15.75 28.2339 15.75 27.4641L15.75 20.5359C15.75 19.7661 16.5833 19.285 17.25 19.6699L23.25 23.134Z"
+            fill="currentColor"
+        ></path>
+    </svg>
+);
+
+export const ArowLeftIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         className={className}
@@ -289,7 +342,7 @@ export const UserIcon = ({ width = '3rem', height = '3rem', className }) => (
     </svg>
 );
 
-export const AccountSettingIcon = ({ width = '3rem', height = '3rem', className }) => (
+export const UserActiveIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         className={className}
@@ -297,14 +350,39 @@ export const AccountSettingIcon = ({ width = '3rem', height = '3rem', className 
         width={width}
         fill="currentColor"
         viewBox="0 0 16 16"
-        style={{ padding: '2px' }}
+    >
+        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+    </svg>
+);
+
+export const AccountSettingIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className={className}
+        height={height}
+        width={width}
+        fill="currentColor"
+        viewBox="0 0 16 16"
     >
         <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
         <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
     </svg>
 );
 
-export const KeyIcon = ({ width = '3rem', height = '3rem', className }) => (
+export const AccountSettingActiveIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className={className}
+        height={height}
+        width={width}
+        fill="currentColor"
+        viewBox="0 0 16 16"
+    >
+        <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z" />
+    </svg>
+);
+
+export const KeyIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         className={className}
@@ -355,15 +433,10 @@ export const PostIcon = ({ width = '3rem', height = '3rem', className }) => (
         className={className}
         height={height}
         width={width}
-        viewBox="0 0 24 24"
-        style={{ padding: '1px' }}
+        fill="currentColor"
+        viewBox="0 0 16 16"
     >
-        <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M19.186 2.09c.521.25 1.136.612 1.625 1.101.49.49.852 1.104 1.1 1.625.313.654.11 1.408-.401 1.92l-7.214 7.213c-.31.31-.688.541-1.105.675l-4.222 1.353a.75.75 0 0 1-.943-.944l1.353-4.221a2.75 2.75 0 0 1 .674-1.105l7.214-7.214c.512-.512 1.266-.714 1.92-.402zm.211 2.516a3.608 3.608 0 0 0-.828-.586l-6.994 6.994a1.002 1.002 0 0 0-.178.241L9.9 14.102l2.846-1.496c.09-.047.171-.107.242-.178l6.994-6.994a3.61 3.61 0 0 0-.586-.828zM4.999 5.5A.5.5 0 0 1 5.47 5l5.53.005a1 1 0 0 0 0-2L5.5 3A2.5 2.5 0 0 0 3 5.5v12.577c0 .76.082 1.185.319 1.627.224.419.558.754.977.978.442.236.866.318 1.627.318h12.154c.76 0 1.185-.082 1.627-.318.42-.224.754-.559.978-.978.236-.442.318-.866.318-1.627V13a1 1 0 1 0-2 0v5.077c0 .459-.021.571-.082.684a.364.364 0 0 1-.157.157c-.113.06-.225.082-.684.082H5.923c-.459 0-.57-.022-.684-.082a.363.363 0 0 1-.157-.157c-.06-.113-.082-.225-.082-.684V5.5z"
-            fill="currentColor"
-        />
+        <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
     </svg>
 );
 
@@ -526,6 +599,7 @@ export const GoogleIcon = ({ width = '3rem', height = '3rem', className }) => (
         </g>
     </svg>
 );
+
 export const SearchIcon = ({ className }) => (
     <div
         className={className}
@@ -535,6 +609,8 @@ export const SearchIcon = ({ className }) => (
             alignContent: 'center',
             alignItems: 'center',
             display: 'inline-block',
+
+            cursor: 'pointer',
             padding: '10px',
             borderRadius: '50%',
         }}
@@ -583,6 +659,7 @@ export const LinkedIcon = ({ className }) => (
             height: '48px',
             alignContent: 'center',
             alignItems: 'center',
+            cursor: 'pointer',
             padding: '10px',
             borderRadius: '50%',
         }}
