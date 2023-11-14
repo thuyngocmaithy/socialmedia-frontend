@@ -11,6 +11,9 @@ function StompProvider({ children }) {
     stompClient.connect({}, function(frame) {
         console.log('Connected: ' + frame);
     });
+    stompClient.onWebSocketError((element) => {
+        console.log(element)
+    })
     return <StompContext.Provider value={stompClient}>{children}</StompContext.Provider>;
 }
 

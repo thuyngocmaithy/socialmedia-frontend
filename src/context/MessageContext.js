@@ -1,12 +1,14 @@
 import { createContext, useContext, useLayoutEffect, useState } from "react";
 import { ConversationContext } from "./ConversationContext";
+import { useConversationContext } from '../hooks/useConversationContext'
 import { StompContext } from "./StompContext";
 const MessageContext = createContext({});
 
 function MessageProvider({ children }) {
     const [load, setLoad] = useState(false);
     let stompClient = useContext(StompContext);
-    const conversation = useContext(ConversationContext).current;
+    // const conversation = useContext(ConversationContext);
+    const conversation = useConversationContext();
     let id = 0;
     let message = {};
     let stompObject = [];
@@ -22,11 +24,11 @@ function MessageProvider({ children }) {
             //     console.log(item);
             // });
             // console.log(conversation);
+            console.log({...conversation});
             setLoad(false);
         }
         loadRoom();
-        console.log(conversation.current);
-    })
+    },[])
     const stompOutputObject = {
         stompID: id,
         stompMessage: message
