@@ -25,7 +25,7 @@
     &.dark {
         color: var(--white);
         &.active {
-            color: var(--color-red) !important;
+            color: var(--white) !important;
             background-color: var(--black);
             &:hover {
                 background-color: var(--background-popup-dark);

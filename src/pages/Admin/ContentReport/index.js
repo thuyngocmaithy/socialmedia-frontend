@@ -9,11 +9,13 @@ import LabelTextBox from '../../../components/LabelTextBox';
 import Button from '../../../components/Button';
 import ActionAlerts from '../../../components/Alert';
 import * as contentReportServices from '../../../services/contentReportServices';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function ContentReport() {
+    const { theme } = useContext(ThemeContext);
     const [listContent, setListContent] = useState([]);
 
     const [openCreate, setOpenCreate] = useState(false); //Mở dialog thêm
@@ -185,7 +187,13 @@ function ContentReport() {
                 rows={rows}
                 title="Quản lý nội dung báo cáo"
             />
-            <Dialog fullWidth={true} maxWidth="sm" open={openEdit} onClose={handleCloseEdit}>
+            <Dialog
+                className={cx(theme === 'dark' ? 'dark' : '')}
+                fullWidth={true}
+                maxWidth="sm"
+                open={openEdit}
+                onClose={handleCloseEdit}
+            >
                 <form onSubmit={handleSubmitEdit}>
                     <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
                         Chỉnh sửa
@@ -207,16 +215,22 @@ function ContentReport() {
                         />
                     </DialogContent>
                     <DialogActions sx={{ justifyContent: 'flex-end', margin: '10px' }}>
-                        <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseEdit}>
+                        <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseEdit}>
                             Hủy
                         </Button>
-                        <Button sx={{ fontSize: '14px' }} red type="submit">
+                        <Button style={{ fontSize: '14px' }} red type="submit">
                             Sửa
                         </Button>
                     </DialogActions>
                 </form>
             </Dialog>
-            <Dialog fullWidth={true} maxWidth="sm" open={openCreate} onClose={handleCloseCreate}>
+            <Dialog
+                className={cx(theme === 'dark' ? 'dark' : '')}
+                fullWidth={true}
+                maxWidth="sm"
+                open={openCreate}
+                onClose={handleCloseCreate}
+            >
                 <form onSubmit={handleSubmitCreate}>
                     <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
                         Thêm loại bài đăng
@@ -237,17 +251,22 @@ function ContentReport() {
                         />
                     </DialogContent>
                     <DialogActions sx={{ marginBottom: '10px' }}>
-                        <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseCreate}>
+                        <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseCreate}>
                             Hủy
                         </Button>
-                        <Button sx={{ fontSize: '14px' }} red type="submit">
+                        <Button style={{ fontSize: '14px' }} red type="submit">
                             Tạo
                         </Button>
                     </DialogActions>
                 </form>
             </Dialog>
             {confirmDelete && (
-                <Dialog fullWidth={true} maxWidth="sm" open={confirmDelete}>
+                <Dialog
+                    className={cx(theme === 'dark' ? 'dark' : '')}
+                    fullWidth={true}
+                    maxWidth="sm"
+                    open={confirmDelete}
+                >
                     <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
                         Xóa nội dung báo cáo?
                     </DialogTitle>
@@ -255,10 +274,10 @@ function ContentReport() {
                         <DialogContent>Tất cả nội dung báo cáo đã chọn sẽ được xóa khỏi hệ thống.</DialogContent>
                         <DialogActions sx={{ marginBottom: '10px' }}>
                             <div>
-                                <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseConfirm}>
+                                <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseConfirm}>
                                     Hủy
                                 </Button>
-                                <Button sx={{ fontSize: '14px' }} red type="submit">
+                                <Button style={{ fontSize: '14px', marginLeft: '8px' }} red type="submit">
                                     Xóa
                                 </Button>
                             </div>
