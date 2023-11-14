@@ -20,8 +20,8 @@ function ConversationPopper() {
             setCurrentInfor({});
         } else {
             chattingWithList.current.forEach((cons) => {
-                console.log('cons:' + Object.keys(cons));
-                console.log('cons.messages:' + cons.messages);
+                // console.log('cons:' + Object.keys(cons));
+                // console.log('cons.messages:' + cons.messages);
                 if (cons.user.username === chatWith) {
                     setCurrentInfor({
                         conversation_id: cons.conversation.id,

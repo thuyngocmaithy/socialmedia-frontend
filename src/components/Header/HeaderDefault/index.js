@@ -45,7 +45,7 @@ function HeaderDefault() {
             getUserById(userLogin)
                 .then((response) => {
                     setUser(response);
-                    console.log(response);
+                    // console.log(response);
                     setUserLoaded(true);
                 })
                 .catch((error) => {

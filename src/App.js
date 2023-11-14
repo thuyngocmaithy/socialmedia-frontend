@@ -56,7 +56,7 @@ function App() {
                             Layout = route.layout;
                         }
                         const Page = route.component;
-                        console.log(userLogin);
+                        // console.log(userLogin);
                         return (
                             <Route
                                 key={index}

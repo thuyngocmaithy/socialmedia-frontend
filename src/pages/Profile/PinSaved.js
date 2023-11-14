@@ -19,10 +19,12 @@ import LabelTextBox from '../../components/LabelTextBox';
 import Button from '../../components/Button';
 import ActionAlerts from '../../components/Alert';
 import { useNavigate } from 'react-router-dom';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function PinSaved() {
+    const { theme } = useContext(ThemeContext);
     const navigate = useNavigate();
     const accountOther = useContext(AccountOtherContext);
     //Open hộp thoại edit
