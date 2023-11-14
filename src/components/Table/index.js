@@ -366,23 +366,12 @@ export default function EnhancedTable({
                                                             inputProps={{ 'aria-label': `radio${row.id}` }}
                                                         />
                                                     ) : (
-                                                        // <Checkbox
-                                                        //     name={`id${row.id}_${key}`}
-                                                        //     color="primary"
-                                                        //     checked={
-                                                        //         privateBool[`id${row.id}_${key}`] !== undefined
-                                                        //             ? privateBool[`id${row.id}_${key}`]
-                                                        //             : row[key]
-                                                        //     }
-                                                        //     onChange={(event) => handleSelectRadio(event)}
-                                                        //     //Ngăn chặn sự kiện click từ lan truyền lên
-                                                        //     onClick={(event) => event.stopPropagation()}
-                                                        // />
                                                         row[key]
                                                     )}
                                                 </TableCell>
                                             ),
                                         )}
+
                                         {selectFunction && (
                                             <TableCell
                                                 align="center"
