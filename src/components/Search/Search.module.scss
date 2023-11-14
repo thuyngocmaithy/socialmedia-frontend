@@ -15,7 +15,7 @@
     input {
         flex: 1;
         color: var(--black);
-        caret-color: var(--primary);
+        caret-color: var(--black);
         font-size: 1.6rem;
         height: 100%;
         background-color: transparent;
@@ -24,7 +24,7 @@
     }
 
     // khi gõ chữ vào input => đổi màu search btn
-    input:not(:placeholder-shown)~.search-btn {
+    input:not(:placeholder-shown) ~ .search-btn {
         color: rgba(22, 24, 35, 0.75);
     }
 
@@ -40,6 +40,9 @@
 
     &:focus-within {
         border-color: rgba(22, 24, 35, 0.2);
+    }
+    &.dark {
+        background-color: #f1f1f2;
     }
 }
 

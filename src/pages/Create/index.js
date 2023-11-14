@@ -1,43 +1,61 @@
 import classNames from 'classnames/bind';
-import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import React, { useContext, useEffect, useState } from 'react';
 import styles from './Create.module.scss';
 import AccountInfo from '../../components/AccountInfo';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import React, { useState } from 'react';
 import Button from '../../components/Button';
 import LoadImage from '../../components/LoadImage';
+import Popper from '../../components/Popper';
+import SelectBoardPopper from '../../components/Popper/SelectBoardPopper';
+import CreateBoard from '../../components/CreateBoard';
+import SelectTypePopper from '../../components/Popper/SelectTypePopper';
+import CreateType from '../../components/CreateType';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import ActionAlerts from '../../components/Alert';
+import * as userServices from '../../services/userServices';
+import * as pinServices from '../../services/pinServices';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
+import axios from 'axios';
+import { async } from 'q';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import LabelTextBox from '../../components/LabelTextBox';
+import * as typeServices from '../../services/typeServices';
+
 const cx = classNames.bind(styles);
 
 function Create() {
-    //auto resize textarea
-    const titleRef = React.useRef();
-    const contentRef = React.useRef();
-    const [value, setValue] = React.useState();
-    const onChange = (event) => {
-        setValue(event.target.value);
+    const userLogin = useContext(AccountLoginContext);
+    //select board
+    const [activeOptionTop, setActiveOptionTop] = useState(false);
+    const [createSuccess, setCreateSuccess] = useState(false);
+
+    const handleClickAway = () => {
+        setActiveOptionTop(false);
     };
-    const autoResize = (ref) => {
-        if (ref && ref.current) {
-            // textRef.current.rows = 2;
-            ref.current.style.height = '0px';
-            const taHeight = ref.current.scrollHeight;
-            ref.current.style.height = taHeight + 'px';
+    const handleDisplay = () => {
+        setActiveOptionTop(true);
+    };
+
+    // HandleChooseType
+    const [currentType, setType] = useState({ typeName: 'Chọn Thể Loại' });
+    const handleChooseType = (currentType) => {
+        setType(currentType);
+    };
+    const handleSubmitCreate = async (event) => {
+        event.preventDefault();
+        const typeName = event.target.elements.typeName.value !== '' ? event.target.elements.typeName.value : null;
+
+        const type = {
+            typeName,
+        };
+        const result = await typeServices.add(type);
+        if (result) {
+            setCreateSuccess(true);
+            setShowCreateType(false);
+            showAlert('createType');
         }
     };
-    React.useEffect(() => {
-        // if (textRef && textRef.current) {
-        //     // textRef.current.rows = 2;
-        //     console.log(textRef.current.style.height);
-        //     textRef.current.style.height = "0px";
-        //     const taHeight = textRef.current.scrollHeight;
-        //     textRef.current.style.height = taHeight + "px";
-        // }
-        autoResize(titleRef);
-        autoResize(contentRef);
-    }, [value]);
-
     //count length
     const [valContent, setValContent] = useState('');
     const handleCountContent = (e) => {
@@ -48,32 +66,157 @@ function Create() {
     const handleCountTitle = (e) => {
         setValTitle(e.target.value);
     };
+    // Get IMG from LoadImage
+    const [imagePin, setImagePin] = useState('');
+    const [base64, setBase64] = useState('');
 
-    const avt = {
-        avatar: '../avt.jpg',
-        username: 'Cynthia Anna',
+    const handleChangeImage = (selectedPhoto) => {
+        if (selectedPhoto) {
+            const imageURL = URL.createObjectURL(selectedPhoto);
+            setImagePin(imageURL); // Set image URL to state
+        }
     };
+    //save pin
+    const handleInsertPin = async () => {
+        const user = await userServices.getUserById(userLogin);
+        console.log(user);
+        let base64String = '';
+        axios
+            .get(imagePin, { responseType: 'blob' })
+            .then((response) => {
+                const blob = response.data;
+                const reader = new FileReader();
+                reader.onload = async () => {
+                    base64String = reader.result.split(',')[1];
+                    setBase64(base64String);
+                    const image = base64String;
+                    setType(currentType);
+                    const type = currentType;
+                    const title = valTitle;
+                    const description = valContent;
+                    let createdAt = new Date();
+                    createdAt = createdAt.toISOString();
+                    const link = null;
+
+                    if (image && type.typeName !== 'Chọn Thể Loại' && title && description) {
+                        const pin = {
+                            createdAt,
+                            description,
+                            image,
+                            link,
+                            title,
+                            type,
+                            user,
+                        };
+                        console.log(pin);
+                        const result = await pinServices.save(pin);
+                        if (result) {
+                            showAlert('save');
+                        }
+                    } else {
+                        alert('Nhập đầy đủ thông tin !!!');
+                    }
+                    // console.log(pin);
+                };
+                reader.readAsDataURL(blob);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+    //Hiển thị hộp thoại thông báo
+    const [alertType, setAlertType] = useState(null);
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const showAlert = (type) => {
+        setAlertType(type);
+        setAlertVisible(true);
+
+        const timeoutId = setTimeout(() => {
+            setAlertVisible(false);
+            setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+        }, 2500);
+
+        return timeoutId;
+    };
+
+    useEffect(() => {
+        if (alertVisible) {
+            const timeoutId = setTimeout(() => {
+                setAlertVisible(false);
+                setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+            }, 2500);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [alertVisible]);
+
+    // Turn on CreateBoard
+    const [showCreateBoard, setShowCreateBoard] = React.useState(false);
+    const handleTurnOnCreateBoard = (isShown) => {
+        setShowCreateBoard(isShown);
+    };
+
+    // Turn on CreateType
+    const [showCreateType, setShowCreateType] = React.useState(false);
+
+    const handleTurnOnCreateType = (isShown) => {
+        setShowCreateType(isShown);
+    };
+    const handleCloseCreate = () => {
+        setShowCreateType(false);
+    };
+
+    //auto resize textarea
+    const titleRef = React.useRef();
+    const contentRef = React.useRef();
+    const [value, setValue] = React.useState();
+    const onChange = (event) => {
+        setValue(event.target.value);
+    };
+    const autoResize = (ref) => {
+        if (ref && ref.current) {
+            ref.current.style.height = '0px';
+            const taHeight = ref.current.scrollHeight;
+            ref.current.style.height = taHeight + 'px';
+        }
+    };
+    React.useEffect(() => {
+        autoResize(titleRef);
+        autoResize(contentRef);
+    }, [value]);
+
+    const [user, setUser] = React.useState();
+    const [loading, setLoading] = React.useState(true);
+
+    useEffect(() => {
+        // Gửi yêu cầu GET để lấy thông tin người dùng
+        if (userLogin !== 0) {
+            userServices
+                .getUserById(userLogin)
+                .then((response) => {
+                    setUser(response);
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    }, [userLogin]);
 
     return (
         <div className={cx('wrapper-createPage')}>
             <div className={cx('createBox')}>
-                <div className={cx('save-pin')}>
-                    <Button className={cx('save-btn')} red>
-                        Lưu
-                    </Button>
+                <div className={cx('wrapperBtns')}>
+                    <div className={cx('save-pin')}>
+                        <Button className={cx('save-btn')} onClick={() => handleInsertPin()} red>
+                            Lưu
+                        </Button>
+                    </div>
                 </div>
                 {/* end header  */}
                 <div className={cx('mainContent')}>
-                    <div className={cx('insertIMG')}>
-                        <LoadImage />
-                        <Tippy delay={[0, 100]} content="Xóa ảnh" placement="bottom">
-                            <div className={cx('deleteIMG')}>
-                                <button className={cx('delete-btn')}>
-                                    <FontAwesomeIcon icon={faTrash} />
-                                </button>
-                            </div>
-                        </Tippy>
-                    </div>
+                    <LoadImage height="565px" width="355px" onSelectImage={handleChangeImage}></LoadImage>
                     {/* end upload IMG */}
                     <div className={cx('insertData')}>
                         <div className={cx('title')}>
@@ -99,7 +242,7 @@ function Create() {
                             </div>
                         </div>
                         <div className={cx('container-user')}>
-                            <AccountInfo userImage={avt.avatar} username={avt.username} />
+                            {loading === false && <AccountInfo userImage={user.avatar} username={user.username} />}
                         </div>
 
                         <div className={cx('content')}>
@@ -124,9 +267,56 @@ function Create() {
                                 <p className={cx('titleLength')}>{500 - valContent.length}</p>
                             </div>
                         </div>
+                        {/* select type */}
+                        <div className={cx('selectType', { active: activeOptionTop })}>
+                            <ClickAwayListener onClickAway={handleClickAway}>
+                                <button className={cx('select-type-btn')} onClick={() => handleDisplay()}>
+                                    <Popper
+                                        // idPopper={id}
+                                        contentTitle={currentType.typeName}
+                                        title={<FontAwesomeIcon icon={faChevronDown} />}
+                                        className={cx('select-type')}
+                                        body={
+                                            <SelectTypePopper
+                                                handleTurnOnCreateType={handleTurnOnCreateType}
+                                                handleChooseType={handleChooseType}
+                                            />
+                                        }
+                                        widthBody="maxContent"
+                                    />
+                                </button>
+                            </ClickAwayListener>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <Dialog fullWidth={true} maxWidth="sm" open={showCreateType} onClose={handleCloseCreate}>
+                <form onSubmit={handleSubmitCreate}>
+                    <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
+                        Thêm loại bài đăng
+                    </DialogTitle>
+                    <DialogContent>
+                        <LabelTextBox
+                            name={'typeName'}
+                            placeholder={'Tên loại'}
+                            label={'Tên loại'}
+                            selectedSize={'medium'}
+                        />
+                    </DialogContent>
+                    <DialogActions sx={{ marginBottom: '10px' }}>
+                        <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseCreate}>
+                            Hủy
+                        </Button>
+                        <Button sx={{ fontSize: '14px' }} red type="submit">
+                            Tạo
+                        </Button>
+                    </DialogActions>
+                </form>
+            </Dialog>
+
+            {alertType === 'save' && <ActionAlerts content={`Tạo thành công`} />}
+            {alertType === 'createType' && <ActionAlerts content={`Đã thêm thể loại`} />}
         </div>
     );
 }

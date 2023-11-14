@@ -14,7 +14,7 @@ function Notification() {
                     <b>Hồ sơ</b>
                 </p>
             </div>
-            <button className={cx('click')}>Hoàn tác</button>
+            {/* <button className={cx('click')}>Hoàn tác</button> */}
         </div>
     );
 }

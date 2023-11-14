@@ -33,7 +33,7 @@ export const getConversationJoinedByUserId = async (user_id) => {
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 export const getFriendChattingWith = async (user_id) => {
     try {

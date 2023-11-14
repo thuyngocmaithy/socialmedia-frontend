@@ -18,4 +18,13 @@ export const post = async (path, data, options = {}) => {
         throw error;
     }
 };
+
+export const put = async (path, data, options = {}) => {
+    try {
+        const response = await httpRequest.put(path, data, options);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
 export default httpRequest;

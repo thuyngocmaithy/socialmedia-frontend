@@ -9,22 +9,21 @@ import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-function Board({ title, detailBoard, accountOther, handleEdit }) {
-    const link = title.replace(' ', '-').toLowerCase();
+function Board({ id, title, detailBoard, accountOther, handleEdit }) {
     const handleEditClick = (event) => {
         event.preventDefault();
         handleEdit();
     };
     return (
         detailBoard && (
-            <Link to={`/thuyngocmaithyy/board/${link}`} className={cx('wrapper')}>
+            <Link to={`/thuyngocmaithyy/board/${id}`} className={cx('wrapper')}>
                 <div className={cx('container-image')}>
                     <div className={cx('images')}>
                         <div className={cx('image-left')}>
                             <Image
                                 fallback={images.backgroundGray}
                                 className={cx('image-left')}
-                                src={detailBoard[0] !== undefined ? detailBoard[0] : ''}
+                                src={detailBoard[0] !== undefined ? `data:image/jpeg;base64,${detailBoard[0]}` : ''}
                                 alt=""
                             />
                         </div>
@@ -33,14 +32,14 @@ function Board({ title, detailBoard, accountOther, handleEdit }) {
                             <div className={cx('image-right')}>
                                 <Image
                                     fallback={images.backgroundGray}
-                                    src={detailBoard[1] !== undefined ? detailBoard[1] : ''}
+                                    src={detailBoard[1] !== undefined ? `data:image/jpeg;base64,${detailBoard[1]}` : ''}
                                     alt=""
                                 />
                             </div>
                             <div className={cx('image-right')}>
                                 <Image
                                     fallback={images.backgroundGray}
-                                    src={detailBoard[2] !== undefined ? detailBoard[2] : ''}
+                                    src={detailBoard[2] !== undefined ? `data:image/jpeg;base64,${detailBoard[2]}` : ''}
                                     alt=""
                                 />
                             </div>
@@ -49,7 +48,7 @@ function Board({ title, detailBoard, accountOther, handleEdit }) {
                     {accountOther ? null : (
                         <div className={cx('option')}>
                             <Tippy delay={[0, 100]} content="Chỉnh sửa" placement="bottom">
-                                <button className={cx('btn')} onClick={handleEditClick}>
+                                <button className={cx('editBtn')} onClick={handleEditClick}>
                                     <EditIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
                                 </button>
                             </Tippy>

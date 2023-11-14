@@ -1,0 +1,28 @@
+.wrapper-item {
+    margin: 20px;
+    h3,
+    h4,
+    p {
+        color: var(--text-color);
+        &.dark {
+            color: var(--white-200);
+        }
+    }
+    h4 {
+        font-size: 1.7rem;
+        margin-top: 7px;
+    }
+    p,
+    h3 {
+        font-size: 1.3rem;
+    }
+}
+
+.container-item {
+    display: flex;
+
+    justify-content: space-around;
+}
+.container-detail {
+    margin: 20px;
+}

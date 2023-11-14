@@ -1,7 +1,7 @@
 .wrapper-message {
     overflow: hidden;
     height: 475px;
-    width: 100%;
+    width: 312px;
     position: relative;
 }
 
@@ -44,20 +44,16 @@
 }
 
 //BODY
-.wrapper-message-list {
-    height: 100%;    
-    width: 100%;
-    max-height: 360px;
-    overflow-y: scroll;
-    // margin: 0.6rem 0;
-    overscroll-behavior: contain;
-}
-.wrapper-message-list::-webkit-scrollbar {
-    display: none;
-}
 .message-list {
-    height: 100%;
-    // overflow-y: scroll;
+    padding-top: 0.8rem;
+    min-height: 380px;
+    max-height: 380px;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    & > div:last-child {
+        margin-bottom: 30px;
+    }
 }
 
 // FOOTER
