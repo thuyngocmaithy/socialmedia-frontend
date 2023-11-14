@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faArrowRightFromBracket, faBars } from '@fortawesome/free-solid-svg-icons';
 import Switch from '@mui/material/Switch';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './HeaderAdmin.module.scss';
 import MenuSettingHeader from '../../Popup/MenuSettingHeader';
 import Image from '../../Image';
@@ -20,6 +20,7 @@ const cx = classNames.bind(styles);
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
 function HeaderAdmin({ className, account = false, handleOpenMenu }) {
+    const navigate = useNavigate();
     const userLogin = useContext(AccountLoginContext);
     const { theme, toggleTheme } = useContext(ThemeContext);
     // MENU KHI CHƯA ĐĂNG NHẬP
@@ -32,14 +33,18 @@ function HeaderAdmin({ className, account = false, handleOpenMenu }) {
     const handleMenuChange = (menuItem) => {
         console.log(menuItem);
     };
-
+    // LOGOUT
+    function logout() {
+        localStorage.removeItem('userLogin');
+        navigate('/login');
+    }
     // MENU SAU KHI ĐĂNG NHẬP
     const userMenu = [
         ...MENU_ITEMS,
         {
             icon: <FontAwesomeIcon icon={faArrowRightFromBracket} />,
             title: 'Log out',
-            to: '/logout',
+            handleClickMenuItem: logout,
             separate: true,
         },
     ];

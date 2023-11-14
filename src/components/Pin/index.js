@@ -52,6 +52,7 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
             const userId = 1;
             const pinId = id;
             const boardId = data.id;
+            console.log(data);
 
             const user = await userServices.getUserById(userId);
             const pin = await pinServices.getPinById(pinId);
@@ -61,11 +62,16 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
             const result = await userSavePinServices.save(userSavePin);
             if (result) {
                 onSaveResult(true);
-                setData('Chọn bang');
+                setData('Chọn bảng');
             }
         };
         if (userLogin !== 0) {
-            fetchApi();
+            if (data !== '') {
+                fetchApi();
+            }
+            else{
+                
+            }
         } else {
             setOpenConfirmLogin(true);
         }

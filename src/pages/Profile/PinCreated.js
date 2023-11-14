@@ -141,7 +141,12 @@ function PinCreated() {
                 </div>
                 {Object.keys(pinEdit).length !== 0 && (
                     <>
-                        <Dialog fullWidth={true} maxWidth="sm" open={openEdit}>
+                        <Dialog
+                            className={cx(theme === 'dark' ? 'dark' : '')}
+                            fullWidth={true}
+                            maxWidth="sm"
+                            open={openEdit}
+                        >
                             <DialogTitle
                                 sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
                             >
@@ -180,14 +185,14 @@ function PinCreated() {
                                     />
                                 </DialogContent>
                                 <DialogActions sx={{ justifyContent: 'space-between', margin: '10px' }}>
-                                    <Button sx={{ fontSize: '14px' }} primary type="button" onClick={handleDelete}>
+                                    <Button style={{ fontSize: '14px' }} primary type="button" onClick={handleDelete}>
                                         Xóa
                                     </Button>
                                     <div>
-                                        <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseEdit}>
+                                        <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseEdit}>
                                             Hủy
                                         </Button>
-                                        <Button sx={{ fontSize: '14px' }} red type="submit">
+                                        <Button style={{ fontSize: '14px' }} red type="submit">
                                             Sửa
                                         </Button>
                                     </div>
@@ -195,7 +200,12 @@ function PinCreated() {
                             </form>
                         </Dialog>
                         {confirmDelete && (
-                            <Dialog fullWidth={true} maxWidth="sm" open={confirmDelete}>
+                            <Dialog
+                                className={cx(theme === 'dark' ? 'dark' : '')}
+                                fullWidth={true}
+                                maxWidth="sm"
+                                open={confirmDelete}
+                            >
                                 <DialogTitle
                                     sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
                                 >
@@ -215,7 +225,7 @@ function PinCreated() {
                                             >
                                                 Hủy
                                             </Button>
-                                            <Button sx={{ fontSize: '14px' }} red type="submit">
+                                            <Button style={{ fontSize: '14px' }} red type="submit">
                                                 Xóa
                                             </Button>
                                         </div>

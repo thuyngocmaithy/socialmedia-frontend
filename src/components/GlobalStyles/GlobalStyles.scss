@@ -30,7 +30,7 @@
     //  Default layout
     --default-layout-header-height: 70px;
     --default-layout-height: 1306px;
-    --default-layout-width: 1260px;
+    --default-layout-width: 100vw;
     --default-layout-horizontal-spacer: 24px;
     --g-ncols: 12px;
 
@@ -146,6 +146,30 @@ body {
         top: auto;
         &.dark {
             color: #fff;
+        }
+    }
+    .MuiDialog-root {
+        &.dark {
+            & > .css-hz1bth-MuiDialog-container > .css-tlc64q-MuiPaper-root-MuiDialog-paper {
+                background-color: #232323;
+                & > form > h2 {
+                    color: #fff;
+                }
+                & > form > div > div > label {
+                    color: #fff;
+                }
+                & > h2 {
+                    color: #fff;
+                }
+                & > form > .css-ypiqx9-MuiDialogContent-root {
+                    color: #fff;
+                }
+            }
+        }
+    }
+    .fa-trash {
+        &.dark {
+            color: white;
         }
     }
 }

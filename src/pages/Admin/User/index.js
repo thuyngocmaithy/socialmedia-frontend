@@ -1,7 +1,7 @@
 import EnhancedTable from '../../../components/Table';
 import classNames from 'classnames/bind';
 import styles from './User.module.scss';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import * as userServices from '../../../services/userServices';
 import * as permissionServices from '../../../services/permissionServices';
 import Dialog from '@mui/material/Dialog';
@@ -11,10 +11,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import LabelTextBox from '../../../components/LabelTextBox';
 import Button from '../../../components/Button';
 import ActionAlerts from '../../../components/Alert';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function User() {
+    const { theme } = useContext(ThemeContext);
     const [listUser, setListUser] = useState([]);
     const [createSuccess, setCreateSuccess] = useState(false);
     const [openCreate, setOpenCreate] = useState(false);
@@ -192,7 +194,13 @@ function User() {
                 handleAdd={handleCreate}
                 deleteSuccess={deleteSuccess}
             />
-            <Dialog fullWidth={true} maxWidth="sm" open={openCreate} onClose={handleCloseCreate}>
+            <Dialog
+                className={cx(theme === 'dark' ? 'dark' : '')}
+                fullWidth={true}
+                maxWidth="sm"
+                open={openCreate}
+                onClose={handleCloseCreate}
+            >
                 <form onSubmit={handleSubmitCreate}>
                     <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
                         Thêm người dùng
@@ -214,17 +222,22 @@ function User() {
                         </div>
                     </DialogContent>
                     <DialogActions sx={{ marginBottom: '10px' }}>
-                        <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseCreate}>
+                        <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseCreate}>
                             Hủy
                         </Button>
-                        <Button sx={{ fontSize: '14px' }} red type="submit">
+                        <Button style={{ fontSize: '14px' }} red type="submit">
                             Tạo
                         </Button>
                     </DialogActions>
                 </form>
             </Dialog>
             {confirmDelete && (
-                <Dialog fullWidth={true} maxWidth="sm" open={confirmDelete}>
+                <Dialog
+                    className={cx(theme === 'dark' ? 'dark' : '')}
+                    fullWidth={true}
+                    maxWidth="sm"
+                    open={confirmDelete}
+                >
                     <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
                         Xóa người dùng?
                     </DialogTitle>
@@ -232,10 +245,10 @@ function User() {
                         <DialogContent>Tất cả người dùng đã chọn sẽ được xóa khỏi hệ thống.</DialogContent>
                         <DialogActions sx={{ marginBottom: '10px' }}>
                             <div>
-                                <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseConfirm}>
+                                <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseConfirm}>
                                     Hủy
                                 </Button>
-                                <Button sx={{ fontSize: '14px' }} red type="submit">
+                                <Button style={{ fontSize: '14px', marginLeft: '8px' }} red type="submit">
                                     Xóa
                                 </Button>
                             </div>
