@@ -83,7 +83,7 @@ function Post() {
     ];
     return (
         <div className={cx('wrapper')}>
-            <EnhancedTable headCells={headCells} rows={rows} title="Quản lý báo cáo bài đăng" />
+            <EnhancedTable headCells={headCells} rows={rows} noedit={true} title="Quản lý báo cáo bài đăng" />
         </div>
     );
 }

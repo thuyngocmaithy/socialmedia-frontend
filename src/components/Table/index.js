@@ -52,6 +52,7 @@ function stableSort(array, comparator) {
 
 function EnhancedTableHead(props) {
     const {
+        noedit,
         theme,
         edit,
         headCells,
@@ -112,7 +113,7 @@ function EnhancedTableHead(props) {
                         Chọn chức năng
                     </TableCell>
                 )}
-                {edit && (
+                {edit && !noedit && (
                     <TableCell
                         padding="normal"
                         sx={{ textAlign: 'center', fontSize: '14px', color: theme === 'dark' ? '#fff' : '#000' }}
@@ -135,7 +136,7 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-    const { title, numSelected, selected, handleAdd, handleDelete } = props;
+    const { noedit, title, numSelected, selected, handleAdd, handleDelete } = props;
 
     return (
         <Toolbar
@@ -162,11 +163,11 @@ function EnhancedTableToolbar(props) {
                 <IconButton onClick={() => handleDelete(selected)}>
                     <FontAwesomeIcon icon={faTrash} />
                 </IconButton>
-            ) : (
+            ) : !noedit ? (
                 <Button red onClick={handleAdd}>
                     Thêm
                 </Button>
-            )}
+            ) : null}
         </Toolbar>
     );
 }
@@ -176,6 +177,7 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function EnhancedTable({
+    noedit = false,
     edit = true,
     deleteSuccess = false,
     headCells,
@@ -277,6 +279,7 @@ export default function EnhancedTable({
                 }}
             >
                 <EnhancedTableToolbar
+                    noedit={noedit}
                     title={title}
                     numSelected={selected.length}
                     selected={selected}
@@ -296,6 +299,7 @@ export default function EnhancedTable({
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
                             edit={edit}
+                            noedit={noedit}
                         />
                         <TableBody>
                             {visibleRows.map((row, index) => {
@@ -388,7 +392,7 @@ export default function EnhancedTable({
                                                 <FontAwesomeIcon icon={faListCheck} />
                                             </TableCell>
                                         )}
-                                        {edit && (
+                                        {edit && !noedit && (
                                             <TableCell
                                                 align="center"
                                                 sx={{ fontSize: '14px', color: theme === 'dark' ? '#fff' : '#000' }}

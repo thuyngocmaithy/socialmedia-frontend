@@ -94,7 +94,13 @@ function Comment() {
     ];
     return (
         <div className={cx('wrapper')}>
-            <EnhancedTable report={true} headCells={headCells} rows={rows} title="Quản lý báo cáo bình luận" />
+            <EnhancedTable
+                report={true}
+                headCells={headCells}
+                rows={rows}
+                noedit={true}
+                title="Quản lý báo cáo bình luận"
+            />
         </div>
     );
 }
