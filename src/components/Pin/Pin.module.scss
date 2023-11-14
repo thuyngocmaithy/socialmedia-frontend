@@ -55,6 +55,7 @@
 .option-top.active {
     display: flex;
 }
+
 .select-board-btn {
     z-index: 3;
     border-radius: 50%;
@@ -98,6 +99,9 @@
     right: 0px;
     display: none;
     justify-content: flex-end;
+}
+.option-bottom.active {
+    display: flex;
 }
 .link-image {
     width: 65%;
@@ -163,8 +167,8 @@
 }
 
 .grey-button {
-    background: #EFEFEF;
+    background: #efefef;
 }
 .grey-button:hover {
-    background: #E2E2E2;
+    background: #e2e2e2;
 }

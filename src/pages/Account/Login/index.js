@@ -1,101 +1,59 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import classNames from 'classnames/bind';
 import styles from '../Account.module.scss';
 import LabelTextBox from '../../../components/LabelTextBox';
 import Wrapper from '../Wrapper';
 import Button from '../../../components/Button';
+import * as userServices from '../../../services/userServices';
+import { GoogleIcon } from '../../../components/Icons';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 // logout xử lý ở phần header
 const cx = classNames.bind(styles);
 
-const initFormValue = {
-    email: '',
-    password: '',
-};
-
 function Login() {
-    const [formValue, setFormValue] = useState(initFormValue);
+    const { theme } = useContext(ThemeContext);
+    // Hàm để đặt giá trị vào localStorage
+    function setLocalStorageWithExpiration(key, value, expirationMinutes) {
+        const expirationMS = expirationMinutes * 60 * 1000; // Chuyển đổi phút thành mili giây
+        const expirationTime = new Date().getTime() + expirationMS;
 
-    const handleChange = (name, value) => {
-        setFormValue({
-            ...formValue,
-            [name]: value,
-        });
-    };
+        const data = {
+            value: value,
+            expirationTime: expirationTime,
+        };
 
-    // const handleSubmit = (event) => {
-    //     event.preventDefault();
-    //     const email = formValue.email + '@gmail.com'; // Tạo email từ tên đăng nhập
-    //     console.log('email', email);
-    //     console.log('password', formValue.password);
-    //     console.log('form value', formValue);
-    // };
+        localStorage.setItem(key, JSON.stringify(data));
+    }
 
-    //alert('Đăng nhập thành công\n' + 'email:\t' + formValue.email + '\npassword:\t' + formValue.password);
-    // alert('Đăng nhập thất bại\n' + 'email:\t' + formValue.email + '\npassword:\t' + formValue.password);
-    // alert('Lỗi');
-
-    const handleLogin = () => {
-        // Gửi yêu cầu đăng nhập
-        fetch('/users/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formValue),
-        })
-            .then((response) => response.text())
-            .then((data) => {
-                // Xử lý phản hồi từ server
-                if (data === 'Login successful') {
-                    // Đăng nhập thành công, thực hiện hành động phù hợp ở đây
-                    console.log('Đăng nhập thành công');
-                    alert(
-                        'Đăng nhập thành công\n' + 'email:\t' + formValue.email + '\npassword:\t' + formValue.password,
-                    );
-                } else {
-                    // Đăng nhập thất bại, hiển thị thông báo cho người dùng
-                    console.log('Đăng nhập thất bại');
-                    alert('Đăng nhập thất bại\n' + 'email:\t' + formValue.email + '\npassword:\t' + formValue.password);
-                }
-            });
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log('form value', formValue);
     };
 
     return (
         <Wrapper>
-            <div className={cx('container-form')}>
+            <div className={cx('container-form', theme === 'dark' ? 'dark' : '')}>
                 <h1 className={cx('title')}>Login account</h1>
 
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className={cx('infomation')}>
-                        <LabelTextBox
-                            placeholder={'Email'}
-                            name={'email'}
-                            label={'Email'}
-                            selectedSize={'small'}
-                            value={formValue.email}
-                            onChange={handleChange}
-                        />
+                        <LabelTextBox placeholder={'Email'} name={'email'} label={'Email'} selectedSize={'small'} />
                         <LabelTextBox
                             placeholder={'Password'}
                             name={'password'}
                             type={'password'}
                             label={'Pasword'}
                             selectedSize={'small'}
-                            value={formValue.password}
-                            onChange={handleChange}
                         />
                     </div>
 
                     <div className={cx('submit-btn')}>
-                        <Button red onClick={handleLogin}>
-                            Login
-                        </Button>
+                        <Button red>Login</Button>
                     </div>
                 </form>
             </div>
         </Wrapper>
     );
 }
-
 export default Login;

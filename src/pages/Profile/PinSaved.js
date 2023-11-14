@@ -17,47 +17,130 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import LabelTextBox from '../../components/LabelTextBox';
 import Button from '../../components/Button';
+import ActionAlerts from '../../components/Alert';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function PinSaved() {
+    const navigate = useNavigate();
     const accountOther = useContext(AccountOtherContext);
+    //Open hộp thoại edit
     const [openEdit, setOpenEdit] = useState(false);
+    //Open hộp thoại add
     const [openCreateBoard, setOpenCreateBoard] = useState(false);
     const [listBoard, setListBoard] = useState([]);
+    //Board đang được chỉnh sửa
+    const [boardEdit, setBoardEdit] = useState({});
+    //Trạng thái thành công
+    const [updateSuccess, setUpdateSuccess] = useState(false);
+    const [createSuccess, setCreateSuccess] = useState(false);
+    const [deleteSuccess, setDeleteSuccess] = useState(false);
 
-    const handleEdit = () => {
+    const [confirmDelete, setConfirmDelete] = useState(false);
+    const [typeSort, setTypeSort] = useState('default');
+    const [active, setActive] = useState('1');
+
+    const [alertType, setAlertType] = useState(null);
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const showAlert = (type) => {
+        setAlertType(type);
+        setAlertVisible(true);
+
+        const timeoutId = setTimeout(() => {
+            setAlertVisible(false);
+            setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+        }, 2500);
+
+        return timeoutId;
+    };
+
+    useEffect(() => {
+        if (alertVisible) {
+            const timeoutId = setTimeout(() => {
+                setAlertVisible(false);
+                setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+            }, 2500);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [alertVisible]);
+
+    const handleActive = (id) => {
+        setActive(id === active ? null : id);
+    };
+
+    // HANDLE EDIT
+    const handleEdit = async (id) => {
+        const result = await boardServices.getBoardById(id);
+        setBoardEdit(result);
         setOpenEdit(true);
     };
 
     const handleCloseEdit = () => {
         setOpenEdit(false);
     };
+    const handleSubmitEdit = async (event) => {
+        event.preventDefault();
+        const id = boardEdit.id;
+        const user = boardEdit.user;
+        const description =
+            event.target.elements.descriptionEdit.value !== '' ? event.target.elements.descriptionEdit.value : null;
+        const name = event.target.elements.nameEdit.value !== '' ? event.target.elements.nameEdit.value : null;
 
+        const board = { id, description, name, user };
+        const result = await boardServices.update(id, board);
+        if (result) {
+            setOpenEdit(false);
+            setUpdateSuccess(true);
+            showAlert('edit');
+        }
+    };
+    // HANDLE DELETE
+    const handleDelete = async () => {
+        setOpenEdit(false);
+        setConfirmDelete(true);
+    };
+    const handleSubmitDelete = async (event) => {
+        event.preventDefault();
+        const result = await boardServices.deleteById(boardEdit.id);
+        if (result) {
+            setOpenEdit(false);
+            setConfirmDelete(false);
+            setDeleteSuccess(true);
+            showAlert('delete');
+        }
+    };
+    const handleCloseConfirm = () => {
+        setOpenEdit(true);
+        setConfirmDelete(false);
+    };
+
+    //HANLDE CREATE
     const handleCreateBoard = () => {
         setOpenCreateBoard(true);
     };
 
-    const handleCloseCreateBoard = () => {
-        setOpenCreateBoard(false);
+    const handleSubmitCreate = async (event) => {
+        event.preventDefault();
+        const user = await userServices.getUserByUsername(pathname);
+        const description =
+            event.target.elements.descriptionAdd.value !== '' ? event.target.elements.descriptionAdd.value : null;
+        const name = event.target.elements.nameAdd.value !== '' ? event.target.elements.nameAdd.value : null;
+
+        const board = { description, name, user };
+        const result = await boardServices.add(board);
+
+        if (result) {
+            setOpenCreateBoard(false);
+            setCreateSuccess(true);
+            showAlert('create');
+        }
     };
 
-    const filterBoardPopper = {
-        title: 'Sắp xếp theo',
-        item: [
-            { id: '1', content: 'A đến Z' },
-            { id: '2', content: 'Tùy chỉnh' },
-            { id: '3', content: 'Đã lưu lần cuối vào' },
-        ],
-        width: '270px',
-    };
-    const createBoardPopper = {
-        title: 'Tạo',
-        item: [
-            { id: '1', content: 'Ghim', handleClick: '' },
-            { id: '2', content: 'Bảng', handleClick: { handleCreateBoard } },
-        ],
-        width: '150px',
+    const handleCloseCreateBoard = () => {
+        setOpenCreateBoard(false);
     };
 
     const location = useLocation();
@@ -65,7 +148,12 @@ function PinSaved() {
 
     useEffect(() => {
         const fetchApi = async () => {
-            const result = await boardServices.getBoardByUsername(pathname);
+            let result = await boardServices.getBoardByUsername(pathname);
+            if (typeSort === 'AtoZ') {
+                result = [...result].sort((a, b) => {
+                    return a.name.localeCompare(b.name);
+                });
+            }
             setListBoard(result);
 
             const promises = result.map(async (board) => {
@@ -88,16 +176,52 @@ function PinSaved() {
                             };
                         }),
                     );
-                    console.log('render-promises');
+                    setCreateSuccess(false);
+                    setUpdateSuccess(false);
+                    setDeleteSuccess(false);
                 })
                 .catch((error) => {
                     console.error(error);
                 });
         };
         fetchApi();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pathname]);
+    }, [pathname, updateSuccess, createSuccess, deleteSuccess, typeSort]);
 
+    const filterBoardPopper = {
+        title: 'Sắp xếp theo',
+        item: [
+            {
+                id: '1',
+                content: 'Mặc định',
+                handleClick: () => setTypeSort('default'),
+                handleActive: () => handleActive('1'),
+                active: active,
+            },
+            {
+                id: '2',
+                content: 'A đến Z',
+                handleClick: () => setTypeSort('AtoZ'),
+                handleActive: () => handleActive('2'),
+                active: active,
+            },
+        ],
+        width: '270px',
+    };
+
+    const createBoardPopper = {
+        title: 'Tạo',
+        item: [
+            {
+                id: '1',
+                content: 'Ghim',
+                handleClick: () => {
+                    navigate('/create');
+                },
+            },
+            { id: '2', content: 'Bảng', handleClick: handleCreateBoard },
+        ],
+        width: '150px',
+    };
     return (
         <Wrapper>
             <div className={cx('wrapper-pin-saved')}>
@@ -123,52 +247,115 @@ function PinSaved() {
                         return (
                             <Board
                                 key={index}
+                                id={board.id}
                                 title={board.name}
                                 detailBoard={board.detailBoard}
                                 countPin={board.count}
                                 accountOther={accountOther}
-                                handleEdit={handleEdit}
+                                handleEdit={() => handleEdit(board.id)}
                             />
                         );
                     })}
                 </div>
-                <Dialog fullWidth={true} maxWidth="sm" open={openEdit} onClose={handleCloseEdit}>
-                    <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
-                        Chỉnh sửa
-                    </DialogTitle>
-                    <DialogContent>
-                        <LabelTextBox placeholder={'Tiêu đề'} label={'Tiêu đề'} selectedSize={'medium'} />
-                        <LabelTextBox placeholder={'Mô tả'} label={'Mô tả'} selectedSize={'medium'} />
-                        <LabelTextBox placeholder={'Liên kết'} label={'Liên kết'} selectedSize={'medium'} />
-                    </DialogContent>
-                    <DialogActions sx={{ marginBottom: '10px' }}>
-                        <Button sx={{ fontSize: '14px' }} onClick={handleCloseEdit}>
-                            Hủy
-                        </Button>
-                        <Button sx={{ fontSize: '14px' }} red onClick={handleCloseEdit}>
-                            Sửa
-                        </Button>
-                    </DialogActions>
+                <Dialog fullWidth={true} maxWidth="sm" open={openEdit}>
+                    <form onSubmit={handleSubmitEdit}>
+                        <DialogTitle
+                            sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
+                        >
+                            Chỉnh sửa
+                        </DialogTitle>
+                        <DialogContent>
+                            <LabelTextBox
+                                name={'nameEdit'}
+                                placeholder={'Tiêu đề'}
+                                label={'Tên bảng'}
+                                selectedSize={'medium'}
+                                text={boardEdit.name ? boardEdit.name : ''}
+                            />
+                            <LabelTextBox
+                                name={'descriptionEdit'}
+                                placeholder={'Mô tả'}
+                                label={'Mô tả'}
+                                selectedSize={'medium'}
+                                text={boardEdit.description ? boardEdit.description : ''}
+                            />
+                        </DialogContent>
+                        <DialogActions sx={{ justifyContent: 'space-between', margin: '10px' }}>
+                            <Button sx={{ fontSize: '14px' }} primary type="button" onClick={handleDelete}>
+                                Xóa
+                            </Button>
+                            <div>
+                                <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseEdit}>
+                                    Hủy
+                                </Button>
+                                <Button sx={{ fontSize: '14px' }} red type="submit">
+                                    Sửa
+                                </Button>
+                            </div>
+                        </DialogActions>
+                    </form>
                 </Dialog>
                 <Dialog fullWidth={true} maxWidth="sm" open={openCreateBoard} onClose={handleCloseCreateBoard}>
-                    <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
-                        Tạo bảng
-                    </DialogTitle>
-                    <DialogContent>
-                        <LabelTextBox placeholder={'Tiêu đề'} label={'Tiêu đề'} selectedSize={'medium'} />
-                        <LabelTextBox placeholder={'Mô tả'} label={'Mô tả'} selectedSize={'medium'} />
-                        <LabelTextBox placeholder={'Liên kết'} label={'Liên kết'} selectedSize={'medium'} />
-                    </DialogContent>
-                    <DialogActions sx={{ marginBottom: '10px' }}>
-                        <Button sx={{ fontSize: '14px' }} onClick={handleCloseCreateBoard}>
-                            Hủy
-                        </Button>
-                        <Button sx={{ fontSize: '14px' }} red onClick={handleCloseCreateBoard}>
-                            Sửa
-                        </Button>
-                    </DialogActions>
+                    <form onSubmit={handleSubmitCreate}>
+                        <DialogTitle
+                            sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
+                        >
+                            Tạo bảng
+                        </DialogTitle>
+                        <DialogContent>
+                            <LabelTextBox
+                                name={'nameAdd'}
+                                placeholder={'Tiêu đề'}
+                                label={'Tên bảng'}
+                                selectedSize={'medium'}
+                                // text={boardEdit.name ? boardEdit.name : ''}
+                            />
+                            <LabelTextBox
+                                name={'descriptionAdd'}
+                                placeholder={'Mô tả'}
+                                label={'Mô tả'}
+                                selectedSize={'medium'}
+                                // text={boardEdit.description ? boardEdit.description : ''}
+                            />
+                        </DialogContent>
+                        <DialogActions sx={{ marginBottom: '10px' }}>
+                            <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseCreateBoard}>
+                                Hủy
+                            </Button>
+                            <Button sx={{ fontSize: '14px' }} red type="submit">
+                                Tạo
+                            </Button>
+                        </DialogActions>
+                    </form>
                 </Dialog>
+                {confirmDelete && (
+                    <Dialog fullWidth={true} maxWidth="sm" open={confirmDelete}>
+                        <DialogTitle
+                            sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
+                        >
+                            Xóa Bảng này?
+                        </DialogTitle>
+                        <form onSubmit={handleSubmitDelete}>
+                            <DialogContent>
+                                Bảng và tất cả các Ghim thuộc bảng này sẽ bị xóa khỏi hồ sơ của bạn.
+                            </DialogContent>
+                            <DialogActions sx={{ marginBottom: '10px' }}>
+                                <div>
+                                    <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseConfirm}>
+                                        Hủy
+                                    </Button>
+                                    <Button sx={{ fontSize: '14px' }} red type="submit">
+                                        Xóa
+                                    </Button>
+                                </div>
+                            </DialogActions>
+                        </form>
+                    </Dialog>
+                )}
             </div>
+            {alertType === 'edit' && <ActionAlerts content={`Đã chỉnh sửa thành công`} />}
+            {alertType === 'create' && <ActionAlerts content={`Đã thêm thành công`} />}
+            {alertType === 'delete' && <ActionAlerts content={`Đã xóa thành công`} />}
         </Wrapper>
     );
 }

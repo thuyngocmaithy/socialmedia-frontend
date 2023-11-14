@@ -5,7 +5,7 @@ import { faCircleArrowUp } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
-function LoadImage() {
+function LoadImage({ height = '300px', width = '300px', onSelectImage }) {
     //preview img
     const [img, setIMG] = useState();
     const [showDiv, setShowDiv] = useState(true);
@@ -15,17 +15,22 @@ function LoadImage() {
             img && URL.revokeObjectURL(img.preview);
         };
     }, [img]);
-
+    const sendtoParent = (file) => {
+        if (onSelectImage) {
+            onSelectImage(file);
+        }
+    };
     const handlePreviewIMG = (e) => {
         const file = e.target.files[0];
         file.preview = URL.createObjectURL(file);
         setIMG(file);
         setShowDiv(false);
+        sendtoParent(file);
     };
     return (
         <div className={cx('imgFrame')} onClick={() => document.querySelector('.inputIMG').click()}>
             {showDiv && (
-                <div className={cx('upload-text')}>
+                <div style={{ height: height, width: width }} className={cx('upload-text')}>
                     <button className={cx('upload-btn')}>
                         <FontAwesomeIcon icon={faCircleArrowUp} />
                     </button>
@@ -36,12 +41,12 @@ function LoadImage() {
             <input
                 className={cx('inputIMG', 'uploadText')}
                 hidden
-                name=""
+                name="uploadPhoto"
                 type="file"
                 accept="image/gif, image/jpeg, image/png"
                 onChange={handlePreviewIMG}
             />
-            {img && <img src={img.preview} alt="" />}
+            {img && <img src={img.preview} style={{ height: height, width: width }} alt="userPhoto" />}
         </div>
     );
 }

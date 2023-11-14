@@ -1,0 +1,75 @@
+.wrapper {
+    padding: 15px 0;
+    position: relative;
+}
+.information {
+    font-size: 12px;
+    margin: 12px 0 12px 12px;
+}
+.item-type {
+    display: flex;
+    position: relative;
+    padding: 4px;
+    width: 100%;
+    margin-bottom: 15px;
+    cursor: pointer;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    align-items: center;
+    img {
+        border-radius: 14px;
+        padding: 5px;
+        width: 100%;
+        object-fit: cover;
+        width: 60px;
+        height: 60px;
+        margin-left: 10px;
+    }
+    p {
+        margin-left: 20px;
+        font-size: 15px;
+        font-weight: bold;
+        padding: 5px;
+    }
+
+    &:hover {
+        background-color: #f0f0f0;
+    }
+}
+
+.bottom-create {
+    display: flex;
+    padding: 8px;
+    border-radius: 5px;
+    width: 100%;
+    cursor: pointer;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    align-items: center;
+
+    .createBtn {
+        background-color: #f0f0f0;
+        border-radius: 10px;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 10px;
+    }
+    p {
+        font-size: 15px;
+        font-weight: bold;
+        margin-left: 30px;
+    }
+    &:hover {
+        background-color: #f0f0f0;
+    }
+}
+.list-type {
+    overflow-y: auto;
+    height: 150px;
+}
+// .createBoard {
+//     display: none;
+// }
