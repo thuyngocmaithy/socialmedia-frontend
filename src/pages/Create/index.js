@@ -19,7 +19,6 @@ import * as pinServices from '../../services/pinServices';
 const cx = classNames.bind(styles);
 
 function Create() {
-    
     //select board
     const [activeOptionTop, setActiveOptionTop] = useState(false);
 
@@ -77,8 +76,9 @@ function Create() {
         const type = currentType;
         const title = valTitle;
         const description = valContent;
+        const created_at = new Date();
         if (image && board.name !== 'Chọn bảng' && type.typeName !== 'Chọn Thể Loại' && title && description) {
-            const pin = {description, image, title, board, type, user};
+            const pin = {description, image, title, board, type, user, created_at};
             const result = await pinServices.save(pin);
 
             handleSaveResult(true);

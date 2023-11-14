@@ -20,7 +20,7 @@ function LoadImage({handleChangeIMGPath}) {
           clientId: "732891886564-k6526fumdrvrqu64of84uc38k3op4d2b.apps.googleusercontent.com",
           developerKey: "AIzaSyA-s8aR3b6Th9Kf1tt3txz037jS1_dFZMg",
           viewId: "DOCS_IMAGES",
-          token: "ya29.a0AfB_byDOwK4ehxJL_KdQTQmuSbvejdiaVeK4k3jrxeLT8tJIF27KnmcnEgsFz_KG4o8t5XS1KRceFe1CCy9GNr4_9rPYl9p1LlQC4Jcq3a0_zqi68H1ogt0GGF9SpAraAd23pIn6nu_q9CL0tVQ8ORH1zx-8CRWUraCFaCgYKAZ8SARASFQHGX2MipLAd7H2vKohekk5LvCPZ_w0171",
+          token: "ya29.a0AfB_byAotUIqH5tLdmQP0A5LKMYagfcmgme5P8zyFk7Z1PrT5UHcY5SLBejzZ9rwS1pXkZMft-Mky8ME9tkMVkQ9MKg8crzUh8pTeWhz95eXt7B7JP1azkQutwH7Dj6XEdrYsJjmrqjLAwshZImP3k1wgDQgP93K-uKVaCgYKAYsSARASFQHGX2MiKZtcsMGr3O4ZdHkTCoKmCw0171",
           // token: token, // pass oauth token in case you already have one
           showUploadView: true,
           showUploadFolders: true,

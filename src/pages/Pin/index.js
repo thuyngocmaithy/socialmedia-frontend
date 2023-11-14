@@ -2,10 +2,10 @@ import classNames from 'classnames/bind';
 import styles from './DisplayPin.module.scss';
 import Tippy from '@tippyjs/react'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { useLocation } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { ShareIcon, DownloadIcon } from '../../components/Icons';
 import AccountInfo from '../../components/AccountInfo';
 import Button from '../../components/Button';
@@ -13,12 +13,11 @@ import Popper from '../../components/Popper';
 import SelectBoardPopper from '../../components/Popper/SelectBoardPopper';
 import CreateBoard from '../../components/CreateBoard';
 import ActionAlerts from '../../components/Alert';
-import CommentApp from '../../components/Comment'
 import * as userServices from '../../services/userServices';
 import * as pinServices from '../../services/pinServices';
 import * as userSavePinServices from '../../services/userSavePinServices'
+import Comment from '../../components/Comment';
 const cx = classNames.bind(styles);
-
 function DisplayPin() {
 
     const [currentUser, setCurrentUser] = useState('')
@@ -41,19 +40,19 @@ function DisplayPin() {
     const [valTitle, setValTitle] = useState('');
     const [user, setUser] = useState('');
  
-
     useEffect(() => {
         const fetchApi = async () => {
+            setLoad(true);
             const pin = await pinServices.getPinById(pinID);
-            console.log(pin);
             setPin(pin);
             // setBoard(pin.board);
             setIMG(pin.image);
             setValContent(pin.description);
             setValTitle(pin.title);
             setUser(pin.user);
+            setLoad(false);
+            // console.log(pin)
         };
-        
         fetchApi();
     }, []);
 
@@ -126,9 +125,6 @@ function DisplayPin() {
         setShowCreateBoard(isShown);
     }
 
-
-
-
     return (
         <div className={cx('wrapper-createPage')}>
         <div className={cx('createBox')}>
@@ -198,13 +194,10 @@ function DisplayPin() {
                                 Kết bạn
                         </Button>
                     </div>
-                    <div className={cx('comment-content')}>
-
-                    </div>
-                    <div className={cx('comment-input')}>
-                        <CommentApp/>
-                    </div>
+                    {/* comment  */}
+                    <Comment pin={pinID} currentUser={currentUser}></Comment>
                 </div>
+
             </div>
         </div>
         
