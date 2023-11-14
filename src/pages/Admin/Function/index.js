@@ -9,11 +9,13 @@ import LabelTextBox from '../../../components/LabelTextBox';
 import Button from '../../../components/Button';
 import ActionAlerts from '../../../components/Alert';
 import * as functionServices from '../../../services/functionServices';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function Function() {
+    const { theme } = useContext(ThemeContext);
     const [listFunction, setListFunction] = useState([]);
 
     const [openCreate, setOpenCreate] = useState(false); //Mở dialog thêm
@@ -174,7 +176,7 @@ function Function() {
                 rows={rows}
                 title="Quản lý chức năng"
             />
-            <Dialog fullWidth={true} maxWidth="sm" open={openEdit}>
+            <Dialog className={cx(theme === 'dark' ? 'dark' : '')} fullWidth={true} maxWidth="sm" open={openEdit}>
                 <form onSubmit={handleSubmitEdit}>
                     <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
                         Chỉnh sửa
@@ -189,16 +191,22 @@ function Function() {
                         />
                     </DialogContent>
                     <DialogActions sx={{ justifyContent: 'flex-end', margin: '10px' }}>
-                        <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseEdit}>
+                        <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseEdit}>
                             Hủy
                         </Button>
-                        <Button sx={{ fontSize: '14px' }} red type="submit">
+                        <Button style={{ fontSize: '14px' }} red type="submit">
                             Sửa
                         </Button>
                     </DialogActions>
                 </form>
             </Dialog>
-            <Dialog fullWidth={true} maxWidth="sm" open={openCreate} onClose={handleCloseCreate}>
+            <Dialog
+                className={cx(theme === 'dark' ? 'dark' : '')}
+                fullWidth={true}
+                maxWidth="sm"
+                open={openCreate}
+                onClose={handleCloseCreate}
+            >
                 <form onSubmit={handleSubmitCreate}>
                     <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
                         Thêm chức năng
@@ -212,17 +220,22 @@ function Function() {
                         />
                     </DialogContent>
                     <DialogActions sx={{ marginBottom: '10px' }}>
-                        <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseCreate}>
+                        <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseCreate}>
                             Hủy
                         </Button>
-                        <Button sx={{ fontSize: '14px' }} red type="submit">
+                        <Button style={{ fontSize: '14px' }} red type="submit">
                             Tạo
                         </Button>
                     </DialogActions>
                 </form>
             </Dialog>
             {confirmDelete && (
-                <Dialog fullWidth={true} maxWidth="sm" open={confirmDelete}>
+                <Dialog
+                    className={cx(theme === 'dark' ? 'dark' : '')}
+                    fullWidth={true}
+                    maxWidth="sm"
+                    open={confirmDelete}
+                >
                     <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
                         Xóa chức năng?
                     </DialogTitle>
@@ -230,10 +243,10 @@ function Function() {
                         <DialogContent>Tất cả chức năng đã chọn sẽ được xóa khỏi hệ thống.</DialogContent>
                         <DialogActions sx={{ marginBottom: '10px' }}>
                             <div>
-                                <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseConfirm}>
+                                <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseConfirm}>
                                     Hủy
                                 </Button>
-                                <Button sx={{ fontSize: '14px' }} red type="submit">
+                                <Button style={{ fontSize: '14px', marginLeft: '8px' }} red type="submit">
                                     Xóa
                                 </Button>
                             </div>
