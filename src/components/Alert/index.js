@@ -14,32 +14,6 @@ const cx = classNames.bind(styles);
 export default function ActionAlerts({ content, action, id }) {
     const [open, setOpen] = useState(true);
 
-    const handleUndoClick = () => {
-        const fetchApi = async () => {
-            const userId = 1;
-            const pinId = id;
-            const boardId = 1;
-
-            const user = await userServices.getUserById(userId);
-            const pin = await pinServices.getPinById(pinId);
-            const board = await boardServices.getBoardById(boardId);
-
-            const userSavePin = { user, pin, board };
-            const result = await userSavePinServices.del(userSavePin);
-            if (result) {    
-                alert("Hủy");
-            }
-        };
-        fetchApi();
-
-        // if (onUndo) {
-        //     onUndo();
-        //   }
-      };   
-      
-     
-  
-
     useEffect(() => {
         const timer = setTimeout(() => {
             setOpen(false);
