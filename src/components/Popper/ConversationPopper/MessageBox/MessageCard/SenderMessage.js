@@ -1,13 +1,17 @@
-import styles from './MessageCard.module.scss'
-import className from 'classnames/bind'
+import styles from './MessageCard.module.scss';
+import className from 'classnames/bind';
+import Image from '../../../../Image';
 
-const cx = className.bind(styles)
-function SenderMessage({ content, chatWith }) {
+const cx = className.bind(styles);
+function SenderMessage({ content, message }) {
+    const avatar = message.user.avatar;
+    // console.log(message.user);
     return (
-        <div className={cx('wrapper-send-message')}>
+        <div className={cx('wrapper-sender-message')}>
+            <Image src={avatar && `data:image/jpeg;base64,${avatar}`} alt="no" className={cx('sender-avatar')}></Image>
             <div className={cx('message-content')}>
-                <div className={cx('send_message_name')}>{chatWith}</div>
-                <div className={cx('send-message-body')}>{content}</div>
+                <div className={cx('message-name')}>{message.user.fullname}</div>
+                <div className={cx('message-body')}>{content}</div>
             </div>
         </div>
     );

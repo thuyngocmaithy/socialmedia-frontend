@@ -13,7 +13,7 @@ import CommentCard from './CommentCard';
 const cx = classNames.bind(styles);
 let stompClient = null;
 
-function Comment({pin, currentUser}) {
+function CommentApp({pin, currentUser}) {
     // console.log(pin);
     // handle comment
     let comments = useRef([]);
@@ -109,4 +109,4 @@ function Comment({pin, currentUser}) {
     );
 }
 
-export default Comment;
+export default CommentApp;

@@ -12,17 +12,18 @@
     padding: 4px;
     width: 100%;
     margin-bottom: 15px;
+    border-radius: 5px;
     cursor: pointer;
     background-color: white;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
     align-items: center;
     img {
-        border-radius: 14px;
-        padding: 5px;
-        width: 100%;
-        object-fit: cover;
+        // border-radius: 14px;
         width: 60px;
         height: 60px;
+        object-fit: cover;
+        border-radius: 5px;
+        padding: 5px;
         margin-left: 10px;
     }
     p {
@@ -34,6 +35,11 @@
 
     &:hover {
         background-color: #f0f0f0;
+    }
+    &.dark {
+        background-color: var(--background-popup-dark);
+        color: var(--white-500);
+        box-shadow: rgba(203, 203, 203, 0.8) 0px 4px 8px -6px, rgba(203, 203, 203, 0.8) 0px 0px 0px 1px;
     }
 }
 
@@ -49,7 +55,7 @@
 
     .createBtn {
         background-color: #f0f0f0;
-        border-radius: 10px;
+        border-radius: 5px;
         width: 50px;
         height: 50px;
         display: flex;
@@ -65,8 +71,9 @@
     &:hover {
         background-color: #f0f0f0;
     }
+    &.dark {
+        background-color: var(--background-popup-dark);
+        color: var(--white-500);
+        box-shadow: rgba(203, 203, 203, 0.8) 0px 4px 8px -6px, rgba(203, 203, 203, 0.8) 0px 0px 0px 1px;
+    }
 }
-
-// .createBoard {
-//     display: none;
-// }
