@@ -9,10 +9,14 @@ import styles from './Search.module.scss';
 import { Wrapper as PopperWrapper } from '../../components/Popup';
 import AccountItemSearch from '../AccountItemSearch';
 import { useDebounce } from '../../hooks';
+import { ThemeContext } from '../../context/ThemeContext';
+import { useContext } from 'react';
 
 const cx = classNames.bind(styles);
 
 function Search({ className, width = '750px' }) {
+    const { theme } = useContext(ThemeContext);
+
     const [searchValue, setSearchValue] = useState('');
     const [searchResult, setSearchResult] = useState([]);
     const [showResult, setShowResult] = useState(false);
@@ -75,7 +79,7 @@ function Search({ className, width = '750px' }) {
     return (
         /*Using a wrapper <div> tag around the reference element solves this 
         by creating a new parentNode context.*/
-        <div className={className} style={{ width: width }}>
+        <div className={cx('wrapper', className)} style={{ width: width }}>
             <HeadlessTippy
                 interactive //tippy được tương tác mà không ẩn đi
                 visible={showResult && searchResult.length > 0} //Visible là Hiển thị không cần hover
@@ -93,7 +97,7 @@ function Search({ className, width = '750px' }) {
                 onClickOutside={handleHideResult}
                 //Bấm ngoài khu vực tippy
             >
-                <div className={cx('search')} style={{ width: width }}>
+                <div className={cx('search', theme === 'dark' ? 'dark' : '')} style={{ width: width }}>
                     <input
                         ref={inputRef} //Lấy DOM element
                         value={searchValue}

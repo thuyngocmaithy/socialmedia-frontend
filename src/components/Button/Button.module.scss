@@ -9,7 +9,7 @@
     font-weight: 600;
     font-family: var(--font-family);
     cursor: pointer;
-    background-color: var(--white);
+    background-color: var(--white-200);
     border: 1px solid transparent;
     user-select: none;
 
@@ -79,17 +79,17 @@
 
 .red {
     color: #ffffff;
-    background-color: #e60023;
-    border-color: #e60023;
+    background-color: var(--color-red);
+    border-color: var(--color-red);
 
     &:hover {
-        background: #ad081b;
-        border-color: #ad081b;
+        background: var(--color-red-hover);
+        border-color: var(--color-red-hover);
     }
 }
 
 .outline {
-    color: var(--primary);
+    color: var(--black);
     border-color: currentColor; //giống màu color
 
     &:hover {

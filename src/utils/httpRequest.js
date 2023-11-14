@@ -26,5 +26,4 @@ export const put = async (path, data, options = {}) => {
         throw error;
     }
 };
-
 export default httpRequest;

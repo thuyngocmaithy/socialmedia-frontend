@@ -4,57 +4,51 @@ import styles from '../Account.module.scss';
 import LabelTextBox from '../../../components/LabelTextBox';
 import Wrapper from '../Wrapper';
 import Button from '../../../components/Button';
-import { GoogleIcon } from '../../../components/Icons';
-import * as registerServices from '../../../services/registerServices';
+
+import * as userServices from '../../../services/userServices';
 
 // logout xử lý ở phần header
 const cx = classNames.bind(styles);
 
-const initFormValue = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    birthday: '',
-    password: '',
-    confirmPassword: '',
-};
-
 function Register() {
-    const [formValue, setFormValue] = useState(initFormValue);
-
-    const handleChange = (name, value) => {
-        setFormValue({
-            ...formValue,
-            [name]: value,
-        });
-    };
-
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        const email = event.target.elements.email.value !== '' ? event.target.elements.email.value : null;
+        const password = event.target.elements.password.value !== '' ? event.target.elements.password.value : null;
+        const confirmPassword =
+            event.target.elements.confirmPassword.value !== '' ? event.target.elements.confirmPassword.value : null;
+        const firstName = event.target.elements.firstName.value !== '' ? event.target.elements.firstName.value : null;
+        const lastName = event.target.elements.lastName.value !== '' ? event.target.elements.lastName.value : null;
+        const birthdate = event.target.elements.birthdate.value !== '' ? event.target.elements.birthdate.value : null;
+        const fullname = firstName + ' ' + lastName;
+
         // Kiểm tra xem password và confirmPassword có giống nhau không
-        if (formValue.password !== formValue.confirmPassword) {
+        if (password !== confirmPassword) {
             console.error('Password and Confirm Password do not match');
-            console.log('password: ' + formValue.password, 'confirm password: ' + formValue.confirmPassword);
+            console.log('password: ' + password, 'confirm password: ' + confirmPassword);
             return;
         }
 
         // Tạo đối tượng người dùng từ thông tin nhập
-        const userToSave = {
-            fullname: formValue.firstName + ' ' + formValue.lastName,
-            username: formValue.email.split('@')[0],
-            birthday: formValue.birthday,
-            password: formValue.password,
+        const userSave = {
+            email: email,
+            username: email.split('@')[0],
+            fullname: fullname,
+            birthdate: birthdate,
+            password: password,
+            introduce: null,
+            avatar: null,
+            website: null,
+            gender: null,
+            language: null,
+            privateBool: false,
+            createdAt: null,
         };
 
         // Gửi yêu cầu đăng ký đến máy chủ
         try {
-            const response = await registerServices.save(
-                userToSave.fullname,
-                userToSave.username,
-                userToSave.birthday,
-                userToSave.password,
-            );
+            const response = await userServices.save(userSave);
 
             if (response) {
                 console.log(response);
@@ -63,7 +57,6 @@ function Register() {
             }
         } catch (error) {
             console.error('An error occurred:', error);
-            // Xử lý lỗi nếu có lỗi kết nối hoặc xử lý khác
         }
     };
 
@@ -80,35 +73,22 @@ function Register() {
                                 name={'firstName'}
                                 label={'First Name'}
                                 selectedSize={'small'}
-                                value={formValue.firstName}
-                                onChange={handleChange}
                             />
                             <LabelTextBox
                                 placeholder={'Last Name'}
                                 name={'lastName'}
                                 label={'Last Name'}
                                 selectedSize={'small'}
-                                value={formValue.lastName}
-                                onChange={handleChange}
                             />
                         </div>
                         <div className={cx('container-input')}>
+                            <LabelTextBox placeholder={'Email'} name={'email'} label={'Email'} selectedSize={'small'} />
                             <LabelTextBox
-                                placeholder={'Email'}
-                                name={'email'}
-                                label={'Email'}
-                                selectedSize={'small'}
-                                value={formValue.email}
-                                onChange={handleChange}
-                            />
-                            <LabelTextBox
-                                placeholder={'Birthday'}
-                                name={'birthday'}
-                                label={'Birthday'}
+                                placeholder={'Birthdate'}
+                                name={'birthdate'}
+                                label={'Birthdate'}
                                 type={'date'}
                                 selectedSize={'small'}
-                                value={formValue.birthday}
-                                onChange={handleChange}
                             />
                         </div>
                         <div className={cx('container-input')}>
@@ -118,8 +98,6 @@ function Register() {
                                 type={'password'}
                                 label={'Pasword'}
                                 selectedSize={'small'}
-                                value={formValue.password}
-                                onChange={handleChange}
                             />
                             <LabelTextBox
                                 placeholder={'Confirm pasword'}
@@ -127,18 +105,12 @@ function Register() {
                                 type={'password'}
                                 label={'Confirm password'}
                                 selectedSize={'small'}
-                                value={formValue.confirmPassword}
-                                onChange={handleChange}
                             />
                         </div>
                     </div>
 
                     <div className={cx('submit-btn')}>
                         <Button red>Register</Button>
-                        <h4 className={cx('or')}>OR</h4>
-                        <Button className={cx('registerGoogle')} primary leftIcon={<GoogleIcon />}>
-                            Sign in with Google
-                        </Button>
                     </div>
                 </form>
             </div>

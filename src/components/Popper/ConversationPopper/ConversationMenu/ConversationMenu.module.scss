@@ -13,8 +13,9 @@
     padding-bottom: 1rem;
     display: flex;
     flex-direction: column;
-
-
+    &.dark {
+        background-color: var(--background-popup-dark);
+    }
 }
 
 .mini-menu .title {
@@ -35,6 +36,9 @@
 
     &:hover {
         background-color: #e9e9e9 !important;
+        &.dark {
+            background-color: var(--background-popup-dark-hover) !important;
+        }
     }
 }
 
@@ -43,7 +47,7 @@
     height: 42px;
     width: 42px;
     border-radius: 50%;
-    background-color: var(--color-text-icon-brand-primary);
+    background-color: var(--color-red);
     align-items: center;
     justify-content: center;
 }
@@ -54,8 +58,10 @@
     background-color: inherit;
     cursor: pointer;
     margin-left: 12px;
+    &.dark {
+        color: var(--white-500);
+    }
 }
-
 
 // MESSAGE LIST
 .wrapper-conversation-list {
@@ -82,10 +88,13 @@
 
     &:hover {
         background-color: #e9e9e9;
+        &.dark {
+            background-color: var(--background-popup-dark-hover);
+        }
     }
 }
 
-.wrapper-conversation-card>img {
+.wrapper-conversation-card > img {
     flex: 1;
     min-width: 62px;
     max-height: 62px;
@@ -121,9 +130,14 @@
     align-self: center;
     border-radius: 50%;
     cursor: pointer;
-
+    &.dark {
+        color: var(--white-500);
+    }
     &:hover {
         background-color: #dddcdc;
         border-color: #dddcdc;
+        &.dark {
+            color: var(--black);
+        }
     }
 }

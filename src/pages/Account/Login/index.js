@@ -1,72 +1,77 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import classNames from 'classnames/bind';
 import styles from '../Account.module.scss';
 import LabelTextBox from '../../../components/LabelTextBox';
 import Wrapper from '../Wrapper';
 import Button from '../../../components/Button';
-import * as loginServices from '../../../services/loginServices';
+import * as userServices from '../../../services/userServices';
+import { GoogleIcon } from '../../../components/Icons';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 // logout xử lý ở phần header
 const cx = classNames.bind(styles);
 
-const initFormValue = {
-    email: '',
-    password: '',
-};
-
 function Login() {
-    const [formValue, setFormValue] = useState(initFormValue);
+    const { theme } = useContext(ThemeContext);
+    // Hàm để đặt giá trị vào localStorage
+    function setLocalStorageWithExpiration(key, value, expirationMinutes) {
+        const expirationMS = expirationMinutes * 60 * 1000; // Chuyển đổi phút thành mili giây
+        const expirationTime = new Date().getTime() + expirationMS;
 
-    const handleChange = (name, value) => {
-        setFormValue({
-            ...formValue,
-            [name]: value,
-        });
-    };
+        const data = {
+            value: value,
+            expirationTime: expirationTime,
+        };
 
-    const [listLogin, setListLogin] = useState([]);
+        localStorage.setItem(key, JSON.stringify(data));
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
         const fetchApi = async () => {
-            const { email, password } = formValue;
+            const email = e.target.elements.email.value !== '' ? e.target.elements.email.value : null;
+            const password = e.target.elements.password.value !== '' ? e.target.elements.password.value : null;
             const username = email.split('@')[0]; // Trích xuất tên người dùng thành email
-            const result = await loginServices.login(username, password);
-            console.log(result);
-            setListLogin(result);
+            const result = await userServices.login(username, password);
+            // console.log(result);
+            if (result !== undefined) {
+                // Sử dụng hàm đặt giá trị vào localStorage với thời gian hết hạn
+
+                setLocalStorageWithExpiration('userLogin', result.id, 30); // 30 phút
+                if (result.permission !== null) {
+                    window.location.href = '/admin/dashboard';
+                } else {
+                    window.location.href = '/';
+                }
+            }
         };
         fetchApi();
     };
 
     return (
         <Wrapper>
-            <div className={cx('container-form')}>
+            <div className={cx('container-form', theme === 'dark' ? 'dark' : '')}>
                 <h1 className={cx('title')}>Login account</h1>
 
                 <form onSubmit={handleSubmit}>
                     {/* <form> */}
                     <div className={cx('infomation')}>
-                        <LabelTextBox
-                            placeholder={'Email'}
-                            name={'email'}
-                            label={'Email'}
-                            selectedSize={'small'}
-                            value={formValue.username}
-                            onChange={handleChange}
-                        />
+                        <LabelTextBox placeholder={'Email'} name={'email'} label={'Email'} selectedSize={'small'} />
                         <LabelTextBox
                             placeholder={'Password'}
                             name={'password'}
                             type={'password'}
                             label={'Pasword'}
                             selectedSize={'small'}
-                            value={formValue.password}
-                            onChange={handleChange}
                         />
                     </div>
 
                     <div className={cx('submit-btn')}>
                         <Button red>Login</Button>
+                        <h4 className={cx('or')}>OR</h4>
+                        <Button className={cx('registerGoogle')} primary leftIcon={<GoogleIcon />}>
+                            Sign in with Google
+                        </Button>
                     </div>
                 </form>
             </div>
