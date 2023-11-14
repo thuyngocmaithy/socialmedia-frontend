@@ -8,7 +8,7 @@ import { ShareIcon, DownloadIcon, AccessIcon, EditIcon, SearchIcon, People } fro
 import AccountInfo from '../AccountInfo';
 import Button from '../Button';
 import SelectBoardPopper from '../Popper/SelectBoardPopper';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import Popper from '../Popper';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import * as userSavePinServices from '../../services/userSavePinServices';
@@ -17,13 +17,16 @@ import * as boardServices from '../../services/boardServices';
 import * as userServices from '../../services/userServices';
 import SharePopper from '../Popper/SharePopper';
 import { NavLink } from 'react-router-dom';
-import { saveAs } from 'file-saver';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
+import DialogConfirmLogin from '../DialogConfirmLogin';
 
 const cx = classNames.bind(styles);
 
 function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated = false, handleEdit, onSaveResult }) {
+    const userLogin = useContext(AccountLoginContext);
     const [activeOptionTop, setActiveOptionTop] = useState(false);
     const [activeOptionBottom, setActiveOptionBottom] = useState(false);
+    const [openConfirmLogin, setOpenConfirmLogin] = useState(false);
 
     const handleOpenShare = () => {
         setActiveOptionBottom(true);
@@ -61,7 +64,11 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
                 setData('Chọn bang');
             }
         };
-        fetchApi();
+        if (userLogin !== 0) {
+            fetchApi();
+        } else {
+            setOpenConfirmLogin(true);
+        }
     };
 
     const download = (url, title) => {
@@ -156,6 +163,7 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
                     </div>
                 )}
             </div>
+            {openConfirmLogin && <DialogConfirmLogin open={openConfirmLogin} setOpen={setOpenConfirmLogin} />}
 
             {/* <Popover
                 id={shareMenuId}

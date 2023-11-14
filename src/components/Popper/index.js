@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Unstable_Popup as Popup } from '@mui/base/Unstable_Popup';
 import { styled } from '@mui/system';
 import classNames from 'classnames/bind';
 import styles from './Popper.module.scss';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
@@ -23,10 +24,10 @@ const grey = {
 const PopupBody = styled('div')(
     ({ theme }) => `
         width: max-content;
-        background-color: ${theme.palette.mode === 'dark' ? grey[900] : grey[50]};
+        background-color: ${theme === 'dark' ? '#292929' : grey[50]};
         border-radius: 8px;
-        border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-        box-shadow: ${theme.palette.mode === 'dark' ? `0px 4px 8px rgb(0 0 0 / 0.7)` : `0px 4px 8px rgb(0 0 0 / 0.1)`};
+        border: 1px solid ${theme === 'dark' ? grey[700] : grey[200]};
+        box-shadow: ${theme === 'dark' ? `0px 4px 8px rgb(0 0 0 / 0.7)` : `0px 4px 8px rgb(0 0 0 / 0.1)`};
         padding: 1rem;
         font-size: 1.5rem;
         font-family: 'IBM Plex Sans', sans-serif;
@@ -38,6 +39,7 @@ const PopupBody = styled('div')(
 );
 
 function Popper({ idPopper, contentTitle, title, body, className, left = '0', placement = 'bottom' }) {
+    const { theme } = useContext(ThemeContext);
     const [anchor, setAnchor] = useState(null);
     const [open, setOpen] = useState(false);
 
@@ -73,6 +75,7 @@ function Popper({ idPopper, contentTitle, title, body, className, left = '0', pl
                 >
                     <ClickAwayListener onClickAway={handleClickAway}>
                         <PopupBody
+                            theme={theme}
                             style={{
                                 marginLeft:
                                     id.split('selectBoard')[1] === '1' || parseInt(id.split('selectBoard')[1]) % 6 === 0

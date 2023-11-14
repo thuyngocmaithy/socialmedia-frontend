@@ -4,10 +4,12 @@ import MessageBox from './MessageBox';
 import classNames from 'classnames/bind';
 import styles from './ConversationPopper.module.scss';
 import { ConversationContext } from '../../../context/ConversationContext';
+import { ThemeContext } from '../../../context/ThemeContext';
 const cx = classNames.bind(styles);
 export const UserIDContext = createContext('');
 
 function ConversationPopper() {
+    const { theme } = useContext(ThemeContext);
     const chattingWithList = useContext(ConversationContext);
     const [messageIsShown, setMessageIsShown] = useState(false);
     const [currentInfor, setCurrentInfor] = useState({});
@@ -44,7 +46,7 @@ function ConversationPopper() {
         });
     };
     return (
-        <div className={cx('wrapper-conversation-popper')}>
+        <div className={cx('wrapper-conversation-popper', theme === 'dark' ? 'dark' : '')}>
             {!messageIsShown ? (
                 <ConversationMenu handleChange={changeConversation} chattingWithList={chattingWithList.current} />
             ) : (

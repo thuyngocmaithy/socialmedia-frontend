@@ -10,20 +10,20 @@
     font-weight: 600;
     border-radius: 8px;
     color: var(--text-color);
-    background-color: var(--white);
+    background-color: var(--white-200);
     transition: background-color ease-in-out 200ms;
     &.dark {
         background-color: var(--black);
-        color: var(--white);
+        color: var(--white-200);
     }
 }
 
 .menu-item {
     &.active {
         background-color: var(--black);
-        color: var(--white);
+        color: var(--white-200);
         &.dark {
-            background-color: var(--white);
+            background-color: var(--white-200);
             color: var(--black);
         }
     }
@@ -46,6 +46,16 @@
         }
         &:hover {
             background-color: #ffffff;
+        }
+    }
+    &.dark {
+        background-color: transparent;
+        color: var(--white-500);
+        .underline {
+            background-color: var(--white-200);
+        }
+        &:hover {
+            background-color: #727272;
         }
     }
 }

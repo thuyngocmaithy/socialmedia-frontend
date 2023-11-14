@@ -11,18 +11,24 @@ import Popper from '../../Popper';
 import NotificationPopper from '../../Popper/NotificationPopper';
 import ConversationPopper from '../../Popper/ConversationPopper';
 import config from '../../../config';
+import { useContext, useEffect, useState } from 'react';
+import { ThemeContext } from '../../../context/ThemeContext';
+import { AccountLoginContext } from '../../../context/AccountLoginContext';
+import { getUserById } from '../../../services/userServices';
 
 const cx = classNames.bind(styles);
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
-// MENU KHI CHƯA ĐĂNG NHẬP
-const MENU_ITEMS = [
-    {
-        switchToggle: <Switch {...label} />,
-        title: 'Dark Mode',
-    },
-];
 
-function HeaderAdmin({ className, account, handleOpenMenu }) {
+function HeaderAdmin({ className, account = false, handleOpenMenu }) {
+    const userLogin = useContext(AccountLoginContext);
+    const { theme, toggleTheme } = useContext(ThemeContext);
+    // MENU KHI CHƯA ĐĂNG NHẬP
+    const MENU_ITEMS = [
+        {
+            switchToggle: <Switch {...label} onChange={toggleTheme} />,
+            title: 'Dark Mode',
+        },
+    ];
     const handleMenuChange = (menuItem) => {
         console.log(menuItem);
     };
@@ -37,10 +43,23 @@ function HeaderAdmin({ className, account, handleOpenMenu }) {
             separate: true,
         },
     ];
-
+    const [user, setUser] = useState({});
+    useEffect(() => {
+        // Gửi yêu cầu GET để lấy thông tin người dùng
+        if (userLogin !== 0) {
+            getUserById(userLogin)
+                .then((response) => {
+                    setUser(response);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+        // setLoading(false);
+    }, [userLogin]);
     return (
-        <header className={cx(className, 'wrapper')}>
-            <div className={cx('inner')}>
+        <header className={cx(className, 'wrapper', theme === 'dark' ? 'dark' : '')}>
+            <div className={cx('inner', { account: account })}>
                 {/* LEFT MENU */}
                 {account ? (
                     <div className={cx('container-title')}>
@@ -58,23 +77,27 @@ function HeaderAdmin({ className, account, handleOpenMenu }) {
                 {/* ACTIONS */}
                 <div className={cx('actions')}>
                     <Popper
-                        title={<NotificationIcon className={cx('action', 'gUZ', 'ztu', 'U9O', 'kVc')} />}
+                        title={<NotificationIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
                         body={<NotificationPopper />}
                         widthBody="maxContent"
                     />
                     <Popper
-                        title={<MessageIcon className={cx('action', 'gUZ', 'ztu', 'U9O', 'kVc')} />}
+                        title={<MessageIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
                         body={<ConversationPopper />}
                         left="-48px"
                         widthBody="maxContent"
                     />
 
-                    <Link className={cx('link-avatar')} to="/admin/thuyngocmaithyy/edit-profile">
-                        <Image src="../../avt.jpg" className={cx('action', 'user-avatar')} alt="Nguyen Van A" />
+                    <Link className={cx('link-avatar')} to={`/admin/${user.username}/edit-profile`}>
+                        <Image
+                            src={user.avatar && `data:image/jpeg;base64,${user.avatar}`}
+                            className={cx('action', 'user-avatar')}
+                            alt={user.username}
+                        />
                     </Link>
 
                     <MenuSettingHeader className={cx('action')} items={userMenu} onChange={handleMenuChange}>
-                        <button className={cx('more-btn')}>
+                        <button className={cx('more-btn', theme === 'dark' ? 'dark' : '')}>
                             <FontAwesomeIcon icon={faChevronDown} />
                         </button>
                     </MenuSettingHeader>

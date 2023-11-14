@@ -12,6 +12,7 @@
     padding: 4px;
     width: 100%;
     margin-bottom: 15px;
+    border-radius: 5px;
     cursor: pointer;
     background-color: white;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
@@ -34,6 +35,11 @@
 
     &:hover {
         background-color: #f0f0f0;
+    }
+    &.dark {
+        background-color: var(--background-popup-dark);
+        color: var(--white-500);
+        box-shadow: rgba(203, 203, 203, 0.8) 0px 4px 8px -6px, rgba(203, 203, 203, 0.8) 0px 0px 0px 1px;
     }
 }
 
@@ -64,5 +70,10 @@
     }
     &:hover {
         background-color: #f0f0f0;
+    }
+    &.dark {
+        background-color: var(--background-popup-dark);
+        color: var(--white-500);
+        box-shadow: rgba(203, 203, 203, 0.8) 0px 4px 8px -6px, rgba(203, 203, 203, 0.8) 0px 0px 0px 1px;
     }
 }

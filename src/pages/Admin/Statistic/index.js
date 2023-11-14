@@ -1,10 +1,13 @@
 import classNames from 'classnames/bind';
 import styles from './Statistic.module.scss';
 import ItemStatistic from '../../../components/ItemStatistic';
+import { useContext } from 'react';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function Statistic() {
+    const { theme } = useContext(ThemeContext);
     const DATA_STATISTIC = [
         {
             id: '1',
@@ -77,7 +80,7 @@ function Statistic() {
         },
     ];
     return (
-        <div className={cx('wrapper')}>
+        <div className={cx('wrapper', theme === 'dark' ? 'dark' : '')}>
             <h3 className={cx('title')}>Số liệu thống kê</h3>
             <ItemStatistic data={DATA_STATISTIC} line={true} />
             <ItemStatistic data={DATA_REPORT} line={false} />

@@ -27,6 +27,7 @@ function AccountLoginProvider({ children }) {
 
     const [userLogin, setUserLogin] = useState(() => {
         const initialData = getLocalStorageWithExpiration('userLogin');
+        console.log('initialData:' + initialData);
         return initialData || 0;
     });
 

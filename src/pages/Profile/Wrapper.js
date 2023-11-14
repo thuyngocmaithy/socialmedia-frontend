@@ -11,10 +11,12 @@ import { useLocation, Link } from 'react-router-dom';
 import * as userServices from '../../services/userServices';
 import * as friendshipServices from '../../services/friendshipServices';
 import ListFriend from '../../components/Popup/ListFriend';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function Wrapper({ children, className }) {
+    const { theme } = useContext(ThemeContext);
     const [info, setInfo] = useState({});
     const [countFriend, setcountFriend] = useState(null);
     const [renderFriend, setRenderFriend] = useState(false);
@@ -63,9 +65,12 @@ function Wrapper({ children, className }) {
                             className={cx('user-avatar')}
                             alt={info.username}
                         />
-                        <h1 className={cx('fullname')}>{info.fullname}</h1>
-                        <p className={cx('username')}>@{info.username}</p>
-                        <h4 className={cx('count-friend')} onClick={() => handleRenderFriend()}>
+                        <h1 className={cx('fullname', theme === 'dark' ? 'dark' : '')}>{info.fullname}</h1>
+                        <p className={cx('username', theme === 'dark' ? 'dark' : '')}>@{info.username}</p>
+                        <h4
+                            className={cx('count-friend', theme === 'dark' ? 'dark' : '')}
+                            onClick={() => handleRenderFriend()}
+                        >
                             {countFriend} Bạn bè
                         </h4>
                         {renderFriend && <ListFriend onClose={handleClose} idUser={info.id} />}
@@ -85,8 +90,12 @@ function Wrapper({ children, className }) {
                         )}
                     </div>
                     <div className={cx('pins-of-user')}>
-                        <div className={cx('wrapper-menu-pin')}>
-                            <NavMenu className={cx('menu-pin')} menu={menuPins} activeUnderline />
+                        <div className={cx('wrapper-menu-pin', theme === 'dark' ? 'dark' : '')}>
+                            <NavMenu
+                                className={cx('menu-pin', theme === 'dark' ? 'dark' : '')}
+                                menu={menuPins}
+                                activeUnderline
+                            />
                         </div>
                         {children}
                     </div>

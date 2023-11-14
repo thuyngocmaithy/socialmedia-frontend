@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import classNames from 'classnames/bind';
 import styles from '../Account.module.scss';
 import LabelTextBox from '../../../components/LabelTextBox';
@@ -6,11 +6,13 @@ import Wrapper from '../Wrapper';
 import Button from '../../../components/Button';
 import * as userServices from '../../../services/userServices';
 import { GoogleIcon } from '../../../components/Icons';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 // logout xử lý ở phần header
 const cx = classNames.bind(styles);
 
 function Login() {
+    const { theme } = useContext(ThemeContext);
     // Hàm để đặt giá trị vào localStorage
     function setLocalStorageWithExpiration(key, value, expirationMinutes) {
         const expirationMS = expirationMinutes * 60 * 1000; // Chuyển đổi phút thành mili giây
@@ -34,8 +36,13 @@ function Login() {
             // console.log(result);
             if (result !== undefined) {
                 // Sử dụng hàm đặt giá trị vào localStorage với thời gian hết hạn
-                setLocalStorageWithExpiration('userLogin', result, 30); // 30 phút
-                window.location.href = '/';
+
+                setLocalStorageWithExpiration('userLogin', result.id, 30); // 30 phút
+                if (result.permission !== null) {
+                    window.location.href = '/admin/dashboard';
+                } else {
+                    window.location.href = '/';
+                }
             }
         };
         fetchApi();
@@ -43,7 +50,7 @@ function Login() {
 
     return (
         <Wrapper>
-            <div className={cx('container-form')}>
+            <div className={cx('container-form', theme === 'dark' ? 'dark' : '')}>
                 <h1 className={cx('title')}>Login account</h1>
 
                 <form onSubmit={handleSubmit}>

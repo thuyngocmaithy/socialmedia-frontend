@@ -4,15 +4,17 @@ import classNames from 'classnames/bind';
 import Image from '../../../Image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { ThemeContext } from '../../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 function ConversationCard({ handleChange, avatar, senderName, lastMessage }) {
+    const { theme } = useContext(ThemeContext);
     const [deleteBtnIsShown, setDeleteBtnIsShown] = useState(false);
 
     return (
         <div
-            className={cx('wrapper-conversation-card')}
+            className={cx('wrapper-conversation-card', theme === 'dark' ? 'dark' : '')}
             onMouseEnter={() => setDeleteBtnIsShown(true)}
             onMouseLeave={() => setDeleteBtnIsShown(false)}
             onClick={() => handleChange(senderName)}
@@ -24,7 +26,7 @@ function ConversationCard({ handleChange, avatar, senderName, lastMessage }) {
             </div>
             <div className={cx('wrapper-button')}>
                 {deleteBtnIsShown && (
-                    <button className={cx('delete-conversation-button')}>
+                    <button className={cx('delete-conversation-button', theme === 'dark' ? 'dark' : '')}>
                         <FontAwesomeIcon icon={faXmark} />
                     </button>
                 )}

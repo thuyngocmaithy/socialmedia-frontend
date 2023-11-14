@@ -50,6 +50,7 @@ function UserProfile({ admin = false }) {
             .then((response) => {
                 setSaveSuccess(false);
                 setUserData(response);
+                console.log(userLogin);
             })
             .catch((error) => {
                 console.error(error);
