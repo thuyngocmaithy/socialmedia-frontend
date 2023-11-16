@@ -22,6 +22,7 @@ function NavMenu({ menu, activeUnderline = false, className }) {
                         key={index}
                         title={data.title}
                         to={data.to}
+                        handleClick={data.handleClick}
                         activeUnderline={activeUnderline}
                         activeDefault={location.pathname === data.to || (index === 0 && currentPath === `/${username}`)}
                     />

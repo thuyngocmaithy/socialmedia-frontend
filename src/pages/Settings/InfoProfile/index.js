@@ -50,6 +50,7 @@ function UserProfile({ admin = false }) {
             .then((response) => {
                 setSaveSuccess(false);
                 setUserData(response);
+                console.log(userLogin);
             })
             .catch((error) => {
                 console.error(error);
@@ -58,7 +59,7 @@ function UserProfile({ admin = false }) {
 
     const [userFullname, setUserFullname] = useState('');
     useEffect(() => {
-        setUserFullname(userData.fullname);
+        setUserFullname(userData.fullname || '');
     }, [userData]);
     const handlGetUserFullname = useCallback((event) => {
         setUserFullname(event.target.value);
@@ -66,7 +67,7 @@ function UserProfile({ admin = false }) {
 
     const [userIntroduce, setUserIntroduce] = useState('');
     useEffect(() => {
-        setUserIntroduce(userData.introduce);
+        setUserIntroduce(userData.introduce || '');
     }, [userData]);
     const handlGetUserIntroduce = useCallback((event) => {
         setUserIntroduce((prevIntroduce) => +prevIntroduce + event.target.value);
@@ -74,7 +75,7 @@ function UserProfile({ admin = false }) {
 
     const [userWebsite, setUserWebsite] = useState('');
     useEffect(() => {
-        setUserWebsite(userData.website);
+        setUserWebsite(userData.website || '');
     }, [userData]);
     const handleGetUserWebsite = useCallback((event) => {
         setUserWebsite((prevWebsite) => prevWebsite + event.target.value);
@@ -82,7 +83,7 @@ function UserProfile({ admin = false }) {
 
     const [username, setUsername] = useState('');
     useEffect(() => {
-        setUsername(userData.username);
+        setUsername(userData.username || '');
     }, [userData]);
     const handleGetUsername = useCallback((event) => {
         setUsername((prevUsername) => prevUsername + event.target.value);
@@ -97,6 +98,7 @@ function UserProfile({ admin = false }) {
 
     const handleUserphoto = (selectedPhoto) => {
         if (selectedPhoto) {
+            console.log(selectedPhoto);
             const imageURL = URL.createObjectURL(selectedPhoto);
             setUserPhoto(imageURL); // Set image URL to state
         }

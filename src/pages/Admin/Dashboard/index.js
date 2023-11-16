@@ -17,10 +17,12 @@ import * as commentServices from '../../../services/commentServices';
 import * as likeServices from '../../../services/likeServices';
 import * as pinServices from '../../../services/pinServices';
 import { CountAccessContext } from '../../../context/CountAccessContext';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function Dashboard() {
+    const { theme } = useContext(ThemeContext);
     const countAccess = useContext(CountAccessContext);
 
     const [countUser, setCountUser] = useState(0);
@@ -50,7 +52,63 @@ function Dashboard() {
         });
         setData(arrDataTmp);
     }, [data]);
+    useEffect(() => {
+        setChart({
+            series: [
+                {
+                    name: 'Desktops',
+                    data: data,
+                },
+            ],
+            options: {
+                chart: {
+                    height: 350,
+                    type: 'line',
+                    zoom: {
+                        enabled: false,
+                    },
+                },
 
+                colors: ['#cc0000'],
+                dataLabels: {
+                    enabled: false,
+                },
+                stroke: {
+                    curve: 'straight',
+                },
+                title: {
+                    text: 'Lượt truy cập theo tháng',
+                    align: 'left',
+                    style: {
+                        color: theme === 'dark' ? 'white' : 'black',
+                        fontSize: '14px',
+                        fontFamily: 'Noto Sans',
+                    },
+                },
+                grid: {
+                    row: {
+                        colors: ['transparent'],
+                        opacity: 0.5,
+                    },
+                },
+                xaxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    labels: {
+                        style: {
+                            colors: theme === 'dark' ? '#ffffff' : '#000000',
+                        },
+                    },
+                },
+                yaxis: {
+                    labels: {
+                        style: {
+                            colors: theme === 'dark' ? '#ffffff' : '#000000',
+                        },
+                    },
+                },
+            },
+        });
+    }, [theme]);
     const [chart, setChart] = useState({
         series: [
             {
@@ -66,6 +124,7 @@ function Dashboard() {
                     enabled: false,
                 },
             },
+
             colors: ['#cc0000'],
             dataLabels: {
                 enabled: false,
@@ -77,18 +136,31 @@ function Dashboard() {
                 text: 'Lượt truy cập theo tháng',
                 align: 'left',
                 style: {
+                    color: theme === 'dark' ? 'white' : 'black',
                     fontSize: '14px',
                     fontFamily: 'Noto Sans',
                 },
             },
             grid: {
                 row: {
-                    colors: ['#f3f3f3', 'transparent'],
+                    colors: ['transparent'],
                     opacity: 0.5,
                 },
             },
             xaxis: {
                 categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                labels: {
+                    style: {
+                        colors: theme === 'dark' ? '#ffffff' : '#000000',
+                    },
+                },
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        colors: theme === 'dark' ? '#ffffff' : '#000000',
+                    },
+                },
             },
         },
     });

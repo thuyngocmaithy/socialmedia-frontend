@@ -4,23 +4,30 @@ import styles from './HeaderRegister.module.scss';
 import config from '../../../config';
 import { LogoPinterest } from '../../Icons';
 import Button from '../../Button';
+import { useContext } from 'react';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function HeaderRegister() {
+    const { theme } = useContext(ThemeContext);
     return (
-        <header className={cx('wrapper')}>
+        <header className={cx('wrapper', theme === 'dark' ? 'dark' : '')}>
             <div className={cx('inner')}>
                 {/* LOGO */}
-                <Link to={config.routes.home} className={cx('logo-link')}>
+                <a href={config.routes.home} className={cx('logo-link')}>
                     <LogoPinterest className={cx('gUZ', 'GjR', 'kVc')} />
                     <h1 className={cx('name')}>DATH</h1>
-                </Link>
+                </a>
                 <div className={cx('actions')}>
                     <Button red to={config.routes.login}>
                         Log in
                     </Button>
-                    <Button primary className={cx('signUpBtn')} to={config.routes.register}>
+                    <Button
+                        primary
+                        className={cx('signUpBtn', theme === 'dark' ? 'dark' : '')}
+                        to={config.routes.register}
+                    >
                         Sign up
                     </Button>
                 </div>

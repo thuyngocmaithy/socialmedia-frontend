@@ -128,7 +128,7 @@ function DisplayPin() {
             <div className={cx('createBox')}>
                 <div className={cx('mainContent')}>
                     <div className={cx('imgWrapper')}>
-                        <img src={img} alt="" />
+                        <img src={img && `data:image/jpeg;base64,${img}`} alt="" />
                     </div>
                     {/* end upload IMG */}
                     <div className={cx('insertData')}>

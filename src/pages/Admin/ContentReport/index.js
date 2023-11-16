@@ -185,7 +185,7 @@ function ContentReport() {
                 rows={rows}
                 title="Quản lý nội dung báo cáo"
             />
-            <Dialog fullWidth={true} maxWidth="sm" open={openEdit}>
+            <Dialog fullWidth={true} maxWidth="sm" open={openEdit} onClose={handleCloseEdit}>
                 <form onSubmit={handleSubmitEdit}>
                     <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
                         Chỉnh sửa

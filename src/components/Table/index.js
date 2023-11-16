@@ -20,6 +20,7 @@ import { faTrash, faPen, faListCheck } from '@fortawesome/free-solid-svg-icons';
 import { visuallyHidden } from '@mui/utils';
 import Button from '../Button';
 import { Radio } from '@mui/material';
+import { ThemeContext } from '../../context/ThemeContext';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -50,8 +51,19 @@ function stableSort(array, comparator) {
 }
 
 function EnhancedTableHead(props) {
-    const { edit, headCells, onSelectAllClick, order, orderBy, selectFunction, numSelected, rowCount, onRequestSort } =
-        props;
+    const {
+        noedit,
+        theme,
+        edit,
+        headCells,
+        onSelectAllClick,
+        order,
+        orderBy,
+        selectFunction,
+        numSelected,
+        rowCount,
+        onRequestSort,
+    } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
@@ -61,6 +73,7 @@ function EnhancedTableHead(props) {
             <TableRow>
                 <TableCell padding="checkbox">
                     <Checkbox
+                        sx={{ color: theme === 'dark' ? '#fff' : '#000' }}
                         color="primary"
                         indeterminate={numSelected > 0 && numSelected < rowCount}
                         checked={rowCount > 0 && numSelected === rowCount}
@@ -76,7 +89,7 @@ function EnhancedTableHead(props) {
                         align={'left'}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
-                        sx={{ fontSize: '14px' }}
+                        sx={{ fontSize: '14px', color: theme === 'dark' ? '#fff' : '#000' }}
                     >
                         <TableSortLabel
                             active={orderBy === headCell.id}
@@ -93,12 +106,18 @@ function EnhancedTableHead(props) {
                     </TableCell>
                 ))}
                 {selectFunction && (
-                    <TableCell padding="normal" sx={{ textAlign: 'center', fontSize: '14px' }}>
+                    <TableCell
+                        padding="normal"
+                        sx={{ textAlign: 'center', fontSize: '14px', color: theme === 'dark' ? '#fff' : '#000' }}
+                    >
                         Chọn chức năng
                     </TableCell>
                 )}
-                {edit && (
-                    <TableCell padding="normal" sx={{ textAlign: 'center', fontSize: '14px' }}>
+                {edit && !noedit && (
+                    <TableCell
+                        padding="normal"
+                        sx={{ textAlign: 'center', fontSize: '14px', color: theme === 'dark' ? '#fff' : '#000' }}
+                    >
                         Sửa
                     </TableCell>
                 )}
@@ -117,7 +136,7 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-    const { title, numSelected, selected, handleAdd, handleDelete } = props;
+    const { noedit, title, numSelected, selected, handleAdd, handleDelete } = props;
 
     return (
         <Toolbar
@@ -144,11 +163,11 @@ function EnhancedTableToolbar(props) {
                 <IconButton onClick={() => handleDelete(selected)}>
                     <FontAwesomeIcon icon={faTrash} />
                 </IconButton>
-            ) : (
+            ) : !noedit ? (
                 <Button red onClick={handleAdd}>
                     Thêm
                 </Button>
-            )}
+            ) : null}
         </Toolbar>
     );
 }
@@ -158,6 +177,7 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function EnhancedTable({
+    noedit = false,
     edit = true,
     deleteSuccess = false,
     headCells,
@@ -169,6 +189,7 @@ export default function EnhancedTable({
     handleEdit,
     handleSelectFunction,
 }) {
+    const { theme } = React.useContext(ThemeContext);
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
@@ -249,8 +270,16 @@ export default function EnhancedTable({
 
     return (
         <Box sx={{ width: '100%' }}>
-            <Paper sx={{ width: '100%', mb: 2 }}>
+            <Paper
+                sx={{
+                    width: '100%',
+                    mb: 2,
+                    backgroundColor: theme === 'dark' ? '#232323' : '#fff',
+                    color: theme === 'dark' ? '#fff' : '#000',
+                }}
+            >
                 <EnhancedTableToolbar
+                    noedit={noedit}
                     title={title}
                     numSelected={selected.length}
                     selected={selected}
@@ -260,6 +289,7 @@ export default function EnhancedTable({
                 <TableContainer>
                     <Table sx={{ minWidth: 728 }} aria-labelledby="tableTitle" size={'medium'}>
                         <EnhancedTableHead
+                            theme={theme}
                             headCells={headCells}
                             numSelected={selected.length}
                             order={order}
@@ -269,6 +299,7 @@ export default function EnhancedTable({
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
                             edit={edit}
+                            noedit={noedit}
                         />
                         <TableBody>
                             {visibleRows.map((row, index) => {
@@ -288,6 +319,7 @@ export default function EnhancedTable({
                                     >
                                         <TableCell padding="checkbox">
                                             <Checkbox
+                                                sx={{ color: theme === 'dark' ? '#fff' : '#000' }}
                                                 color="primary"
                                                 checked={isItemSelected}
                                                 inputProps={{
@@ -300,15 +332,26 @@ export default function EnhancedTable({
                                             id={labelId}
                                             scope="row"
                                             padding="none"
-                                            sx={{ fontSize: '14px' }}
+                                            sx={{
+                                                fontSize: '14px',
+                                                color: theme === 'dark' ? '#fff' : '#000',
+                                            }}
                                         >
                                             {row.id}
                                         </TableCell>
                                         {Object.keys(row).map((key, index) =>
                                             index === 0 ? null : (
-                                                <TableCell key={key} align="left" sx={{ fontSize: '14px' }}>
+                                                <TableCell
+                                                    key={key}
+                                                    align="left"
+                                                    sx={{
+                                                        fontSize: '14px',
+                                                        color: theme === 'dark' ? '#fff' : '#000',
+                                                    }}
+                                                >
                                                     {row[key] === true || row[key] === false ? (
                                                         <Radio
+                                                            sx={{ color: theme === 'dark' ? '#fff' : '#000' }}
                                                             checked={
                                                                 selectedValue[`radio${row.id}`] !== undefined
                                                                     ? selectedValue[`radio${row.id}`] ===
@@ -343,16 +386,16 @@ export default function EnhancedTable({
                                         {selectFunction && (
                                             <TableCell
                                                 align="center"
-                                                sx={{ fontSize: '14px' }}
+                                                sx={{ fontSize: '14px', color: theme === 'dark' ? '#fff' : '#000' }}
                                                 onClick={(event) => handleSelectFunction(event, row.id)}
                                             >
                                                 <FontAwesomeIcon icon={faListCheck} />
                                             </TableCell>
                                         )}
-                                        {edit && (
+                                        {edit && !noedit && (
                                             <TableCell
                                                 align="center"
-                                                sx={{ fontSize: '14px' }}
+                                                sx={{ fontSize: '14px', color: theme === 'dark' ? '#fff' : '#000' }}
                                                 onClick={(event) => handleEdit(event, row.id)}
                                             >
                                                 <FontAwesomeIcon icon={faPen} />
@@ -374,7 +417,7 @@ export default function EnhancedTable({
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    sx={{ fontSize: '14px' }}
+                    sx={{ fontSize: '14px', color: theme === 'dark' ? '#fff' : '#000' }}
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
                     count={rows.length}

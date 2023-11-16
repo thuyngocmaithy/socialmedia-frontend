@@ -66,7 +66,10 @@
         background-color: #f0f0f0;
     }
 }
-
+.list-type {
+    overflow-y: auto;
+    height: 150px;
+}
 // .createBoard {
 //     display: none;
 // }

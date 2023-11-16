@@ -17,24 +17,28 @@ import { memo, useContext, useEffect, useState } from 'react';
 import { AccountLoginContext } from '../../../context/AccountLoginContext';
 import { getUserById } from '../../../services/userServices';
 import Button from '../../Button';
+import { ThemeContext } from '../../../context/ThemeContext';
+import DialogConfirmLogin from '../../DialogConfirmLogin';
 
 const cx = classNames.bind(styles);
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
-// MENU KHI CHƯA ĐĂNG NHẬP
-const MENU_ITEMS = [
-    {
-        switchToggle: <Switch {...label} />,
-        title: 'Dark Mode',
-    },
-];
 
 function HeaderDefault() {
     const navigate = useNavigate();
+    const { theme, toggleTheme } = useContext(ThemeContext);
     const userLogin = useContext(AccountLoginContext);
     const [user, setUser] = useState({});
     const [loading, setLoading] = useState(true);
     const [userLoaded, setUserLoaded] = useState(false);
+    const [openConfirmLogin, setOpenConfirmLogin] = useState(false);
 
+    // MENU KHI CHƯA ĐĂNG NHẬP
+    const MENU_ITEMS = [
+        {
+            switchToggle: <Switch {...label} onChange={toggleTheme} />,
+            title: 'Dark Mode',
+        },
+    ];
     useEffect(() => {
         // Gửi yêu cầu GET để lấy thông tin người dùng
         if (userLogin !== 0) {
@@ -66,6 +70,7 @@ function HeaderDefault() {
             icon: <FontAwesomeIcon icon={faArrowRightFromBracket} />,
             title: 'Log out',
             handleClickMenuItem: logout,
+            separate: true,
         },
     ];
 
@@ -77,16 +82,17 @@ function HeaderDefault() {
         {
             title: 'Create',
             to: config.routes.create,
+            handleClick: userLogin !== 0 ? null : () => setOpenConfirmLogin(true),
         },
     ];
 
     return (
         // loading === false && (
-        <header className={cx('wrapper')}>
+        <header className={cx('wrapper', theme === 'dark' ? 'dark' : '')}>
             <div className={cx('inner')}>
                 {/* LOGO */}
                 <Link to={config.routes.home} className={cx('logo-link')}>
-                    <LogoPinterest className={cx('logo', 'gUZ', 'GjR', 'kVc')} />
+                    <LogoPinterest className={cx('logo')} />
                 </Link>
 
                 <NavMenu menu={menuNavbarLeft} />
@@ -96,6 +102,7 @@ function HeaderDefault() {
 
                 {/* ACTIONS */}
                 <div className={cx('actions')}>
+<<<<<<< HEAD
                     <Popper
                         title={<NotificationIcon className={cx('action', 'gUZ', 'ztu', 'U9O', 'kVc')} />}
                         body={<NotificationPopper />}
@@ -111,14 +118,45 @@ function HeaderDefault() {
                     <Link className={cx('link-avatar')} to="/thuyngocmaithyy">
                         <Image src="../avt.jpg" className={cx('action', 'user-avatar')} alt="Nguyen Van A" />
                     </Link>
+=======
+                    {userLoaded && (
+                        <>
+                            <Popper
+                                title={<NotificationIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
+                                body={<NotificationPopper />}
+                                widthBody="maxContent"
+                            />
+                            <Popper
+                                title={<MessageIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
+                                body={<ConversationPopper />}
+                                left="-48px"
+                                widthBody="maxContent"
+                            />
+
+                            <Link className={cx('link-avatar')} to={`/${user.username}`}>
+                                <Image
+                                    src={user.avatar && `data:image/jpeg;base64,${user.avatar}`}
+                                    className={cx('action', 'user-avatar', theme === 'dark' ? 'dark' : '')}
+                                    alt={user.username}
+                                />
+                            </Link>
+                        </>
+                    )}
+                    {userLogin === 0 && (
+                        <Button red to={config.routes.login}>
+                            Log in
+                        </Button>
+                    )}
+>>>>>>> 314505d7d6575d92a690e7e4eec041b98f0ca63c
 
                     <MenuSettingHeader className={cx('action')} items={userMenu} onChange={handleMenuChange}>
-                        <button className={cx('more-btn')}>
+                        <button className={cx('more-btn', theme === 'dark' ? 'dark' : '')}>
                             <FontAwesomeIcon icon={faChevronDown} />
                         </button>
                     </MenuSettingHeader>
                 </div>
             </div>
+            {openConfirmLogin && <DialogConfirmLogin open={openConfirmLogin} setOpen={setOpenConfirmLogin} />}
         </header>
         // )
     );

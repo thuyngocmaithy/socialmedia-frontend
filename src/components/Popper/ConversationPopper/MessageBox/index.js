@@ -29,17 +29,19 @@ function MessageBox({ handleChange, handleGetNewMessage, chatWith }) {
             setLastestMessageId(messages.at(-1).id + 1);
         };
         fetchApi();
-
-        const stompObject = stompClient.subscribe(
-            `/room/conversation_id/${chatWith.conversation_id}`,
-            function (message) {
-                handleSendMessage(JSON.parse(message.body));
-            },
-        );
-        // console.log(stompObject);
-
+        let stompObject = null;
+        const createListener = () => {
+            stompObject = stompClient.subscribe(
+                `/room/conversation_id/${chatWith.conversation_id}`,
+                function (message) {
+                    console.log(JSON.parse(message.body));
+                    // handleSendMessage(JSON.parse(message.body));
+                },
+            );
+        };
+        createListener();
         return () => {
-            stompClient.unsubscribe(stompObject.id);
+            // stompClient.unsubscribe(stompObject.id);
         };
     }, []);
 
@@ -84,7 +86,7 @@ function MessageBox({ handleChange, handleGetNewMessage, chatWith }) {
         message.current.id = lastestMessageId;
         message.current.send_at = formattedDate();
         stompClient.publish({
-            destination: `/app/chat/conversation/${chatWith.conversation_id}`,
+            destination: `/app/chat/conversation_id/${chatWith.conversation_id}`,
             body: JSON.stringify({
                 id: lastestMessageId,
                 user: message.current.user,
@@ -113,7 +115,7 @@ function MessageBox({ handleChange, handleGetNewMessage, chatWith }) {
             </div>
 
             <div className={cx('wrapper-message-list')}>
-                {console.log(chatWith)}
+                {/* {console.log(chatWith)} */}
                 <div className={cx('message-list')}>
                     {chatWith.messages.map((message) => {
                         return <MessageCard key={message.id} message={message}></MessageCard>;

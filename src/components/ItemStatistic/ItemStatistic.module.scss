@@ -4,6 +4,9 @@
     h4,
     p {
         color: var(--text-color);
+        &.dark {
+            color: var(--white-200);
+        }
     }
     h4 {
         font-size: 1.7rem;
@@ -17,7 +20,7 @@
 
 .container-item {
     display: flex;
-    
+
     justify-content: space-around;
 }
 .container-detail {

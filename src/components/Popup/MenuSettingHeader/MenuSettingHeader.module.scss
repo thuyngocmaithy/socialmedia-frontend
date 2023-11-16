@@ -6,11 +6,18 @@
     .menu-item {
         font-size: 1.3rem;
         justify-content: flex-start;
+        &.dark {
+            background-color: var(--background-popup-dark);
+            color: var(--white-500);
+        }
     }
 }
 
 .menu-popper {
     padding-bottom: 8px;
+    &.dark {
+        background-color: var(--background-popup-dark);
+    }
 }
 
 // Menu-body
@@ -31,10 +38,16 @@
 
     &.separate {
         border-top: 1px solid rgba(22, 24, 35, 0.12);
+        &.dark {
+            border-top: 1px solid rgba(255, 255, 255, 0.6);
+        }
     }
 
     &:hover {
         background-color: rgba(22, 24, 35, 0.03);
+        &.dark {
+            background-color: var(--background-popup-dark-hover);
+        }
     }
 }
 

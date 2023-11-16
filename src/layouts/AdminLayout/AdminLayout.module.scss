@@ -9,13 +9,24 @@
 }
 .sidebar {
     background-color: #e3a0aa;
+    &.dark {
+        & > nav > a {
+            color: black;
+        }
+    }
 }
 .header {
     background-color: #f0f4fd;
+    &.dark {
+        background-color: var(--black);
+    }
 }
 .container {
     width: calc(100vw - 250px);
     flex: 1;
+    &.dark {
+        background-color: var(--black);
+    }
 }
 
 .content {

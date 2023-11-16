@@ -72,6 +72,7 @@ function Home() {
                 return (
                     <Pin
                         key={index}
+                        stt={index + 1}
                         id={pin.id}
                         image={pin.image}
                         // linkImage={pin.linkImage}

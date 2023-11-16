@@ -7,7 +7,7 @@ import { useContext } from 'react';
 
 const cx = classNames.bind(styles);
 
-function MenuItem({ title, to, activeUnderline = false, activeDefault }) {
+function MenuItem({ title, to, activeUnderline = false, activeDefault, handleClick }) {
     const { theme } = useContext(ThemeContext);
     return (
         <>
@@ -22,6 +22,10 @@ function MenuItem({ title, to, activeUnderline = false, activeDefault }) {
                     )
                 }
                 to={to}
+                onClick={(event) => {
+                    handleClick && event.preventDefault();
+                    handleClick && handleClick();
+                }}
             >
                 <span className={cx('title')}>{title}</span>
                 <div className={cx('underline-wrapper')}>

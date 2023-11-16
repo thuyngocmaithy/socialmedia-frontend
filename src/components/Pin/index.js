@@ -8,7 +8,7 @@ import { ShareIcon, DownloadIcon, AccessIcon, EditIcon, SearchIcon, People } fro
 import AccountInfo from '../AccountInfo';
 import Button from '../Button';
 import SelectBoardPopper from '../Popper/SelectBoardPopper';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import Popper from '../Popper';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import * as userSavePinServices from '../../services/userSavePinServices';
@@ -16,12 +16,17 @@ import * as pinServices from '../../services/pinServices';
 import * as boardServices from '../../services/boardServices';
 import * as userServices from '../../services/userServices';
 import SharePopper from '../Popper/SharePopper';
+import { NavLink } from 'react-router-dom';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
+import DialogConfirmLogin from '../DialogConfirmLogin';
 
 const cx = classNames.bind(styles);
 
-function Pin({ id, image, linkImage, title, userImage, username, pinCreated = false, handleEdit, onSaveResult }) {
+function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated = false, handleEdit, onSaveResult }) {
+    const userLogin = useContext(AccountLoginContext);
     const [activeOptionTop, setActiveOptionTop] = useState(false);
     const [activeOptionBottom, setActiveOptionBottom] = useState(false);
+    const [openConfirmLogin, setOpenConfirmLogin] = useState(false);
 
     const handleOpenShare = () => {
         setActiveOptionBottom(true);
@@ -59,48 +64,21 @@ function Pin({ id, image, linkImage, title, userImage, username, pinCreated = fa
                 setData('Chọn bang');
             }
         };
-        fetchApi();
+        if (userLogin !== 0) {
+            fetchApi();
+        } else {
+            setOpenConfirmLogin(true);
+        }
     };
 
-    const download = (url) => {
-        console.log(url);
-        fetch(url, {
-            method: 'GET',
-            mode: 'no-cors',
-            headers: {},
-        })
-            .then((response) => {
-                response.arrayBuffer().then(function (buffer) {
-                    const url = window.URL.createObjectURL(new Blob([buffer]));
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.setAttribute('download', 'image.jpg'); //or any other extension
-                    document.body.appendChild(link);
-                    link.click();
-                });
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    const download = (url, title) => {
+        const linkSource = `data:image/jpeg;base64,${url}`;
+        const downloadLink = document.createElement('a');
+        downloadLink.href = linkSource;
+        downloadLink.download = `${title}.png`;
+        downloadLink.click();
     };
-    // const download = async (url) => {
-    //     console.log(url);
-    //     const originalImage = url;
-    //     const image = await fetch(originalImage, { mode: 'no-cors' });
 
-    //     // Split image name
-    //     const nameSplit = originalImage.split('/');
-    //     const duplicateName = nameSplit.pop();
-
-    //     const imageBlog = await image.blob();
-    //     const imageURL = URL.createObjectURL(imageBlog);
-    //     const link = document.createElement('a');
-    //     link.href = imageURL;
-    //     link.download = '' + duplicateName + '';
-    //     document.body.appendChild(link);
-    //     link.click();
-    //     document.body.removeChild(link);
-    // };
     const openImage = (url) => {
         const link = document.createElement('a');
         link.href = url;
@@ -114,13 +92,15 @@ function Pin({ id, image, linkImage, title, userImage, username, pinCreated = fa
         <>
             <div className={cx('wrapper')}>
                 <div className={cx('container-image')}>
-                    <img className={cx('image')} src={image} alt="" />
+                    <NavLink className={(nav) => cx('menu-item')} to={`/pin/${id}`}>
+                        <img className={cx('image')} src={image && `data:image/jpeg;base64,${image}`} alt="" />
+                    </NavLink>
                     {pinCreated ? null : (
                         <div className={cx('option-top', { active: activeOptionTop })}>
                             <ClickAwayListener onClickAway={handleClickAwaySelectBoard}>
                                 <button className={cx('select-board-btn')} onClick={handleDisplay}>
                                     <Popper
-                                        idPopper={`selectBoard${id}`}
+                                        idPopper={`selectBoard${stt}`}
                                         contentTitle={data.name || 'Chọn bảng'}
                                         title={<FontAwesomeIcon icon={faChevronDown} />}
                                         className={cx('select-board')}
@@ -165,8 +145,8 @@ function Pin({ id, image, linkImage, title, userImage, username, pinCreated = fa
                         {pinCreated ? null : (
                             <Tippy delay={[0, 100]} content="Lưu ảnh" placement="bottom">
                                 <button
-                                    onClick={(e) => {
-                                        download(image);
+                                    onClick={() => {
+                                        download(image, title);
                                     }}
                                     className={cx('btn-end')}
                                 >
@@ -183,6 +163,7 @@ function Pin({ id, image, linkImage, title, userImage, username, pinCreated = fa
                     </div>
                 )}
             </div>
+            {openConfirmLogin && <DialogConfirmLogin open={openConfirmLogin} setOpen={setOpenConfirmLogin} />}
 
             {/* <Popover
                 id={shareMenuId}

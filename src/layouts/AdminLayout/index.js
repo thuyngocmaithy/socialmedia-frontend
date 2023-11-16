@@ -20,11 +20,13 @@ import {
 import { Link } from 'react-router-dom';
 import config from '../../config';
 import '@fortawesome/react-fontawesome';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function AdminLayout({ children, account = false }) {
+    const { theme } = useContext(ThemeContext);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [displayMenu, setDisplayMenu] = useState('none');
 
@@ -107,7 +109,7 @@ function AdminLayout({ children, account = false }) {
         <div className={cx('wrapper')} style={{ backgroundColor: account ? 'transparent' : '#f0f4fd' }}>
             {account === false && (
                 <SideBar
-                    className={cx('sidebar')}
+                    className={cx('sidebar', theme === 'dark' ? 'dark' : '')}
                     style={{
                         display: screenWidth <= 768 ? (displayMenu === 'none' ? 'none' : 'block') : 'block',
                         position: screenWidth <= 768 && displayMenu === 'block' && 'absolute',
@@ -129,8 +131,13 @@ function AdminLayout({ children, account = false }) {
                 </SideBar>
             )}
 
-            <div className={cx('container')}>
-                <HeaderAdmin account={account} className={cx('header')} handleOpenMenu={handleOpenMenu} />
+            <div className={cx('container', theme === 'dark' ? 'dark' : '')}>
+                {console.log(theme)}
+                <HeaderAdmin
+                    account={account}
+                    className={cx('header', theme === 'dark' ? 'dark' : '')}
+                    handleOpenMenu={handleOpenMenu}
+                />
                 <div className={cx('content')}>{children}</div>
             </div>
         </div>
