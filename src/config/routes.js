@@ -16,7 +16,6 @@ const routes = {
     contentReportAdmin: '/admin/content-report',
     postAdmin: '/admin/post',
     commentAdmin: '/admin/comment',
-    settingWeb: '/admin/setting-web',
     statistic: '/admin/statistic',
     functionAdmin: '/admin/function',
     permissionAdmin: '/admin/permission',
