@@ -22,7 +22,7 @@ root.render(
                         <StompProvider>
                             <ConversationProvider>
                                 <MessageProvider>
-                                    <App />
+                                        <App />
                                 </MessageProvider>
                             </ConversationProvider>
                         </StompProvider>

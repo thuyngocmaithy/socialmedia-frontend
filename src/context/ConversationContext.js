@@ -7,7 +7,7 @@ const ConversationContext = createContext({});
 
 function ConversationProvider({ children }) {
     const USER_ID = useContext(AccountLoginContext);
-    let conversationList = useRef();
+    let conversationList = useRef([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         const fetchApi = async () => {
