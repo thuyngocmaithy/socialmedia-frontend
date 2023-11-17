@@ -8,6 +8,7 @@ export const getCountFriend = async (id) => {
         console.log(error);
     }
 };
+
 export const getListFriend = async (id) => {
     try {
         const res = await httpRequest.get(`/friendships/listFriend/${id}`);
@@ -20,6 +21,15 @@ export const getListFriend = async (id) => {
 export const getListRequest = async (id) => {
     try {
         const res = await httpRequest.get(`/friendships/listRequest/${id}`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getFriendByNotification = async (notificationId) => {
+    try {
+        const res = httpRequest.get(`friendships/getByNotification/${notificationId}`);
         return res;
     } catch (error) {
         console.log(error);

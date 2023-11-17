@@ -1,10 +1,10 @@
-import { useContext, useState } from 'react';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { Unstable_Popup as Popup } from '@mui/base/Unstable_Popup';
 import { styled } from '@mui/system';
 import classNames from 'classnames/bind';
-import styles from './Popper.module.scss';
-import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import { useContext, useState } from 'react';
 import { ThemeContext } from '../../context/ThemeContext';
+import styles from './Popper.module.scss';
 
 const cx = classNames.bind(styles);
 

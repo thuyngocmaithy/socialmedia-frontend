@@ -9,6 +9,15 @@ export const countAll = async () => {
     }
 };
 
+export const getLikeByNotification = async (notificationId) => {
+    try {
+        const res = httpRequest.get(`likes/getByNotification/${notificationId}`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const percent7days = async () => {
     try {
         const res = await httpRequest.get(`likes/percent7days`);

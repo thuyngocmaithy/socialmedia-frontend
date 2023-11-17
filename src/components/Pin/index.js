@@ -1,26 +1,32 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
 import classNames from 'classnames/bind';
-import styles from './Pin.module.scss';
-import { ShareIcon, DownloadIcon, AccessIcon, EditIcon, SearchIcon, People } from '../Icons';
+import { useContext, useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { io } from 'socket.io-client';
+import 'tippy.js/dist/tippy.css';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
+import * as boardServices from '../../services/boardServices';
+import * as pinServices from '../../services/pinServices';
+import * as userSavePinServices from '../../services/userSavePinServices';
+import * as userServices from '../../services/userServices';
 import AccountInfo from '../AccountInfo';
 import Button from '../Button';
-import SelectBoardPopper from '../Popper/SelectBoardPopper';
-import { useState, useEffect, useRef, useContext } from 'react';
-import Popper from '../Popper';
-import { ClickAwayListener } from '@mui/base/ClickAwayListener';
-import * as userSavePinServices from '../../services/userSavePinServices';
-import * as pinServices from '../../services/pinServices';
-import * as boardServices from '../../services/boardServices';
-import * as userServices from '../../services/userServices';
-import SharePopper from '../Popper/SharePopper';
-import { NavLink } from 'react-router-dom';
-import { AccountLoginContext } from '../../context/AccountLoginContext';
 import DialogConfirmLogin from '../DialogConfirmLogin';
+import { AccessIcon, DownloadIcon, EditIcon, ShareIcon } from '../Icons';
+import Popper from '../Popper';
+import SelectBoardPopper from '../Popper/SelectBoardPopper';
+import SharePopper from '../Popper/SharePopper';
+import styles from './Pin.module.scss';
 
 const cx = classNames.bind(styles);
+
+const socket = io("http://localhost:3000");
+socket.connect((e) => {
+    console.log(e);
+})
 
 function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated = false, handleEdit, onSaveResult }) {
     const userLogin = useContext(AccountLoginContext);
@@ -53,7 +59,8 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
             const pinId = id;
             const boardId = data.id;
             console.log(data);
-
+            // Tăng biến đếm để tạo thông báo bài pin liên quan
+            localStorage.setItem('pinCount', parseInt(localStorage.getItem('pinCount')) + 1 || 0);
             const user = await userServices.getUserById(userId);
             const pin = await pinServices.getPinById(pinId);
             const board = await boardServices.getBoardById(boardId);
@@ -69,8 +76,8 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
             if (data !== '') {
                 fetchApi();
             }
-            else{
-                
+            else {
+
             }
         } else {
             setOpenConfirmLogin(true);

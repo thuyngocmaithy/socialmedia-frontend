@@ -1,5 +1,5 @@
-import React from 'react';
 import classNames from 'classnames/bind';
+import React from 'react';
 import styles from './Notification.module.scss';
 
 const cx = classNames.bind(styles);
@@ -10,12 +10,11 @@ function Notification() {
             <div className={cx('information')}>
                 <p> Đã lưu vào </p>
                 <p>
-                    {' '}
-                    <b>Hồ sơ</b>
+                    <b> Hồ sơ </b>
                 </p>
             </div>
             {/* <button className={cx('click')}>Hoàn tác</button> */}
         </div>
     );
 }
-export default Notification;
+export default Notification; 

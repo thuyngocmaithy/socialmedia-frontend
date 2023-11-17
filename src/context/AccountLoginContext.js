@@ -1,11 +1,9 @@
-import { createContext, useEffect, useMemo, useState } from 'react';
-
+import { createContext, useEffect, useState } from 'react';
 const AccountLoginContext = createContext();
 
 function AccountLoginProvider({ children }) {
     // const initialData = Cookies.get('userLogin') || 0;
     // const [userLogin, setUserLogin] = useState(0);
-
     // Hàm để lấy giá trị từ localStorage
     const getLocalStorageWithExpiration = (key) => {
         const data = localStorage.getItem(key);
@@ -39,7 +37,8 @@ function AccountLoginProvider({ children }) {
         getUserLogin();
     }, []);
 
-    return <AccountLoginContext.Provider value={userLogin}>{children}</AccountLoginContext.Provider>;
+    return <AccountLoginContext.Provider value={userLogin}> {children} </AccountLoginContext.Provider>;
 }
 
 export { AccountLoginContext, AccountLoginProvider };
+

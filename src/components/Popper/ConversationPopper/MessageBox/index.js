@@ -1,12 +1,12 @@
+import { faAngleLeft, faCircleArrowRight, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styles from './MessageBox.module.scss';
-import { faAngleLeft, faHeart, faCircleArrowRight } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
-import MessageCard from './MessageCard';
-import { useState, useLayoutEffect, useContext, useEffect, useRef } from 'react';
-import * as messageServices from '../../../../services/messageServices';
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AccountLoginContext } from '../../../../context/AccountLoginContext';
 import { StompContext } from '../../../../context/StompContext';
+import * as messageServices from '../../../../services/messageServices';
+import styles from './MessageBox.module.scss';
+import MessageCard from './MessageCard';
 
 const cx = classNames.bind(styles);
 

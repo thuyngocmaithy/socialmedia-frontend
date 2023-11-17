@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useRef } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import * as messageServices from '../services/messageServices';
 import * as participantServices from '../services/participantServices';
 import { AccountLoginContext } from './AccountLoginContext';
@@ -23,13 +23,7 @@ function ConversationProvider({ children }) {
         }
         setLoading(false);
     }, [USER_ID]);
-    return (
-        loading === false && (
-            <ConversationContext.Provider value={USER_ID !== 0 ? conversationList : ''}>
-                {children}
-            </ConversationContext.Provider>
-        )
-    );
+    return loading === false && <ConversationContext.Provider value={123}> {children} </ConversationContext.Provider>;
 }
 
-export { ConversationProvider, ConversationContext };
+export { ConversationContext, ConversationProvider };

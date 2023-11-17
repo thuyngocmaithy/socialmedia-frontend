@@ -1,29 +1,28 @@
 import config from '../config';
 
 // Pages
-import Home from '../pages/Home';
-import Create from '../pages/Create';
-import Board from '../pages/Board';
-import DisplayPin from '../pages/Pin';
-import Profile, { PinCreated, PinSaved } from '../pages/Profile';
-import InfoProfile from '../pages/Settings/InfoProfile';
-import AccountSetting from '../pages/Settings/AccountSetting';
-import ChangePassword from '../pages/Settings/ChangePassword';
-import { Register } from '../pages/Account';
-import { Login } from '../pages/Account';
-import Dashboard from '../pages/Admin/Dashboard';
-import User from '../pages/Admin/User';
-import Type from '../pages/Admin/Type';
-import Post from '../pages/Admin/Post';
+import { Login, Register } from '../pages/Account';
 import Comment from '../pages/Admin/Comment';
-import Statistic from '../pages/Admin/Statistic';
+import ContentReport from '../pages/Admin/ContentReport';
+import Dashboard from '../pages/Admin/Dashboard';
 import Function from '../pages/Admin/Function';
 import Permission from '../pages/Admin/Permission';
-import ContentReport from '../pages/Admin/ContentReport';
+import Post from '../pages/Admin/Post';
+import Statistic from '../pages/Admin/Statistic';
+import Type from '../pages/Admin/Type';
+import User from '../pages/Admin/User';
+import Board from '../pages/Board';
+import Create from '../pages/Create';
+import Home from '../pages/Home';
+import News_Hub from '../pages/News_Hub';
+import DisplayPin from '../pages/Pin';
+import Profile, { PinCreated, PinSaved } from '../pages/Profile';
+import AccountSetting from '../pages/Settings/AccountSetting';
+import ChangePassword from '../pages/Settings/ChangePassword';
+import InfoProfile from '../pages/Settings/InfoProfile';
 
 // Layout
-import { RegisterLayout } from '../layouts';
-import { AdminLayout } from '../layouts';
+import { AdminLayout, RegisterLayout } from '../layouts';
 
 //Không đăng nhập vẫn vào được
 const publicRoutes = [
@@ -36,6 +35,7 @@ const publicRoutes = [
     { path: config.routes.accountSetting, component: AccountSetting },
     { path: config.routes.changePassword, component: ChangePassword },
     { path: config.routes.pin, component: DisplayPin },
+    { path: config.routes.news_hub, component: News_Hub },
 ];
 
 //Không đăng nhập => chuyển login
@@ -43,7 +43,6 @@ const privateRoutes = [
     { path: config.routes.pinCreatedOfUser, component: PinCreated },
     { path: config.routes.pinSavedOfUser, component: PinSaved },
     { path: config.routes.board, component: Board },
-
     //admin
     { path: config.routes.admin, component: Dashboard, layout: AdminLayout },
     { path: config.routes.userAdmin, component: User, layout: AdminLayout },
@@ -71,4 +70,4 @@ const privateRoutes = [
     },
 ];
 
-export { publicRoutes, privateRoutes };
+export { privateRoutes, publicRoutes };
