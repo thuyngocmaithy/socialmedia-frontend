@@ -170,19 +170,39 @@ export const NotificationIcon = ({ width = '2.4rem', height = '2.4rem', classNam
     </svg>
 );
 
-export const MessageIcon = ({ width = '2.4rem', height = '2.4rem', className }) => (
-    <svg
-        className={className}
-        width={width}
-        height={height}
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-        aria-label=""
-        role="img"
-    >
-        <path d="M18 12.5a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 18 12.5m-6 0a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 12 12.5m-6 0a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 6 12.5M12 0C5.925 0 1 4.925 1 11c0 2.653.94 5.086 2.504 6.986L2 24l5.336-3.049A10.93 10.93 0 0 0 12 22c6.075 0 11-4.925 11-11S18.075 0 12 0"></path>
-    </svg>
+export const MessageIcon = ({ width = '2.4rem', height = '2.4rem', className, newMessageCount }) => (
+    <div style={{width: "48px", height: "48px", display: "flex"}}>
+        <div style={{position: "relative", boxSizing: "content-box", display: "block"}}>
+            <svg
+                className={className}
+                width={width}
+                height={height}
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                aria-label=""
+                role="img"
+            >
+                <path d="M18 12.5a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 18 12.5m-6 0a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 12 12.5m-6 0a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 6 12.5M12 0C5.925 0 1 4.925 1 11c0 2.653.94 5.086 2.504 6.986L2 24l5.336-3.049A10.93 10.93 0 0 0 12 22c6.075 0 11-4.925 11-11S18.075 0 12 0"></path>
+            </svg>
+            {
+                newMessageCount > 0 &&
+                <div style={{
+                    position: "absolute", 
+                    right: "5px", 
+                    top: "2px", 
+                    background: "#e60023", 
+                    padding: "0.5px 5.5px", 
+                    borderRadius: "50%",
+                    fontSize: "11px",
+                    color: "white"
+                }}>
+                    {newMessageCount}
+                </div>
+            }
+        </div>
+    </div>
 );
+
 export const EditIcon = ({ width = '1.6rem', height = '1.6rem', className }) => (
     <svg
         className={className}

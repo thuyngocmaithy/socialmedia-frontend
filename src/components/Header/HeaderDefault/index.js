@@ -18,6 +18,7 @@ import { AccountLoginContext } from '../../../context/AccountLoginContext';
 import { getUserById } from '../../../services/userServices';
 import Button from '../../Button';
 import { ThemeContext } from '../../../context/ThemeContext';
+import { MessageContext } from '../../../context/MessageContext';
 import DialogConfirmLogin from '../../DialogConfirmLogin';
 
 const cx = classNames.bind(styles);
@@ -31,6 +32,8 @@ function HeaderDefault() {
     const [loading, setLoading] = useState(true);
     const [userLoaded, setUserLoaded] = useState(false);
     const [openConfirmLogin, setOpenConfirmLogin] = useState(false);
+    const messages = useContext(MessageContext);
+    let newMessageCount = messages.length;
 
     // MENU KHI CHƯA ĐĂNG NHẬP
     const MENU_ITEMS = [
@@ -54,7 +57,6 @@ function HeaderDefault() {
         }
         // setLoading(false);
     }, [userLogin]);
-
     const handleMenuChange = (menuItem) => {
         console.log(menuItem);
     };
@@ -110,7 +112,7 @@ function HeaderDefault() {
                                 widthBody="maxContent"
                             />
                             <Popper
-                                title={<MessageIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
+                                title={<MessageIcon newMessageCount={newMessageCount} className={cx('action', theme === 'dark' ? 'dark' : '')} />}
                                 body={<ConversationPopper />}
                                 left="-48px"
                                 widthBody="maxContent"

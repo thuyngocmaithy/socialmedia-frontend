@@ -30,20 +30,19 @@ function MessageBox({ handleChange, handleGetNewMessage, chatWith }) {
             console.log(chatWith)
         };
         fetchApi();
-        // let stompObject = null;
-        // const createListener = () => {
-        //     stompObject = stompClient.subscribe(
-        //         `/room/conversation_id/${chatWith.conversation_id}`,
-        //         function (message) {
-        //             // console.log(JSON.parse(message.body));
-        //             updateMessages(JSON.parse(message.body));
-        //         },
-        //     );
-        // };
-        // createListener();
-        // return () => {
-        //     stompClient.unsubscribe(stompObject.id);
-        // };
+        let stompObject = null;
+        const createListener = () => {
+            stompClient.subscribe(
+                `/app/login/${chatWith.conversation_id}`,
+                (response) => {
+                    // console.log(`Conversation ID: ${JSON.parse(response.body)}`);
+                }
+            );
+        };
+        createListener();
+        return () => {
+            stompClient.unsubscribe(stompObject.id);
+        };
     }, []);
 
     // Change chat icon

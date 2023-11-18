@@ -14,6 +14,7 @@ import config from '../../../config';
 import { useContext, useEffect, useState } from 'react';
 import { ThemeContext } from '../../../context/ThemeContext';
 import { AccountLoginContext } from '../../../context/AccountLoginContext';
+import { MessageContext } from '../../../context/MessageContext';
 import { getUserById } from '../../../services/userServices';
 
 const cx = classNames.bind(styles);
@@ -23,6 +24,8 @@ function HeaderAdmin({ className, account = false, handleOpenMenu }) {
     const navigate = useNavigate();
     const userLogin = useContext(AccountLoginContext);
     const { theme, toggleTheme } = useContext(ThemeContext);
+    const messages = useContext(MessageContext);
+    let newMessageCount = messages.length;
     // MENU KHI CHƯA ĐĂNG NHẬP
     const MENU_ITEMS = [
         {
@@ -87,7 +90,7 @@ function HeaderAdmin({ className, account = false, handleOpenMenu }) {
                         widthBody="maxContent"
                     />
                     <Popper
-                        title={<MessageIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
+                        title={<MessageIcon newMessageCount={newMessageCount} className={cx('action', theme === 'dark' ? 'dark' : '')} />}
                         body={<ConversationPopper />}
                         left="-48px"
                         widthBody="maxContent"
