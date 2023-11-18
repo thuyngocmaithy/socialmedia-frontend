@@ -384,10 +384,10 @@ function Permission() {
                     </form>
                 </Dialog>
             )}
-            {alertType === 'edit' && <ActionAlerts content={`Đã chỉnh sửa thành công`} />}
-            {alertType === 'create' && <ActionAlerts content={`Đã thêm thành công`} />}
-            {alertType === 'delete' && <ActionAlerts content={`Đã xóa thành công`} />}
-            {alertType === 'select' && <ActionAlerts content={`Đã chọn chức năng thành công`} />}
+            {alertType === 'edit' && <ActionAlerts severity="success" content={`Đã chỉnh sửa thành công`} />}
+            {alertType === 'create' && <ActionAlerts severity="success" content={`Đã thêm thành công`} />}
+            {alertType === 'delete' && <ActionAlerts severity="success" content={`Đã xóa thành công`} />}
+            {alertType === 'select' && <ActionAlerts severity="success" content={`Đã chọn chức năng thành công`} />}
         </div>
     );
 }

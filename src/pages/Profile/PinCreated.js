@@ -15,10 +15,12 @@ import LabelTextBox from '../../components/LabelTextBox';
 import Button from '../../components/Button';
 import Options from '../../components/Options';
 import ActionAlerts from '../../components/Alert';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function PinCreated() {
+    const { theme } = useContext(ThemeContext);
     const accountOther = useContext(AccountOtherContext);
     const [isLoading, setIsLoading] = useState(true);
     const [openEdit, setOpenEdit] = useState(false);
@@ -235,8 +237,8 @@ function PinCreated() {
                         )}
                     </>
                 )}
-                {alertType === 'edit' && <ActionAlerts content={`Đã chỉnh sửa thành công`} />}
-                {alertType === 'delete' && <ActionAlerts content={`Đã xóa thành công`} />}
+                {alertType === 'edit' && <ActionAlerts severity="success" content={`Đã chỉnh sửa thành công`} />}
+                {alertType === 'delete' && <ActionAlerts severity="success" content={`Đã xóa thành công`} />}
             </Wrapper>
         )
     );

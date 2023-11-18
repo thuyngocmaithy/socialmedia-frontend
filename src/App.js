@@ -62,7 +62,9 @@ function App() {
                                 key={index}
                                 path={route.path}
                                 element={
-                                    userLogin !== 0 && user.permission !== null ? (
+                                    userLogin !== 0 &&
+                                    ((user.permission !== null && route.admin) ||
+                                        (user.permission === null && !route.admin)) ? (
                                         <Layout>
                                             <Page />
                                         </Layout>

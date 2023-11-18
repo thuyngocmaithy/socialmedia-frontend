@@ -256,8 +256,8 @@ function User() {
                     </form>
                 </Dialog>
             )}
-            {alertType === 'create' && <ActionAlerts content={`Đã thêm thành công`} />}
-            {alertType === 'delete' && <ActionAlerts content={`Đã xóa thành công`} />}
+            {alertType === 'create' && <ActionAlerts severity="success" content={`Đã thêm thành công`} />}
+            {alertType === 'delete' && <ActionAlerts severity="success" content={`Đã xóa thành công`} />}
         </div>
     );
 }

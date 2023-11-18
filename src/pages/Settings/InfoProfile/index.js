@@ -215,7 +215,7 @@ function UserProfile({ admin = false }) {
                         onChange={handleGetUsername}
                     />
                 </div>
-                {alertType === 'editAvatar' && <ActionAlerts content={`Lưu ảnh thành công`} />}
+                {alertType === 'editAvatar' && <ActionAlerts severity="success" content={`Lưu ảnh thành công`} />}
             </div>
         </Wrapper>
 

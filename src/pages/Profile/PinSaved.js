@@ -19,11 +19,13 @@ import LabelTextBox from '../../components/LabelTextBox';
 import Button from '../../components/Button';
 import ActionAlerts from '../../components/Alert';
 import { useNavigate } from 'react-router-dom';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function PinSaved() {
     const navigate = useNavigate();
+    const { theme } = useContext(ThemeContext);
     const accountOther = useContext(AccountOtherContext);
     //Open hộp thoại edit
     const [openEdit, setOpenEdit] = useState(false);
@@ -364,9 +366,9 @@ function PinSaved() {
                     </Dialog>
                 )}
             </div>
-            {alertType === 'edit' && <ActionAlerts content={`Đã chỉnh sửa thành công`} />}
-            {alertType === 'create' && <ActionAlerts content={`Đã thêm thành công`} />}
-            {alertType === 'delete' && <ActionAlerts content={`Đã xóa thành công`} />}
+            {alertType === 'edit' && <ActionAlerts severity="success" content={`Đã chỉnh sửa thành công`} />}
+            {alertType === 'create' && <ActionAlerts severity="success" content={`Đã thêm thành công`} />}
+            {alertType === 'delete' && <ActionAlerts severity="success" content={`Đã xóa thành công`} />}
         </Wrapper>
     );
 }

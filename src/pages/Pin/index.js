@@ -215,7 +215,7 @@ function DisplayPin() {
                     />
                 </div>
             )}
-            {statusSave && <ActionAlerts content={`Đã lưu pin`} action="UNDO" />}
+            {statusSave && <ActionAlerts severity="success" content={`Đã lưu pin`} action="UNDO" />}
         </div>
     );
 }

@@ -11,7 +11,7 @@ import * as userServices from '../../services/userServices';
 
 const cx = classNames.bind(styles);
 
-export default function ActionAlerts({ content, action, id }) {
+export default function ActionAlerts({ content, action, id, severity }) {
     const [open, setOpen] = useState(true);
 
     useEffect(() => {
@@ -49,12 +49,12 @@ export default function ActionAlerts({ content, action, id }) {
     return (
         <Stack className={cx('wrapper')} sx={{ width: '25%' }} spacing={2}>
             <Alert
-                variant="filled"
-                severity="success"
+                // variant="filled"
+                severity={severity}
                 sx={{ fontSize: '16px', fontWeight: '600', textAlign: 'center', justifyContent: 'center' }}
                 action={
                     action ? (
-                        <Button primary small onClick={handleUndoClick}>
+                        <Button red small onClick={handleUndoClick}>
                             {action}
                         </Button>
                     ) : null

@@ -218,9 +218,9 @@ function AccountSetting({ admin = false }) {
                         )}
                     </div>
                 </div>
-                {alertType === 'edit' && <ActionAlerts content={`Lưu thành công`} />}
-                {alertType === 'changePrivate' && <ActionAlerts content={`Tài khoản riêng tư`} />}
-                {alertType === 'changePublic' && <ActionAlerts content={`Tài khoản công khai`} />}
+                {alertType === 'edit' && <ActionAlerts severity="success" content={`Lưu thành công`} />}
+                {alertType === 'changePrivate' && <ActionAlerts severity="info" content={`Tài khoản riêng tư`} />}
+                {alertType === 'changePublic' && <ActionAlerts severity="info" content={`Tài khoản công khai`} />}
             </Wrapper>
         )
     );

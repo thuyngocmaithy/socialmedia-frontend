@@ -13,6 +13,32 @@ function Home() {
     // COUNT ACCESS
     const { updateCounter, countData } = useCountAccess();
     const [hasExecuted, setHasExecuted] = useState(false);
+    //Hiển thị hộp thoại thông báo
+    const [alertType, setAlertType] = useState(null);
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const showAlert = (type) => {
+        setAlertType(type);
+        setAlertVisible(true);
+
+        const timeoutId = setTimeout(() => {
+            setAlertVisible(false);
+            setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+        }, 2500);
+
+        return timeoutId;
+    };
+
+    useEffect(() => {
+        if (alertVisible) {
+            const timeoutId = setTimeout(() => {
+                setAlertVisible(false);
+                setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+            }, 2500);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [alertVisible]);
 
     useEffect(() => {
         if (!hasExecuted) {
@@ -80,10 +106,13 @@ function Home() {
                         userImage={user.avatar}
                         username={user.username}
                         onSaveResult={handleSaveResult}
+                        showAlert={showAlert}
                     />
                 );
             })}
-            {statusSave && <ActionAlerts content={`Đã lưu pin`} action="UNDO" />}
+            {statusSave && <ActionAlerts severity="success" content={`Đã lưu pin`} action="UNDO" />}
+            {alertType === 'warning' && <ActionAlerts severity="warning" content={`Chọn bảng trước khi lưu`} />}
+            {alertType === 'errorSave' && <ActionAlerts severity="error" content={`Không thể lưu pin của chính bạn`} />}
         </div>
     );
 }

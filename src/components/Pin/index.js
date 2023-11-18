@@ -19,10 +19,23 @@ import SharePopper from '../Popper/SharePopper';
 import { NavLink } from 'react-router-dom';
 import { AccountLoginContext } from '../../context/AccountLoginContext';
 import DialogConfirmLogin from '../DialogConfirmLogin';
+import ActionAlerts from '../Alert';
 
 const cx = classNames.bind(styles);
 
-function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated = false, handleEdit, onSaveResult }) {
+function Pin({
+    stt,
+    id,
+    image,
+    linkImage,
+    title,
+    userImage,
+    username,
+    pinCreated = false,
+    handleEdit,
+    onSaveResult,
+    showAlert,
+}) {
     const userLogin = useContext(AccountLoginContext);
     const [activeOptionTop, setActiveOptionTop] = useState(false);
     const [activeOptionBottom, setActiveOptionBottom] = useState(false);
@@ -49,28 +62,30 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
     };
     const handleSave = () => {
         const fetchApi = async () => {
-            const userId = 1;
+            const userId = userLogin;
             const pinId = id;
             const boardId = data.id;
-            console.log(data);
 
             const user = await userServices.getUserById(userId);
             const pin = await pinServices.getPinById(pinId);
             const board = await boardServices.getBoardById(boardId);
 
-            const userSavePin = { user, pin, board };
-            const result = await userSavePinServices.save(userSavePin);
-            if (result) {
-                onSaveResult(true);
-                setData('Chọn bảng');
+            if (pin.user.id === userId) {
+                showAlert('errorSave');
+            } else {
+                const userSavePin = { user, pin, board };
+                const result = await userSavePinServices.save(userSavePin);
+                if (result) {
+                    onSaveResult(true);
+                    setData('');
+                }
             }
         };
         if (userLogin !== 0) {
             if (data !== '') {
                 fetchApi();
-            }
-            else{
-                
+            } else {
+                showAlert('warning');
             }
         } else {
             setOpenConfirmLogin(true);

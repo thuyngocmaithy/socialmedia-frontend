@@ -323,8 +323,8 @@ function Create() {
                 </form>
             </Dialog>
 
-            {alertType === 'save' && <ActionAlerts content={`Tạo thành công`} />}
-            {alertType === 'createType' && <ActionAlerts content={`Đã thêm thể loại`} />}
+            {alertType === 'save' && <ActionAlerts severity="success" content={`Tạo thành công`} />}
+            {alertType === 'createType' && <ActionAlerts severity="success" content={`Đã thêm thể loại`} />}
         </div>
     );
 }
