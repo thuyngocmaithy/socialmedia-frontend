@@ -6,12 +6,11 @@ import { AccountLoginContext } from './AccountLoginContext';
 const MessageContext = createContext({});
 
 function MessageProvider({ children }) {
-    // const [load, setLoad] = useState(false);
     const stompClient = useContext(StompContext);
     const USER_ID = useContext(AccountLoginContext);
     let conversations = useContext(ConversationContext);
     let conversationJoined = [];
-    let messages = useRef([]);
+    let unSeenMessageCount = useRef(0);
     const [messageCount, setMessageCount] = useState(0);
     useEffect(() => {
         const fetchAPI = async () => {
@@ -23,7 +22,7 @@ function MessageProvider({ children }) {
         }
         const loadRoom = async () => {
             setTimeout(() => {
-                conversationJoined.forEach(conversation_id => {
+                conversationJoined.forEach((conversation_id) => {
                     stompClient.subscribe(
                         `/room/conversation_id/${conversation_id}`,
                         function (message) {
@@ -31,32 +30,46 @@ function MessageProvider({ children }) {
                         },
                     );
                 });
-                // console.log(conversations);
-            }, 100);
+                stompClient.subscribe(
+                    '/room/testUnsubscribe',
+                    (response) => {
+                        console.log(response.body)
+                    }
+                );
+            }, 1500);
         };
         if(USER_ID !== 0) {
             fetchAPI();
         }
     }, [USER_ID]);
 
+    const countUnSeenMessage = () => {
+        conversations.current.forEach((item) => {
+            item.messages.forEach((m) => {
+                if(!m.seen) {
+                    unSeenMessageCount.current = unSeenMessageCount.current+1;
+                }
+            })
+        });
+        setMessageCount(unSeenMessageCount.current);
+    };
+
     const updateMessages = (message) => {
-        messages.current = [...messages.current,message];
         conversations.current.forEach((item) => {
             if(item.conversation.id === message.conversation.id) {
                 item.messages = [...item.messages, message];
                 item.lastMessage = message.content;
             }
         });
-        setMessageCount(messages.current.length);
+        countUnSeenMessage();
     }
 
     useEffect(() => {
-        // setMessageCount(messages.current.length);
         console.log(`New Message: ${messageCount}`);
         console.log(conversations);
     },[messageCount]);
 
-    return <MessageContext.Provider value={messages.current}>{children}</MessageContext.Provider>;
+    return <MessageContext.Provider value={unSeenMessageCount.current}>{children}</MessageContext.Provider>;
 }
 
 export { MessageProvider, MessageContext };

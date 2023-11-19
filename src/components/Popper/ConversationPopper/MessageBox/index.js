@@ -32,7 +32,7 @@ function MessageBox({ handleChange, handleGetNewMessage, chatWith }) {
         fetchApi();
         let stompObject = null;
         const createListener = () => {
-            stompClient.subscribe(
+            stompObject = stompClient.subscribe(
                 `/app/login/${chatWith.conversation_id}`,
                 (response) => {
                     // console.log(`Conversation ID: ${JSON.parse(response.body)}`);
@@ -41,6 +41,10 @@ function MessageBox({ handleChange, handleGetNewMessage, chatWith }) {
         };
         createListener();
         return () => {
+            stompClient.publish({
+                destination: `/app/unsubscribe`, 
+                body: chatWith.conversation_id.toString()
+            });
             stompClient.unsubscribe(stompObject.id);
         };
     }, []);
