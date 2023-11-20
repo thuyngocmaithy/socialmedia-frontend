@@ -93,14 +93,16 @@ function Function() {
         event.preventDefault();
         const name = event.target.elements.name.value !== '' ? event.target.elements.name.value : null;
 
-        const functionItem = {
-            name,
-        };
-        const result = await functionServices.add(functionItem);
-        if (result) {
-            setCreateSuccess(true);
-            setOpenCreate(false);
-            showAlert('create');
+        if (name !== null) {
+            const functionItem = {
+                name,
+            };
+            const result = await functionServices.add(functionItem);
+            if (result) {
+                setCreateSuccess(true);
+                setOpenCreate(false);
+                showAlert('create');
+            }
         }
     };
     //Handle delete
@@ -142,12 +144,14 @@ function Function() {
         const id = functionEdit.id;
         const name = event.target.elements.nameEdit.value !== '' ? event.target.elements.nameEdit.value : null;
 
-        const functionItem = { id, name };
-        const result = await functionServices.update(id, functionItem);
-        if (result) {
-            setOpenEdit(false);
-            setUpdateSuccess(true);
-            showAlert('edit');
+        if (name !== null) {
+            const functionItem = { id, name };
+            const result = await functionServices.update(id, functionItem);
+            if (result) {
+                setOpenEdit(false);
+                setUpdateSuccess(true);
+                showAlert('edit');
+            }
         }
     };
     const headCells = [

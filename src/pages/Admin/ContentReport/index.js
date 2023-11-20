@@ -96,15 +96,17 @@ function ContentReport() {
         const description =
             event.target.elements.description.value !== '' ? event.target.elements.description.value : null;
 
-        const content_report = {
-            content,
-            description,
-        };
-        const result = await contentReportServices.add(content_report);
-        if (result) {
-            setCreateSuccess(true);
-            setOpenCreate(false);
-            showAlert('create');
+        if (content !== null && description !== null) {
+            const content_report = {
+                content,
+                description,
+            };
+            const result = await contentReportServices.add(content_report);
+            if (result) {
+                setCreateSuccess(true);
+                setOpenCreate(false);
+                showAlert('create');
+            }
         }
     };
     //Handle delete
@@ -148,12 +150,14 @@ function ContentReport() {
         const description =
             event.target.elements.descriptionEdit.value !== '' ? event.target.elements.descriptionEdit.value : null;
 
-        const content_report = { id, content, description };
-        const result = await contentReportServices.update(id, content_report);
-        if (result) {
-            setOpenEdit(false);
-            setUpdateSuccess(true);
-            showAlert('edit');
+        if (content !== null && description !== null) {
+            const content_report = { id, content, description };
+            const result = await contentReportServices.update(id, content_report);
+            if (result) {
+                setOpenEdit(false);
+                setUpdateSuccess(true);
+                showAlert('edit');
+            }
         }
     };
     const headCells = [

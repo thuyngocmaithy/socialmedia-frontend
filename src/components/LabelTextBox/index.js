@@ -9,6 +9,8 @@ function LabelTextBox({
     label,
     type,
     text = '',
+    error = '',
+    customGetValue,
     editable = true,
     hoverable = true,
     onChange,
@@ -18,10 +20,15 @@ function LabelTextBox({
 }) {
     const cx = classNames.bind(style);
     const [inputValue, setInputValue] = useState(text); // Sử dụng giá trị text từ prop
+    const [change, setChange] = useState(false);
 
     const handleChange = (event) => {
         if (editable) {
             setInputValue(event.target.value);
+            setChange(true);
+            if (customGetValue) {
+                customGetValue(event.target.value);
+            }
         }
     };
 
@@ -59,25 +66,36 @@ function LabelTextBox({
         <div className={wrapperClasses}>
             <label>{label}</label>
             {area ? (
-                <textarea
-                    name={name}
-                    alt=""
-                    className={cx(inputClassname)}
-                    placeholder={placeholder}
-                    value={inputValue}
-                    disabled={!editable}
-                    onChange={onChange ? onChange : handleChange}
-                ></textarea>
+                <>
+                    <textarea
+                        name={name}
+                        alt=""
+                        className={cx(inputClassname)}
+                        placeholder={placeholder}
+                        value={inputValue}
+                        disabled={!editable}
+                        onChange={onChange ? onChange : handleChange}
+                    ></textarea>
+                    {error === '' && inputValue === '' && change ? `${label} rỗng` : error !== '' ? error : ''}
+                </>
             ) : (
-                <input
-                    name={name}
-                    type={type}
-                    placeholder={placeholder}
-                    value={inputValue}
-                    disabled={!editable}
-                    onChange={onChange ? onChange : handleChange}
-                    className={cx(inputClassname)}
-                />
+                <>
+                    <input
+                        name={name}
+                        type={type}
+                        placeholder={placeholder}
+                        value={inputValue}
+                        disabled={!editable}
+                        onChange={(event) => {
+                            onChange && onChange(event);
+                            handleChange(event);
+                        }}
+                        className={cx(inputClassname)}
+                    />
+                    <span className={cx('error')}>
+                        {error === '' && inputValue === '' && change ? `${label} rỗng` : error !== '' ? error : ''}
+                    </span>
+                </>
             )}
         </div>
     );

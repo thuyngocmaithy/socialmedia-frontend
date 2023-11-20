@@ -92,3 +92,42 @@
         background-color: rgba(22, 24, 35, 0.06);
     }
 }
+.type {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+.item-type {
+    display: flex;
+    position: relative;
+    padding: 4px;
+    // width: 100%;
+    margin: 8px;
+    cursor: pointer;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    align-items: center;
+    p {
+        // margin-left: 20px;
+        font-size: 15px;
+        font-weight: bold;
+        padding: 12px;
+    }
+
+    &:hover {
+        background-color: #f0f0f0;
+    }
+}
+.searchUser {
+    width: 100%;
+    margin-left: 60px;
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    .searchUser-title {
+        font-size: 18px;
+    }
+}

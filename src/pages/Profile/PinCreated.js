@@ -1,21 +1,21 @@
-import classNames from 'classnames/bind';
-import styles from './Profile.module.scss';
-import Pin from '../../components/Pin';
-import Wrapper from './Wrapper';
-import { AccountOtherContext } from '../../context/AccountOtherContext';
-import { useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import * as pinServices from '../../services/pinServices';
-import * as typeServices from '../../services/typeServices';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import LabelTextBox from '../../components/LabelTextBox';
-import Button from '../../components/Button';
-import Options from '../../components/Options';
+import classNames from 'classnames/bind';
+import { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import ActionAlerts from '../../components/Alert';
+import Button from '../../components/Button';
+import LabelTextBox from '../../components/LabelTextBox';
+import Options from '../../components/Options';
+import Pin from '../../components/Pin';
+import { AccountOtherContext } from '../../context/AccountOtherContext';
 import { ThemeContext } from '../../context/ThemeContext';
+import * as pinServices from '../../services/pinServices';
+import * as typeServices from '../../services/typeServices';
+import styles from './Profile.module.scss';
+import Wrapper from './Wrapper';
 
 const cx = classNames.bind(styles);
 
@@ -113,6 +113,7 @@ function PinCreated() {
     };
 
     useEffect(() => {
+        //set Pin
         const fetchApi = async () => {
             const resultPin = await pinServices.getPinsByUsername(pathname);
             setListPin(resultPin);

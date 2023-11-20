@@ -1,27 +1,33 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
 import classNames from 'classnames/bind';
-import styles from './Pin.module.scss';
-import { ShareIcon, DownloadIcon, AccessIcon, EditIcon, SearchIcon, People } from '../Icons';
+import { useContext, useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import { io } from 'socket.io-client';
+import 'tippy.js/dist/tippy.css';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
+import * as boardServices from '../../services/boardServices';
+import * as pinServices from '../../services/pinServices';
+import * as userSavePinServices from '../../services/userSavePinServices';
+import * as userServices from '../../services/userServices';
 import AccountInfo from '../AccountInfo';
 import Button from '../Button';
-import SelectBoardPopper from '../Popper/SelectBoardPopper';
-import { useState, useEffect, useRef, useContext } from 'react';
-import Popper from '../Popper';
-import { ClickAwayListener } from '@mui/base/ClickAwayListener';
-import * as userSavePinServices from '../../services/userSavePinServices';
-import * as pinServices from '../../services/pinServices';
-import * as boardServices from '../../services/boardServices';
-import * as userServices from '../../services/userServices';
-import SharePopper from '../Popper/SharePopper';
-import { NavLink } from 'react-router-dom';
-import { AccountLoginContext } from '../../context/AccountLoginContext';
 import DialogConfirmLogin from '../DialogConfirmLogin';
 import ActionAlerts from '../Alert';
+import { AccessIcon, DownloadIcon, EditIcon, ShareIcon } from '../Icons';
+import Popper from '../Popper';
+import SelectBoardPopper from '../Popper/SelectBoardPopper';
+import SharePopper from '../Popper/SharePopper';
+import styles from './Pin.module.scss';
 
 const cx = classNames.bind(styles);
+
+const socket = io('http://localhost:3000');
+socket.connect((e) => {
+    console.log(e);
+});
 
 function Pin({
     stt,
@@ -36,7 +42,7 @@ function Pin({
     onSaveResult,
     showAlert,
 }) {
-    const userLogin = useContext(AccountLoginContext);
+    const { userId } = useContext(AccountLoginContext);
     const [activeOptionTop, setActiveOptionTop] = useState(false);
     const [activeOptionBottom, setActiveOptionBottom] = useState(false);
     const [openConfirmLogin, setOpenConfirmLogin] = useState(false);
@@ -62,16 +68,21 @@ function Pin({
     };
     const handleSave = () => {
         const fetchApi = async () => {
-            const userId = userLogin;
+            const userIdLogin = userId;
             const pinId = id;
             const boardId = data.id;
 
-            const user = await userServices.getUserById(userId);
+            // Tăng biến đếm để tạo thông báo bài pin liên quan
+            localStorage.setItem('pinCount', parseInt(localStorage.getItem('pinCount')) + 1 || 0);
+
+            const user = await userServices.getUserById(userIdLogin);
             const pin = await pinServices.getPinById(pinId);
             const board = await boardServices.getBoardById(boardId);
 
-            if (pin.user.id === userId) {
+            if (pin.user.id === userIdLogin) {
                 showAlert('errorSave');
+            } else if (user.permission.id !== null) {
+                showAlert('errorAdmin');
             } else {
                 const userSavePin = { user, pin, board };
                 const result = await userSavePinServices.save(userSavePin);
@@ -81,7 +92,7 @@ function Pin({
                 }
             }
         };
-        if (userLogin !== 0) {
+        if (userId !== 0) {
             if (data !== '') {
                 fetchApi();
             } else {
@@ -180,6 +191,7 @@ function Pin({
                 {pinCreated ? null : (
                     <div className={cx('info-pin')}>
                         {title && <h3>{title}</h3>}
+
                         <AccountInfo userImage={userImage} username={username} />
                     </div>
                 )}

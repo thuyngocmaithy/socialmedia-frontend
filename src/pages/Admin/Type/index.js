@@ -108,14 +108,16 @@ function Type() {
         event.preventDefault();
         const typeName = event.target.elements.typeName.value !== '' ? event.target.elements.typeName.value : null;
 
-        const type = {
-            typeName,
-        };
-        const result = await typeServices.add(type);
-        if (result) {
-            setCreateSuccess(true);
-            setOpenCreate(false);
-            showAlert('create');
+        if (typeName !== null) {
+            const type = {
+                typeName,
+            };
+            const result = await typeServices.add(type);
+            if (result) {
+                setCreateSuccess(true);
+                setOpenCreate(false);
+                showAlert('create');
+            }
         }
     };
     //Handle delete
@@ -157,13 +159,14 @@ function Type() {
         const id = typeEdit.id;
         const typeName =
             event.target.elements.typeNameEdit.value !== '' ? event.target.elements.typeNameEdit.value : null;
-
-        const type = { id, typeName };
-        const result = await typeServices.update(id, type);
-        if (result) {
-            setOpenEdit(false);
-            setUpdateSuccess(true);
-            showAlert('edit');
+        if (typeName !== null) {
+            const type = { id, typeName };
+            const result = await typeServices.update(id, type);
+            if (result) {
+                setOpenEdit(false);
+                setUpdateSuccess(true);
+                showAlert('edit');
+            }
         }
     };
     return (

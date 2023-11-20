@@ -6,14 +6,48 @@ import { EditIcon } from '../Icons';
 import Image from '../Image';
 import images from '../../assets/images';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
 
-function Board({ id, title, detailBoard, accountOther, handleEdit }) {
+function Board({ id, title, detailBoard, accountOther, createdAt, handleEdit }) {
+    const [date, setDate] = useState('');
     const handleEditClick = (event) => {
         event.preventDefault();
         handleEdit();
     };
+    function calculateTimeDifference(specificDate) {
+        const currentDate = new Date();
+        specificDate = new Date(specificDate);
+        const timeDifference = currentDate.getTime() - specificDate.getTime();
+
+        // Chuyển đổi mili giây thành số ngày
+        const daysDifference = timeDifference / (1000 * 3600 * 24);
+
+        return daysDifference;
+    }
+    function displayTimeDifference(specificDate) {
+        const daysDifference = calculateTimeDifference(specificDate);
+
+        if (daysDifference >= 7 && daysDifference < 30) {
+            const weeks = Math.floor(daysDifference / 7);
+            setDate(`${weeks} tuần`);
+            // console.log(`Số tuần kể từ ngày cụ thể là: ${weeks} tuần`);
+        } else if (daysDifference >= 30) {
+            const months = Math.floor(daysDifference / 30);
+            setDate(`${months} tháng`);
+            // console.log(`Số tháng kể từ ngày cụ thể là: ${months} tháng`);
+        } else {
+            setDate(`${daysDifference.toFixed(0)} ngày`);
+            // console.log(`Số ngày kể từ ngày cụ thể là: ${daysDifference.toFixed(0)} ngày`);
+        }
+    }
+    useEffect(() => {
+        console.log('createdAt:' + createdAt);
+        displayTimeDifference(createdAt);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [createdAt]);
+
     return (
         detailBoard && (
             <Link to={`/thuyngocmaithyy/board/${id}`} className={cx('wrapper')}>
@@ -58,7 +92,8 @@ function Board({ id, title, detailBoard, accountOther, handleEdit }) {
                 <div className={cx('info-board')}>
                     <h2 className={cx('title')}>{title}</h2>
                     <span className={cx('quantity-pin')}>{detailBoard.length} ghim</span>
-                    <span className={cx('time-created')}>2 ngày</span>
+
+                    <span className={cx('time-created')}>{date}</span>
                 </div>
             </Link>
         )

@@ -6,7 +6,7 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { useLocation } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import { ShareIcon, DownloadIcon } from '../../components/Icons';
+import { ShareIcon, DownloadIcon, ReportIcon } from '../../components/Icons';
 import AccountInfo from '../../components/AccountInfo';
 import Button from '../../components/Button';
 import Popper from '../../components/Popper';
@@ -17,6 +17,7 @@ import CommentApp from '../../components/Comment';
 import * as userServices from '../../services/userServices';
 import * as pinServices from '../../services/pinServices';
 import * as userSavePinServices from '../../services/userSavePinServices';
+import SelectReportOption from '../../components/SelectReportOption';
 const cx = classNames.bind(styles);
 
 function DisplayPin() {
@@ -39,7 +40,7 @@ function DisplayPin() {
     const [valContent, setValContent] = useState('');
     const [valTitle, setValTitle] = useState('');
     const [user, setUser] = useState('');
-
+    const [load, setLoad] = useState(false);
     useEffect(() => {
         const fetchApi = async () => {
             const pin = await pinServices.getPinById(pinID);
@@ -50,6 +51,7 @@ function DisplayPin() {
             setValContent(pin.description);
             setValTitle(pin.title);
             setUser(pin.user);
+            setLoad(false);
         };
 
         fetchApi();
@@ -123,6 +125,12 @@ function DisplayPin() {
         setShowCreateBoard(isShown);
     };
 
+    // Turn on select report
+    const [showSelectReport, setShowSelectReport] = React.useState(false);
+    const handleTurnOnSelectReport = (isShown) => {
+        setShowSelectReport(isShown);
+    };
+
     return (
         <div className={cx('wrapper-createPage')}>
             <div className={cx('createBox')}>
@@ -134,6 +142,18 @@ function DisplayPin() {
                     <div className={cx('insertData')}>
                         <div className={cx('wrapperBtns')}>
                             <div className={cx('option-bottom')}>
+                                <Tippy delay={[0, 100]} content="Báo cáo" placement="bottom">
+                                    <button
+                                        className={cx('btn-end', 'report-btn')}
+                                        onClick={() => handleTurnOnSelectReport(true)}
+                                    >
+                                        <ReportIcon
+                                            width="2.4rem"
+                                            height="2.4rem"
+                                            className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')}
+                                        />
+                                    </button>
+                                </Tippy>
                                 <Tippy delay={[0, 100]} content="Chia sẻ" placement="bottom">
                                     <button className={cx('btn-end', 'share-btn')}>
                                         <ShareIcon
@@ -195,13 +215,10 @@ function DisplayPin() {
                                     Kết bạn
                                 </Button>
                             </div>
-                            <div className={cx('comment-container')}>
+                            <div className={cx('comment-input')}>
                                 <h3 className={cx('comment-title')}>Nhận xét</h3>
-                                <div className={cx('comment-content')}>djbdsjkfbjk</div>
+                                <CommentApp pinID={pinID} currentUser={currentUser} />
                             </div>
-                        </div>
-                        <div className={cx('comment-input')}>
-                            <CommentApp />
                         </div>
                     </div>
                 </div>
@@ -216,6 +233,9 @@ function DisplayPin() {
                 </div>
             )}
             {statusSave && <ActionAlerts severity="success" content={`Đã lưu pin`} action="UNDO" />}
+            {showSelectReport && (
+                <SelectReportOption handleTurnOnSelectReport={handleTurnOnSelectReport} pin={pin} user={currentUser} />
+            )}
         </div>
     );
 }
