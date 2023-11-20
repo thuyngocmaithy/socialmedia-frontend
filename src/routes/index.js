@@ -16,7 +16,6 @@ import User from '../pages/Admin/User';
 import Type from '../pages/Admin/Type';
 import Post from '../pages/Admin/Post';
 import Comment from '../pages/Admin/Comment';
-import SettingWeb from '../pages/Admin/SettingWeb';
 import Statistic from '../pages/Admin/Statistic';
 import Function from '../pages/Admin/Function';
 import Permission from '../pages/Admin/Permission';
@@ -26,36 +25,31 @@ import ContentReport from '../pages/Admin/ContentReport';
 import { RegisterLayout } from '../layouts';
 import { AdminLayout } from '../layouts';
 
-//Login
-import Register from '../Register/Register';
-import Login from '../Register/Login';
-
 //Không đăng nhập vẫn vào được
 const publicRoutes = [
     { path: config.routes.home, component: Home },
     { path: config.routes.create, component: Create },
     { path: config.routes.register, component: Register, layout: RegisterLayout },
     { path: config.routes.login, component: Login, layout: RegisterLayout },
-
+    { path: config.routes.profile, component: Profile },
+    { path: config.routes.infoProfile, component: InfoProfile },
+    { path: config.routes.accountSetting, component: AccountSetting },
+    { path: config.routes.changePassword, component: ChangePassword },
     { path: config.routes.pin, component: DisplayPin },
 ];
 
 //Không đăng nhập => chuyển login
 const privateRoutes = [
-    { path: config.routes.profile, component: Profile },
     { path: config.routes.pinCreatedOfUser, component: PinCreated },
     { path: config.routes.pinSavedOfUser, component: PinSaved },
     { path: config.routes.board, component: Board },
-    { path: config.routes.infoProfile, component: InfoProfile },
-    { path: config.routes.accountSetting, component: AccountSetting },
-    { path: config.routes.changePassword, component: ChangePassword },
+
     //admin
     { path: config.routes.admin, component: Dashboard, layout: AdminLayout },
     { path: config.routes.userAdmin, component: User, layout: AdminLayout },
     { path: config.routes.typeAdmin, component: Type, layout: AdminLayout },
     { path: config.routes.postAdmin, component: Post, layout: AdminLayout },
     { path: config.routes.commentAdmin, component: Comment, layout: AdminLayout },
-    { path: config.routes.settingWeb, component: SettingWeb, layout: AdminLayout },
     { path: config.routes.statistic, component: Statistic, layout: AdminLayout },
     { path: config.routes.functionAdmin, component: Function, layout: AdminLayout },
     { path: config.routes.permissionAdmin, component: Permission, layout: AdminLayout },

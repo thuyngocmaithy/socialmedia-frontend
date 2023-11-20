@@ -10,6 +10,7 @@ import { ThemeContext } from '../../../context/ThemeContext';
 const cx = classNames.bind(styles);
 
 function HeaderRegister() {
+    const { theme } = useContext(ThemeContext);
     return (
         <header className={cx('wrapper', theme === 'dark' ? 'dark' : '')}>
             <div className={cx('inner')}>
@@ -22,7 +23,11 @@ function HeaderRegister() {
                     <Button red to={config.routes.login}>
                         Log in
                     </Button>
-                    <Button primary className={cx('signUpBtn')} to={config.routes.register}>
+                    <Button
+                        primary
+                        className={cx('signUpBtn', theme === 'dark' ? 'dark' : '')}
+                        to={config.routes.register}
+                    >
                         Sign up
                     </Button>
                 </div>

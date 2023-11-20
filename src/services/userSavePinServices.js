@@ -43,16 +43,3 @@ export const del = async (userSavePin) => {
         console.log(error);
     }
 };
-
-export const del = async (userSavePin) => {
-    try {
-        const res = await httpRequest.post(`userSavePin/delete`, userSavePin, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        return res;
-    } catch (error) {
-        console.log(error);
-    }
-};

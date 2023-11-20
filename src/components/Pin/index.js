@@ -8,40 +8,38 @@ import { ShareIcon, DownloadIcon, AccessIcon, EditIcon, SearchIcon, People } fro
 import AccountInfo from '../AccountInfo';
 import Button from '../Button';
 import SelectBoardPopper from '../Popper/SelectBoardPopper';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import Popper from '../Popper';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import * as userSavePinServices from '../../services/userSavePinServices';
 import * as pinServices from '../../services/pinServices';
 import * as boardServices from '../../services/boardServices';
 import * as userServices from '../../services/userServices';
-import { Popover } from '@mui/material';
-import ShareMenu from './ShareMenu';
+import SharePopper from '../Popper/SharePopper';
+import { NavLink } from 'react-router-dom';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
+import DialogConfirmLogin from '../DialogConfirmLogin';
 
 const cx = classNames.bind(styles);
 
-function Pin({ id, image, linkImage, title, userImage, username, pinCreated = false, handleEdit, onSaveResult }) {
+function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated = false, handleEdit, onSaveResult }) {
+    const userLogin = useContext(AccountLoginContext);
     const [activeOptionTop, setActiveOptionTop] = useState(false);
-    const [anchorEl, setAnchorEl] = useState(null);
+    const [activeOptionBottom, setActiveOptionBottom] = useState(false);
+    const [openConfirmLogin, setOpenConfirmLogin] = useState(false);
 
-    const divRef = useRef();
-
-    const handleOpenShare = (event) => {
-        setAnchorEl(divRef.current);
+    const handleOpenShare = () => {
+        setActiveOptionBottom(true);
     };
-
-    const handleCloseShare = () => {
-        setAnchorEl(null);
-    };
-
-    const openedShare = Boolean(anchorEl);
-    const shareMenuId = openedShare ? 'simple-popover' : undefined;
 
     const handleDisplay = () => {
         setActiveOptionTop(true);
     };
     const handleClickAwaySelectBoard = () => {
         setActiveOptionTop(false);
+    };
+    const handleClickAwayShare = () => {
+        setActiveOptionBottom(false);
     };
 
     const [data, setData] = useState('');
@@ -54,6 +52,7 @@ function Pin({ id, image, linkImage, title, userImage, username, pinCreated = fa
             const userId = 1;
             const pinId = id;
             const boardId = data.id;
+            console.log(data);
 
             const user = await userServices.getUserById(userId);
             const pin = await pinServices.getPinById(pinId);
@@ -63,37 +62,27 @@ function Pin({ id, image, linkImage, title, userImage, username, pinCreated = fa
             const result = await userSavePinServices.save(userSavePin);
             if (result) {
                 onSaveResult(true);
-                setData('Chọn bang');
+                setData('Chọn bảng');
             }
         };
         if (userLogin !== 0) {
-            fetchApi();
+            if (data !== '') {
+                fetchApi();
+            }
+            else{
+                
+            }
         } else {
             setOpenConfirmLogin(true);
         }
     };
 
-    const download = (url) => {
-        console.log(url);
-        const splittedUrl = url.split('.');
-        const ext = splittedUrl[splittedUrl.length - 1];
-        fetch(url, {
-            method: 'GET',
-            headers: {},
-        })
-            .then((response) => {
-                response.arrayBuffer().then(function (buffer) {
-                    const url = window.URL.createObjectURL(new Blob([buffer]));
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.setAttribute('download', `image.${ext}`);
-                    document.body.appendChild(link);
-                    link.click();
-                });
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    const download = (url, title) => {
+        const linkSource = `data:image/jpeg;base64,${url}`;
+        const downloadLink = document.createElement('a');
+        downloadLink.href = linkSource;
+        downloadLink.download = `${title}.png`;
+        downloadLink.click();
     };
 
     const openImage = (url) => {
@@ -108,14 +97,16 @@ function Pin({ id, image, linkImage, title, userImage, username, pinCreated = fa
     return (
         <>
             <div className={cx('wrapper')}>
-                <div ref={divRef} className={cx('container-image')}>
-                    <img className={cx('image')} src={image} alt="" />
+                <div className={cx('container-image')}>
+                    <NavLink className={(nav) => cx('menu-item')} to={`/pin/${id}`}>
+                        <img className={cx('image')} src={image && `data:image/jpeg;base64,${image}`} alt="" />
+                    </NavLink>
                     {pinCreated ? null : (
                         <div className={cx('option-top', { active: activeOptionTop })}>
-                            <ClickAwayListener onClickAway={handleClickAway}>
+                            <ClickAwayListener onClickAway={handleClickAwaySelectBoard}>
                                 <button className={cx('select-board-btn')} onClick={handleDisplay}>
                                     <Popper
-                                        idPopper={id}
+                                        idPopper={`selectBoard${stt}`}
                                         contentTitle={data.name || 'Chọn bảng'}
                                         title={<FontAwesomeIcon icon={faChevronDown} />}
                                         className={cx('select-board')}
@@ -130,7 +121,7 @@ function Pin({ id, image, linkImage, title, userImage, username, pinCreated = fa
                             </Button>
                         </div>
                     )}
-                    <div className={cx('option-bottom')}>
+                    <div className={cx('option-bottom', { active: activeOptionBottom })}>
                         {linkImage && (
                             <button onClick={() => openImage(linkImage)} className={cx('btn-text')}>
                                 <AccessIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
@@ -145,17 +136,23 @@ function Pin({ id, image, linkImage, title, userImage, username, pinCreated = fa
                             </Tippy>
                         )}
 
-                        <Tippy delay={[0, 100]} content="Chia sẻ" placement="bottom">
+                        <ClickAwayListener onClickAway={handleClickAwayShare}>
                             <button onClick={handleOpenShare} className={cx(pinCreated ? 'btn-end' : 'btn')}>
-                                <ShareIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
+                                <Popper
+                                    idPopper={`share${id}`}
+                                    contentTitle={<ShareIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />}
+                                    className={cx('share-menu')}
+                                    body={<SharePopper />}
+                                    widthBody="maxContent"
+                                />
                             </button>
-                        </Tippy>
+                        </ClickAwayListener>
 
                         {pinCreated ? null : (
                             <Tippy delay={[0, 100]} content="Lưu ảnh" placement="bottom">
                                 <button
-                                    onClick={function (e) {
-                                        download(image);
+                                    onClick={() => {
+                                        download(image, title);
                                     }}
                                     className={cx('btn-end')}
                                 >
@@ -172,7 +169,9 @@ function Pin({ id, image, linkImage, title, userImage, username, pinCreated = fa
                     </div>
                 )}
             </div>
-            <Popover
+            {openConfirmLogin && <DialogConfirmLogin open={openConfirmLogin} setOpen={setOpenConfirmLogin} />}
+
+            {/* <Popover
                 id={shareMenuId}
                 anchorOrigin={{
                     vertical: 'bottom',
@@ -186,7 +185,7 @@ function Pin({ id, image, linkImage, title, userImage, username, pinCreated = fa
                 anchorEl={anchorEl}
             >
                 <ShareMenu />
-            </Popover>
+            </Popover> */}
         </>
     );
 }

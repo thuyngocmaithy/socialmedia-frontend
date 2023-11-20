@@ -61,7 +61,6 @@ function Home() {
             setTimeout(() => {
                 setSatusSave(false);
             }, 2500);
-            console.log(result)
         }
     };
 
@@ -84,7 +83,7 @@ function Home() {
                     />
                 );
             })}
-         {statusSave && <ActionAlerts content={`Đã lưu pin`} action='UNDO' />}
+            {statusSave && <ActionAlerts content={`Đã lưu pin`} action="UNDO" />}
         </div>
     );
 }

@@ -19,10 +19,13 @@ import LabelTextBox from '../../components/LabelTextBox';
 import Button from '../../components/Button';
 import ActionAlerts from '../../components/Alert';
 import { useNavigate } from 'react-router-dom';
+import { ThemeContext } from '../../context/ThemeContext';
+// import { useContext } from 'react';
 
 const cx = classNames.bind(styles);
 
 function PinSaved() {
+    const { theme } = useContext(ThemeContext);
     const navigate = useNavigate();
     const accountOther = useContext(AccountOtherContext);
     //Open hộp thoại edit
@@ -257,7 +260,7 @@ function PinSaved() {
                         );
                     })}
                 </div>
-                <Dialog fullWidth={true} maxWidth="sm" open={openEdit}>
+                <Dialog className={cx(theme === 'dark' ? 'dark' : '')} fullWidth={true} maxWidth="sm" open={openEdit}>
                     <form onSubmit={handleSubmitEdit}>
                         <DialogTitle
                             sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
@@ -281,21 +284,27 @@ function PinSaved() {
                             />
                         </DialogContent>
                         <DialogActions sx={{ justifyContent: 'space-between', margin: '10px' }}>
-                            <Button sx={{ fontSize: '14px' }} primary type="button" onClick={handleDelete}>
+                            <Button style={{ fontSize: '14px' }} primary type="button" onClick={handleDelete}>
                                 Xóa
                             </Button>
                             <div>
-                                <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseEdit}>
+                                <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseEdit}>
                                     Hủy
                                 </Button>
-                                <Button sx={{ fontSize: '14px' }} red type="submit">
+                                <Button style={{ fontSize: '14px' }} red type="submit">
                                     Sửa
                                 </Button>
                             </div>
                         </DialogActions>
                     </form>
                 </Dialog>
-                <Dialog fullWidth={true} maxWidth="sm" open={openCreateBoard} onClose={handleCloseCreateBoard}>
+                <Dialog
+                    className={cx(theme === 'dark' ? 'dark' : '')}
+                    fullWidth={true}
+                    maxWidth="sm"
+                    open={openCreateBoard}
+                    onClose={handleCloseCreateBoard}
+                >
                     <form onSubmit={handleSubmitCreate}>
                         <DialogTitle
                             sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
@@ -319,17 +328,22 @@ function PinSaved() {
                             />
                         </DialogContent>
                         <DialogActions sx={{ marginBottom: '10px' }}>
-                            <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseCreateBoard}>
+                            <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseCreateBoard}>
                                 Hủy
                             </Button>
-                            <Button sx={{ fontSize: '14px' }} red type="submit">
+                            <Button style={{ fontSize: '14px' }} red type="submit">
                                 Tạo
                             </Button>
                         </DialogActions>
                     </form>
                 </Dialog>
                 {confirmDelete && (
-                    <Dialog fullWidth={true} maxWidth="sm" open={confirmDelete}>
+                    <Dialog
+                        className={cx(theme === 'dark' ? 'dark' : '')}
+                        fullWidth={true}
+                        maxWidth="sm"
+                        open={confirmDelete}
+                    >
                         <DialogTitle
                             sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
                         >
@@ -341,10 +355,10 @@ function PinSaved() {
                             </DialogContent>
                             <DialogActions sx={{ marginBottom: '10px' }}>
                                 <div>
-                                    <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseConfirm}>
+                                    <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseConfirm}>
                                         Hủy
                                     </Button>
-                                    <Button sx={{ fontSize: '14px' }} red type="submit">
+                                    <Button style={{ fontSize: '14px' }} red type="submit">
                                         Xóa
                                     </Button>
                                 </div>

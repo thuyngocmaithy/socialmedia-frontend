@@ -235,18 +235,31 @@ export default function EnhancedTable({
     };
 
     const [selectedValue, setSelectedValue] = React.useState([]);
-    const handleSelectRadio = (event) => {
-        console.log(event.target.value);
+    // const handleSelectRadio = (event) => {
+    //     setSelectedValue({
+    //         ...selectedValue,
+    //         [event.target.name]: event.target.value,
+    //     });
+    //     console.log(event.target.value);
+    //     if (event.target.value === 'approve') {
+    //         console.log('has been approved');
+    //     } else {
+    //         console.log('has been rejected');
+    //     }
+    // };
+    const handleSelectRadio = async (event) => {
+        const temp = event.target.value.split('_');
         setSelectedValue({
             ...selectedValue,
             [event.target.name]: event.target.value,
         });
-
+        await handleSelectFunction(parseInt(temp[0]), temp[1] == 'approve' ? true : false);
         // console.log(event.target.name);
         // setPrivateBool({
         //     ...privateBool,
         //     [event.target.name]: event.target.checked,
         // });
+        console.log(temp);
     };
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -275,6 +288,10 @@ export default function EnhancedTable({
                     width: '100%',
                     mb: 2,
                     backgroundColor: theme === 'dark' ? '#232323' : '#fff',
+                    boxShadow:
+                        theme === 'dark'
+                            ? '#414345 0px 2px 8px 0px'
+                            : '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)',
                     color: theme === 'dark' ? '#fff' : '#000',
                 }}
             >
@@ -366,28 +383,16 @@ export default function EnhancedTable({
                                                             inputProps={{ 'aria-label': `radio${row.id}` }}
                                                         />
                                                     ) : (
-                                                        // <Checkbox
-                                                        //     name={`id${row.id}_${key}`}
-                                                        //     color="primary"
-                                                        //     checked={
-                                                        //         privateBool[`id${row.id}_${key}`] !== undefined
-                                                        //             ? privateBool[`id${row.id}_${key}`]
-                                                        //             : row[key]
-                                                        //     }
-                                                        //     onChange={(event) => handleSelectRadio(event)}
-                                                        //     //Ngăn chặn sự kiện click từ lan truyền lên
-                                                        //     onClick={(event) => event.stopPropagation()}
-                                                        // />
                                                         row[key]
                                                     )}
                                                 </TableCell>
                                             ),
                                         )}
+
                                         {selectFunction && (
                                             <TableCell
                                                 align="center"
                                                 sx={{ fontSize: '14px', color: theme === 'dark' ? '#fff' : '#000' }}
-                                                onClick={(event) => handleSelectFunction(event, row.id)}
                                             >
                                                 <FontAwesomeIcon icon={faListCheck} />
                                             </TableCell>

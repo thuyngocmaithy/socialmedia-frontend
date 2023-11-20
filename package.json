@@ -35,6 +35,7 @@
         "react-scripts": "5.0.1",
         "react-slideshow-image": "^4.2.1",
         "react-tiny-popover": "^8.0.4",
+        "socket.io-client": "^4.7.2",
         "styled-components": "^6.0.8",
         "web-vitals": "^2.1.4"
     },
