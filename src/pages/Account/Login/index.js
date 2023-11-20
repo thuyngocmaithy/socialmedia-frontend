@@ -26,9 +26,26 @@ function Login() {
         localStorage.setItem(key, JSON.stringify(data));
     }
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log('form value', formValue);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const fetchApi = async () => {
+            const email = e.target.elements.email.value !== '' ? e.target.elements.email.value : null;
+            const password = e.target.elements.password.value !== '' ? e.target.elements.password.value : null;
+            const username = email.split('@')[0]; // Trích xuất tên người dùng thành email
+            const result = await userServices.login(username, password);
+            // console.log(result);
+            if (result !== undefined) {
+                // Sử dụng hàm đặt giá trị vào localStorage với thời gian hết hạn
+
+                setLocalStorageWithExpiration('userLogin', result.id, 30); // 30 phút
+                if (result.permission !== null) {
+                    window.location.href = '/admin/dashboard';
+                } else {
+                    window.location.href = '/';
+                }
+            }
+        };
+        fetchApi();
     };
 
     return (
@@ -37,6 +54,7 @@ function Login() {
                 <h1 className={cx('title')}>Login account</h1>
 
                 <form onSubmit={handleSubmit}>
+                    {/* <form> */}
                     <div className={cx('infomation')}>
                         <LabelTextBox placeholder={'Email'} name={'email'} label={'Email'} selectedSize={'small'} />
                         <LabelTextBox
@@ -50,6 +68,10 @@ function Login() {
 
                     <div className={cx('submit-btn')}>
                         <Button red>Login</Button>
+                        <h4 className={cx('or')}>OR</h4>
+                        <Button className={cx('registerGoogle')} primary leftIcon={<GoogleIcon />}>
+                            Sign in with Google
+                        </Button>
                     </div>
                 </form>
             </div>

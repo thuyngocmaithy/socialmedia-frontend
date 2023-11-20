@@ -21,10 +21,12 @@ import { async } from 'q';
 import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import LabelTextBox from '../../components/LabelTextBox';
 import * as typeServices from '../../services/typeServices';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function Create() {
+    const { theme } = useContext(ThemeContext);
     const userLogin = useContext(AccountLoginContext);
     //select board
     const [activeOptionTop, setActiveOptionTop] = useState(false);
@@ -291,7 +293,13 @@ function Create() {
                 </div>
             </div>
 
-            <Dialog fullWidth={true} maxWidth="sm" open={showCreateType} onClose={handleCloseCreate}>
+            <Dialog
+                className={cx(theme === 'dark' ? 'dark' : '')}
+                fullWidth={true}
+                maxWidth="sm"
+                open={showCreateType}
+                onClose={handleCloseCreate}
+            >
                 <form onSubmit={handleSubmitCreate}>
                     <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
                         Thêm loại bài đăng
@@ -305,10 +313,10 @@ function Create() {
                         />
                     </DialogContent>
                     <DialogActions sx={{ marginBottom: '10px' }}>
-                        <Button sx={{ fontSize: '14px' }} type="button" onClick={handleCloseCreate}>
+                        <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseCreate}>
                             Hủy
                         </Button>
-                        <Button sx={{ fontSize: '14px' }} red type="submit">
+                        <Button style={{ fontSize: '14px' }} red type="submit">
                             Tạo
                         </Button>
                     </DialogActions>
