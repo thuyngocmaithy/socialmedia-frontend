@@ -6,12 +6,12 @@
     background-color: #ffff;
     // margin-top: 0.8rem;
 }
-
+.wrapper {
+    height: 180px;
+    overflow-y: auto;
+}
 .comment-panel {
-    min-height: 280px;
-    max-height: 280px;
     padding-top: 1.2rem;
-    overflow: auto;
 }
 
 .comment-panel::-webkit-scrollbar-corner {

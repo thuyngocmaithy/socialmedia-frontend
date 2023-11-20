@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const cx = classNames.bind(styles);
 function CommentCard({comment}) {
     useEffect(() => {
-        console.log(comment.user.avatar);
+        // console.log(comment.user.avatar);
     },[])
 
     const deleteComment = () => {

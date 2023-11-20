@@ -1,5 +1,14 @@
 import * as httpRequest from '../utils/httpRequest';
 
+export const getPinByUserId = async (userId) => {
+    try {
+        const res = await httpRequest.get(`userSavePin/getPinByUser/${userId}`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export const getPinByUserIdAndBoardId = async (userId, boardId) => {
     try {
         const res = await httpRequest.get(`userSavePin/getPin/${userId}/${boardId}`);

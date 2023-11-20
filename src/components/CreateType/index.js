@@ -37,7 +37,7 @@ function CreateType({ handleTurnOnCreateType, handleChooseType }) {
             handleChooseType(Type);
         };
         fetchApi();
-        handleTurnOnCreateType(false);
+        handleTurnOnCreateType(false);  
     };
 
     return (

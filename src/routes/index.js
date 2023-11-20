@@ -5,6 +5,7 @@ import Home from '../pages/Home';
 import Create from '../pages/Create';
 import Board from '../pages/Board';
 import DisplayPin from '../pages/Pin';
+import DisplaySearch from '../pages/Search'
 import Profile, { PinCreated, PinSaved } from '../pages/Profile';
 import InfoProfile from '../pages/Settings/InfoProfile';
 import AccountSetting from '../pages/Settings/AccountSetting';
@@ -36,6 +37,7 @@ const publicRoutes = [
     { path: config.routes.accountSetting, component: AccountSetting },
     { path: config.routes.changePassword, component: ChangePassword },
     { path: config.routes.pin, component: DisplayPin },
+    { path: config.routes.search, component: DisplaySearch },
 ];
 
 //Không đăng nhập => chuyển login
