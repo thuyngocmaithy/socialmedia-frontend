@@ -16,19 +16,32 @@ import {
     ChartLineIcon,
     PermissionIcon,
     ReportIcon,
+    KeyIcon
 } from '../../components/Icons';
 import { Link } from 'react-router-dom';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
+
 import config from '../../config';
 import '@fortawesome/react-fontawesome';
 import { useState, useEffect, useContext } from 'react';
 import { ThemeContext } from '../../context/ThemeContext';
-
+import { getUserById } from '../../services/userServices';
 const cx = classNames.bind(styles);
 
 function AdminLayout({ children, account = false }) {
     const { theme } = useContext(ThemeContext);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [displayMenu, setDisplayMenu] = useState('none');
+    const userLogin = useContext(AccountLoginContext);
+    const [user, setUser] = useState('');
+    console.log(userLogin);
+
+    useEffect(() => {
+        getUserById(userLogin).then((user) => { setUser(user) })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [userLogin]);
 
     // Sử dụng useEffect để theo dõi thay đổi của screenWidth
     useEffect(() => {
@@ -93,6 +106,24 @@ function AdminLayout({ children, account = false }) {
             to: '/admin/permission',
             icon: <PermissionIcon />,
         },
+
+        {
+            title: 'Chỉnh sửa hồ sơ',
+            to: account === false ? `/admin/${user.username}/edit-profile` : `/${user.username}/edit-profile`,
+
+            icon: <UserIcon />,
+        },
+        {
+            title: 'Quản lý tài khoản',
+            to: account === false ? `/admin/${user.username}/account-setting` : `/${user.username}/account-setting`,
+            icon: <AccountSettingIcon />,
+
+        },
+        {
+            title: 'Chỉnh sửa mật khẩu',
+            to: account === false ? `/admin/${user.username}/password` : `/${user.username}/password`,
+            icon: <KeyIcon />,
+        }
     ];
 
     const handleOpenMenu = () => {
@@ -119,6 +150,7 @@ function AdminLayout({ children, account = false }) {
                     SideBarItems={SideBarItems}
                     onclickMenuItem={handleOnclickMenuItem}
                 >
+
                     <div className={cx('container-title')}>
                         <Link to={config.routes.admin} className={cx('logo-link')}>
                             <LogoPinterest className={cx('icon')} />

@@ -19,10 +19,13 @@ import LabelTextBox from '../../components/LabelTextBox';
 import Button from '../../components/Button';
 import ActionAlerts from '../../components/Alert';
 import { useNavigate } from 'react-router-dom';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function PinSaved() {
+    const { theme } = useContext(ThemeContext);
+
     const navigate = useNavigate();
     const accountOther = useContext(AccountOtherContext);
     //Open hộp thoại edit
@@ -314,14 +317,14 @@ function PinSaved() {
                                 placeholder={'Tiêu đề'}
                                 label={'Tên bảng'}
                                 selectedSize={'medium'}
-                                // text={boardEdit.name ? boardEdit.name : ''}
+                            // text={boardEdit.name ? boardEdit.name : ''}
                             />
                             <LabelTextBox
                                 name={'descriptionAdd'}
                                 placeholder={'Mô tả'}
                                 label={'Mô tả'}
                                 selectedSize={'medium'}
-                                // text={boardEdit.description ? boardEdit.description : ''}
+                            // text={boardEdit.description ? boardEdit.description : ''}
                             />
                         </DialogContent>
                         <DialogActions sx={{ marginBottom: '10px' }}>

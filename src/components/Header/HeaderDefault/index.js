@@ -102,23 +102,6 @@ function HeaderDefault() {
 
                 {/* ACTIONS */}
                 <div className={cx('actions')}>
-<<<<<<< HEAD
-                    <Popper
-                        title={<NotificationIcon className={cx('action', 'gUZ', 'ztu', 'U9O', 'kVc')} />}
-                        body={<NotificationPopper />}
-                        widthBody="maxContent"
-                    />
-                    <Popper
-                        title={<MessageIcon className={cx('action', 'gUZ', 'ztu', 'U9O', 'kVc')} />}
-                        body={<ConversationPopper />}
-                        left="-48px"
-                        widthBody="maxContent"
-                    />
-
-                    <Link className={cx('link-avatar')} to="/thuyngocmaithyy">
-                        <Image src="../avt.jpg" className={cx('action', 'user-avatar')} alt="Nguyen Van A" />
-                    </Link>
-=======
                     {userLoaded && (
                         <>
                             <Popper
@@ -147,7 +130,6 @@ function HeaderDefault() {
                             Log in
                         </Button>
                     )}
->>>>>>> 314505d7d6575d92a690e7e4eec041b98f0ca63c
 
                     <MenuSettingHeader className={cx('action')} items={userMenu} onChange={handleMenuChange}>
                         <button className={cx('more-btn', theme === 'dark' ? 'dark' : '')}>

@@ -51,7 +51,7 @@ function User() {
     useEffect(() => {
         const fetchApi = async () => {
             let result = await userServices.getAllUser();
-            result = result.filter((item) => item.permission !== null && item.permission.id === 2);
+            result = result.filter((item) => item.permission !== null && (item.permission.id === 2 || item.permission.id === 1));
             setListUser(result);
 
             setCreateSuccess(false);
@@ -258,6 +258,7 @@ function User() {
             )}
             {alertType === 'create' && <ActionAlerts content={`Đã thêm thành công`} />}
             {alertType === 'delete' && <ActionAlerts content={`Đã xóa thành công`} />}
+            {alertType === 'save' && <ActionAlerts content={`Đã sửa thành công`} />}
         </div>
     );
 }
