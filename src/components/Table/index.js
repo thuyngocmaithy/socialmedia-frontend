@@ -235,18 +235,6 @@ export default function EnhancedTable({
     };
 
     const [selectedValue, setSelectedValue] = React.useState([]);
-    // const handleSelectRadio = (event) => {
-    //     setSelectedValue({
-    //         ...selectedValue,
-    //         [event.target.name]: event.target.value,
-    //     });
-    //     console.log(event.target.value);
-    //     if (event.target.value === 'approve') {
-    //         console.log('has been approved');
-    //     } else {
-    //         console.log('has been rejected');
-    //     }
-    // };
     const handleSelectRadio = async (event) => {
         const temp = event.target.value.split('_');
         setSelectedValue({
@@ -254,11 +242,6 @@ export default function EnhancedTable({
             [event.target.name]: event.target.value,
         });
         await handleSelectFunction(parseInt(temp[0]), temp[1] == 'approve' ? true : false);
-        // console.log(event.target.name);
-        // setPrivateBool({
-        //     ...privateBool,
-        //     [event.target.name]: event.target.checked,
-        // });
         console.log(temp);
     };
     const handleChangePage = (event, newPage) => {
