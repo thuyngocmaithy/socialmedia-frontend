@@ -31,3 +31,29 @@ export const save = async (report) => {
         console.log(error);
     }
 };
+export const getPin = async () => {
+    try {
+        const res = await httpRequest.get(`report_pins/get`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const getPinId = async (id) => {
+    try {
+        const res = await httpRequest.get(`report_pins/id/${id}`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const changeApprove = async (id, userRatify, approveState) => {
+    try {
+        const res = await httpRequest.put(`report_pins/id/${id}/${approveState}`, userRatify);
+        return res.status;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};

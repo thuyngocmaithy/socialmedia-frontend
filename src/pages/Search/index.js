@@ -55,7 +55,7 @@ function DisplaySearch() {
             }
             if (searchType !== '') {
                 for (let i = 0; i < result.length; i++) {
-                    if (result[i].type !== null && result[i].type.id == parseInt(searchType)) {
+                    if (result[i].type !== null && result[i].type.id === parseInt(searchType)) {
                         temp.push(result[i]);
                     }
                 }

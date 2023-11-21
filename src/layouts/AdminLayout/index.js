@@ -17,6 +17,7 @@ import {
     ChartLineIcon,
     PermissionIcon,
     ReportIcon,
+    ReportContentIcon,
 } from '../../components/Icons';
 import { Link } from 'react-router-dom';
 import config from '../../config';
@@ -65,7 +66,7 @@ function AdminLayout({ children, account = false }) {
         {
             title: 'Quản lý báo cáo',
             to: '/admin/content-report',
-            icon: <ReportIcon />,
+            icon: <ReportContentIcon />,
         },
         {
             title: 'Quản lý bài đăng',

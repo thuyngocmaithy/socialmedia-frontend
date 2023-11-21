@@ -1,10 +1,18 @@
 import EnhancedTable from '../../../components/Table';
 import classNames from 'classnames/bind';
 import styles from './Post.module.scss';
-
+import { useState, useEffect, useContext } from 'react';
+import * as report_pinServices from '../../../services/report_pinServices';
+import Image from '../../../components/Image';
+import { AccountLoginContext } from '../../../context/AccountLoginContext';
+import { getUserById } from '../../../services/userServices';
+import { async } from 'q';
 const cx = classNames.bind(styles);
 
 function Post() {
+    const { userId } = useContext(AccountLoginContext);
+    const [listPost, setListPost] = useState([]);
+    const [approveState, setApproveState] = useState(true);
     const headCells = [
         {
             id: 'id',
@@ -14,17 +22,19 @@ function Post() {
         },
         {
             id: 'image_post',
-            numeric: true,
+            numeric: false,
             disablePadding: false,
+            width: '100px',
+            height: '100px',
             label: 'Hình ảnh',
+            type: 'image',
         },
         {
-            id: 'content_post',
-            numeric: true,
-            disablePadding: false,
-            label: 'Nội dung bài viết',
+            id: 'title_post',
+            numeric: false,
+            disablePadding: true,
+            label: 'Chủ đề',
         },
-
         {
             id: 'content_report',
             numeric: true,
@@ -50,48 +60,69 @@ function Post() {
             label: 'Duyệt',
         },
     ];
-    function createData(
-        id,
-        // username_reporting,
-        // username_reported,
-        image_post,
-        content_post,
-        content_report,
-        username_approve,
-        reject,
-        approve,
-    ) {
-        return {
-            id,
-            // username_reporting,
-            // username_reported,
-            image_post,
-            content_post,
-            content_report,
-            username_approve,
-            reject,
-            approve,
-        };
-    }
+    // const base64ToImageUrl = (base64) => `data:image/png;base64,${base64}`;
 
-    const rows = [
-        createData(1, 1, 'Cupcake', 67, 4.3, true, false),
-        createData(2, 1, 'Donut', 51, 4.9, true, false),
-        createData(3, 1, 'Eclair', 24, 6.0, true, false),
-        createData(4, 1, 'Frozen yoghurt', 24, 4.0, true, false),
-        createData(5, 1, 'Gingerbread', 49, 3.9, true, false),
-        createData(6, 1, 'Honeycomb', 87, 6.5, true, false),
-        createData(7, 1, 'Ice cream sandwich', 37, 4.3, true, false),
-        createData(8, 1, 'Jelly Bean', 94, 0.0, true, false),
-        createData(9, 1, 'KitKat', 65, 7.0, true, false),
-        createData(10, 1, 'Lollipop', 98, 0.0, true, false),
-        createData(11, 1, 'Marshmallow', 81, 2.0, true, false),
-        createData(12, 1, 'Nougat', 9, 37.0, true, false),
-        createData(13, 1, 'Oreo', 63, 4.0, true, false),
-    ];
+    useEffect(() => {
+        const fetchApi = async () => {
+            try {
+                const result = await report_pinServices.getPin();
+
+                // Sử dụng hàm mới để chuyển đổi base64 thành URL hình ảnh
+                const base64ToImageUrl = (base64) => `data:image/png;base64,${base64}`;
+
+                setListPost(
+                    result.map((row) => ({
+                        id: row[0],
+                        image_post: <Image src={base64ToImageUrl(row[2])} height="100px" width="100px" />, // Chuyển đổi base64 thành URL hình ảnh
+                        title_post: row[1],
+                        content_report: row[3],
+                        username_approve: row[4] !== null ? row[4] : '',
+                        approve: row[5],
+                        reject: row[6],
+                    })),
+                );
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        };
+        fetchApi();
+    }, []);
+
+    const handleApproval = async (id, approveState) => {
+        try {
+            const base64ToImageUrl = (base64) => `data:image/png;base64,${base64}`;
+
+            if (userId !== 0) {
+                const userLogin = await getUserById(userId);
+                await report_pinServices.changeApprove(id, userLogin, approveState);
+                // Cập nhật lại danh sách sau khi thay đổi trạng thái
+                const result = await report_pinServices.getPin();
+                setListPost(
+                    result.map((row) => ({
+                        id: row[0],
+                        image_post: <Image src={base64ToImageUrl(row[2])} height="100px" width="100px" />, // Chuyển đổi base64 thành URL hình ảnh
+                        title_post: row[1],
+                        content_report: row[3],
+                        username_approve: row[4],
+                        approve: row[5],
+                        reject: row[6],
+                    })),
+                );
+            }
+        } catch (error) {
+            console.error('Error updating approval status:', error);
+        }
+    };
+
     return (
         <div className={cx('wrapper')}>
-            <EnhancedTable headCells={headCells} rows={rows} noedit={true} title="Quản lý báo cáo bài đăng" />
+            <EnhancedTable
+                headCells={headCells}
+                rows={listPost}
+                noedit={true}
+                title="Quản lý báo cáo bài đăng"
+                handleSelectFunction={handleApproval}
+            />
         </div>
     );
 }

@@ -71,6 +71,7 @@ function Pin({
             const userIdLogin = userId;
             const pinId = id;
             const boardId = data.id;
+            console.log(data);
 
             // Tăng biến đếm để tạo thông báo bài pin liên quan
             localStorage.setItem('pinCount', parseInt(localStorage.getItem('pinCount')) + 1 || 0);
