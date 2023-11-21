@@ -11,6 +11,7 @@ import ActionAlerts from '../../../components/Alert';
 const cx = classNames.bind(styles);
 
 function ChangePassword({ admin = false }) {
+    const [editSuccess, setEditSuccess] = useState(false)
     //Hiển thị hộp thoại thông báo
     const [alertType, setAlertType] = useState(null);
     const [alertVisible, setAlertVisible] = useState(false);
@@ -65,6 +66,7 @@ function ChangePassword({ admin = false }) {
         getUserById(userId)
             .then((response) => {
                 setUserData(response);
+
             })
             .catch((error) => {
                 console.error(error);
@@ -119,7 +121,11 @@ function ChangePassword({ admin = false }) {
             ) {
                 changeUserPassword(userId, currentPassword, newPassword)
                     .then((response) => {
+                        setEditSuccess(true)
                         showAlert('editSuccess');
+                        setNewPassword('')
+                        setCurrentPassword('')
+                        setConfirmPassword('')
                     })
                     .catch((error) => {
                         console.log(error);

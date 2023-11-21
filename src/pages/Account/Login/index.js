@@ -33,9 +33,7 @@ function Login() {
         const fetchApi = async () => {
             const email = e.target.elements.email.value !== '' ? e.target.elements.email.value : null;
             const password = e.target.elements.password.value !== '' ? e.target.elements.password.value : null;
-            const username = email.split('@')[0]; // Trích xuất tên người dùng thành email
-            console.log(username);
-            const result = await userServices.login(username, password);
+            const result = await userServices.login(email, password);
             if (result !== undefined) {
                 // Sử dụng hàm đặt giá trị vào localStorage với thời gian hết hạn
                 setLocalStorageWithExpiration('userLogin', { id: result.id, permission: result.permission }, 60); // 60 phút
