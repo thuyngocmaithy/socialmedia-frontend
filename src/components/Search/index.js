@@ -30,14 +30,16 @@ function Search({ className, width = '750px' }) {
 
     const location = useLocation();
     const pathname = location.pathname.split('/')[1];
-    const [info, setInfo] = useState({});
-    useEffect(() => {
-        const fetchApi = async () => {
-            const resultInfo = await userServices.getUserByUsername(pathname);
-            setInfo(resultInfo);
-        };
-        fetchApi();
-    }, [pathname]);
+    // const [info, setInfo] = useState({});
+    // useEffect(() => {
+    //     const fetchApi = async () => {
+    //         console.log(pathname);
+    //         const resultInfo = await userServices.getUserByUsername(pathname);
+
+    //         setInfo(resultInfo);
+    //     };
+    //     fetchApi();
+    // }, [pathname]);
 
     const [pinByUser, setPinByUser] = useState([]);
     // useEffect(() =>  {
@@ -125,7 +127,7 @@ function Search({ className, width = '750px' }) {
                     <div style={{ width: width }} className={cx('search-result')} tabIndex="-1" {...attrs}>
                         <PopperWrapper>
                             {!pathname ? (
-                                <div>
+                                <div className={cx('search-body')}>
                                     {searchResult.length > 0 && (
                                         <div>
                                             <h4 className={cx('search-title')}>Accounts</h4>
@@ -139,6 +141,7 @@ function Search({ className, width = '750px' }) {
                                         {listType.map((item, index) => {
                                             return (
                                                 <NavLink
+                                                    key={index}
                                                     className={(nav) => cx('menu-item')}
                                                     to={`/search/type=${item.id}`}
                                                 >

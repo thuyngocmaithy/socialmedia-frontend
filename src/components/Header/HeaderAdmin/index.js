@@ -15,6 +15,7 @@ import { useContext, useEffect, useState } from 'react';
 import { ThemeContext } from '../../../context/ThemeContext';
 import { AccountLoginContext } from '../../../context/AccountLoginContext';
 import { getUserById } from '../../../services/userServices';
+import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
@@ -64,54 +65,54 @@ function HeaderAdmin({ className, account = false, handleOpenMenu }) {
         }
     }, [userId]);
     return (
-        userLoaded && (
-            <header className={cx(className, 'wrapper', theme === 'dark' ? 'dark' : '')}>
-                <div className={cx('inner', { account: account })}>
-                    {/* LEFT MENU */}
-                    {account ? (
-                        <div className={cx('container-title')}>
-                            <Link to={config.routes.admin} className={cx('logo-link')}>
-                                <LogoPinterest className={cx('icon')} />
-                                <h1 className={cx('name')}>DATH</h1>
-                            </Link>
-                        </div>
-                    ) : (
-                        <button className={cx('menu')} onClick={handleOpenMenu}>
-                            <FontAwesomeIcon icon={faBars} />
-                        </button>
-                    )}
-
-                    {/* ACTIONS */}
-                    <div className={cx('actions')}>
-                        <Popper
-                            title={<NotificationIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
-                            body={<NotificationPopper />}
-                            widthBody="maxContent"
-                        />
-                        <Popper
-                            title={<MessageIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
-                            body={<ConversationPopper />}
-                            left="-48px"
-                            widthBody="maxContent"
-                        />
-
-                        <Link className={cx('link-avatar')} to={`/admin/${user.username}/edit-profile`}>
-                            <Image
-                                src={user.avatar && `data:image/jpeg;base64,${user.avatar}`}
-                                className={cx('action', 'user-avatar')}
-                                alt={user.username}
-                            />
+        <header className={cx(className, 'wrapper', theme === 'dark' ? 'dark' : '')}>
+            <div className={cx('inner', { account: account })}>
+                {/* LEFT MENU */}
+                {account ? (
+                    <div className={cx('container-title')}>
+                        <Link to={config.routes.admin} className={cx('logo-link')}>
+                            <LogoPinterest className={cx('icon')} />
+                            <h1 className={cx('name')}>DATH</h1>
                         </Link>
-
-                        <MenuSettingHeader className={cx('action')} items={userMenu} onChange={handleMenuChange}>
-                            <button className={cx('more-btn', theme === 'dark' ? 'dark' : '')}>
-                                <FontAwesomeIcon icon={faChevronDown} />
-                            </button>
-                        </MenuSettingHeader>
                     </div>
+                ) : (
+                    <button className={cx('menu')} onClick={handleOpenMenu}>
+                        <FontAwesomeIcon icon={faBars} />
+                    </button>
+                )}
+
+                {/* ACTIONS */}
+                <div className={cx('actions')}>
+                    {userLoaded && (
+                        <>
+                            <Popper
+                                title={<NotificationIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
+                                body={<NotificationPopper />}
+                                widthBody="maxContent"
+                            />
+                            <Popper
+                                title={<MessageIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
+                                body={<ConversationPopper />}
+                                left="-48px"
+                                widthBody="maxContent"
+                            />
+                            <Link className={cx('link-avatar')} to={`/${user.username}`}>
+                                <Image
+                                    src={user.avatar && `data:image/jpeg;base64,${user.avatar}`}
+                                    className={cx('action', 'user-avatar', theme === 'dark' ? 'dark' : '')}
+                                    alt={user.username}
+                                />
+                            </Link>
+                        </>
+                    )}
+                    <MenuSettingHeader className={cx('action')} items={userMenu} onChange={handleMenuChange}>
+                        <button className={cx('more-btn', theme === 'dark' ? 'dark' : '')}>
+                            <FontAwesomeIcon icon={faChevronDown} />
+                        </button>
+                    </MenuSettingHeader>
                 </div>
-            </header>
-        )
+            </div>
+        </header>
     );
 }
 export default HeaderAdmin;

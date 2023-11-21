@@ -63,7 +63,7 @@ function SelectReportOption({ handleTurnOnSelectReport, pin, user }) {
                 <div className={cx('list-report')}>
                     {listReport.map((item, index) => {
                         return (
-                            <div className={cx('item-report')}>
+                            <div className={cx('item-report')} key={index}>
                                 <div className={cx('wrapper')}>
                                     <input
                                         className={cx('radioBTN')}

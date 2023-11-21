@@ -19,6 +19,7 @@ import NotificationPopper from '../../Popper/NotificationPopper';
 import MenuSettingHeader from '../../Popup/MenuSettingHeader';
 import Search from '../../Search';
 import styles from './HeaderDefault.module.scss';
+import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
@@ -85,57 +86,57 @@ function HeaderDefault() {
     ];
 
     return (
-        userLoaded && (
-            <header className={cx('wrapper', theme === 'dark' ? 'dark' : '')}>
-                <div className={cx('inner')}>
-                    {/* LOGO */}
-                    <Link to={config.routes.home} className={cx('logo-link')}>
-                        <LogoPinterest className={cx('logo')} />
-                    </Link>
+        <header className={cx('wrapper', theme === 'dark' ? 'dark' : '')}>
+            <div className={cx('inner')}>
+                {/* LOGO */}
+                <Link to={config.routes.home} className={cx('logo-link')}>
+                    <LogoPinterest className={cx('logo')} />
+                </Link>
 
-                    <NavMenu menu={menuNavbarLeft} />
+                <NavMenu menu={menuNavbarLeft} />
 
-                    {/* THANH TÌM KIẾM */}
-                    <Search />
+                {/* THANH TÌM KIẾM */}
+                <Search />
 
-                    {/* ACTIONS */}
-                    <div className={cx('actions')}>
-                        <Popper
-                            title={<NotificationIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
-                            body={<NotificationPopper />}
-                            widthBody="maxContent"
-                        />
-                        <Popper
-                            title={<MessageIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
-                            body={<ConversationPopper />}
-                            left="-48px"
-                            widthBody="maxContent"
-                        />
-
-                        <Link className={cx('link-avatar')} to={`/${user.username}`}>
-                            <Image
-                                src={user.avatar && `data:image/jpeg;base64,${user.avatar}`}
-                                className={cx('action', 'user-avatar', theme === 'dark' ? 'dark' : '')}
-                                alt={user.username}
+                {/* ACTIONS */}
+                <div className={cx('actions')}>
+                    {userLoaded && (
+                        <>
+                            <Popper
+                                title={<NotificationIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
+                                body={<NotificationPopper />}
+                                widthBody="maxContent"
                             />
-                        </Link>
+                            <Popper
+                                title={<MessageIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
+                                body={<ConversationPopper />}
+                                left="-48px"
+                                widthBody="maxContent"
+                            />
+                            <Link className={cx('link-avatar')} to={`/${user.username}`}>
+                                <Image
+                                    src={user.avatar && `data:image/jpeg;base64,${user.avatar}`}
+                                    className={cx('action', 'user-avatar', theme === 'dark' ? 'dark' : '')}
+                                    alt={user.username}
+                                />
+                            </Link>
+                        </>
+                    )}
+                    {userId === 0 && (
+                        <Button className={cx('btnLogin')} red to={config.routes.login}>
+                            Log in
+                        </Button>
+                    )}
 
-                        {userId === 0 && (
-                            <Button red to={config.routes.login}>
-                                Log in
-                            </Button>
-                        )}
-
-                        <MenuSettingHeader className={cx('action')} items={userMenu} onChange={handleMenuChange}>
-                            <button className={cx('more-btn', theme === 'dark' ? 'dark' : '')}>
-                                <FontAwesomeIcon icon={faChevronDown} />
-                            </button>
-                        </MenuSettingHeader>
-                    </div>
+                    <MenuSettingHeader className={cx('action')} items={userMenu} onChange={handleMenuChange}>
+                        <button className={cx('more-btn', theme === 'dark' ? 'dark' : '')}>
+                            <FontAwesomeIcon icon={faChevronDown} />
+                        </button>
+                    </MenuSettingHeader>
                 </div>
-                {openConfirmLogin && <DialogConfirmLogin open={openConfirmLogin} setOpen={setOpenConfirmLogin} />}
-            </header>
-        )
+            </div>
+            {openConfirmLogin && <DialogConfirmLogin open={openConfirmLogin} setOpen={setOpenConfirmLogin} />}
+        </header>
     );
 }
 export default memo(HeaderDefault);

@@ -7,6 +7,7 @@ import Pin from '../../components/Pin';
 import * as pinServices from '../../services/pinServices';
 import * as userServices from '../../services/userServices';
 import * as userSavePin from '../../services/userSavePinServices';
+import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
@@ -19,6 +20,7 @@ function DisplaySearch() {
 
     //RENDER LIST PIN
     const [LIST_PIN, setListPin] = useState([]);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         searchValue = location.pathname.split('/')[2];
         searchType = location.pathname.split('=')[1];
@@ -30,6 +32,7 @@ function DisplaySearch() {
             const result = await pinServices.getAllPins();
             // console.log(result);
             let temp = [];
+
             if (searchUser !== '') {
                 const pinCreated = await pinServices.getPinsByUsername(searchUser);
                 const user = await userServices.getUserByUsername(searchUser);
@@ -69,6 +72,7 @@ function DisplaySearch() {
             }
 
             setListPin(temp);
+            setLoading(false);
         };
 
         fetchApi();
@@ -88,8 +92,10 @@ function DisplaySearch() {
     };
 
     return (
-        <div className={cx('wrapper')}>
-            {LIST_PIN.length > 0 ? (
+        <div className={cx('wrapper')} style={{ height: loading ? 'calc(100vh - 70px)' : 'auto' }}>
+            {loading ? (
+                <CircularProgress sx={{ display: 'flex', margin: 'auto' }} />
+            ) : LIST_PIN.length > 0 ? (
                 LIST_PIN.map((pin, index) => {
                     // console.log(pin);
                     const user = pin.user;
@@ -110,6 +116,7 @@ function DisplaySearch() {
             ) : (
                 <p>Không thể tìm thấy Pin nào</p>
             )}
+
             {statusSave && <ActionAlerts content={`Đã lưu pin`} action="UNDO" />}
         </div>
     );

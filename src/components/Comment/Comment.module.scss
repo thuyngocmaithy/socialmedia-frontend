@@ -1,17 +1,18 @@
 .comment-content {
     width: 100%;
-    height: max-content;
     display: flex;
     flex-direction: column;
     background-color: #ffff;
     // margin-top: 0.8rem;
+    height: calc(100% - 28px);
 }
 .wrapper {
-    height: 180px;
+    height: calc(100% - 20px);
     overflow-y: auto;
 }
 .comment-panel {
     padding-top: 1.2rem;
+    height: calc(100% - 50px);
 }
 
 .comment-panel::-webkit-scrollbar-corner {
@@ -23,6 +24,8 @@
     align-self: flex-end;
     display: flex;
     align-items: center;
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
 }
 .userComment {
     width: 50px;
@@ -99,7 +102,7 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center;
     cursor: pointer;
     // &:hover ~ .comment-option {
     //     display: flex;

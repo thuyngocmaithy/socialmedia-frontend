@@ -54,8 +54,10 @@ function CommentApp({ pinID, currentUser }) {
     };
 
     const sendComment = () => {
+        console.log(comments.current);
         stompClient.publish({
             destination: `/app/addComment/pin_id/${pinID}`,
+
             body: JSON.stringify({
                 commentId: comments.current.at(-1).id + 1,
                 userId: currentUser.id,
@@ -85,7 +87,6 @@ function CommentApp({ pinID, currentUser }) {
         <div className={cx('comment-content')}>
             <div className={cx('comment-panel')}>
                 <div className={cx('wrapper')}>
-                    <hr></hr>
                     {comments.current.map((comment, index) => (
                         <CommentCard key={index} comment={comment}></CommentCard>
                     ))}

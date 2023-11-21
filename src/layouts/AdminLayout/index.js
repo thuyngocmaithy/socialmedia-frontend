@@ -123,7 +123,6 @@ function AdminLayout({ children, account = false }) {
     };
     return (
         <div className={cx('wrapper')} style={{ backgroundColor: account ? 'transparent' : '#f0f4fd' }}>
-            {console.log('=================================:' + sideBarItems)}
             {account === false && (
                 <SideBar
                     className={cx('sidebar', theme === 'dark' ? 'dark' : '')}
