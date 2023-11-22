@@ -32,8 +32,7 @@ function HeaderDefault() {
     const [loading, setLoading] = useState(true);
     const [userLoaded, setUserLoaded] = useState(false);
     const [openConfirmLogin, setOpenConfirmLogin] = useState(false);
-    const messages = useContext(MessageContext);
-    let newMessageCount = messages.length;
+    const newMessageCount = useContext(MessageContext).messageCount;
 
     // MENU KHI CHƯA ĐĂNG NHẬP
     const MENU_ITEMS = [
@@ -42,6 +41,11 @@ function HeaderDefault() {
             title: 'Dark Mode',
         },
     ];
+
+    useEffect(() => {
+        console.log(newMessageCount);
+    }, [])
+
     useEffect(() => {
         // Gửi yêu cầu GET để lấy thông tin người dùng
         if (userLogin !== 0) {

@@ -24,8 +24,7 @@ function HeaderAdmin({ className, account = false, handleOpenMenu }) {
     const navigate = useNavigate();
     const userLogin = useContext(AccountLoginContext);
     const { theme, toggleTheme } = useContext(ThemeContext);
-    const messages = useContext(MessageContext);
-    let newMessageCount = messages.length;
+    const newMessageCount = useContext(MessageContext).messageCount;
     // MENU KHI CHƯA ĐĂNG NHẬP
     const MENU_ITEMS = [
         {

@@ -10,8 +10,8 @@ function MessageProvider({ children }) {
     const USER_ID = useContext(AccountLoginContext);
     let conversations = useContext(ConversationContext);
     let conversationJoined = [];
-    let unSeenMessageCount = useRef(0);
     const [messageCount, setMessageCount] = useState(0);
+    const [newMessage, setNewMessage] = useState();
     useEffect(() => {
         const fetchAPI = async () => {
             var temp = await participantsService.getConversationJoinedByUserId(USER_ID);
@@ -36,6 +36,7 @@ function MessageProvider({ children }) {
                         console.log(response.body)
                     }
                 );
+                countMessage();
             }, 1500);
         };
         if(USER_ID !== 0) {
@@ -43,15 +44,16 @@ function MessageProvider({ children }) {
         }
     }, [USER_ID]);
 
-    const countUnSeenMessage = () => {
+    const countMessage = () => {
+        let count = 0;
         conversations.current.forEach((item) => {
-            item.messages.forEach((m) => {
-                if(!m.seen) {
-                    unSeenMessageCount.current = unSeenMessageCount.current+1;
+            item.messages.forEach((message) => {
+                if(!message.seen && message.user.id !== USER_ID) {
+                    count ++;
                 }
-            })
+            });
         });
-        setMessageCount(unSeenMessageCount.current);
+        setMessageCount(count);
     };
 
     const updateMessages = (message) => {
@@ -61,15 +63,23 @@ function MessageProvider({ children }) {
                 item.lastMessage = message.content;
             }
         });
-        countUnSeenMessage();
+        if(!message.seen && message.user.id !== USER_ID) {
+            setMessageCount(count => count+1);
+        }
+        setNewMessage(message);
+    }
+
+    const setSeenAllMessage = () => {
+        conversations.current.forEach((item) => {
+        });
+        setMessageCount(0);
     }
 
     useEffect(() => {
         console.log(`New Message: ${messageCount}`);
-        console.log(conversations);
     },[messageCount]);
 
-    return <MessageContext.Provider value={unSeenMessageCount.current}>{children}</MessageContext.Provider>;
+    return <MessageContext.Provider value={{messageCount: messageCount, newMessage: newMessage}}>{children}</MessageContext.Provider>;
 }
 
 export { MessageProvider, MessageContext };

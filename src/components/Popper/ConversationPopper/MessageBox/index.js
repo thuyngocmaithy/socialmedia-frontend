@@ -7,12 +7,14 @@ import { useState, useLayoutEffect, useContext, useEffect, useRef } from 'react'
 import * as messageServices from '../../../../services/messageServices';
 import { AccountLoginContext } from '../../../../context/AccountLoginContext';
 import { StompContext } from '../../../../context/StompContext';
+import { MessageContext } from '../../../../context/MessageContext';
 
 const cx = classNames.bind(styles);
 
-function MessageBox({ handleChange, handleGetNewMessage, chatWith }) {
+function MessageBox({ handleChange, chatWith }) {
     let stompClient = useContext(StompContext);
     let USER_ID = useContext(AccountLoginContext);
+    let receivedMessage = useContext(MessageContext).newMessage;
     let message = useRef({});
     const messagesEndRef = useRef(null);
     const scrollToBottom = () => {
@@ -26,8 +28,12 @@ function MessageBox({ handleChange, handleGetNewMessage, chatWith }) {
         // sendMessage()
         const fetchApi = async () => {
             const messages = await messageServices.getAllConversations();
-            setLastestMessageId(messages.at(-1).id + 1);
-            console.log(chatWith)
+            if(messages === null || messages === undefined) {
+                setLastestMessageId(1);
+            }
+            else {
+                setLastestMessageId(messages.at(-1).id + 1);
+            }
         };
         fetchApi();
         let stompObject = null;
@@ -63,12 +69,15 @@ function MessageBox({ handleChange, handleGetNewMessage, chatWith }) {
 
     // Add new message
     const [newMessage, setNewMessage] = useState('');
-    const updateMessages = (message) => {
-        chatWith.messages = [...chatWith.messages, message];
+    const refreshInput = () => {
+        // chatWith.messages = [...chatWith.messages, receivedMessage];
+        setTimeout(() => {
+            console.log(receivedMessage);
+
+        }, 2000);
         setNewMessage('');
         setIsEntering(false);
         setLastestMessageId((lastestMessageId) => lastestMessageId + 1);
-        handleGetNewMessage(chatWith.conversation_id, chatWith.messages);
     };
 
     const sendMessage = () => {
@@ -88,6 +97,7 @@ function MessageBox({ handleChange, handleGetNewMessage, chatWith }) {
                 conversation_id: chatWith.conversation_id,
             }),
         });
+        refreshInput();
     };
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
@@ -109,9 +119,13 @@ function MessageBox({ handleChange, handleGetNewMessage, chatWith }) {
 
             <div className={cx('wrapper-message-list')}>
                 <div className={cx('message-list')}>
-                    {chatWith.messages.map((message) => {
-                        return <MessageCard key={message.id} message={message}></MessageCard>;
-                    })}
+                    {   chatWith.messages !== null ?
+                            chatWith.messages.map((message) => {
+                                return <MessageCard key={message.id} message={message}></MessageCard>;
+                            })
+                        :
+                            ''
+                    }
                     <div ref={messagesEndRef} />
                 </div>
             </div>
