@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { useLocation } from 'react-router-dom';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { ShareIcon, DownloadIcon, ReportIcon } from '../../components/Icons';
 import AccountInfo from '../../components/AccountInfo';
 import Button from '../../components/Button';
@@ -15,16 +15,23 @@ import CreateBoard from '../../components/CreateBoard';
 import ActionAlerts from '../../components/Alert';
 import SelectReportOption from '../../components/SelectReportOption';
 import CommentApp from '../../components/Comment';
+import LikeCard from '../../components/LikeCard';
 import * as userServices from '../../services/userServices';
 import * as pinServices from '../../services/pinServices';
 import * as userSavePinServices from '../../services/userSavePinServices';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
+import { ThemeContext } from '../../context/ThemeContext';
+
 const cx = classNames.bind(styles);
 function DisplayPin() {
     const [currentUser, setCurrentUser] = useState('');
+    const { theme } = useContext(ThemeContext);
+    const userLogin = useContext(AccountLoginContext);
+
+
     useEffect(() => {
         const fetchApi = async () => {
-            const userId = 1;
-            const user = await userServices.getUserById(userId);
+            const user = await userServices.getUserById(userLogin);
             setCurrentUser(user);
         };
 
@@ -217,7 +224,10 @@ function DisplayPin() {
                             {/* <div className={cx('comment-container')}>
                             </div> */}
                             <div className={cx('comment-input')}>
-                                <h3 className={cx('comment-title')}>Nhận xét</h3>
+                                <div className={cx('like')}>
+                                    <h3 className={cx('comment-title')}>Nhận xét</h3>
+                                    <LikeCard pinID={pinID} currentUser={currentUser}/>
+                                </div>
                                 <CommentApp pinID={pinID} currentUser={currentUser}/>
                             </div>
                         </div>

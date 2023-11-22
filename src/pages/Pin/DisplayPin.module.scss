@@ -167,6 +167,13 @@
         color: #111111;
     }
 }
+.like {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+}
 
 .notification {
     position: absolute;
