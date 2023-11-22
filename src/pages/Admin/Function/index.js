@@ -93,14 +93,16 @@ function Function() {
         event.preventDefault();
         const name = event.target.elements.name.value !== '' ? event.target.elements.name.value : null;
 
-        const functionItem = {
-            name,
-        };
-        const result = await functionServices.add(functionItem);
-        if (result) {
-            setCreateSuccess(true);
-            setOpenCreate(false);
-            showAlert('create');
+        if (name !== null) {
+            const functionItem = {
+                name,
+            };
+            const result = await functionServices.add(functionItem);
+            if (result) {
+                setCreateSuccess(true);
+                setOpenCreate(false);
+                showAlert('create');
+            }
         }
     };
     //Handle delete
@@ -142,12 +144,14 @@ function Function() {
         const id = functionEdit.id;
         const name = event.target.elements.nameEdit.value !== '' ? event.target.elements.nameEdit.value : null;
 
-        const functionItem = { id, name };
-        const result = await functionServices.update(id, functionItem);
-        if (result) {
-            setOpenEdit(false);
-            setUpdateSuccess(true);
-            showAlert('edit');
+        if (name !== null) {
+            const functionItem = { id, name };
+            const result = await functionServices.update(id, functionItem);
+            if (result) {
+                setOpenEdit(false);
+                setUpdateSuccess(true);
+                showAlert('edit');
+            }
         }
     };
     const headCells = [
@@ -254,9 +258,9 @@ function Function() {
                     </form>
                 </Dialog>
             )}
-            {alertType === 'edit' && <ActionAlerts content={`Đã chỉnh sửa thành công`} />}
-            {alertType === 'create' && <ActionAlerts content={`Đã thêm thành công`} />}
-            {alertType === 'delete' && <ActionAlerts content={`Đã xóa thành công`} />}
+            {alertType === 'edit' && <ActionAlerts severity="success" content={`Đã chỉnh sửa thành công`} />}
+            {alertType === 'create' && <ActionAlerts severity="success" content={`Đã thêm thành công`} />}
+            {alertType === 'delete' && <ActionAlerts severity="success" content={`Đã xóa thành công`} />}
         </div>
     );
 }

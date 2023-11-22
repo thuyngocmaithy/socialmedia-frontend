@@ -14,7 +14,7 @@ import { AccountLoginContext } from '../../../context/AccountLoginContext';
 const cx = classNames.bind(styles);
 
 function UserProfile({ admin = false }) {
-    const userLogin = useContext(AccountLoginContext);
+    const { userId } = useContext(AccountLoginContext);
     const [userData, setUserData] = useState({});
     const [saveSuccess, setSaveSuccess] = useState(false);
     //Hiển thị hộp thoại thông báo
@@ -46,48 +46,48 @@ function UserProfile({ admin = false }) {
 
     useEffect(() => {
         // Gửi yêu cầu GET để lấy thông tin người dùng
-        getUserById(userLogin)
+        getUserById(userId)
             .then((response) => {
                 setSaveSuccess(false);
                 setUserData(response);
-                console.log(userLogin);
+                console.log(userId);
             })
             .catch((error) => {
                 console.error(error);
             });
-    }, [saveSuccess, userLogin]);
+    }, [saveSuccess, userId]);
 
     const [userFullname, setUserFullname] = useState('');
     useEffect(() => {
         setUserFullname(userData.fullname || '');
     }, [userData]);
-    const handlGetUserFullname = useCallback((event) => {
-        setUserFullname(event.target.value);
-    }, []);
+    const handlGetUserFullname = (value) => {
+        setUserFullname(value);
+    };
 
     const [userIntroduce, setUserIntroduce] = useState('');
     useEffect(() => {
         setUserIntroduce(userData.introduce || '');
     }, [userData]);
-    const handlGetUserIntroduce = useCallback((event) => {
-        setUserIntroduce((prevIntroduce) => +prevIntroduce + event.target.value);
-    }, []);
+    const handlGetUserIntroduce = (value) => {
+        setUserIntroduce(value);
+    };
 
     const [userWebsite, setUserWebsite] = useState('');
     useEffect(() => {
         setUserWebsite(userData.website || '');
     }, [userData]);
-    const handleGetUserWebsite = useCallback((event) => {
-        setUserWebsite((prevWebsite) => prevWebsite + event.target.value);
-    }, []);
+    const handleGetUserWebsite = (value) => {
+        setUserWebsite(value);
+    };
 
     const [username, setUsername] = useState('');
     useEffect(() => {
         setUsername(userData.username || '');
     }, [userData]);
-    const handleGetUsername = useCallback((event) => {
-        setUsername((prevUsername) => prevUsername + event.target.value);
-    }, []);
+    const handleGetUsername = (value) => {
+        setUsername(value);
+    };
 
     const [isPopupVisible, setPopupVisible] = useState(false);
 
@@ -119,7 +119,7 @@ function UserProfile({ admin = false }) {
                     const base64String = reader.result.split(',')[1];
                     setBase64(base64String);
 
-                    ChangeUserAvatar(userLogin, base64String)
+                    ChangeUserAvatar(userId, base64String)
                         .then((response) => {
                             if (response) {
                                 showAlert('editAvatar');
@@ -145,9 +145,9 @@ function UserProfile({ admin = false }) {
             username: username,
         };
 
-        changeUserInfo(userLogin, updatedUser)
+        changeUserInfo(userId, updatedUser)
             .then((response) => {
-                console.log(response);
+                showAlert('editSuccess');
             })
             .catch((error) => console.log(error));
     };
@@ -185,7 +185,7 @@ function UserProfile({ admin = false }) {
                             label={'Họ Tên'}
                             selectedSize={'medium'}
                             text={userFullname}
-                            onChange={handlGetUserFullname}
+                            customGetValue={handlGetUserFullname}
                         />
                     </div>
                     {admin === false && (
@@ -195,14 +195,14 @@ function UserProfile({ admin = false }) {
                                 label={'Giới thiệu'}
                                 selectedSize={'large'}
                                 text={userIntroduce}
-                                onChange={handlGetUserIntroduce}
+                                customGetValue={handlGetUserIntroduce}
                             />
                             <LabelTextBox
                                 placeholder={'Thêm liên kết để hướng lưu lượng vào trang web'}
                                 label={'Trang web'}
                                 selectedSize={'medium'}
                                 text={userWebsite}
-                                onChange={handleGetUserWebsite}
+                                customGetValue={handleGetUserWebsite}
                             />
                         </>
                     )}
@@ -212,10 +212,11 @@ function UserProfile({ admin = false }) {
                         label={'Tên người dùng'}
                         selectedSize={'medium'}
                         text={username}
-                        onChange={handleGetUsername}
+                        customGetValue={handleGetUsername}
                     />
                 </div>
-                {alertType === 'editAvatar' && <ActionAlerts content={`Lưu ảnh thành công`} />}
+                {alertType === 'editAvatar' && <ActionAlerts severity="success" content={`Lưu ảnh thành công`} />}
+                {alertType === 'editSuccess' && <ActionAlerts severity="success" content={`Lưu thành công`} />}
             </div>
         </Wrapper>
 

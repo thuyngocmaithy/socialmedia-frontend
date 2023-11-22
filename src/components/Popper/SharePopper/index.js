@@ -10,24 +10,23 @@ import { CircularProgress } from '@mui/material';
 const cx = classNames.bind(styles);
 
 function SharePopper() {
-    const userLogin = useContext(AccountLoginContext);
+    const { userId } = useContext(AccountLoginContext);
     const [listUser, setListUser] = useState([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         const fetchApi = async () => {
             let result = await userServices.getAllUser();
-            result = result.filter((item) => item.permission === null && item.id !== parseInt(userLogin));
+            result = result.filter((item) => item.permission === null && item.id !== parseInt(userId));
             setListUser(result);
             setLoading(false);
         };
-        if (userLogin !== 0) {
+        if (userId !== 0) {
             fetchApi();
         } else {
             setLoading(false);
         }
-    }, [userLogin]);
+    }, [userId]);
     return (
-        // loading === false && (
         <div className={cx('wrapper')}>
             <div className={cx('title')}>Gửi trên Pinterest </div>
             <div
@@ -59,7 +58,6 @@ function SharePopper() {
                 </div>
             </div>
         </div>
-        // )
     );
 }
 

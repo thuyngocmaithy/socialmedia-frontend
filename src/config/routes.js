@@ -23,6 +23,8 @@ const routes = {
     accountSettingAdmin: '/admin/:username/account-setting',
     changePasswordAdmin: '/admin/:username/password',
     pin: '/pin/:pinid',
+    news_hub: '/news_hub/:id',
+    search: '/search/:searchvalue',
 };
 
 export default routes;

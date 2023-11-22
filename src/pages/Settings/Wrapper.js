@@ -10,19 +10,19 @@ import { getUserById } from '../../services/userServices';
 const cx = classNames.bind(styles);
 
 function Wrapper({ children, bottom = true, admin = false, onSave }) {
-    const userLogin = useContext(AccountLoginContext);
+    const { userId } = useContext(AccountLoginContext);
     const [user, setUser] = useState({});
 
     useEffect(() => {
         // Gửi yêu cầu GET để lấy thông tin người dùng
-        getUserById(userLogin)
+        getUserById(userId)
             .then((response) => {
                 setUser(response);
             })
             .catch((error) => {
                 console.error(error);
             });
-    }, [userLogin]);
+    }, [userId]);
 
     const SideBarItems = [
         {

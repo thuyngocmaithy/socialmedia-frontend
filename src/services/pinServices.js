@@ -84,3 +84,11 @@ export const percent7days = async () => {
         console.log(error);
     }
 };
+export const countPinByCreatedAt = async () => {
+    try {
+        const res = await httpRequest.get(`pins/countPinByCreatedAt`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};

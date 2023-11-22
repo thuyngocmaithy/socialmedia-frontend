@@ -1,15 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 import GlobalStyles from './components/GlobalStyles';
-import { AccountOtherProvider } from './context/AccountOtherContext';
-import { CountAccessProvider } from './context/CountAccessContext';
-import { ThemeProvider } from './context/ThemeContext';
 import { AccountLoginProvider } from './context/AccountLoginContext';
-import { StompProvider } from './context/StompContext';
+import { AccountOtherProvider } from './context/AccountOtherContext';
 import { ConversationProvider } from './context/ConversationContext';
+import { CountAccessProvider } from './context/CountAccessContext';
 import { MessageProvider } from './context/MessageContext';
+import { NotificationProvider } from './context/NotificationContext';
+import { StompProvider } from './context/StompContext';
+import { ThemeProvider } from './context/ThemeContext';
+import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -20,11 +21,13 @@ root.render(
                 <AccountOtherProvider>
                     <CountAccessProvider>
                         <StompProvider>
-                            <ConversationProvider>
-                                <MessageProvider>
+                            <NotificationProvider>
+                                <ConversationProvider>
+                                    <MessageProvider>
                                         <App />
-                                </MessageProvider>
-                            </ConversationProvider>
+                                    </MessageProvider>
+                                </ConversationProvider>
+                            </NotificationProvider>
                         </StompProvider>
                     </CountAccessProvider>
                 </AccountOtherProvider>

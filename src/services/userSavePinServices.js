@@ -31,6 +31,15 @@ export const getPinByBoardId = async (boardId) => {
     }
 };
 
+export const getPinsSavedByUserId = async (userId) => {
+    try {
+        const res = await httpRequest.get(`userSavePin/userId/${userId}`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const del = async (userSavePin) => {
     try {
         const res = await httpRequest.post(`userSavePin/delete`, userSavePin, {

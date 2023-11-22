@@ -8,6 +8,7 @@ export const getCountFriend = async (id) => {
         console.log(error);
     }
 };
+
 export const getListFriend = async (id) => {
     try {
         const res = await httpRequest.get(`/friendships/listFriend/${id}`);
@@ -20,6 +21,24 @@ export const getListFriend = async (id) => {
 export const getListRequest = async (id) => {
     try {
         const res = await httpRequest.get(`/friendships/listRequest/${id}`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getListSent = async (id) => {
+    try {
+        const res = await httpRequest.get(`/friendships/listSent/${id}`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getFriendByNotification = async (notificationId) => {
+    try {
+        const res = httpRequest.get(`friendships/getByNotification/${notificationId}`);
         return res;
     } catch (error) {
         console.log(error);
@@ -42,6 +61,30 @@ export const update = async (id, friendship) => {
 export const deleteById = async (id) => {
     try {
         const res = await httpRequest.post(`/friendships/delete/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const add = async (friendship) => {
+    try {
+        const res = await httpRequest.post(`friendships/add`, friendship, {
+            headers: {
+                'Content-Function': 'application/json',
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const checkFriend = async (id1, id2) => {
+    try {
+        const res = await httpRequest.get(`friendships/checkFriend?id1=${id1}&id2=${id2}`, {
             headers: {
                 'Content-Type': 'application/json',
             },

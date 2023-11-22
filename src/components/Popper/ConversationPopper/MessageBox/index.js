@@ -13,8 +13,8 @@ const cx = classNames.bind(styles);
 
 function MessageBox({ handleChange, chatWith }) {
     let stompClient = useContext(StompContext);
-    let USER_ID = useContext(AccountLoginContext);
-    let receivedMessage = useContext(MessageContext).newMessage;
+    let { userId } = useContext(AccountLoginContext);
+    let { newMessage } = useContext(MessageContext);
     let message = useRef({});
     const messagesEndRef = useRef(null);
     const scrollToBottom = () => {
@@ -26,7 +26,7 @@ function MessageBox({ handleChange, chatWith }) {
     let [lastestMessageId, setLastestMessageId] = useState(0);
     useLayoutEffect(() => {
         // sendMessage()
-        const fetchApi = async () => {
+        const fetchLastestMessageID = async () => {
             const messages = await messageServices.getAllConversations();
             if(messages === null || messages === undefined) {
                 setLastestMessageId(1);
@@ -35,9 +35,9 @@ function MessageBox({ handleChange, chatWith }) {
                 setLastestMessageId(messages.at(-1).id + 1);
             }
         };
-        fetchApi();
+        fetchLastestMessageID();
         let stompObject = null;
-        const createListener = () => {
+        const loginToChat = () => {
             stompObject = stompClient.subscribe(
                 `/app/login/${chatWith.conversation_id}`,
                 (response) => {
@@ -45,7 +45,7 @@ function MessageBox({ handleChange, chatWith }) {
                 }
             );
         };
-        createListener();
+        loginToChat();
         return () => {
             stompClient.publish({
                 destination: `/app/unsubscribe`, 
@@ -55,50 +55,48 @@ function MessageBox({ handleChange, chatWith }) {
         };
     }, []);
 
+    useEffect(() => {
+        if(Object.keys(newMessage).length !== 0) { 
+            chatWith.messages = [...chatWith.messages, newMessage];
+            setCurrentMessage('');
+            setIsEntering(false);
+            setLastestMessageId((lastestMessageId) => lastestMessageId + 1);
+        }
+    }, [newMessage]);
+
     // Change chat icon
     const [isEntering, setIsEntering] = useState(false);
     const handleChatting = (e) => {
         if (e.target.value.length >= 1) {
             setIsEntering(true);
-            setNewMessage(e.target.value);
+            setCurrentMessage(e.target.value);
         } else {
             setIsEntering(false);
-            setNewMessage('');
+            setCurrentMessage('');
         }
     };
 
     // Add new message
-    const [newMessage, setNewMessage] = useState('');
-    const refreshInput = () => {
-        // chatWith.messages = [...chatWith.messages, receivedMessage];
-        setTimeout(() => {
-            console.log(receivedMessage);
-
-        }, 2000);
-        setNewMessage('');
-        setIsEntering(false);
-        setLastestMessageId((lastestMessageId) => lastestMessageId + 1);
-    };
-
+    const [currentMessage, setCurrentMessage] = useState('');
     const sendMessage = () => {
         chatWith.messages.forEach((element) => {
-            if (element.user.id === USER_ID) {
+            if (element.user.id === userId) {
                 message.current = { ...element };
             }
         });
-        message.current.content = newMessage;
+        message.current.content = currentMessage;
         message.current.id = lastestMessageId;
         stompClient.publish({
             destination: `/app/chat/conversation_id/${chatWith.conversation_id}`,
             body: JSON.stringify({
                 id: lastestMessageId,
-                user_id: USER_ID,
-                content: newMessage,
+                user_id: userId,
+                content: currentMessage,
                 conversation_id: chatWith.conversation_id,
             }),
         });
-        refreshInput();
     };
+
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             sendMessage();
@@ -119,7 +117,7 @@ function MessageBox({ handleChange, chatWith }) {
 
             <div className={cx('wrapper-message-list')}>
                 <div className={cx('message-list')}>
-                    {   chatWith.messages !== null ?
+                    {   chatWith.messages.length !== 0 ?
                             chatWith.messages.map((message) => {
                                 return <MessageCard key={message.id} message={message}></MessageCard>;
                             })
@@ -139,7 +137,7 @@ function MessageBox({ handleChange, chatWith }) {
                         handleKeyDown(e);
                     }}
                     onChange={(e) => handleChatting(e)}
-                    value={newMessage}
+                    value={currentMessage}
                 ></input>
                 <div
                     className={cx('wrapper-send_heart-btn')}

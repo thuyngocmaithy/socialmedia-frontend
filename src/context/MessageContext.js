@@ -7,14 +7,14 @@ const MessageContext = createContext({});
 
 function MessageProvider({ children }) {
     const stompClient = useContext(StompContext);
-    const USER_ID = useContext(AccountLoginContext);
+    const { userId } = useContext(AccountLoginContext);
     let conversations = useContext(ConversationContext);
     let conversationJoined = [];
     const [messageCount, setMessageCount] = useState(0);
-    const [newMessage, setNewMessage] = useState();
+    const [newMessage, setNewMessage] = useState({});
     useEffect(() => {
         const fetchAPI = async () => {
-            var temp = await participantsService.getConversationJoinedByUserId(USER_ID);
+            var temp = await participantsService.getConversationJoinedByUserId(userId);
             temp.forEach(element => {
                 conversationJoined = [...conversationJoined, element.conversation.id];
             });
@@ -39,16 +39,16 @@ function MessageProvider({ children }) {
                 countMessage();
             }, 1500);
         };
-        if(USER_ID !== 0) {
+        if(userId !== 0) {
             fetchAPI();
         }
-    }, [USER_ID]);
+    }, [userId]);
 
     const countMessage = () => {
         let count = 0;
         conversations.current.forEach((item) => {
             item.messages.forEach((message) => {
-                if(!message.seen && message.user.id !== USER_ID) {
+                if(!message.seen && message.user.id !== userId) {
                     count ++;
                 }
             });
@@ -63,23 +63,18 @@ function MessageProvider({ children }) {
                 item.lastMessage = message.content;
             }
         });
-        if(!message.seen && message.user.id !== USER_ID) {
+        if(!message.seen && message.user.id !== userId) {
             setMessageCount(count => count+1);
         }
         setNewMessage(message);
     }
 
-    const setSeenAllMessage = () => {
-        conversations.current.forEach((item) => {
-        });
-        setMessageCount(0);
-    }
+    // const setSeenAllMessage = () => {
+    //     conversations.current.forEach((item) => {
+    //     });
+    // }
 
-    useEffect(() => {
-        console.log(`New Message: ${messageCount}`);
-    },[messageCount]);
-
-    return <MessageContext.Provider value={{messageCount: messageCount, newMessage: newMessage}}>{children}</MessageContext.Provider>;
+    return <MessageContext.Provider value={{messageCount: messageCount, setMessageCount: setMessageCount, newMessage: newMessage}}>{children}</MessageContext.Provider>;
 }
 
 export { MessageProvider, MessageContext };

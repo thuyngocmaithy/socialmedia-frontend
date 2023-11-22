@@ -17,7 +17,7 @@ const cx = classNames.bind(styles);
 function AccountSetting({ admin = false }) {
     const label1 = { inputProps: { 'aria-label': 'Switch demo' } };
     const timeoutRef = useRef(null);
-    const userLogin = useContext(AccountLoginContext);
+    const { userId } = useContext(AccountLoginContext);
     const [userData, setUserData] = useState({});
     //Hiển thị hộp thoại thông báo
     const [alertType, setAlertType] = useState(null);
@@ -51,7 +51,7 @@ function AccountSetting({ admin = false }) {
 
     useEffect(() => {
         // Gửi yêu cầu GET để lấy thông tin người dùng
-        getUserById(userLogin)
+        getUserById(userId)
             .then((response) => {
                 setUserData(response);
                 if (response.privateBool === true) {
@@ -64,7 +64,7 @@ function AccountSetting({ admin = false }) {
             .catch((error) => {
                 console.error(error);
             });
-    }, [userLogin]);
+    }, [userId]);
 
     const [privateState, setPrivateState] = useState(null);
     useEffect(() => {
@@ -74,7 +74,7 @@ function AccountSetting({ admin = false }) {
     }, [userData]);
     const handelchangePrivateState = (event) => {
         clearTimeout(timeoutRef.current);
-        changePrivate(userLogin, event.target.checked)
+        changePrivate(userId, event.target.checked)
             .then((response) => {
                 if (event.target.checked) {
                     showAlert('changePublic');
@@ -118,7 +118,7 @@ function AccountSetting({ admin = false }) {
         };
 
         // ĐỔI GENDER, LANGUAGE
-        changeUserInfo(userLogin, updateOptions)
+        changeUserInfo(userId, updateOptions)
             .then((response) => {
                 // console.log(response);
             })
@@ -128,7 +128,7 @@ function AccountSetting({ admin = false }) {
             });
 
         //ĐỔI NGÀY SINH
-        changeUserBirthdate(userLogin, updateBirthday)
+        changeUserBirthdate(userId, updateBirthday)
             .then((response) => {
                 // console.log(response);
             })
@@ -218,9 +218,9 @@ function AccountSetting({ admin = false }) {
                         )}
                     </div>
                 </div>
-                {alertType === 'edit' && <ActionAlerts content={`Lưu thành công`} />}
-                {alertType === 'changePrivate' && <ActionAlerts content={`Tài khoản riêng tư`} />}
-                {alertType === 'changePublic' && <ActionAlerts content={`Tài khoản công khai`} />}
+                {alertType === 'edit' && <ActionAlerts severity="success" content={`Lưu thành công`} />}
+                {alertType === 'changePrivate' && <ActionAlerts severity="info" content={`Tài khoản riêng tư`} />}
+                {alertType === 'changePublic' && <ActionAlerts severity="info" content={`Tài khoản công khai`} />}
             </Wrapper>
         )
     );

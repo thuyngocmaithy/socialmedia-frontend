@@ -9,8 +9,8 @@ import { AccountLoginContext } from '../../../../../context/AccountLoginContext'
 const cx = className.bind(styles);
 
 function MessageCard({ message }) {
-    const USER_ID = useContext(AccountLoginContext);
-    const isSender = message.user.id === USER_ID ? false : true;
+    const { userId } = useContext(AccountLoginContext);
+    const isSender = message.user.id === userId ? false : true;
     const isHeartMessage = message.content === '' ? true : false;
     return (
         <div className={cx('wrapper-message-card')}>

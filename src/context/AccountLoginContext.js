@@ -1,11 +1,8 @@
-import { createContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 const AccountLoginContext = createContext();
 
 function AccountLoginProvider({ children }) {
-    // const initialData = Cookies.get('userLogin') || 0;
-    // const [userLogin, setUserLogin] = useState(0);
-
     // Hàm để lấy giá trị từ localStorage
     const getLocalStorageWithExpiration = (key) => {
         const data = localStorage.getItem(key);
@@ -25,21 +22,25 @@ function AccountLoginProvider({ children }) {
         return parsedData.value;
     };
 
-    const [userLogin, setUserLogin] = useState(() => {
+    const [userId, setUserId] = useState(() => {
         const initialData = getLocalStorageWithExpiration('userLogin');
-        console.log('initialData:' + initialData);
-        return initialData || 0;
+        return initialData ? initialData.id : 0;
+    });
+    const [permission, setPermission] = useState(() => {
+        const initialData = getLocalStorageWithExpiration('userLogin');
+        return initialData ? initialData.permission : null;
     });
 
     useEffect(() => {
         const getUserLogin = async () => {
-            const userId = await getLocalStorageWithExpiration('userLogin');
-            setUserLogin(userId || 0);
+            const userlogin = await getLocalStorageWithExpiration('userLogin');
+            setUserId(userlogin ? userlogin.id : 0);
+            setPermission(userlogin && userlogin.permission);
         };
         getUserLogin();
-    }, []);
+    }, [userId]);
 
-    return <AccountLoginContext.Provider value={userLogin}>{children}</AccountLoginContext.Provider>;
+    return <AccountLoginContext.Provider value={{ userId, permission }}> {children} </AccountLoginContext.Provider>;
 }
 
 export { AccountLoginContext, AccountLoginProvider };
