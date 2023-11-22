@@ -5,36 +5,75 @@ import NavMenu from '../../components/NavMenu';
 import { memo } from 'react';
 import Image from '../../components/Image';
 import Button from '../../components/Button';
-import { AccountOtherContext } from '../../context/AccountOtherContext';
+import { AccountOtherContext, AccountOtherProvider } from '../../context/AccountOtherContext';
 import { useContext, useEffect, useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import * as userServices from '../../services/userServices';
 import * as friendshipServices from '../../services/friendshipServices';
 import ListFriend from '../../components/Popup/ListFriend';
+import FriendRequest from '../../components/Popup/FriendRequest';
 import { ThemeContext } from '../../context/ThemeContext';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
+import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
 function Wrapper({ children, className }) {
+    const navigate = useNavigate();
     const { theme } = useContext(ThemeContext);
+    const [loading, setLoading] = useState(true);
     const [info, setInfo] = useState({});
-    const [countFriend, setcountFriend] = useState(null);
+    const [countFriend, setCountFriend] = useState(null);
+    const [countRequest, setCountRequest] = useState(null);
     const [renderFriend, setRenderFriend] = useState(false);
+    const [renderFriendRequest, setRenderFriendRequest] = useState(false);
+    const [statusFriend, setSatusFriend] = useState(false);
+    const [idFriend, setIdFriend] = useState(false);
 
-    const accountOther = useContext(AccountOtherContext);
+    const { userId } = useContext(AccountLoginContext);
+
+    const { accountOther, handleAccount } = useContext(AccountOtherContext);
 
     const location = useLocation();
     const pathname = location.pathname.split('/')[1];
 
+    handleAccount();
     useEffect(() => {
         const fetchApi = async () => {
             const resultInfo = await userServices.getUserByUsername(pathname);
-            const resultFriend = await friendshipServices.getCountFriend(resultInfo.id);
-            setInfo(resultInfo);
-            setcountFriend(resultFriend);
+            //check status friend
+            if (resultInfo !== '') {
+                if (accountOther) {
+                    // console.log('resultInfo.privateBool:::' + resultInfo);
+                    if (resultInfo.privateBool === true) {
+                        navigate(-1);
+                    } else {
+                        const id2 = resultInfo.id;
+                        const id1 = userId;
+                        const checkFriend = await friendshipServices.checkFriend(id1, id2);
+
+                        if (checkFriend !== undefined) {
+                            setSatusFriend(checkFriend.status);
+                            setIdFriend(checkFriend.id);
+                        }
+                    }
+                }
+                //set info user
+
+                const resultFriend = await friendshipServices.getCountFriend(resultInfo.id);
+                const resultRequest = await friendshipServices.getListRequest(resultInfo.id);
+
+                setInfo(resultInfo);
+                setCountFriend(resultFriend);
+                setCountRequest(resultRequest.length);
+                setLoading(false);
+            } else {
+                navigate(-1);
+            }
         };
+
         fetchApi();
-    }, [pathname]);
+    }, [pathname, accountOther, userId, handleAccount]);
 
     const handleRenderFriend = () => {
         setRenderFriend(true);
@@ -42,6 +81,13 @@ function Wrapper({ children, className }) {
 
     const handleClose = () => {
         setRenderFriend(false);
+    };
+    const handleRenderFriendRequest = () => {
+        setRenderFriendRequest(true);
+    };
+
+    const handleCloseRequest = () => {
+        setRenderFriendRequest(false);
     };
 
     const menuPins = [
@@ -54,9 +100,30 @@ function Wrapper({ children, className }) {
             to: `/${info.username}/_saved`,
         },
     ];
+    //add friend
+    const handleAddFriend = async () => {
+        const createdAt = null;
+        const status = 'PENDING';
+        const user1 = await userServices.getUserById(userId);
+        const user2 = await userServices.getUserByUsername(pathname);
+
+        const friendship = { createdAt, status, user1, user2 };
+        const result = await friendshipServices.add(friendship);
+        if (result) {
+            setSatusFriend('PENDING');
+        }
+    };
+    //cancel friend
+    const handleCancelFriend = async () => {
+        const result = await friendshipServices.deleteById(idFriend);
+        if (result) {
+            setSatusFriend('REJECT');
+        }
+    };
 
     return (
         <div className={cx('wrapper', className)}>
+            {loading && <CircularProgress sx={{ display: 'flex', margin: '0 auto' }} />}
             {Object.keys(info).length !== 0 && countFriend !== null && (
                 <>
                     <div className={cx('info')}>
@@ -67,20 +134,39 @@ function Wrapper({ children, className }) {
                         />
                         <h1 className={cx('fullname', theme === 'dark' ? 'dark' : '')}>{info.fullname}</h1>
                         <p className={cx('username', theme === 'dark' ? 'dark' : '')}>@{info.username}</p>
-                        <h4
-                            className={cx('count-friend', theme === 'dark' ? 'dark' : '')}
-                            onClick={() => handleRenderFriend()}
-                        >
-                            {countFriend} Bạn bè
-                        </h4>
+                        <div className={cx('container-friend')}>
+                            <h4
+                                className={cx('count-friend', theme === 'dark' ? 'dark' : '')}
+                                onClick={() => handleRenderFriend()}
+                            >
+                                {countFriend} Bạn bè
+                            </h4>
+                            {accountOther === false && (
+                                <h4
+                                    className={cx('count-friend-request', theme === 'dark' ? 'dark' : '')}
+                                    onClick={() => handleRenderFriendRequest()}
+                                >
+                                    {countRequest} Lời mời kết bạn
+                                </h4>
+                            )}
+                        </div>
                         {renderFriend && <ListFriend onClose={handleClose} idUser={info.id} />}
+                        {renderFriendRequest && <FriendRequest onClose={handleCloseRequest} idUser={info.id} />}
+
                         <Button className={cx('shareBtn')} primary>
                             Chia sẻ
                         </Button>
+                        {console.log('accountOther:' + accountOther)}
                         {accountOther ? (
-                            <Button className={cx('addFriendBtn')} primary>
-                                Kết bạn
-                            </Button>
+                            statusFriend === 'ACCEPTED' || statusFriend === 'PENDING' ? (
+                                <Button className={cx('addFriendBtn')} primary onClick={handleCancelFriend}>
+                                    Hủy kết bạn
+                                </Button>
+                            ) : (
+                                <Button className={cx('addFriendBtn')} primary onClick={handleAddFriend}>
+                                    Kết bạn
+                                </Button>
+                            )
                         ) : (
                             <Link to={`/${info.username}/edit-profile`}>
                                 <Button className={cx('editBtn')} primary>

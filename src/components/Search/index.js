@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark, faSpinner, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useState, useRef, useContext  } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import HeadlessTippy from '@tippyjs/react/headless';
 import classNames from 'classnames/bind';
 import { NavLink } from 'react-router-dom';
@@ -30,14 +30,16 @@ function Search({ className, width = '750px' }) {
 
     const location = useLocation();
     const pathname = location.pathname.split('/')[1];
-    const [info, setInfo] = useState({});
-    useEffect(() => {
-        const fetchApi = async () => {
-            const resultInfo = await userServices.getUserByUsername(pathname);
-            setInfo(resultInfo);
-        };
-        fetchApi();
-    }, [pathname]);
+    // const [info, setInfo] = useState({});
+    // useEffect(() => {
+    //     const fetchApi = async () => {
+    //         console.log(pathname);
+    //         const resultInfo = await userServices.getUserByUsername(pathname);
+
+    //         setInfo(resultInfo);
+    //     };
+    //     fetchApi();
+    // }, [pathname]);
 
     const [pinByUser, setPinByUser] = useState([]);
     // useEffect(() =>  {
@@ -48,7 +50,7 @@ function Search({ className, width = '750px' }) {
     //         console.log(result);
     //         console.log(pinByUser);
     //         const rs = await userSavePinServices.getPinByUserId(info.id);
-    //         setPinByUser([...pinByUser, rs]);    
+    //         setPinByUser([...pinByUser, rs]);
     //     };
     //     fetchApi();
     // },[debouncedValue]);
@@ -73,20 +75,20 @@ function Search({ className, width = '750px' }) {
         }
 
         fetch(`http://localhost:8080/users/getAll`)
-        .then((res) => res.json())
-        .then((res) => {
-            let temp = [];
-            for (let i = 0; i < res.length; i++) {
-                if (res[i].username.includes(debouncedValue)) {
-                    temp.push(res[i]);
+            .then((res) => res.json())
+            .then((res) => {
+                let temp = [];
+                for (let i = 0; i < res.length; i++) {
+                    if (res[i].username.includes(debouncedValue)) {
+                        temp.push(res[i]);
+                    }
                 }
-            }
-            setSearchResult(temp);
-            setLoading(false); //bỏ loading sau khi gọi api
-        })
-        .catch(() => {
-            setLoading(false); //bỏ loading khi bị lỗi
-        });
+                setSearchResult(temp);
+                setLoading(false); //bỏ loading sau khi gọi api
+            })
+            .catch(() => {
+                setLoading(false); //bỏ loading khi bị lỗi
+            });
     }, [debouncedValue]); //Khi người dùng gõ vào input => chạy lại useEffect
 
     const handleClear = () => {
@@ -103,7 +105,7 @@ function Search({ className, width = '750px' }) {
         const searchValue = e.target.value;
         // setSearchResult(searchResult);
         if (!searchValue.startsWith(' ')) {
-        //     // Không cho người dùng gõ dấu cách đầu tiên
+          
             setSearchValue(searchValue);
             setShowResult(true);
         }
@@ -111,7 +113,7 @@ function Search({ className, width = '750px' }) {
 
     const handleClick = () => {
         setShowResult(true);
-    }
+    };
 
     return (
         /*Using a wrapper <div> tag around the reference element solves this 
@@ -124,22 +126,30 @@ function Search({ className, width = '750px' }) {
                 render={(attrs) => (
                     <div style={{ width: width }} className={cx('search-result')} tabIndex="-1" {...attrs}>
                         <PopperWrapper>
-                            {(!pathname) ? (
-                                <div>
-                                    {(searchResult.length > 0)&&
+                            {!pathname ? (
+                                <div className={cx('search-body')}>
+                                    {searchResult.length > 0 && (
                                         <div>
                                             <h4 className={cx('search-title')}>Accounts</h4>
-                                            {searchResult.map((result) => ( 
-                                                <AccountItemSearch key={result.id} data={result} /> 
+                                            {searchResult.map((result) => (
+                                                <AccountItemSearch key={result.id} data={result} />
                                             ))}
                                         </div>
-                                    }
+                                    )}
                                     <h4 className={cx('search-title')}>Ý tưởng dành cho bạn</h4>
                                     <div className={cx('type')}>
                                         {listType.map((item, index) => {
                                             return (
-                                                <NavLink className={(nav) => cx('menu-item')} to={`/search/type=${item.id}`}>
-                                                    <button key={index} className={cx('item-type')} onClick={handleHideResult} >
+                                                <NavLink
+                                                    key={index}
+                                                    className={(nav) => cx('menu-item')}
+                                                    to={`/search/type=${item.id}`}
+                                                >
+                                                    <button
+                                                        key={index}
+                                                        className={cx('item-type')}
+                                                        onClick={handleHideResult}
+                                                    >
                                                         <p>{item.typeName}</p>
                                                     </button>
                                                 </NavLink>
@@ -152,8 +162,6 @@ function Search({ className, width = '750px' }) {
                                     <h4 className={cx('searchUser-title')}>Tìm kiếm Pin của bạn</h4>
                                 </div>
                             )}
-
-                               
                         </PopperWrapper>
                     </div>
                 )}
@@ -162,7 +170,7 @@ function Search({ className, width = '750px' }) {
                 //Bấm ngoài khu vực tippy
             >
                 <div className={cx('search', theme === 'dark' ? 'dark' : '')} style={{ width: width }}>
-                    {(!pathname) ? (
+                    {!pathname ? (
                         <input
                             ref={inputRef} //Lấy DOM element
                             value={searchValue}
@@ -171,15 +179,14 @@ function Search({ className, width = '750px' }) {
                             onChange={handleChange}
                             onClick={handleClick}
                         />
-
                     ) : (
                         <input
-                        ref={inputRef} //Lấy DOM element
-                        value={searchValue}
-                        placeholder="Search your pins"
-                        spellCheck={false}
-                        onChange={handleChange}
-                        onClick={handleClick}
+                            ref={inputRef} //Lấy DOM element
+                            value={searchValue}
+                            placeholder="Search your pins"
+                            spellCheck={false}
+                            onChange={handleChange}
+                            onClick={handleClick}
                         />
                     )}
 
@@ -191,24 +198,38 @@ function Search({ className, width = '750px' }) {
                     
                     {loading && <FontAwesomeIcon className={cx('loading-btn')} icon={faSpinner} />}
 
-                    
-                    {(searchResult.length > 0) ? (
-                        (!pathname) ? (
+                    {searchResult.length > 0 ? (
+                        !pathname ? (
                             <NavLink className={(nav) => cx('menu-item')} to={`/search/${searchValue}`}>
-                                <button className={cx('search-btn')} onMouseDown={(e) => e.preventDefault()} onClick={handleHideResult}>
+                                <button
+                                    className={cx('search-btn')}
+                                    onMouseDown={(e) => e.preventDefault()}
+                                    onClick={handleHideResult}
+                                >
                                     <FontAwesomeIcon icon={faMagnifyingGlass} />
                                 </button>
                             </NavLink>
                         ) : (
-                            <NavLink className={(nav) => cx('menu-item')} to={`/search/user:${pathname}:${searchValue}`}>
-                                <button className={cx('search-btn')} onMouseDown={(e) => e.preventDefault()} onClick={handleHideResult}>
+                            <NavLink
+                                className={(nav) => cx('menu-item')}
+                                to={`/search/user:${pathname}:${searchValue}`}
+                            >
+                                <button
+                                    className={cx('search-btn')}
+                                    onMouseDown={(e) => e.preventDefault()}
+                                    onClick={handleHideResult}
+                                >
                                     <FontAwesomeIcon icon={faMagnifyingGlass} />
                                 </button>
                             </NavLink>
                         )
                     ) : (
                         <NavLink className={(nav) => cx('menu-item')} to={`/`}>
-                            <button className={cx('search-btn')} onMouseDown={(e) => e.preventDefault()} onClick={handleHideResult}>
+                            <button
+                                className={cx('search-btn')}
+                                onMouseDown={(e) => e.preventDefault()}
+                                onClick={handleHideResult}
+                            >
                                 <FontAwesomeIcon icon={faMagnifyingGlass} />
                             </button>
                         </NavLink>

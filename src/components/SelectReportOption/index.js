@@ -3,13 +3,12 @@ import classNames from 'classnames/bind';
 import styles from './SelectReportOption.module.scss';
 import Button from '../Button';
 import * as contentReportServices from '../../services/contentReportServices';
-import * as reportPinsServices from '../../services/reportPinsServices';
-import ActionAlerts from '../Alert'
+import * as report_pinServices from '../../services/report_pinServices';
+import ActionAlerts from '../Alert';
 
 const cx = classNames.bind(styles);
 
-function SelectReportOption({handleTurnOnSelectReport, pin, user}) {
-
+function SelectReportOption({ handleTurnOnSelectReport, pin, user }) {
     const [listReport, setListReport] = useState([]);
     useEffect(() => {
         const fetchApi = async () => {
@@ -18,7 +17,7 @@ function SelectReportOption({handleTurnOnSelectReport, pin, user}) {
         };
         fetchApi();
     }, []);
-    
+
     const [statusSave, setStatusSave] = useState(false);
 
     const handleSaveResult = (result) => {
@@ -39,20 +38,20 @@ function SelectReportOption({handleTurnOnSelectReport, pin, user}) {
     const handleReport = () => {
         const fetchApi = async () => {
             const report = {
-                approve : false,
-                reject : true,
-                content : reported,
-                pin : pin,
-                userRatify : null,
-                userReport : user
-            }
+                approve: false,
+                reject: true,
+                content: reported,
+                pin: pin,
+                userRatify: null,
+                userReport: user,
+            };
             // console.log(report);
-            const result = await reportPinsServices.save(report);
+            const result = await report_pinServices.save(report);
             // console.log(result);
             handleSaveResult(result);
         };
         fetchApi();
-    }
+    };
 
     return (
         <div className={cx('popup-background')}>
@@ -64,17 +63,15 @@ function SelectReportOption({handleTurnOnSelectReport, pin, user}) {
                 <div className={cx('list-report')}>
                     {listReport.map((item, index) => {
                         return (
-                            <div className={cx('item-report')}>
+                            <div className={cx('item-report')} key={index}>
                                 <div className={cx('wrapper')}>
-                                    <input 
+                                    <input
                                         className={cx('radioBTN')}
                                         type="radio"
                                         name="reportOption"
-                                        onChange={e=>(setRedButton(true), setReportOption(item))}
+                                        onChange={(e) => (setRedButton(true), setReportOption(item))}
                                     />
-                                    <label 
-                                        className={cx('content')}>{item.content}
-                                    </label>
+                                    <label className={cx('content')}>{item.content}</label>
                                 </div>
                                 <p className={cx('description')}>{item.description}</p>
                             </div>
@@ -83,8 +80,8 @@ function SelectReportOption({handleTurnOnSelectReport, pin, user}) {
                 </div>
                 <div className={cx('optionBtn')}>
                     <Button className={cx('saveBtn')} primary onClick={() => handleTurnOnSelectReport(false)}>
-                            Hủy
-                        </Button>
+                        Hủy
+                    </Button>
                     {red ? (
                         <Button className={cx('saveBtn')} red onClick={() => handleReport()}>
                             Báo cáo
@@ -98,9 +95,7 @@ function SelectReportOption({handleTurnOnSelectReport, pin, user}) {
                 {statusSave && <ActionAlerts content={`Đã báo cáo`} action="UNDO" />}
             </div>
         </div>
-
     );
-
 }
 
 export default SelectReportOption;

@@ -14,7 +14,7 @@ import CommentCard from './CommentCard';
 const cx = classNames.bind(styles);
 let stompClient = null;
 
-function CommentApp({pinID, currentUser}) {
+function CommentApp({ pinID, currentUser }) {
     // console.log(pin);
     // handle comment
     let comments = useRef([]);
@@ -28,18 +28,18 @@ function CommentApp({pinID, currentUser}) {
             comments.current = await commentServices.getByPinId(pinID);
             setLoad(true);
             console.log(comments.current);
-        }
+        };
         const createStompConnect = () => {
             const socket = new SockJS('http://localhost:8080/ws');
             stompClient = Stomp.over(socket);
-            stompClient.connect({}, function(frame) {
+            stompClient.connect({}, function (frame) {
                 console.log('Connected: ' + frame);
-                stompObject = stompClient.subscribe(`/topic/comment/pin_id/${pinID}`, function(comment) {
+                stompObject = stompClient.subscribe(`/topic/comment/pin_id/${pinID}`, function (comment) {
                     handleCommentSubmit(JSON.parse(comment.body));
-                    console.log(JSON.parse(comment.body))
+                    console.log(JSON.parse(comment.body));
                 });
             });
-        }
+        };
         createStompConnect();
         fetchData();
         return () => {
@@ -55,9 +55,16 @@ function CommentApp({pinID, currentUser}) {
     };
 
     const sendComment = () => {
+        console.log(comments.current);
         stompClient.publish({
             destination: `/app/addComment/pin_id/${pinID}`,
-            body: JSON.stringify({"commentId": comments.current.at(-1).id+1,"userId": currentUser.id,"pinId": pin.id,"content": newComment})
+
+            body: JSON.stringify({
+                commentId: comments.current.at(-1).id + 1,
+                userId: currentUser.id,
+                pinId: pin.id,
+                content: newComment,
+            }),
         });
     }
 
@@ -78,12 +85,26 @@ function CommentApp({pinID, currentUser}) {
         }
     }
 
+    const handlePressEnter = (event) => {
+        if (event.key === 'Enter') {
+            sendComment();
+        }
+    };
+    //red button
+    const [red, setRed] = useState(false);
+    const changeBtn = (e) => {
+        const current = e.target.value;
+        if (current.length >= 1) {
+            setRed(true);
+        } else {
+            setRed(false);
+        }
+    };
+
     return (
-        
         <div className={cx('comment-content')}>
             <div className={cx('comment-panel')}>
                 <div className={cx('wrapper')}>
-                    <hr></hr>
                     {comments.current.map((comment, index) => (
                         <CommentCard key={index} comment={comment}></CommentCard>
                     ))}
@@ -96,20 +117,20 @@ function CommentApp({pinID, currentUser}) {
                 <div className={cx('comment')}>
                     <input
                         type="text"
-                        placeholder='Thêm nhận xét'
+                        placeholder="Thêm nhận xét"
                         value={newComment}
                         onChange={(e) => (setNewComment(e.target.value), changeBtn(e))}
                         onKeyDown={(e) => handlePressEnter(e)}
                     />
-                    {red ?
-                        <Button className={cx('send-btn')} onClick={() => sendComment()}  red>
-                            <FontAwesomeIcon icon={faPaperPlane} style={{fontsize: "14px"}} />
+                    {red ? (
+                        <Button className={cx('send-btn')} onClick={() => sendComment()} red>
+                            <FontAwesomeIcon icon={faPaperPlane} style={{ fontsize: '14px' }} />
                         </Button>
-                        :
-                        <Button className={cx('send-btn')}  primary>
-                            <FontAwesomeIcon icon={faPaperPlane} style={{fontsize: "14px"}} />
+                    ) : (
+                        <Button className={cx('send-btn')} primary>
+                            <FontAwesomeIcon icon={faPaperPlane} style={{ fontsize: '14px' }} />
                         </Button>
-                    }
+                    )}
                 </div>
             </div>
         </div>

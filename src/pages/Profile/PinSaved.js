@@ -1,32 +1,31 @@
-import classNames from 'classnames/bind';
-import styles from './Profile.module.scss';
-import Wrapper from './Wrapper';
-import Board from '../../components/Board';
-import Popper from '../../components/Popper';
-import { FilterIcon, CreateBoardIcon } from '../../components/Icons';
-import OptionPopper from '../../components/Popper/OptionPopper';
-import { AccountOtherContext } from '../../context/AccountOtherContext';
-import { useContext, useState, useEffect } from 'react';
-import * as userSavePinServices from '../../services/userSavePinServices';
-import * as boardServices from '../../services/boardServices';
-import * as userServices from '../../services/userServices';
-import { useLocation } from 'react-router-dom';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import LabelTextBox from '../../components/LabelTextBox';
-import Button from '../../components/Button';
+import classNames from 'classnames/bind';
+import { useContext, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ActionAlerts from '../../components/Alert';
-import { useNavigate } from 'react-router-dom';
 import { ThemeContext } from '../../context/ThemeContext';
+import Board from '../../components/Board';
+import Button from '../../components/Button';
+import { CreateBoardIcon, FilterIcon } from '../../components/Icons';
+import LabelTextBox from '../../components/LabelTextBox';
+import Popper from '../../components/Popper';
+import OptionPopper from '../../components/Popper/OptionPopper';
+import { AccountOtherContext } from '../../context/AccountOtherContext';
+import * as boardServices from '../../services/boardServices';
+import * as userSavePinServices from '../../services/userSavePinServices';
+import * as userServices from '../../services/userServices';
+import styles from './Profile.module.scss';
+import Wrapper from './Wrapper';
 
 const cx = classNames.bind(styles);
 
 function PinSaved() {
-    const { theme } = useContext(ThemeContext);
     const navigate = useNavigate();
-    const accountOther = useContext(AccountOtherContext);
+    const { theme } = useContext(ThemeContext);
+    const { accountOther } = useContext(AccountOtherContext);
     //Open hộp thoại edit
     const [openEdit, setOpenEdit] = useState(false);
     //Open hộp thoại add
@@ -91,7 +90,9 @@ function PinSaved() {
             event.target.elements.descriptionEdit.value !== '' ? event.target.elements.descriptionEdit.value : null;
         const name = event.target.elements.nameEdit.value !== '' ? event.target.elements.nameEdit.value : null;
 
-        const board = { id, description, name, user };
+        const createdAt = null;
+
+        const board = { id, description, name, user, createdAt };
         const result = await boardServices.update(id, board);
         if (result) {
             setOpenEdit(false);
@@ -130,8 +131,9 @@ function PinSaved() {
         const description =
             event.target.elements.descriptionAdd.value !== '' ? event.target.elements.descriptionAdd.value : null;
         const name = event.target.elements.nameAdd.value !== '' ? event.target.elements.nameAdd.value : null;
+        const createdAt = null;
 
-        const board = { description, name, user };
+        const board = { description, name, user, createdAt };
         const result = await boardServices.add(board);
 
         if (result) {
@@ -242,8 +244,7 @@ function PinSaved() {
                             placement="bottom-end"
                         />
                     </div>
-                )}
-
+                )}{' '}
                 <div className={cx('pin-saved')}>
                     {listBoard.map((board, index) => {
                         return (
@@ -253,19 +254,20 @@ function PinSaved() {
                                 title={board.name}
                                 detailBoard={board.detailBoard}
                                 countPin={board.count}
+                                createdAt={board.created_at}
                                 accountOther={accountOther}
                                 handleEdit={() => handleEdit(board.id)}
                             />
                         );
-                    })}
-                </div>
-                <Dialog className={cx(theme === 'dark' ? 'dark' : '')} fullWidth={true} maxWidth="sm" open={openEdit}>
+                    })}{' '}
+                </div>{' '}
+                <Dialog className={cx('')} fullWidth={true} maxWidth="sm" open={openEdit}>
                     <form onSubmit={handleSubmitEdit}>
                         <DialogTitle
                             sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
                         >
-                            Chỉnh sửa
-                        </DialogTitle>
+                            Chỉnh sửa{' '}
+                        </DialogTitle>{' '}
                         <DialogContent>
                             <LabelTextBox
                                 name={'nameEdit'}
@@ -273,32 +275,32 @@ function PinSaved() {
                                 label={'Tên bảng'}
                                 selectedSize={'medium'}
                                 text={boardEdit.name ? boardEdit.name : ''}
-                            />
+                            />{' '}
                             <LabelTextBox
                                 name={'descriptionEdit'}
                                 placeholder={'Mô tả'}
                                 label={'Mô tả'}
                                 selectedSize={'medium'}
                                 text={boardEdit.description ? boardEdit.description : ''}
-                            />
-                        </DialogContent>
+                            />{' '}
+                        </DialogContent>{' '}
                         <DialogActions sx={{ justifyContent: 'space-between', margin: '10px' }}>
                             <Button style={{ fontSize: '14px' }} primary type="button" onClick={handleDelete}>
-                                Xóa
-                            </Button>
+                                Xóa{' '}
+                            </Button>{' '}
                             <div>
                                 <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseEdit}>
-                                    Hủy
-                                </Button>
+                                    Hủy{' '}
+                                </Button>{' '}
                                 <Button style={{ fontSize: '14px' }} red type="submit">
-                                    Sửa
-                                </Button>
-                            </div>
-                        </DialogActions>
-                    </form>
-                </Dialog>
+                                    Sửa{' '}
+                                </Button>{' '}
+                            </div>{' '}
+                        </DialogActions>{' '}
+                    </form>{' '}
+                </Dialog>{' '}
                 <Dialog
-                    className={cx(theme === 'dark' ? 'dark' : '')}
+                    className={cx('')}
                     fullWidth={true}
                     maxWidth="sm"
                     open={openCreateBoard}
@@ -308,8 +310,8 @@ function PinSaved() {
                         <DialogTitle
                             sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
                         >
-                            Tạo bảng
-                        </DialogTitle>
+                            Tạo bảng{' '}
+                        </DialogTitle>{' '}
                         <DialogContent>
                             <LabelTextBox
                                 name={'nameAdd'}
@@ -317,58 +319,53 @@ function PinSaved() {
                                 label={'Tên bảng'}
                                 selectedSize={'medium'}
                                 // text={boardEdit.name ? boardEdit.name : ''}
-                            />
+                            />{' '}
                             <LabelTextBox
                                 name={'descriptionAdd'}
                                 placeholder={'Mô tả'}
                                 label={'Mô tả'}
                                 selectedSize={'medium'}
                                 // text={boardEdit.description ? boardEdit.description : ''}
-                            />
-                        </DialogContent>
+                            />{' '}
+                        </DialogContent>{' '}
                         <DialogActions sx={{ marginBottom: '10px' }}>
                             <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseCreateBoard}>
-                                Hủy
-                            </Button>
+                                Hủy{' '}
+                            </Button>{' '}
                             <Button style={{ fontSize: '14px' }} red type="submit">
-                                Tạo
-                            </Button>
-                        </DialogActions>
-                    </form>
-                </Dialog>
+                                Tạo{' '}
+                            </Button>{' '}
+                        </DialogActions>{' '}
+                    </form>{' '}
+                </Dialog>{' '}
                 {confirmDelete && (
-                    <Dialog
-                        className={cx(theme === 'dark' ? 'dark' : '')}
-                        fullWidth={true}
-                        maxWidth="sm"
-                        open={confirmDelete}
-                    >
+                    <Dialog className={cx('')} fullWidth={true} maxWidth="sm" open={confirmDelete}>
                         <DialogTitle
                             sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
                         >
-                            Xóa Bảng này?
-                        </DialogTitle>
+                            Xóa Bảng này ?
+                        </DialogTitle>{' '}
                         <form onSubmit={handleSubmitDelete}>
                             <DialogContent>
-                                Bảng và tất cả các Ghim thuộc bảng này sẽ bị xóa khỏi hồ sơ của bạn.
-                            </DialogContent>
+                                Bảng và tất cả các Ghim thuộc bảng này sẽ bị xóa khỏi hồ sơ của bạn.{' '}
+                            </DialogContent>{' '}
                             <DialogActions sx={{ marginBottom: '10px' }}>
                                 <div>
                                     <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseConfirm}>
-                                        Hủy
-                                    </Button>
+                                        Hủy{' '}
+                                    </Button>{' '}
                                     <Button style={{ fontSize: '14px' }} red type="submit">
-                                        Xóa
-                                    </Button>
-                                </div>
-                            </DialogActions>
-                        </form>
+                                        Xóa{' '}
+                                    </Button>{' '}
+                                </div>{' '}
+                            </DialogActions>{' '}
+                        </form>{' '}
                     </Dialog>
                 )}
             </div>
-            {alertType === 'edit' && <ActionAlerts content={`Đã chỉnh sửa thành công`} />}
-            {alertType === 'create' && <ActionAlerts content={`Đã thêm thành công`} />}
-            {alertType === 'delete' && <ActionAlerts content={`Đã xóa thành công`} />}
+            {alertType === 'edit' && <ActionAlerts severity="success" content={`Đã chỉnh sửa thành công`} />}
+            {alertType === 'create' && <ActionAlerts severity="success" content={`Đã thêm thành công`} />}
+            {alertType === 'delete' && <ActionAlerts severity="success" content={`Đã xóa thành công`} />}
         </Wrapper>
     );
 }

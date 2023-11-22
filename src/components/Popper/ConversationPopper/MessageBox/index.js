@@ -1,18 +1,18 @@
+import { faAngleLeft, faCircleArrowRight, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styles from './MessageBox.module.scss';
-import { faAngleLeft, faHeart, faCircleArrowRight } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
-import MessageCard from './MessageCard';
-import { useState, useLayoutEffect, useContext, useEffect, useRef } from 'react';
-import * as messageServices from '../../../../services/messageServices';
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AccountLoginContext } from '../../../../context/AccountLoginContext';
 import { StompContext } from '../../../../context/StompContext';
+import * as messageServices from '../../../../services/messageServices';
+import styles from './MessageBox.module.scss';
+import MessageCard from './MessageCard';
 
 const cx = classNames.bind(styles);
 
 function MessageBox({ handleChange, handleGetNewMessage, chatWith }) {
     let stompClient = useContext(StompContext);
-    let USER_ID = useContext(AccountLoginContext);
+    let { userId } = useContext(AccountLoginContext);
     let message = useRef({});
     const messagesEndRef = useRef(null);
     const scrollToBottom = () => {
@@ -27,22 +27,23 @@ function MessageBox({ handleChange, handleGetNewMessage, chatWith }) {
         const fetchApi = async () => {
             const messages = await messageServices.getAllConversations();
             setLastestMessageId(messages.at(-1).id + 1);
+            console.log(chatWith);
         };
         fetchApi();
-        let stompObject = null;
-        const createListener = () => {
-            stompObject = stompClient.subscribe(
-                `/room/conversation_id/${chatWith.conversation_id}`,
-                function (message) {
-                    console.log(JSON.parse(message.body));
-                    // handleSendMessage(JSON.parse(message.body));
-                },
-            );
-        };
-        createListener();
-        return () => {
-            // stompClient.unsubscribe(stompObject.id);
-        };
+        // let stompObject = null;
+        // const createListener = () => {
+        //     stompObject = stompClient.subscribe(
+        //         `/room/conversation_id/${chatWith.conversation_id}`,
+        //         function (message) {
+        //             // console.log(JSON.parse(message.body));
+        //             updateMessages(JSON.parse(message.body));
+        //         },
+        //     );
+        // };
+        // createListener();
+        // return () => {
+        //     stompClient.unsubscribe(stompObject.id);
+        // };
     }, []);
 
     // Change chat icon
@@ -59,16 +60,7 @@ function MessageBox({ handleChange, handleGetNewMessage, chatWith }) {
 
     // Add new message
     const [newMessage, setNewMessage] = useState('');
-    const formattedDate = () => {
-        let today = new Date().toLocaleString('vi-VN').split(' ');
-        let date = today[1].split('/');
-        if (date[0].length === 1) {
-            date[0] = '0' + date[0];
-        }
-        today[1] = date.reverse().join('-');
-        return today.reverse().join('T') + '.000+00:00';
-    };
-    const handleSendMessage = (message) => {
+    const updateMessages = (message) => {
         chatWith.messages = [...chatWith.messages, message];
         setNewMessage('');
         setIsEntering(false);
@@ -78,21 +70,19 @@ function MessageBox({ handleChange, handleGetNewMessage, chatWith }) {
 
     const sendMessage = () => {
         chatWith.messages.forEach((element) => {
-            if (element.user.id === USER_ID) {
+            if (element.user.id === userId) {
                 message.current = { ...element };
             }
         });
         message.current.content = newMessage;
         message.current.id = lastestMessageId;
-        message.current.send_at = formattedDate();
         stompClient.publish({
             destination: `/app/chat/conversation_id/${chatWith.conversation_id}`,
             body: JSON.stringify({
                 id: lastestMessageId,
-                user: message.current.user,
+                user_id: userId,
                 content: newMessage,
-                send_at: formattedDate(),
-                conversation: message.current.conversation,
+                conversation_id: chatWith.conversation_id,
             }),
         });
     };
@@ -115,7 +105,6 @@ function MessageBox({ handleChange, handleGetNewMessage, chatWith }) {
             </div>
 
             <div className={cx('wrapper-message-list')}>
-                {/* {console.log(chatWith)} */}
                 <div className={cx('message-list')}>
                     {chatWith.messages.map((message) => {
                         return <MessageCard key={message.id} message={message}></MessageCard>;

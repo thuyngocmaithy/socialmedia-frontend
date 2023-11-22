@@ -27,7 +27,7 @@ const cx = classNames.bind(styles);
 
 function Create() {
     const { theme } = useContext(ThemeContext);
-    const userLogin = useContext(AccountLoginContext);
+    const { userId } = useContext(AccountLoginContext);
     //select board
     const [activeOptionTop, setActiveOptionTop] = useState(false);
     const [createSuccess, setCreateSuccess] = useState(false);
@@ -78,53 +78,56 @@ function Create() {
             setImagePin(imageURL); // Set image URL to state
         }
     };
+
     //save pin
     const handleInsertPin = async () => {
-        const user = await userServices.getUserById(userLogin);
-        console.log(user);
+        const user = await userServices.getUserById(userId);
         let base64String = '';
-        axios
-            .get(imagePin, { responseType: 'blob' })
-            .then((response) => {
-                const blob = response.data;
-                const reader = new FileReader();
-                reader.onload = async () => {
-                    base64String = reader.result.split(',')[1];
-                    setBase64(base64String);
-                    const image = base64String;
-                    setType(currentType);
-                    const type = currentType;
-                    const title = valTitle;
-                    const description = valContent;
-                    let createdAt = new Date();
-                    createdAt = createdAt.toISOString();
-                    const link = null;
+        if (imagePin !== '') {
+            axios
+                .get(imagePin, { responseType: 'blob' })
+                .then((response) => {
+                    const blob = response.data;
+                    const reader = new FileReader();
+                    reader.onload = async () => {
+                        base64String = reader.result.split(',')[1];
+                        setBase64(base64String);
+                        const image = base64String;
+                        setType(currentType);
+                        const type = currentType;
+                        const title = valTitle;
+                        const description = valContent;
+                        let createdAt = new Date();
+                        createdAt = createdAt.toISOString();
+                        const link = null;
 
-                    if (image && type.typeName !== 'Chọn Thể Loại' && title && description) {
-                        const pin = {
-                            createdAt,
-                            description,
-                            image,
-                            link,
-                            title,
-                            type,
-                            user,
-                        };
-                        console.log(pin);
-                        const result = await pinServices.save(pin);
-                        if (result) {
-                            showAlert('save');
+                        if (image && type.typeName !== 'Chọn Thể Loại' && title && description) {
+                            const pin = {
+                                createdAt,
+                                description,
+                                image,
+                                link,
+                                title,
+                                type,
+                                user,
+                            };
+                            console.log(pin);
+                            const result = await pinServices.save(pin);
+                            if (result) {
+                                showAlert('save');
+                            }
+                        } else {
+                            showAlert('errorInfo');
                         }
-                    } else {
-                        alert('Nhập đầy đủ thông tin !!!');
-                    }
-                    // console.log(pin);
-                };
-                reader.readAsDataURL(blob);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+                    };
+                    reader.readAsDataURL(blob);
+                })
+                .catch((error) => {
+                    showAlert('errorImage');
+                });
+        } else {
+            showAlert('errorImage');
+        }
     };
     //Hiển thị hộp thoại thông báo
     const [alertType, setAlertType] = useState(null);
@@ -152,12 +155,6 @@ function Create() {
             return () => clearTimeout(timeoutId);
         }
     }, [alertVisible]);
-
-    // Turn on CreateBoard
-    const [showCreateBoard, setShowCreateBoard] = React.useState(false);
-    const handleTurnOnCreateBoard = (isShown) => {
-        setShowCreateBoard(isShown);
-    };
 
     // Turn on CreateType
     const [showCreateType, setShowCreateType] = React.useState(false);
@@ -193,9 +190,9 @@ function Create() {
 
     useEffect(() => {
         // Gửi yêu cầu GET để lấy thông tin người dùng
-        if (userLogin !== 0) {
+        if (userId !== 0) {
             userServices
-                .getUserById(userLogin)
+                .getUserById(userId)
                 .then((response) => {
                     setUser(response);
                     setLoading(false);
@@ -204,7 +201,7 @@ function Create() {
                     console.error(error);
                 });
         }
-    }, [userLogin]);
+    }, [userId]);
 
     return (
         <div className={cx('wrapper-createPage')}>
@@ -323,8 +320,10 @@ function Create() {
                 </form>
             </Dialog>
 
-            {alertType === 'save' && <ActionAlerts content={`Tạo thành công`} />}
-            {alertType === 'createType' && <ActionAlerts content={`Đã thêm thể loại`} />}
+            {alertType === 'save' && <ActionAlerts severity="success" content={`Tạo thành công`} />}
+            {alertType === 'createType' && <ActionAlerts severity="success" content={`Đã thêm thể loại`} />}
+            {alertType === 'errorImage' && <ActionAlerts severity="error" content={`Bạn chưa chọn hình ảnh`} />}
+            {alertType === 'errorInfo' && <ActionAlerts severity="error" content={`Nhập đầy đủ thông tin`} />}
         </div>
     );
 }

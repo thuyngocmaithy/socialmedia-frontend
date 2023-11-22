@@ -7,12 +7,11 @@ import Pin from '../../components/Pin';
 import * as pinServices from '../../services/pinServices';
 import * as userServices from '../../services/userServices';
 import * as userSavePin from '../../services/userSavePinServices';
+import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
-
 function DisplaySearch() {
-
     const location = useLocation();
     let searchValue = '';
     let searchType = '';
@@ -21,6 +20,7 @@ function DisplaySearch() {
 
     //RENDER LIST PIN
     const [LIST_PIN, setListPin] = useState([]);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         searchValue = location.pathname.split('/')[2];
         searchType = location.pathname.split('=')[1];
@@ -32,6 +32,7 @@ function DisplaySearch() {
             const result = await pinServices.getAllPins();
             // console.log(result);
             let temp = [];
+
             if (searchUser !== '') {
                 const pinCreated = await pinServices.getPinsByUsername(searchUser);
                 const user = await userServices.getUserByUsername(searchUser);
@@ -39,7 +40,10 @@ function DisplaySearch() {
                 // const pinSaved = await userSavePin.getPinByUserId(user.id);
                 // console.log(pinSaved);
                 for (let i = 0; i < pinCreated.length; i++) {
-                    if ((pinCreated[i].title && pinCreated[i].title.includes(searchUserValue)) || (pinCreated[i].descriptio && pinCreated[i].description.includes(searchUserValue)) ) {
+                    if (
+                        (pinCreated[i].title && pinCreated[i].title.includes(searchUserValue)) ||
+                        (pinCreated[i].descriptio && pinCreated[i].description.includes(searchUserValue))
+                    ) {
                         temp.push(result[i]);
                     }
                 }
@@ -51,20 +55,24 @@ function DisplaySearch() {
             }
             if (searchType !== '') {
                 for (let i = 0; i < result.length; i++) {
-                    if (result[i].type !== null && result[i].type.id == parseInt(searchType)) {
+                    if (result[i].type !== null && result[i].type.id === parseInt(searchType)) {
                         temp.push(result[i]);
                     }
                 }
             }
-            if (searchValue !== '')  {
+            if (searchValue !== '') {
                 for (let i = 0; i < result.length; i++) {
-                    if ((result[i].title && result[i].title.includes(searchValue)) || (result[i].descriptio && result[i].description.includes(searchValue)) ) {
+                    if (
+                        (result[i].title && result[i].title.includes(searchValue)) ||
+                        (result[i].descriptio && result[i].description.includes(searchValue))
+                    ) {
                         temp.push(result[i]);
                     }
                 }
             }
-            
-            setListPin(temp); 
+
+            setListPin(temp);
+            setLoading(false);
         };
 
         fetchApi();
@@ -84,8 +92,10 @@ function DisplaySearch() {
     };
 
     return (
-        <div className={cx('wrapper')}>
-            {(LIST_PIN.length > 0) ? (
+        <div className={cx('wrapper')} style={{ height: loading ? 'calc(100vh - 70px)' : 'auto' }}>
+            {loading ? (
+                <CircularProgress sx={{ display: 'flex', margin: 'auto' }} />
+            ) : LIST_PIN.length > 0 ? (
                 LIST_PIN.map((pin, index) => {
                     // console.log(pin);
                     const user = pin.user;
@@ -106,10 +116,10 @@ function DisplaySearch() {
             ) : (
                 <p>Không thể tìm thấy Pin nào</p>
             )}
+
             {statusSave && <ActionAlerts content={`Đã lưu pin`} action="UNDO" />}
         </div>
     );
-
 }
 
 export default DisplaySearch;

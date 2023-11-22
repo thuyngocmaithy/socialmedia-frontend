@@ -15,14 +15,16 @@ import { useContext, useEffect, useState } from 'react';
 import { ThemeContext } from '../../../context/ThemeContext';
 import { AccountLoginContext } from '../../../context/AccountLoginContext';
 import { getUserById } from '../../../services/userServices';
+import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
 function HeaderAdmin({ className, account = false, handleOpenMenu }) {
     const navigate = useNavigate();
-    const userLogin = useContext(AccountLoginContext);
+    const { userId } = useContext(AccountLoginContext);
     const { theme, toggleTheme } = useContext(ThemeContext);
+    const [userLoaded, setUserLoaded] = useState(false);
     // MENU KHI CHƯA ĐĂNG NHẬP
     const MENU_ITEMS = [
         {
@@ -51,17 +53,17 @@ function HeaderAdmin({ className, account = false, handleOpenMenu }) {
     const [user, setUser] = useState({});
     useEffect(() => {
         // Gửi yêu cầu GET để lấy thông tin người dùng
-        if (userLogin !== 0) {
-            getUserById(userLogin)
+        if (userId !== 0) {
+            getUserById(userId)
                 .then((response) => {
                     setUser(response);
+                    setUserLoaded(true);
                 })
                 .catch((error) => {
                     console.error(error);
                 });
         }
-        // setLoading(false);
-    }, [userLogin]);
+    }, [userId]);
     return (
         <header className={cx(className, 'wrapper', theme === 'dark' ? 'dark' : '')}>
             <div className={cx('inner', { account: account })}>
@@ -81,26 +83,28 @@ function HeaderAdmin({ className, account = false, handleOpenMenu }) {
 
                 {/* ACTIONS */}
                 <div className={cx('actions')}>
-                    <Popper
-                        title={<NotificationIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
-                        body={<NotificationPopper />}
-                        widthBody="maxContent"
-                    />
-                    <Popper
-                        title={<MessageIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
-                        body={<ConversationPopper />}
-                        left="-48px"
-                        widthBody="maxContent"
-                    />
-
-                    <Link className={cx('link-avatar')} to={`/admin/${user.username}/edit-profile`}>
-                        <Image
-                            src={user.avatar && `data:image/jpeg;base64,${user.avatar}`}
-                            className={cx('action', 'user-avatar')}
-                            alt={user.username}
-                        />
-                    </Link>
-
+                    {userLoaded && (
+                        <>
+                            <Popper
+                                title={<NotificationIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
+                                body={<NotificationPopper />}
+                                widthBody="maxContent"
+                            />
+                            <Popper
+                                title={<MessageIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
+                                body={<ConversationPopper />}
+                                left="-48px"
+                                widthBody="maxContent"
+                            />
+                            <Link className={cx('link-avatar')} to={`/${user.username}`}>
+                                <Image
+                                    src={user.avatar && `data:image/jpeg;base64,${user.avatar}`}
+                                    className={cx('action', 'user-avatar', theme === 'dark' ? 'dark' : '')}
+                                    alt={user.username}
+                                />
+                            </Link>
+                        </>
+                    )}
                     <MenuSettingHeader className={cx('action')} items={userMenu} onChange={handleMenuChange}>
                         <button className={cx('more-btn', theme === 'dark' ? 'dark' : '')}>
                             <FontAwesomeIcon icon={faChevronDown} />

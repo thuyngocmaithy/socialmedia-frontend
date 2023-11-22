@@ -6,7 +6,7 @@ const MessageContext = createContext({});
 function MessageProvider({ children }) {
     const [load, setLoad] = useState(false);
     let stompClient = useContext(StompContext);
-    const conversation = useContext(ConversationContext).current;
+    const conversation = useContext(ConversationContext);
     let id = 0;
     let message = {};
     let stompObject = [];
@@ -21,10 +21,11 @@ function MessageProvider({ children }) {
             //     id = tempObject.id;
             //     console.log(item);
             // });
-            // console.log(conversation);
+
             setLoad(false);
         };
         loadRoom();
+        console.log('conversation:' + JSON.stringify(conversation));
         // console.log(conversation.current);
     });
     const stompOutputObject = {

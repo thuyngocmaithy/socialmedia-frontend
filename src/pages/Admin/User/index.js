@@ -110,7 +110,12 @@ function User() {
     }
 
     const rows = listUser.map((user) => {
-        return createData(user.id, user.fullname, user.username, user.gender, user.birthdate, user.email);
+        const originalDate = new Date(user.birthdate);
+
+        // Get the date in the format "YYYY-MM-DD"
+        const formattedDate = originalDate.toISOString().split('T')[0];
+
+        return createData(user.id, user.fullname, user.username, user.gender, formattedDate, user.email);
     });
 
     const handleCreate = () => {
@@ -138,26 +143,28 @@ function User() {
         const password = '12345678';
         const permission = await permissionServices.getPermissionById(2);
 
-        const user = {
-            avtar,
-            birthdate,
-            email,
-            fullname,
-            gender,
-            introduce,
-            language,
-            password,
-            privateBool,
-            username,
-            website,
-            permission,
-        };
-        const result = await userServices.add(user);
+        if (firstname !== null && lastname !== null && email !== null) {
+            const user = {
+                avtar,
+                birthdate,
+                email,
+                fullname,
+                gender,
+                introduce,
+                language,
+                password,
+                privateBool,
+                username,
+                website,
+                permission,
+            };
+            const result = await userServices.add(user);
 
-        if (result) {
-            setOpenCreate(false);
-            setCreateSuccess(true);
-            showAlert('create');
+            if (result) {
+                setOpenCreate(false);
+                setCreateSuccess(true);
+                showAlert('create');
+            }
         }
     };
     const handleDelete = async (selected) => {
@@ -256,8 +263,8 @@ function User() {
                     </form>
                 </Dialog>
             )}
-            {alertType === 'create' && <ActionAlerts content={`Đã thêm thành công`} />}
-            {alertType === 'delete' && <ActionAlerts content={`Đã xóa thành công`} />}
+            {alertType === 'create' && <ActionAlerts severity="success" content={`Đã thêm thành công`} />}
+            {alertType === 'delete' && <ActionAlerts severity="success" content={`Đã xóa thành công`} />}
         </div>
     );
 }

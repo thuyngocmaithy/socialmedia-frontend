@@ -1,24 +1,25 @@
+import { faArrowRightFromBracket, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import Switch from '@mui/material/Switch';
 import classNames from 'classnames/bind';
-import { Link, useNavigate } from 'react-router-dom';
-import styles from './HeaderDefault.module.scss';
-import MenuSettingHeader from '../../Popup/MenuSettingHeader';
-import Image from '../../Image';
-import Search from '../../Search';
-import config from '../../../config';
-import { LogoPinterest, MessageIcon, NotificationIcon } from '../../Icons';
-import NavMenu from '../../NavMenu';
-import Popper from '../../Popper';
-import NotificationPopper from '../../Popper/NotificationPopper';
-import ConversationPopper from '../../Popper/ConversationPopper';
 import { memo, useContext, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import config from '../../../config';
 import { AccountLoginContext } from '../../../context/AccountLoginContext';
+import { ThemeContext } from '../../../context/ThemeContext';
 import { getUserById } from '../../../services/userServices';
 import Button from '../../Button';
-import { ThemeContext } from '../../../context/ThemeContext';
 import DialogConfirmLogin from '../../DialogConfirmLogin';
+import { LogoPinterest, MessageIcon, NotificationIcon } from '../../Icons';
+import Image from '../../Image';
+import NavMenu from '../../NavMenu';
+import Popper from '../../Popper';
+import ConversationPopper from '../../Popper/ConversationPopper';
+import NotificationPopper from '../../Popper/NotificationPopper';
+import MenuSettingHeader from '../../Popup/MenuSettingHeader';
+import Search from '../../Search';
+import styles from './HeaderDefault.module.scss';
+import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
@@ -26,9 +27,8 @@ const label = { inputProps: { 'aria-label': 'Switch demo' } };
 function HeaderDefault() {
     const navigate = useNavigate();
     const { theme, toggleTheme } = useContext(ThemeContext);
-    const userLogin = useContext(AccountLoginContext);
+    const { userId } = useContext(AccountLoginContext);
     const [user, setUser] = useState({});
-    const [loading, setLoading] = useState(true);
     const [userLoaded, setUserLoaded] = useState(false);
     const [openConfirmLogin, setOpenConfirmLogin] = useState(false);
 
@@ -41,8 +41,8 @@ function HeaderDefault() {
     ];
     useEffect(() => {
         // Gửi yêu cầu GET để lấy thông tin người dùng
-        if (userLogin !== 0) {
-            getUserById(userLogin)
+        if (userId !== 0) {
+            getUserById(userId)
                 .then((response) => {
                     setUser(response);
                     console.log(response);
@@ -52,8 +52,7 @@ function HeaderDefault() {
                     console.error(error);
                 });
         }
-        // setLoading(false);
-    }, [userLogin]);
+    }, [userId]);
 
     const handleMenuChange = (menuItem) => {
         console.log(menuItem);
@@ -82,12 +81,11 @@ function HeaderDefault() {
         {
             title: 'Create',
             to: config.routes.create,
-            handleClick: userLogin !== 0 ? null : () => setOpenConfirmLogin(true),
+            handleClick: userId !== 0 ? null : () => setOpenConfirmLogin(true),
         },
     ];
 
     return (
-        // loading === false && (
         <header className={cx('wrapper', theme === 'dark' ? 'dark' : '')}>
             <div className={cx('inner')}>
                 {/* LOGO */}
@@ -115,7 +113,6 @@ function HeaderDefault() {
                                 left="-48px"
                                 widthBody="maxContent"
                             />
-
                             <Link className={cx('link-avatar')} to={`/${user.username}`}>
                                 <Image
                                     src={user.avatar && `data:image/jpeg;base64,${user.avatar}`}
@@ -125,8 +122,8 @@ function HeaderDefault() {
                             </Link>
                         </>
                     )}
-                    {userLogin === 0 && (
-                        <Button red to={config.routes.login}>
+                    {userId === 0 && (
+                        <Button className={cx('btnLogin')} red to={config.routes.login}>
                             Log in
                         </Button>
                     )}
@@ -140,7 +137,6 @@ function HeaderDefault() {
             </div>
             {openConfirmLogin && <DialogConfirmLogin open={openConfirmLogin} setOpen={setOpenConfirmLogin} />}
         </header>
-        // )
     );
 }
 export default memo(HeaderDefault);

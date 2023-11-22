@@ -10,7 +10,7 @@ function AccountInfo({ userImage, username, width = '32px', fontSize = '1.4rem',
     return (
         username && (
             <div className={cx('info-user')}>
-                <Link className={cx('link-avatar')} to="">
+                <Link className={cx('link-avatar')} to={`/${username}`}>
                     <Image
                         style={{ width: width, height: width }}
                         src={userImage && `data:image/jpeg;base64,${userImage}`}

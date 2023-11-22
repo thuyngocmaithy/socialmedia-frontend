@@ -9,6 +9,15 @@ export const countAll = async () => {
     }
 };
 
+export const getCommentByNotification = async (notificationId) => {
+    try {
+        const res = httpRequest.get(`comments/getByNotification/${notificationId}`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const percent7days = async () => {
     try {
         const res = await httpRequest.get(`comments/percent7days`);
@@ -17,7 +26,14 @@ export const percent7days = async () => {
         console.log(error);
     }
 };
-
+export const countCommentByCreatedAt = async () => {
+    try {
+        const res = await httpRequest.get(`comments/countCommentByCreatedAt`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
 export const getByPinId = async (pin_id) => {
     try {
         const res = await httpRequest.get(`comments/pin_id/${pin_id}`);
@@ -25,4 +41,4 @@ export const getByPinId = async (pin_id) => {
     } catch (error) {
         console.log(error);
     }
-}
+};

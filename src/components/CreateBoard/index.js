@@ -29,7 +29,8 @@ function CreateBoard({ handleTurnOnCreateBoard, handleChooseBoard }) {
             const user = await userServices.getUserById(userId);
             const name = val;
             const description = 'bangtest';
-            const board = { user, name, description };
+            const createdAt = null;
+            const board = { user, name, description, createdAt };
 
             const result = await boardServices.add(board);
             // if (result) {
