@@ -4,8 +4,12 @@
     width: calc(23%);
     border-radius: 24px;
     margin-bottom: 15px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+    // box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     &.dark {
         background-image: linear-gradient(#232526, #414345);
+        box-shadow: #414345 0px 2px 8px 0px;
+        // box-shadow: var(--box-shadow-dark);
     }
 }
 .container-title {

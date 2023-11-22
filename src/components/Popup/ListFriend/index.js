@@ -11,6 +11,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
 function CustomTabPanel(props) {
@@ -70,8 +71,7 @@ function ListFriend({ idUser, onClose }) {
     };
 
     const handleAcceptFriend = async (id, user1, user2) => {
-        let createdAt = new Date();
-        createdAt = createdAt.toISOString();
+        const createdAt = null;
 
         const status = 'ACCEPTED';
 
@@ -90,100 +90,43 @@ function ListFriend({ idUser, onClose }) {
     };
 
     return (
-        loading === false && (
-            <div className={cx('wrapper')}>
-                <div className={cx('container')}>
-                    <div className={cx('header')}>
-                        <h2 className={cx('title')}>Bạn bè</h2>
-                        <button className={cx('closeBtn')} onClick={onClose}>
-                            <span className={cx('icon')}>
-                                <FontAwesomeIcon icon={faXmark} />
-                            </span>
-                        </button>
-                    </div>
-                    <div className={cx('option-container')}>
-                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                            <Tabs
-                                value={value}
-                                onChange={handleChange}
-                                variant="fullWidth"
-                                aria-label="basic tabs example"
-                            >
-                                <Tab
-                                    sx={{ fontSize: '1.3rem', fontWeight: 600 }}
-                                    label="Tất cả bạn bè"
-                                    {...a11yProps(0)}
-                                />
-                                <Tab
-                                    sx={{ fontSize: '1.3rem', fontWeight: 600 }}
-                                    label="Lời mời kết bạn"
-                                    {...a11yProps(1)}
-                                />
-                            </Tabs>
-                        </Box>
-                    </div>
-                    <CustomTabPanel value={value} index={1}>
-                        <div className={cx('body')}>
-                            {listRequest &&
-                                listRequest.map((item, index) => {
-                                    return (
-                                        <div key={index} className={cx('item-friend')}>
-                                            <AccountInfo
-                                                userImage={
-                                                    idUser === item.user1.id ? item.user2.avatar : item.user1.avatar
-                                                }
-                                                username={
-                                                    idUser === item.user1.id ? item.user2.username : item.user1.username
-                                                }
-                                                width="45px"
-                                                fontSize="1.5rem"
-                                                fontWeight="500"
-                                            />
-                                            <div>
-                                                <Button primary onClick={() => handleCancelFriend(item.id)}>
-                                                    Xóa
-                                                </Button>
-                                                <Button
-                                                    className={cx('acceptBtn')}
-                                                    red
-                                                    onClick={() => handleAcceptFriend(item.id, item.user1, item.user2)}
-                                                >
-                                                    Chấp nhận
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                        </div>
-                    </CustomTabPanel>
-                    <CustomTabPanel value={value} index={0}>
-                        <div className={cx('body')}>
-                            {listFriend &&
-                                listFriend.map((item, index) => {
-                                    return (
-                                        <div key={index} className={cx('item-friend')}>
-                                            <AccountInfo
-                                                userImage={
-                                                    idUser === item.user1.id ? item.user2.avatar : item.user1.avatar
-                                                }
-                                                username={
-                                                    idUser === item.user1.id ? item.user2.username : item.user1.username
-                                                }
-                                                width="45px"
-                                                fontSize="1.5rem"
-                                                fontWeight="500"
-                                            />
-                                            <Button primary onClick={() => handleCancelFriend(item.id)}>
-                                                Hủy kết bạn
-                                            </Button>
-                                        </div>
-                                    );
-                                })}
-                        </div>
-                    </CustomTabPanel>
+        <div className={cx('wrapper')}>
+            {loading && <CircularProgress sx={{ display: 'flex', margin: '0 auto' }} />}
+            <div className={cx('container')}>
+                <div className={cx('header')}>
+                    <h2 className={cx('title')}>Bạn bè</h2>
+                    <button className={cx('closeBtn')} onClick={onClose}>
+                        <span className={cx('icon')}>
+                            <FontAwesomeIcon icon={faXmark} />
+                        </span>
+                    </button>
                 </div>
+                <div className={cx('option-container')}>
+                    <div className={cx('body')}>
+                        {listFriend &&
+                            listFriend.map((item, index) => {
+                                return (
+                                    <div key={index} className={cx('item-friend')}>
+                                        <AccountInfo
+                                            userImage={idUser === item.user1.id ? item.user2.avatar : item.user1.avatar}
+                                            username={
+                                                idUser === item.user1.id ? item.user2.username : item.user1.username
+                                            }
+                                            width="45px"
+                                            fontSize="1.5rem"
+                                            fontWeight="500"
+                                        />
+                                        <Button primary onClick={() => handleCancelFriend(item.id)}>
+                                            Hủy kết bạn
+                                        </Button>
+                                    </div>
+                                );
+                            })}
+                    </div>
+                </div>
+                <CustomTabPanel value={value} index={0}></CustomTabPanel>
             </div>
-        )
+        </div>
     );
 }
 

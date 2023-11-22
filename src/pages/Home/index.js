@@ -6,13 +6,41 @@ import ActionAlerts from '../../components/Alert';
 import { useCountAccess } from '../../context/CountAccessContext';
 import * as pinServices from '../../services/pinServices';
 import * as userServices from '../../services/userServices';
+import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
 function Home() {
+    const [loading, setLoading] = useState(true);
     // COUNT ACCESS
     const { updateCounter, countData } = useCountAccess();
     const [hasExecuted, setHasExecuted] = useState(false);
+    //Hiển thị hộp thoại thông báo
+    const [alertType, setAlertType] = useState(null);
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const showAlert = (type) => {
+        setAlertType(type);
+        setAlertVisible(true);
+
+        const timeoutId = setTimeout(() => {
+            setAlertVisible(false);
+            setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+        }, 2500);
+
+        return timeoutId;
+    };
+
+    useEffect(() => {
+        if (alertVisible) {
+            const timeoutId = setTimeout(() => {
+                setAlertVisible(false);
+                setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+            }, 2500);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [alertVisible]);
 
     useEffect(() => {
         if (!hasExecuted) {
@@ -44,8 +72,10 @@ function Home() {
     const [LIST_PIN, setListPin] = useState([]);
     useEffect(() => {
         const fetchApi = async () => {
-            const result = await pinServices.getAllPins();
+            let result = await pinServices.getAllPins();
+            result = result.filter((item) => item.user.privateBool === false);
             setListPin(result);
+            setLoading(false);
         };
 
         fetchApi();
@@ -65,7 +95,9 @@ function Home() {
     };
 
     return (
-        <div className={cx('wrapper')}>
+        <div className={cx('wrapper')} style={{ height: loading ? 'calc(100vh - 70px)' : 'auto' }}>
+            {loading && <CircularProgress sx={{ display: 'flex', margin: 'auto' }} />}
+
             {LIST_PIN.map((pin, index) => {
                 // console.log(pin);
                 const user = pin.user;
@@ -80,10 +112,16 @@ function Home() {
                         userImage={user.avatar}
                         username={user.username}
                         onSaveResult={handleSaveResult}
+                        showAlert={showAlert}
                     />
                 );
             })}
-            {statusSave && <ActionAlerts content={`Đã lưu pin`} action="UNDO" />}
+            {statusSave && <ActionAlerts severity="success" content={`Đã lưu pin`} action="UNDO" />}
+            {alertType === 'warning' && <ActionAlerts severity="warning" content={`Chọn bảng trước khi lưu`} />}
+            {alertType === 'errorSave' && <ActionAlerts severity="error" content={`Không thể lưu pin của chính bạn`} />}
+            {alertType === 'errorAdmin' && (
+                <ActionAlerts severity="error" content={`Hãy đăng nhập tài khoản user để lưu pin`} />
+            )}
         </div>
     );
 }

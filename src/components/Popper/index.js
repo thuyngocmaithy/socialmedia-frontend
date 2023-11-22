@@ -1,10 +1,10 @@
-import { useContext, useState } from 'react';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { Unstable_Popup as Popup } from '@mui/base/Unstable_Popup';
 import { styled } from '@mui/system';
 import classNames from 'classnames/bind';
-import styles from './Popper.module.scss';
-import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import { useContext, useState } from 'react';
 import { ThemeContext } from '../../context/ThemeContext';
+import styles from './Popper.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -34,7 +34,7 @@ const PopupBody = styled('div')(
         font-weight: 500;
         opacity: 1;
         margin: 0.25rem 0;    
-        z-index: 5;
+        z-index: 20;
     `,
 );
 
@@ -65,7 +65,7 @@ function Popper({ idPopper, contentTitle, title, body, className, left = '0', pl
             </span>
             {open ? (
                 <Popup
-                    style={{ left: left, zIndex: '10' }}
+                    style={{ left: left, zIndex: '30' }}
                     id={id}
                     open={open}
                     anchor={anchor}

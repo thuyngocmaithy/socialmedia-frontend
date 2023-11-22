@@ -28,7 +28,13 @@
         color: var(--white-500);
     }
 }
-.count-friend {
+.container-friend {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+.count-friend,
+.count-friend-request {
     margin-top: 8px;
     font-weight: 600;
     font-size: 1.6rem;
@@ -37,6 +43,10 @@
     &.dark {
         color: var(--white-500);
     }
+}
+.count-friend-request {
+    margin-left: 15px;
+    color: #717171;
 }
 .shareBtn {
     margin-top: 12px;

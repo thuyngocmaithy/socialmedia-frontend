@@ -1,28 +1,16 @@
-import { Fragment, useContext, useEffect, useState } from 'react';
+import { Fragment, useContext } from 'react';
 import { Route, Routes, BrowserRouter as Router, Navigate } from 'react-router-dom';
 import { privateRoutes, publicRoutes } from './routes';
 import DefaultLayout from './layouts';
 import { AccountLoginContext } from './context/AccountLoginContext';
 import config from './config';
-import { getUserById } from './services/userServices';
+
 function App() {
-    const userLogin = useContext(AccountLoginContext);
-    const [user, setUser] = useState({});
-    useEffect(() => {
-        // Gửi yêu cầu GET để lấy thông tin người dùng
-        if (userLogin !== 0) {
-            getUserById(userLogin)
-                .then((response) => {
-                    setUser(response);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        }
-        // setLoading(false);
-    }, [userLogin]);
+    const { userId, permission } = useContext(AccountLoginContext);
+
     return (
         <Router>
+            {console.log('2222222222222222222222222222222222222:' + userId + '/////' + permission)}
             <div className="App">
                 <Routes>
                     {publicRoutes.map((route, index) => {
@@ -56,20 +44,32 @@ function App() {
                             Layout = route.layout;
                         }
                         const Page = route.component;
-                        console.log(userLogin);
+
                         return (
                             <Route
                                 key={index}
                                 path={route.path}
                                 element={
-                                    userLogin !== 0 && user.permission !== null ? (
-                                        <Layout>
-                                            <Page />
-                                        </Layout>
+                                    userId !== 0 ? (
+                                        (permission !== null && route.admin) ||
+                                        (permission === null && route.admin === undefined) ? (
+                                            <Layout>
+                                                <Page />
+                                            </Layout>
+                                        ) : (
+                                            <Navigate to={config.routes.login} replace={true} />
+                                        )
                                     ) : (
-                                        // Chuyển hướng đến trang đăng nhập
                                         <Navigate to={config.routes.login} replace={true} />
                                     )
+
+                                    // userLogin !== 0 &&
+                                    // ((user.permission !== null && route.admin) ||
+                                    //     (user.permission === null && route.admin !== undefined)) ? (
+
+                                    // ) : (
+
+                                    // )
                                 }
                             />
                         );

@@ -1,10 +1,10 @@
-import { useState, createContext, useContext, useEffect } from 'react';
-import ConversationMenu from './ConversationMenu';
-import MessageBox from './MessageBox';
 import classNames from 'classnames/bind';
-import styles from './ConversationPopper.module.scss';
+import { createContext, useContext, useState } from 'react';
 import { ConversationContext } from '../../../context/ConversationContext';
 import { ThemeContext } from '../../../context/ThemeContext';
+import ConversationMenu from './ConversationMenu';
+import styles from './ConversationPopper.module.scss';
+import MessageBox from './MessageBox';
 const cx = classNames.bind(styles);
 export const UserIDContext = createContext('');
 

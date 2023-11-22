@@ -9,9 +9,26 @@ export const countAll = async () => {
     }
 };
 
+export const getLikeByNotification = async (notificationId) => {
+    try {
+        const res = httpRequest.get(`likes/getByNotification/${notificationId}`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const percent7days = async () => {
     try {
         const res = await httpRequest.get(`likes/percent7days`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const countLikeByCreatedAt = async () => {
+    try {
+        const res = await httpRequest.get(`likes/countLikeByCreatedAt`);
         return res;
     } catch (error) {
         console.log(error);

@@ -5,6 +5,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { HeaderAdmin } from '../../components/Header';
 import styles from './AdminLayout.module.scss';
 import SideBar from '../../components/SideBar';
+import * as permission_functionServices from '../../services/permission_functionServices';
 import {
     HomeIcon,
     UserIcon,
@@ -16,19 +17,23 @@ import {
     ChartLineIcon,
     PermissionIcon,
     ReportIcon,
+    ReportContentIcon,
 } from '../../components/Icons';
 import { Link } from 'react-router-dom';
 import config from '../../config';
 import '@fortawesome/react-fontawesome';
 import { useState, useEffect, useContext } from 'react';
 import { ThemeContext } from '../../context/ThemeContext';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
 
 const cx = classNames.bind(styles);
 
 function AdminLayout({ children, account = false }) {
     const { theme } = useContext(ThemeContext);
+    const { permission } = useContext(AccountLoginContext);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [displayMenu, setDisplayMenu] = useState('none');
+    const [sideBarItems, setSideBarItems] = useState([]);
 
     // Sử dụng useEffect để theo dõi thay đổi của screenWidth
     useEffect(() => {
@@ -46,7 +51,7 @@ function AdminLayout({ children, account = false }) {
         };
     }, []);
 
-    const SideBarItems = [
+    const LIST_FUNCTION = [
         {
             title: 'Dashboard',
             to: '/admin/dashboard',
@@ -61,7 +66,7 @@ function AdminLayout({ children, account = false }) {
         {
             title: 'Quản lý báo cáo',
             to: '/admin/content-report',
-            icon: <ReportIcon />,
+            icon: <ReportContentIcon />,
         },
         {
             title: 'Quản lý bài đăng',
@@ -94,7 +99,19 @@ function AdminLayout({ children, account = false }) {
             icon: <PermissionIcon />,
         },
     ];
+    useEffect(() => {
+        const fetchApi = async () => {
+            console.log(permission);
+            const result = await permission_functionServices.getByPermissionId(permission.id);
 
+            // Filter items from LIST_FUNCTION based on the comparison condition
+            const matchingItems = LIST_FUNCTION.filter((functionitem) =>
+                result.some((permission_function) => functionitem.title === permission_function.function.name),
+            );
+            setSideBarItems((prevItems) => [...prevItems, ...matchingItems]);
+        };
+        fetchApi();
+    }, []);
     const handleOpenMenu = () => {
         if (displayMenu === 'none') {
             setDisplayMenu('block');
@@ -116,7 +133,7 @@ function AdminLayout({ children, account = false }) {
                         zIndex: screenWidth <= 768 && displayMenu === 'block' && '5',
                         height: screenWidth <= 768 && displayMenu === 'block' && '100%',
                     }}
-                    SideBarItems={SideBarItems}
+                    SideBarItems={sideBarItems}
                     onclickMenuItem={handleOnclickMenuItem}
                 >
                     <div className={cx('container-title')}>

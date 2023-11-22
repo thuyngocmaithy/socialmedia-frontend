@@ -68,9 +68,7 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
         if (userLogin !== 0) {
             if (data !== '') {
                 fetchApi();
-            }
-            else{
-                
+            } else {
             }
         } else {
             setOpenConfirmLogin(true);

@@ -2,7 +2,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 100;
+    z-index: 20;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -73,7 +73,9 @@
 .link-avatar {
     height: 48px;
 }
-
+.btnLogin {
+    margin-left: 8px;
+}
 .more-btn {
     font-size: 1.8rem;
     padding: 4px 8px;

@@ -162,3 +162,12 @@ export const ChangeUserAvatar = async (id, base64String) => {
         throw err;
     }
 };
+
+export const countUserByCreatedAt = async () => {
+    try {
+        const res = await httpRequest.get(`users/countUserByCreatedAt`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
