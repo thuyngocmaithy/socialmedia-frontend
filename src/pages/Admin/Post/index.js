@@ -1,10 +1,11 @@
-import EnhancedTable from '../../../components/Table';
 import classNames from 'classnames/bind';
+import EnhancedTable from '../../../components/Table';
 import styles from './Post.module.scss';
 
 const cx = classNames.bind(styles);
 
 function Post() {
+    const handleSave = (rows) => { };
     const headCells = [
         {
             id: 'id',
@@ -50,6 +51,7 @@ function Post() {
             label: 'Duyệt',
         },
     ];
+
     function createData(
         id,
         // username_reporting,
@@ -76,18 +78,7 @@ function Post() {
 
     const rows = [
         createData(1, 1, 'Cupcake', 67, 4.3, true, false),
-        createData(2, 1, 'Donut', 51, 4.9, true, false),
-        createData(3, 1, 'Eclair', 24, 6.0, true, false),
-        createData(4, 1, 'Frozen yoghurt', 24, 4.0, true, false),
-        createData(5, 1, 'Gingerbread', 49, 3.9, true, false),
-        createData(6, 1, 'Honeycomb', 87, 6.5, true, false),
-        createData(7, 1, 'Ice cream sandwich', 37, 4.3, true, false),
-        createData(8, 1, 'Jelly Bean', 94, 0.0, true, false),
-        createData(9, 1, 'KitKat', 65, 7.0, true, false),
-        createData(10, 1, 'Lollipop', 98, 0.0, true, false),
-        createData(11, 1, 'Marshmallow', 81, 2.0, true, false),
-        createData(12, 1, 'Nougat', 9, 37.0, true, false),
-        createData(13, 1, 'Oreo', 63, 4.0, true, false),
+
     ];
     return (
         <div className={cx('wrapper')}>

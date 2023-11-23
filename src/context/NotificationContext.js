@@ -2,33 +2,41 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { getCommentByNotification } from '../services/commentServices';
 import { getFriendByNotification } from '../services/friendshipServices';
 import { getLikeByNotification } from '../services/likeServices';
-import { getAllNotifications, getNewsHub, initNotifications } from '../services/notificationService';
+import { getAllNotifications, getNewsHub } from '../services/notificationService';
 import { AccountLoginContext } from './AccountLoginContext';
 import { StompContext } from './StompContext';
-const NotificationContext = createContext([]);
+const NotificationContext = createContext({});
 
 function NotificationProvider({ children }) {
     const UserID = useContext(AccountLoginContext);
     const stompClient = useContext(StompContext);
-    const nots = useRef([]);
     const [res, setRes] = useState([]);
+    const nots = useRef([]);
+    const [pinCount, setPinCount] = useState([]);
     const notType = { pin: 'Pin', like: 'Like', comment: 'Comment', friend: 'Friend' };
-    let pinCount = parseInt(localStorage.getItem('pinCount') || 0);
 
+    const updatePinCount = (value) => {
+        setPinCount(value);
+    }
     useEffect(() => {
         const fetch1 = async () => {
-            stompClient.connect({}, () => {
-                if (pinCount === 4) {
+            if (pinCount.length === 4) {
+                try {
                     setTimeout(() => {
-                        const data = { notificationType: notType.pin }
-                        initNotifications(data, UserID);
+                        const data = JSON.stringify({ notifications: { notificationType: 'Pin' }, listPins: pinCount });
+                        stompClient.send(`/app/sendNot/${UserID}`, {}, data);
                     }, 5000);
-                    localStorage.setItem('pinCount', 0);
+
+                    stompClient.subscribe(`/room/updateNots/${UserID}`, (result) => {
+                        nots.current = [...nots.current, (JSON.parse(result.body).notifications)];
+                        console.log(result.body);
+                    });
+                } catch (error) {
+                    console.log('Error in stomp: ', error);
                 }
-                stompClient.subscribe(`/room/update-nots/${UserID}`, (notification) => {
-                    nots.current = JSON.parse(notification.body)
-                })
-            })
+                localStorage.setItem('pinCount', []);
+            }
+
         }
         // Load bảng thông báo
         const fetch2 = async () => {
@@ -54,11 +62,7 @@ function NotificationProvider({ children }) {
         fetch1().then(() => {
             fetch2();
         });
-    }, [pinCount]);
-
-    return <NotificationContext.Provider value={res ? res : []}>
-        {children}
-    </NotificationContext.Provider>
+    }, [UserID, notType.comment, notType.friend, notType.like, pinCount, stompClient])
+    return <NotificationContext.Provider value={{ updatePinCount, res }}> {children} </NotificationContext.Provider>;
 }
-
 export { NotificationContext, NotificationProvider };

@@ -55,9 +55,12 @@ function HeaderDefault() {
         // setLoading(false);
     }, [userLogin]);
 
+
     const handleMenuChange = (menuItem) => {
         console.log(menuItem);
     };
+
+
     // LOGOUT
     function logout() {
         localStorage.removeItem('userLogin');
@@ -105,6 +108,7 @@ function HeaderDefault() {
                     {userLoaded && (
                         <>
                             <Popper
+                                news={0}
                                 title={<NotificationIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
                                 body={<NotificationPopper />}
                                 widthBody="maxContent"

@@ -1,26 +1,28 @@
-import classNames from 'classnames/bind';
-import styles from './DisplayPin.module.scss';
-import Tippy from '@tippyjs/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import Tippy from '@tippyjs/react';
+import classNames from 'classnames/bind';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
-import { ShareIcon, DownloadIcon } from '../../components/Icons';
 import AccountInfo from '../../components/AccountInfo';
+import ActionAlerts from '../../components/Alert';
 import Button from '../../components/Button';
+import CommentApp from '../../components/Comment';
+import CreateBoard from '../../components/CreateBoard';
+import { DownloadIcon, ShareIcon } from '../../components/Icons';
 import Popper from '../../components/Popper';
 import SelectBoardPopper from '../../components/Popper/SelectBoardPopper';
-import CreateBoard from '../../components/CreateBoard';
-import ActionAlerts from '../../components/Alert';
-import CommentApp from '../../components/Comment';
-import * as userServices from '../../services/userServices';
+import { StompContext } from '../../context/StompContext';
 import * as pinServices from '../../services/pinServices';
 import * as userSavePinServices from '../../services/userSavePinServices';
+import * as userServices from '../../services/userServices';
+import styles from './DisplayPin.module.scss';
 const cx = classNames.bind(styles);
 
 function DisplayPin() {
     const [currentUser, setCurrentUser] = useState('');
+    const stompClient = useContext(StompContext);
     useEffect(() => {
         const fetchApi = async () => {
             const userId = 1;
@@ -91,6 +93,12 @@ function DisplayPin() {
         setBoard(currentBoard);
         // console.log(currentBoard.name);
     };
+
+    // Make Friend 
+    const handleFriendships = async () => {
+        const data = JSON.stringify({ notifications: { notificationType: 'Friend' }, friendships: { user1: 1 } });
+        stompClient.send(`/app/sendNot/${currentUser.id}`, {}, data);
+    }
 
     //save pin
     const handleInsertPin = async () => {
@@ -191,7 +199,7 @@ function DisplayPin() {
                             </div>
                             <div className={cx('container-user')}>
                                 <AccountInfo userImage={user.avatar} username={user.username} />
-                                <Button className={cx('addFriendBtn')} primary>
+                                <Button className={cx('addFriendBtn')} primary onClick={handleFriendships}>
                                     Kết bạn
                                 </Button>
                             </div>

@@ -38,7 +38,7 @@ const PopupBody = styled('div')(
     `,
 );
 
-function Popper({ idPopper, contentTitle, title, body, className, left = '0', placement = 'bottom' }) {
+function Popper({ idPopper, contentTitle, title, body, className, left = '0', placement = 'bottom', news }) {
     const { theme } = useContext(ThemeContext);
     const [anchor, setAnchor] = useState(null);
     const [open, setOpen] = useState(false);

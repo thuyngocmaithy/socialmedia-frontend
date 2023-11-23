@@ -1,13 +1,12 @@
-import styles from './SelectBoardPopper.module.scss';
 import classNames from 'classnames/bind';
-import { CreateBoardIcon } from '../../Icons';
-import Search from '../../Search';
-import { useState, useEffect, useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { ThemeContext } from '../../../context/ThemeContext';
 import * as boardServices from '../../../services/boardServices';
 import * as userSavePinServices from '../../../services/userSavePinServices';
+import { CreateBoardIcon } from '../../Icons';
 import Image from '../../Image';
-import images from '../../../assets/images';
-import { ThemeContext } from '../../../context/ThemeContext';
+import Search from '../../Search';
+import styles from './SelectBoardPopper.module.scss';
 
 const cx = classNames.bind(styles);
 
