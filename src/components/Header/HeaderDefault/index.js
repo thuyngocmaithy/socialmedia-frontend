@@ -19,7 +19,6 @@ import NotificationPopper from '../../Popper/NotificationPopper';
 import MenuSettingHeader from '../../Popup/MenuSettingHeader';
 import Search from '../../Search';
 import styles from './HeaderDefault.module.scss';
-import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
@@ -57,6 +56,7 @@ function HeaderDefault() {
     const handleMenuChange = (menuItem) => {
         console.log(menuItem);
     };
+
     // LOGOUT
     function logout() {
         localStorage.removeItem('userLogin');
@@ -103,6 +103,7 @@ function HeaderDefault() {
                     {userLoaded && (
                         <>
                             <Popper
+                                news={0}
                                 title={<NotificationIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
                                 body={<NotificationPopper />}
                                 widthBody="maxContent"

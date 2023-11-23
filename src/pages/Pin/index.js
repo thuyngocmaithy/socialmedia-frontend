@@ -1,36 +1,38 @@
-import classNames from 'classnames/bind';
-import styles from './DisplayPin.module.scss';
-import Tippy from '@tippyjs/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import Tippy from '@tippyjs/react';
+import classNames from 'classnames/bind';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
 import { ShareIcon, DownloadIcon, ReportIcon } from '../../components/Icons';
 import AccountInfo from '../../components/AccountInfo';
+import ActionAlerts from '../../components/Alert';
 import Button from '../../components/Button';
+import CommentApp from '../../components/Comment';
+import CreateBoard from '../../components/CreateBoard';
 import Popper from '../../components/Popper';
 import SelectBoardPopper from '../../components/Popper/SelectBoardPopper';
-import CreateBoard from '../../components/CreateBoard';
-import ActionAlerts from '../../components/Alert';
-import CommentApp from '../../components/Comment';
-import * as userServices from '../../services/userServices';
+import { StompContext } from '../../context/StompContext';
 import * as pinServices from '../../services/pinServices';
 import * as userSavePinServices from '../../services/userSavePinServices';
 import SelectReportOption from '../../components/SelectReportOption';
+import * as userServices from '../../services/userServices';
+import styles from './DisplayPin.module.scss';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
+import { CircularProgress } from '@mui/material';
+
 const cx = classNames.bind(styles);
 
 function DisplayPin() {
-    const [currentUser, setCurrentUser] = useState('');
-    useEffect(() => {
-        const fetchApi = async () => {
-            const userId = 1;
-            const user = await userServices.getUserById(userId);
-            setCurrentUser(user);
-        };
+    const { userId } = useContext(AccountLoginContext);
+    const [currentUser, setCurrentUser] = useState(null);
+    const stompClient = useContext(StompContext);
+    // useEffect(() => {
+    //     const fetchApi = async () => {};
 
-        fetchApi();
-    }, []);
+    //     fetchApi();
+    // }, [userId]);
 
     const location = useLocation();
     const pinID = location.pathname.split('/')[2];
@@ -39,10 +41,13 @@ function DisplayPin() {
     const [img, setIMG] = useState();
     const [valContent, setValContent] = useState('');
     const [valTitle, setValTitle] = useState('');
-    const [user, setUser] = useState('');
+    const [user, setUser] = useState(null);
     const [load, setLoad] = useState(false);
     useEffect(() => {
         const fetchApi = async () => {
+            const user = await userServices.getUserById(userId);
+            setCurrentUser(user);
+
             const pin = await pinServices.getPinById(pinID);
             console.log(pin);
             setPin(pin);
@@ -55,7 +60,7 @@ function DisplayPin() {
         };
 
         fetchApi();
-    }, []);
+    }, [userId]);
 
     //auto resize textarea
     const titleRef = React.useRef();
@@ -92,6 +97,12 @@ function DisplayPin() {
     const handleChooseBoard = (currentBoard) => {
         setBoard(currentBoard);
         // console.log(currentBoard.name);
+    };
+
+    // Make Friend
+    const handleFriendships = async () => {
+        const data = JSON.stringify({ notifications: { notificationType: 'Friend' }, friendships: { user1: 1 } });
+        stompClient.send(`/app/sendNot/${currentUser.id}`, {}, data);
     };
 
     //save pin
@@ -133,6 +144,7 @@ function DisplayPin() {
 
     return (
         <div className={cx('wrapper-createPage')}>
+            {load && <CircularProgress sx={{ display: 'flex', margin: '0 auto' }} />}
             <div className={cx('createBox')}>
                 <div className={cx('mainContent')}>
                     <div className={cx('imgWrapper')}>
@@ -210,14 +222,14 @@ function DisplayPin() {
                                 <div className={cx('inputContent')}>{valContent}</div>
                             </div>
                             <div className={cx('container-user')}>
-                                <AccountInfo userImage={user.avatar} username={user.username} />
-                                <Button className={cx('addFriendBtn')} primary>
+                                {user !== null && <AccountInfo userImage={user.avatar} username={user.username} />}
+                                <Button className={cx('addFriendBtn')} primary onClick={handleFriendships}>
                                     Kết bạn
                                 </Button>
                             </div>
                             <div className={cx('comment-input')}>
                                 <h3 className={cx('comment-title')}>Nhận xét</h3>
-                                <CommentApp pinID={pinID} currentUser={currentUser} />
+                                {currentUser !== null && <CommentApp pinID={pinID} currentUser={currentUser} />}
                             </div>
                         </div>
                     </div>

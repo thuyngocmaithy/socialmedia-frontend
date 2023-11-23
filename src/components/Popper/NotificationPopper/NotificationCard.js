@@ -3,8 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import PropTypes from 'prop-types';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import 'tippy.js/dist/tippy.css';
+import { NotificationContext } from '../../../context/NotificationContext';
 import { deleted } from '../../../services/notificationService';
 import Popper from '../../Popper';
 import Cards from './Card';
@@ -13,16 +15,15 @@ import styles from './NotificationPopper.module.scss';
 const cx = classNames.bind(styles);
 
 function NotificationCard({ time, detail, id, type, not }) {
-
+    const { updatePinCount } = useContext(NotificationContext);
     const contents = [
         { content: <Cards detail={detail.user} title="đã like bài viết của bạn" />, link: '/pins/' + detail.id },
         { content: <Cards detail={detail.user} title="đã bình luận về bài viết của bạn" />, link: '/pins/' + id },
-        { content: <Cards detail={detail.user1} title="đã gửi cho bạn lời mời kết bạn" />, link: '/friendship/' + id }
+        { content: <Cards detail={detail.user1} title="đã gửi cho bạn lời mời kết bạn" />, link: '/friendship/' + id },
     ];
 
     // Xóa thông báo
     const handleDelete = (e) => {
-        alert('xóa thành công');
         deleted(not.id);
     };
     const renderResult = (attrs) => (
@@ -52,8 +53,7 @@ function NotificationCard({ time, detail, id, type, not }) {
                 content: (
                     <div className={cx('images')}>
                         {detail.slice(0, 3).map((detail, key) => (
-                            <img src={detail.image && `data:image/jpeg;base64,${detail.image}`}
-                                key={key} alt="" />
+                            <img src={detail.image && `data:image/jpeg;base64,${detail.image}`} key={key} alt="" />
                         ))}
                     </div>
                 ),

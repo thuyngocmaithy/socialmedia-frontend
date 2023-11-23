@@ -5,28 +5,32 @@ import 'tippy.js/dist/tippy.css';
 import classNames from 'classnames/bind';
 import styles from './Pin.module.scss';
 import { ShareIcon, DownloadIcon, AccessIcon, EditIcon, SearchIcon, People } from '../Icons';
+import { NavLink } from 'react-router-dom';
+import 'tippy.js/dist/tippy.css';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
+import { NotificationContext } from '../../context/NotificationContext';
+import * as boardServices from '../../services/boardServices';
+import * as pinServices from '../../services/pinServices';
+import * as userSavePinServices from '../../services/userSavePinServices';
+import * as userServices from '../../services/userServices';
 import AccountInfo from '../AccountInfo';
 import Button from '../Button';
 import SelectBoardPopper from '../Popper/SelectBoardPopper';
 import { useState, useEffect, useRef, useContext } from 'react';
 import Popper from '../Popper';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
-import * as userSavePinServices from '../../services/userSavePinServices';
-import * as pinServices from '../../services/pinServices';
-import * as boardServices from '../../services/boardServices';
-import * as userServices from '../../services/userServices';
 import SharePopper from '../Popper/SharePopper';
-import { NavLink } from 'react-router-dom';
-import { AccountLoginContext } from '../../context/AccountLoginContext';
 import DialogConfirmLogin from '../DialogConfirmLogin';
 
 const cx = classNames.bind(styles);
 
 function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated = false, handleEdit, onSaveResult }) {
-    const userLogin = useContext(AccountLoginContext);
+    const { userId } = useContext(AccountLoginContext);
+    const [userLogin, setUserLogin] = useState(null);
     const [activeOptionTop, setActiveOptionTop] = useState(false);
     const [activeOptionBottom, setActiveOptionBottom] = useState(false);
     const [openConfirmLogin, setOpenConfirmLogin] = useState(false);
+    const { updatePinCount } = useContext(NotificationContext);
 
     const handleOpenShare = () => {
         setActiveOptionBottom(true);
@@ -49,15 +53,25 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
     };
     const handleSave = () => {
         const fetchApi = async () => {
-            const userId = 1;
             const pinId = id;
             const boardId = data.id;
-            console.log(data);
+            {
+                // Tăng biến đếm để tạo thông báo bài pin liên quan
+                const pinCount = localStorage.getItem('pinCount');
+                const existingArray = pinCount ? JSON.parse(pinCount) : [];
+                const pinCountList = [...existingArray, { id: id }];
 
+                localStorage.setItem('pinCount', JSON.stringify(pinCountList));
+                console.log(pinCountList.length);
+                if (pinCountList.length === 4) {
+                    updatePinCount(pinCountList);
+                    localStorage.setItem('pinCount', []);
+                }
+                console.log(pinCount);
+            }
             const user = await userServices.getUserById(userId);
             const pin = await pinServices.getPinById(pinId);
             const board = await boardServices.getBoardById(boardId);
-
             const userSavePin = { user, pin, board };
             const result = await userSavePinServices.save(userSavePin);
             if (result) {
@@ -65,7 +79,7 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
                 setData('Chọn bảng');
             }
         };
-        if (userLogin !== 0) {
+        if (userId !== 0) {
             if (data !== '') {
                 fetchApi();
             } else {
