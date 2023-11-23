@@ -15,7 +15,6 @@ function MessageBox({ handleChange, chatWith }) {
     let stompClient = useContext(StompContext);
     let { userId } = useContext(AccountLoginContext);
     let { newMessage } = useContext(MessageContext);
-    let message = useRef({});
     const messagesEndRef = useRef(null);
     const scrollToBottom = () => {
         messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -36,6 +35,7 @@ function MessageBox({ handleChange, chatWith }) {
             }
         };
         fetchLastestMessageID();
+
         let stompObject = null;
         const loginToChat = () => {
             stompObject = stompClient.subscribe(
@@ -46,6 +46,7 @@ function MessageBox({ handleChange, chatWith }) {
             );
         };
         loginToChat();
+
         return () => {
             stompClient.publish({
                 destination: `/app/unsubscribe`, 
@@ -79,13 +80,6 @@ function MessageBox({ handleChange, chatWith }) {
     // Add new message
     const [currentMessage, setCurrentMessage] = useState('');
     const sendMessage = () => {
-        chatWith.messages.forEach((element) => {
-            if (element.user.id === userId) {
-                message.current = { ...element };
-            }
-        });
-        message.current.content = currentMessage;
-        message.current.id = lastestMessageId;
         stompClient.publish({
             destination: `/app/chat/conversation_id/${chatWith.conversation_id}`,
             body: JSON.stringify({
@@ -117,7 +111,8 @@ function MessageBox({ handleChange, chatWith }) {
 
             <div className={cx('wrapper-message-list')}>
                 <div className={cx('message-list')}>
-                    {   chatWith.messages.length !== 0 ?
+                    {   
+                        chatWith.messages.length !== 0 ?
                             chatWith.messages.map((message) => {
                                 return <MessageCard key={message.id} message={message}></MessageCard>;
                             })
@@ -146,11 +141,12 @@ function MessageBox({ handleChange, chatWith }) {
                     }}
                 >
                     <button className={cx('send_heart-btn')}>
-                        {isEntering ? (
-                            <FontAwesomeIcon style={{ color: 'red' }} icon={faCircleArrowRight} />
-                        ) : (
-                            <FontAwesomeIcon icon={faHeart} />
-                        )}
+                        {
+                            isEntering ? 
+                                <FontAwesomeIcon style={{ color: 'red' }} icon={faCircleArrowRight} />
+                            : 
+                                <FontAwesomeIcon icon={faHeart} />
+                        }
                     </button>
                 </div>
             </div>

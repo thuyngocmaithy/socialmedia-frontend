@@ -3,6 +3,7 @@ import { ConversationContext } from './ConversationContext';
 import { StompContext } from './StompContext';
 import * as participantsService from '../services/participantServices';
 import { AccountLoginContext } from './AccountLoginContext';
+import * as messageServices from '../services/messageServices';
 const MessageContext = createContext({});
 
 function MessageProvider({ children }) {
@@ -69,12 +70,17 @@ function MessageProvider({ children }) {
         setNewMessage(message);
     }
 
-    // const setSeenAllMessage = () => {
-    //     conversations.current.forEach((item) => {
-    //     });
-    // }
+    const setAllSeen = (conversation_id) => {
+        conversations.current.forEach((item) => {
+            if(item.conversation.id === conversation_id) {
+                item.messages.forEach(async (message) => {
+                    const res = await messageServices.update(message);
+                })
+            }
+        });
+    }
 
-    return <MessageContext.Provider value={{messageCount: messageCount, setMessageCount: setMessageCount, newMessage: newMessage}}>{children}</MessageContext.Provider>;
+    return <MessageContext.Provider value={{messageCount: messageCount, setAllSeen: setAllSeen, setMessageCount: setMessageCount, newMessage: newMessage}}>{children}</MessageContext.Provider>;
 }
 
 export { MessageProvider, MessageContext };

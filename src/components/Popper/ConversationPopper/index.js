@@ -1,58 +1,52 @@
-import { useState, createContext, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import ConversationMenu from './ConversationMenu';
 import MessageBox from './MessageBox';
 import classNames from 'classnames/bind';
 import styles from './ConversationPopper.module.scss';
 import { ConversationContext } from '../../../context/ConversationContext';
 import { ThemeContext } from '../../../context/ThemeContext';
-const cx = classNames.bind(styles);
-export const UserIDContext = createContext('');
+import { MessageContext } from '../../../context/MessageContext';
 
+const cx = classNames.bind(styles);
 function ConversationPopper() {
     const { theme } = useContext(ThemeContext);
-    const chattingWithList = useContext(ConversationContext);
+    const conversationList = useContext(ConversationContext);
+    const { setAllSeen } = useContext(MessageContext);
     const [messageIsShown, setMessageIsShown] = useState(false);
     const [currentInfor, setCurrentInfor] = useState({});
-    // useEffect(() => console.log(chattingWithList))
-    const changeConversation = (chatWith = '') => {
+
+    const changeConversation = (chatWith = '', conversation_id ) => {
         if (messageIsShown) {
             setMessageIsShown(false);
             setCurrentInfor({});
         } else {
-            chattingWithList.current.forEach((cons) => {
-                // console.log('cons:' + Object.keys(cons));
-                // console.log('cons.messages:' + cons.messages);
-                if (cons.user.username === chatWith) {
+            conversationList.current.forEach((conv) => {
+                if (conv.user.username === chatWith) {
                     setCurrentInfor({
-                        conversation_id: cons.conversation.id,
-                        name: cons.user.fullname,
-                        avatar: cons.user.avatar,
-                        messages: cons.messages,
+                        conversation_id: conv.conversation.id,
+                        name: conv.user.fullname,
+                        avatar: conv.user.avatar,
+                        messages: conv.messages,
                     });
+                }
+                if(conv.conversation.id === conversation_id) {
+                    conv.messages.forEach((message) => {
+                        message.seen = true;
+                        setAllSeen(conversation_id);
+                    })
                 }
             });
             setMessageIsShown(true);
         }
     };
 
-    // Set last message again
-    const handleGetNewMessage = (conversation_id, messages) => {
-        chattingWithList.current.forEach((item) => {
-            if (item.conversation.id === conversation_id) {
-                item.lastMessage = messages.at(-1).content;
-                item.messages = messages;
-                // console.log(item);
-            }
-        });
-    };
     return (
         <div className={cx('wrapper-conversation-popper', theme === 'dark' ? 'dark' : '')}>
             {!messageIsShown ? (
-                <ConversationMenu handleChange={changeConversation} chattingWithList={chattingWithList.current} />
+                <ConversationMenu handleChange={changeConversation} conversationList={conversationList.current} />
             ) : (
                 <MessageBox
                     handleChange={changeConversation}
-                    handleGetNewMessage={handleGetNewMessage}
                     chatWith={currentInfor}
                 />
             )}

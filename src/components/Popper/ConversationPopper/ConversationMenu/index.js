@@ -3,11 +3,11 @@ import ConversationList from './ConversationList';
 import styles from './ConversationMenu.module.scss';
 import classNames from 'classnames/bind';
 import { CreateMessageIcon } from '../../../Icons';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { ThemeContext } from '../../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
-function ConversationMenu({ handleChange, chattingWithList }) {
+function ConversationMenu({ handleChange, conversationList }) {
     const { theme } = useContext(ThemeContext);
     return (
         <div className={cx('wrapper-conservation-menu')}>
@@ -25,7 +25,7 @@ function ConversationMenu({ handleChange, chattingWithList }) {
                     </button>
                 </div>
             </div>
-            <ConversationList handleChange={handleChange} conversationList={chattingWithList}></ConversationList>
+            <ConversationList handleChange={handleChange} conversationList={conversationList}></ConversationList>
         </div>
     );
 }

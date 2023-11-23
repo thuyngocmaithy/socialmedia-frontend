@@ -8,21 +8,22 @@ import { useContext, useState } from 'react';
 import { ThemeContext } from '../../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
-function ConversationCard({ handleChange, avatar, senderName, lastMessage, isSeen }) {
+function ConversationCard({ handleChange, avatar, senderName, lastMessage, isSeen , conversation_id}) {
     const { theme } = useContext(ThemeContext);
     const [deleteBtnIsShown, setDeleteBtnIsShown] = useState(false);
-    const [redMarkShown, setRedMarkShown] = useState(true);
+    const [redMarkShown, setRedMarkShown] = useState(!isSeen);
     const showButton = (isShown) => {
         setDeleteBtnIsShown(isShown);
-        setRedMarkShown(!isShown);
+        if(isSeen === false) {
+            setRedMarkShown(!isShown);
+        }
     }
-
     return (
         <div
             className={cx('wrapper-conversation-card', theme === 'dark' ? 'dark' : '')}
             onMouseEnter={() => showButton(true)}
             onMouseLeave={() => showButton(false)}
-            onClick={() => handleChange(senderName)}
+            onClick={() => handleChange(senderName, conversation_id)}
         >
             <Image src={avatar && `data:image/jpeg;base64,${avatar}`} className={cx('conversation-avatar')}></Image>
             <div className={cx('wrapper-conversation')}>
