@@ -15,7 +15,6 @@ import { useContext, useEffect, useState } from 'react';
 import { ThemeContext } from '../../../context/ThemeContext';
 import { AccountLoginContext } from '../../../context/AccountLoginContext';
 import { getUserById } from '../../../services/userServices';
-import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
@@ -96,7 +95,7 @@ function HeaderAdmin({ className, account = false, handleOpenMenu }) {
                                 left="-48px"
                                 widthBody="maxContent"
                             />
-                            <Link className={cx('link-avatar')} to={`/${user.username}`}>
+                            <Link className={cx('link-avatar')} to={`/admin/${user.username}/edit-profile`}>
                                 <Image
                                     src={user.avatar && `data:image/jpeg;base64,${user.avatar}`}
                                     className={cx('action', 'user-avatar', theme === 'dark' ? 'dark' : '')}
