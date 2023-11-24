@@ -36,7 +36,6 @@ function NotificationPopper() {
                         type={notification.not.notificationType}
                         time={getTimeCreated(notification.not.notificationAt)}
                         detail={notification.related}
-                        not={notification.not}
                     />
                 );
             })}

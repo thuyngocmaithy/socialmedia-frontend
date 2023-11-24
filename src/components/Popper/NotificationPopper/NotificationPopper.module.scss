@@ -3,6 +3,7 @@
     height: 475px;
     width: 325px;
 }
+
 .wrapper-card {
     padding: 15px 7px;
     border-radius: 10px;
@@ -28,11 +29,14 @@
     display: flex;
     justify-content: space-between;
 }
+
 .time {
     color: #706f6f;
     margin-left: 5px;
-    white-space: nowrap; /* Không ngắt dòng ngay tại đây */
-    overflow: hidden; /* Ẩn nội dung vượt ra khỏi khung container */
+    white-space: nowrap;
+    /* Không ngắt dòng ngay tại đây */
+    overflow: hidden;
+    /* Ẩn nội dung vượt ra khỏi khung container */
 }
 
 .action {
@@ -46,6 +50,21 @@
         background-color: black;
         color: white;
         cursor: pointer;
+    }
+}
+
+.card {
+    display: flex;
+    align-items: center;
+    .avatar {
+        height: 52px;
+        width: 30%;
+        max-width: 48px;
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
     }
 }
 
@@ -64,6 +83,7 @@
         border-bottom-right-radius: 10px;
     }
 }
+
 // TIPPY
 //Menu wrapper
 // Menu-body
@@ -71,6 +91,7 @@
     min-height: 29px;
     padding-top: 0;
 }
+
 .menu-body {
     overflow-y: auto;
     overflow-x: hidden;

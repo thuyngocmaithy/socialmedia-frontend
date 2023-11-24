@@ -9,19 +9,6 @@ export const getAllNotifications = async (userId) => {
     }
 };
 
-export const initNotifications = async (data, userId) => {
-    try {
-        const res = await httpRequest.post(`notifications/init/${userId}`, data, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        return res;
-    } catch (error) {
-        console.log(error);
-    }
-};
-
 export const getNewsHub = async (notificationId) => {
     try {
         const res = await httpRequest.get(`/news_hub/${notificationId}`);
@@ -31,9 +18,10 @@ export const getNewsHub = async (notificationId) => {
     }
 };
 
-export const deleted = async (userId) => {
+export const notificationDeleted = async (userId) => {
     try {
-        const res = await httpRequest.post(`notifications/delete/${userId}`);
+        const res = await httpRequest.post(`notifications/deleted/${userId}`);
+        console.log('Delete notification');
     } catch (error) {
         console.log(error);
     }

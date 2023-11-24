@@ -33,6 +33,7 @@ function Login() {
         const fetchApi = async () => {
             const email = e.target.elements.email.value !== '' ? e.target.elements.email.value : null;
             const password = e.target.elements.password.value !== '' ? e.target.elements.password.value : null;
+            console.log({ email, password });
             const result = await userServices.login(email, password);
             if (result !== undefined) {
                 // Sử dụng hàm đặt giá trị vào localStorage với thời gian hết hạn
@@ -52,7 +53,6 @@ function Login() {
             <div className={cx('container-form', theme === 'dark' ? 'dark' : '')}>
                 <h1 className={cx('title')}> Login account </h1>
                 <form onSubmit={handleSubmit}>
-                    {' '}
                     {/* <form> */}{' '}
                     <div className={cx('infomation')}>
                         <LabelTextBox placeholder={'Email'} name={'email'} label={'Email'} selectedSize={'small'} />{' '}

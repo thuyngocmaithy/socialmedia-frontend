@@ -1,17 +1,14 @@
-import classNames from 'classnames/bind';
-import styles from './ListFriend.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CircularProgress } from '@mui/material';
+import Box from '@mui/material/Box';
+import classNames from 'classnames/bind';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import * as friendshipServices from '../../../services/friendshipServices';
 import AccountInfo from '../../AccountInfo';
 import Button from '../../Button';
-import * as friendshipServices from '../../../services/friendshipServices';
-import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import { CircularProgress } from '@mui/material';
+import styles from './ListFriend.module.scss';
 
 const cx = classNames.bind(styles);
 function CustomTabPanel(props) {
@@ -79,7 +76,9 @@ function ListFriend({ idUser, onClose }) {
         const result = await friendshipServices.update(id, friendship);
         if (result) {
             setUpdateSuccess(true);
+
         }
+
     };
 
     const handleCancelFriend = async (id) => {

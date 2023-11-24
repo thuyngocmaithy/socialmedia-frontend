@@ -1,17 +1,17 @@
-import classNames from 'classnames/bind';
-import styles from './FriendRequest.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CircularProgress } from '@mui/material';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import classNames from 'classnames/bind';
+import PropTypes from 'prop-types';
+import { useContext, useEffect, useState } from 'react';
+import { StompContext } from '../../../context/StompContext';
+import * as friendshipServices from '../../../services/friendshipServices';
 import AccountInfo from '../../AccountInfo';
 import Button from '../../Button';
-import * as friendshipServices from '../../../services/friendshipServices';
-import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import { CircularProgress } from '@mui/material';
+import styles from './FriendRequest.module.scss';
 
 const cx = classNames.bind(styles);
 function CustomTabPanel(props) {
@@ -43,6 +43,7 @@ function a11yProps(index) {
     };
 }
 function FriendRequest({ idUser, onClose }) {
+    const stompClient = useContext(StompContext);
     const [listRequest, setListRequest] = useState([]);
     const [listSent, setListSent] = useState([]);
     const [updateSuccess, setUpdateSuccess] = useState(false);
@@ -75,11 +76,18 @@ function FriendRequest({ idUser, onClose }) {
 
         const status = 'ACCEPTED';
 
-        const friendship = { id, user1, user2, status, createdAt };
-        const result = await friendshipServices.update(id, friendship);
-        if (result) {
-            setUpdateSuccess(true);
-        }
+        // const friendship = { id, user1, user2, status, createdAt };
+        // const result = await friendshipServices.update(id, friendship);
+        // if (result) {
+
+        // }
+        const data = JSON.stringify({
+            notifications: { notificationType: 'Friend' },
+            friendships: { status, user1: { id: user2.id }, user2: { id: user1.id } },
+        });
+        console.log('data.friendships:' + data);
+        stompClient.send(`/app/sendNot/${user1.id}`, {}, data);
+        setUpdateSuccess(true);
     };
 
     const handleCancelFriend = async (id) => {

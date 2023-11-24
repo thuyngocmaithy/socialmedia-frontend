@@ -1,20 +1,29 @@
-import classNames from 'classnames/bind';
-import styles from '../Comment.module.scss';
-import AccountInfo from '../../../components/AccountInfo';
-import { useEffect } from 'react';
-import Tippy from '@tippyjs/react';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Tippy from '@tippyjs/react';
+import classNames from 'classnames/bind';
+import { useContext, useState } from 'react';
+import AccountInfo from '../../../components/AccountInfo';
+import { AccountLoginContext } from '../../../context/AccountLoginContext';
+import { deleted } from '../../../services/commentServices';
+import { notificationDeleted } from '../../../services/notificationService';
+import styles from '../Comment.module.scss';
 
 const cx = classNames.bind(styles);
 function CommentCard({ comment }) {
-    useEffect(() => {
-        // console.log(comment.user.avatar);
-    }, []);
+    const [appear, setAppear] = useState(true);
+    const { userId } = useContext(AccountLoginContext);
+    const deleteComment = async (event) => {
+        setAppear(false);
 
-    const deleteComment = () => {};
+        await deleted(comment.id);
 
-    return (
+        // Xóa luôn thông báo
+        notificationDeleted(comment.notification.id)
+
+    };
+
+    return (appear &&
         <div className={cx('comment-wrapper')}>
             <div className={cx('comment-info')}>
                 <div className={cx('user-infor')}>
@@ -27,14 +36,18 @@ function CommentCard({ comment }) {
             <div className={cx('comment-option')}>
                 <Tippy delay={[0, 100]} content="Xóa bình luận" placement="bottom">
                     <div className={cx('delete-comment')}>
-                        <button className={cx('delete-button')} onClick={() => deleteComment()}>
+                        <button className={cx('delete-button')} onClick={(comment.user.id === userId) ? deleteComment : () => {
+                            alert('You can just report this comment')
+                        }}>
                             <FontAwesomeIcon icon={faTrash} />
                         </button>
                     </div>
                 </Tippy>
-            </div>
-        </div>
-    );
+            </div >
+        </div >
+    ) || ((comment.user.id !== userId) && <div className={cx('comment-body')}>
+        <p>{'Bình luận đã bị thu hồi'}</p>
+    </div>);
 }
 
 export default CommentCard;

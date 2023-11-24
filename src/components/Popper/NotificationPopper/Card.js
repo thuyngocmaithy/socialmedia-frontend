@@ -8,7 +8,7 @@ function Card({ detail, title }) {
     return (
         <div className={cx('card')}>
             <div className={cx('avatar')}>
-                <img src={detail.avatar} alt="" />
+                <img src={detail.avatar && `data:image/jpeg;base64,${detail.avatar}`} alt="" />
             </div>
             <span style={{ margin: '0px 8px' }}>
                 <b>{detail.fullname}</b> {title}

@@ -3,28 +3,29 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import PropTypes from 'prop-types';
-import { useContext } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import 'tippy.js/dist/tippy.css';
-import { NotificationContext } from '../../../context/NotificationContext';
-import { deleted } from '../../../services/notificationService';
+import { notificationDeleted } from '../../../services/notificationService';
 import Popper from '../../Popper';
 import Cards from './Card';
 import styles from './NotificationPopper.module.scss';
 
 const cx = classNames.bind(styles);
 
-function NotificationCard({ time, detail, id, type, not }) {
-    const { updatePinCount } = useContext(NotificationContext);
+function NotificationCard({ time, detail, id, type }) {
+    const [appear, setAppear] = useState(true);
+
     const contents = [
-        { content: <Cards detail={detail.user} title="đã like bài viết của bạn" />, link: '/pins/' + detail.id },
-        { content: <Cards detail={detail.user} title="đã bình luận về bài viết của bạn" />, link: '/pins/' + id },
-        { content: <Cards detail={detail.user1} title="đã gửi cho bạn lời mời kết bạn" />, link: '/friendship/' + id },
+        { content: <Cards detail={detail.user} title="đã like bài viết của bạn" />, link: '/pin/' + detail.pin.id },
+        { content: <Cards detail={detail.user} title="đã bình luận về bài viết của bạn" />, link: '/pin/' + detail.pin.id },
+        { content: <Cards detail={detail.user1} title={detail.status === 'ACCEPTED' ? " đã chấp nhận lời mời kết bạn" : "đã gửi cho bạn lời mời kết bạn"} />, link: '/friendship/' + id },
     ];
 
     // Xóa thông báo
     const handleDelete = (e) => {
-        deleted(not.id);
+        setAppear(false);
+        notificationDeleted(id);
     };
     const renderResult = (attrs) => (
         <div className={cx('menu-list')} tabIndex="-1" {...attrs}>
@@ -62,7 +63,7 @@ function NotificationCard({ time, detail, id, type, not }) {
             };
     }
     return (
-        <div className={cx('wrapper-card')}>
+        (appear && <div className={cx('wrapper-card')}>
             <Link to={type.link}>
                 <div className={cx('info')}>
                     <div>
@@ -84,6 +85,7 @@ function NotificationCard({ time, detail, id, type, not }) {
                 <div className={cx('content')}>{type.content}</div>
             </Link>
         </div>
+        )
     );
 }
 

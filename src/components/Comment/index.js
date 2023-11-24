@@ -1,14 +1,14 @@
-import classNames from 'classnames/bind';
-import styles from './Comment.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Stomp } from '@stomp/stompjs';
+import classNames from 'classnames/bind';
+import { useEffect, useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
 import AccountInfo from '../../components/AccountInfo';
-import { useEffect, useState, useRef } from 'react';
 import Button from '../../components/Button';
 import * as commentServices from '../../services/commentServices';
 import * as pinServices from '../../services/pinServices';
+import styles from './Comment.module.scss';
 import CommentCard from './CommentCard';
 
 const cx = classNames.bind(styles);
@@ -25,23 +25,24 @@ function CommentApp({ pinID, currentUser }) {
         let stompObject = null;
         const fetchData = async () => {
             setPin(await pinServices.getPinById(pinID));
+            console.log(pin);
             comments.current = await commentServices.getByPinId(pinID);
             setLoad(true);
-            console.log(comments.current);
         };
         const createStompConnect = () => {
             const socket = new SockJS('http://localhost:8080/ws');
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
                 console.log('Connected: ' + frame);
-                stompObject = stompClient.subscribe(`/topic/comment/pin_id/${pinID}`, function (comment) {
+                stompObject = stompClient.subscribe(`/room/comment/pin_id/${pinID}`, function (comment) {
                     handleCommentSubmit(JSON.parse(comment.body));
                     console.log(JSON.parse(comment.body));
                 });
             });
         };
-        createStompConnect();
-        fetchData();
+        fetchData().then(() => {
+            createStompConnect();
+        });
         return () => {
             stompClient.unsubscribe(stompObject.id);
         };
@@ -54,15 +55,17 @@ function CommentApp({ pinID, currentUser }) {
     };
 
     const sendComment = () => {
+        stompClient.send({},)
         console.log(comments.current);
         stompClient.publish({
-            destination: `/app/addComment/pin_id/${pinID}`,
-
+            destination: `/app/sendNot/${pin.user.id}`,
             body: JSON.stringify({
-                commentId: comments.current.at(-1).id + 1,
-                userId: currentUser.id,
-                pinId: pin.id,
-                content: newComment,
+                notifications: { notificationType: 'Comment' },
+                comments: {
+                    user: { id: currentUser.id },
+                    pin: { id: pin.id },
+                    content: newComment,
+                }
             }),
         });
     };
@@ -88,7 +91,7 @@ function CommentApp({ pinID, currentUser }) {
             <div className={cx('comment-panel')}>
                 <div className={cx('wrapper')}>
                     {comments.current.map((comment, index) => (
-                        <CommentCard key={index} comment={comment}></CommentCard>
+                        <CommentCard key={index} comment={comment} ></CommentCard>
                     ))}
                 </div>
             </div>

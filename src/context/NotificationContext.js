@@ -22,7 +22,7 @@ function NotificationProvider({ children }) {
         stompClient.connect({}, () => {
             stompClient.subscribe(`/room/updateNots/${userId}`, (result) => {
                 nots.current = [...nots.current, JSON.parse(result.body).notifications];
-                console.log(result.body);
+                fetch2();
             });
         });
         const fetch1 = async () => {
@@ -59,12 +59,11 @@ function NotificationProvider({ children }) {
                 setRes(result);
             });
         };
-        if (userId !== 0) {
-            fetch1().then(() => {
-                fetch2();
-            });
-        }
-    }, [userId, notType.comment, notType.friend, notType.like, pinCount, stompClient]);
+        (userId && fetch2().then(() => {
+            fetch1();
+        }));
+    }, [notType.comment, notType.friend, notType.like, pinCount, stompClient]);
     return <NotificationContext.Provider value={{ updatePinCount, res }}> {children} </NotificationContext.Provider>;
 }
 export { NotificationContext, NotificationProvider };
+
