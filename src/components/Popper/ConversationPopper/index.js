@@ -6,6 +6,7 @@ import styles from './ConversationPopper.module.scss';
 import { ConversationContext } from '../../../context/ConversationContext';
 import { ThemeContext } from '../../../context/ThemeContext';
 import { MessageContext } from '../../../context/MessageContext';
+import SearchMenu from './SearchMenu';
 
 const cx = classNames.bind(styles);
 function ConversationPopper() {
@@ -13,37 +14,45 @@ function ConversationPopper() {
     const conversationList = useContext(ConversationContext);
     const { setAllSeen } = useContext(MessageContext);
     const [messageIsShown, setMessageIsShown] = useState(false);
+    const [ isSearching, setIsSearching ] = useState(false);
     const [currentInfor, setCurrentInfor] = useState({});
 
-    const changeConversation = (chatWith = '', conversation_id ) => {
+    const changeConversation = (chatWith = '', isSearching = false, conversation_id = 0) => {
         if (messageIsShown) {
             setMessageIsShown(false);
+            setIsSearching(false);
             setCurrentInfor({});
         } else {
-            conversationList.current.forEach((conv) => {
-                if (conv.user.username === chatWith) {
-                    setCurrentInfor({
-                        conversation_id: conv.conversation.id,
-                        name: conv.user.fullname,
-                        avatar: conv.user.avatar,
-                        messages: conv.messages,
-                    });
-                }
-                if(conv.conversation.id === conversation_id) {
-                    conv.messages.forEach((message) => {
-                        message.seen = true;
-                        setAllSeen(conversation_id);
-                    })
-                }
-            });
-            setMessageIsShown(true);
+            setIsSearching(isSearching);
+            if(chatWith !== '') {
+                conversationList.current.forEach((conv) => {
+                    if (conv.user.username === chatWith) {
+                        setCurrentInfor({
+                            conversation_id: conv.conversation.id,
+                            name: conv.user.fullname,
+                            avatar: conv.user.avatar,
+                            messages: conv.messages,
+                        });
+                    }
+                    if(conv.conversation.id === conversation_id) {
+                        conv.messages.forEach((message) => {
+                            message.seen = true;
+                            setAllSeen(conversation_id);
+                        })
+                    }
+                });
+                setMessageIsShown(true);
+            }
         }
     };
 
     return (
         <div className={cx('wrapper-conversation-popper', theme === 'dark' ? 'dark' : '')}>
             {!messageIsShown ? (
-                <ConversationMenu handleChange={changeConversation} conversationList={conversationList.current} />
+                isSearching ?
+                    <SearchMenu handleChange={changeConversation}></SearchMenu>
+                :
+                    <ConversationMenu handleChange={changeConversation} conversationList={conversationList.current} />
             ) : (
                 <MessageBox
                     handleChange={changeConversation}

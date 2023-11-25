@@ -140,7 +140,7 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
                                     idPopper={`share${id}`}
                                     contentTitle={<ShareIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />}
                                     className={cx('share-menu')}
-                                    body={<SharePopper />}
+                                    body={<SharePopper pin_id={id}/>}
                                     widthBody="maxContent"
                                 />
                             </button>

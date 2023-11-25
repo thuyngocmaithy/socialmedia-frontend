@@ -1,8 +1,8 @@
 import styles from './MessageCard.module.scss';
 import className from 'classnames/bind';
-import ReceiverMessage from './ReceiverMessage';
-import SenderMessage from './SenderMessage';
+import TextMessage from './TextMessage';
 import HeartMessage from './HeartMessage';
+import PinMessage from './PinMessage';
 import { useContext } from 'react';
 import { AccountLoginContext } from '../../../../../context/AccountLoginContext';
 
@@ -10,21 +10,20 @@ const cx = className.bind(styles);
 
 function MessageCard({ message }) {
     const { userId } = useContext(AccountLoginContext);
-    const isSender = message.user.id === userId ? false : true;
-    const isHeartMessage = message.content === '' ? true : false;
+    const isPinMessage = message.pin !== null ? true : false;
+    const isTextMessage = message.content !== '' ? true : false;
+    const messageOwner = message.user.id === userId ? 'my-message' : 'friend-message';
     return (
         <div className={cx('wrapper-message-card')}>
-            {isHeartMessage ? (
-                <HeartMessage></HeartMessage>
-            ) : isSender ? (
-                <div className={cx('container-sender')}>
-                    <SenderMessage content={message.content} message={message}></SenderMessage>
-                </div>
-            ) : (
-                <div className={cx('container-reveiver')}>
-                    <ReceiverMessage content={message.content}></ReceiverMessage>
-                </div>
-            )}
+            {
+                isTextMessage ?
+                    <TextMessage message={message} messageOwner={messageOwner}></TextMessage>
+                :
+                    isPinMessage ?
+                        <PinMessage pin={message.pin} messageOwner={messageOwner}></PinMessage>
+                    :
+                        <HeartMessage messageOwner={messageOwner}></HeartMessage>
+            }
         </div>
     );
 }

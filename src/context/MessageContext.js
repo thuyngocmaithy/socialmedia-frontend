@@ -40,9 +40,11 @@ function MessageProvider({ children }) {
                 countMessage();
             }, 1500);
         };
+
         if(userId !== 0) {
             fetchAPI();
         }
+        
     }, [userId]);
 
     const countMessage = () => {
@@ -61,12 +63,19 @@ function MessageProvider({ children }) {
         conversations.current.forEach((item) => {
             if(item.conversation.id === message.conversation.id) {
                 item.messages = [...item.messages, message];
-                item.lastMessage = message.content;
+                if(message.content !== '') {
+                    item.lastAction = 'text';
+                }
+                else {
+                    item.lastAction = item.pin !== null ? 'pin' : 'heart';
+                }
             }
         });
         if(!message.seen && message.user.id !== userId) {
-            setMessageCount(count => count+1);
+            const tempCount = messageCount + 1;
+            setMessageCount(tempCount);
         }
+        console.log(conversations.current);
         setNewMessage(message);
     }
 

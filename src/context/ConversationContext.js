@@ -14,7 +14,7 @@ function ConversationProvider({ children }) {
             conversationList.current = await participantServices.getFriendChattingWith(userId);
             conversationList.current.forEach(async (item) => {
                 item.messages = await messageServices.getMessageByConversationId(item.conversation.id);
-                item.lastMessage = item.messages.at(-1).content;
+                item.lastAction = item.messages.at(-1).content;
                 delete item.id;
             });
         };

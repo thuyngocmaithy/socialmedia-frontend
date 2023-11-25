@@ -1,4 +1,3 @@
-import Search from '../../../Search';
 import ConversationList from './ConversationList';
 import styles from './ConversationMenu.module.scss';
 import classNames from 'classnames/bind';
@@ -13,10 +12,10 @@ function ConversationMenu({ handleChange, conversationList }) {
         <div className={cx('wrapper-conservation-menu')}>
             <div className={cx('mini-menu', theme === 'dark' ? 'dark' : '')}>
                 <h2 className={cx('title')}>Inbox</h2>
-
-                <Search width="310px" />
-
-                <div className={cx('wrapper-create-conversation', theme === 'dark' ? 'dark' : '')}>
+                <div 
+                    className={cx('wrapper-create-conversation', theme === 'dark' ? 'dark' : '')}
+                    onClick={() => handleChange('', true, 0)}
+                >
                     <div className={cx('wrapper-icon')}>
                         <CreateMessageIcon className={cx('gUZ', 'NUb', 'kVc', 'U90')} />
                     </div>

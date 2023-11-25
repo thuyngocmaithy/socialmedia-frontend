@@ -3,12 +3,14 @@ import styles from './ConversationMenu.module.scss';
 import classNames from 'classnames/bind';
 import Image from '../../../Image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircle, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { useContext, useState } from 'react';
+import { faCircle, faHeart, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { useContext, useEffect, useState } from 'react';
 import { ThemeContext } from '../../../../context/ThemeContext';
+import { AccountLoginContext } from '../../../../context/AccountLoginContext';
 
 const cx = classNames.bind(styles);
-function ConversationCard({ handleChange, avatar, senderName, lastMessage, isSeen , conversation_id}) {
+function ConversationCard({ handleChange, isSeen , item}) {
+    const { userId } = useContext(AccountLoginContext);
     const { theme } = useContext(ThemeContext);
     const [deleteBtnIsShown, setDeleteBtnIsShown] = useState(false);
     const [redMarkShown, setRedMarkShown] = useState(!isSeen);
@@ -23,13 +25,32 @@ function ConversationCard({ handleChange, avatar, senderName, lastMessage, isSee
             className={cx('wrapper-conversation-card', theme === 'dark' ? 'dark' : '')}
             onMouseEnter={() => showButton(true)}
             onMouseLeave={() => showButton(false)}
-            onClick={() => handleChange(senderName, conversation_id)}
+            onClick={() => handleChange(item.user.username, item.conversation.id)}
         >
-            <Image src={avatar && `data:image/jpeg;base64,${avatar}`} className={cx('conversation-avatar')}></Image>
+            <Image src={item.user.avatar && `data:image/jpeg;base64,${item.user.avatar}`} className={cx('conversation-avatar')}></Image>
             <div className={cx('wrapper-conversation')}>
-                <h3 className={cx('sender-name', isSeen === false ? 'unSeen' : '')}>{senderName}</h3>
-                <h3 className={cx('lastMessage', isSeen === false ? 'unSeen' : '')}>{lastMessage}</h3>
+                <h3 className={cx('sender-name', isSeen === false ? 'unSeen' : '')}>{item.user.username}</h3>
+                {
+                    item.messages.at(-1).content !== '' ?
+                        <h3 className={cx('lastMessage', isSeen === false ? 'unSeen' : '')}>{item.user.id === userId ? 'Bạn: ' + item.messages.at(-1).content : item.messages.at(-1).content}</h3>
+                    : 
+                        item.messages.at(-1).pin !== null ? 
+                            <h3 className={cx('lastMessage', isSeen === false ? 'unSeen' : '')}>{"Bạn đã gửi 1 pin"}</h3>
+                        : 
+                            <h3 className={cx('lastMessage', isSeen === false ? 'unSeen' : '')}>{"Bạn: "}
+                                <FontAwesomeIcon icon={faHeart}/>
+                            </h3>
+                }
             </div>
+            {
+                item.messages.at(-1).pin !== null ? 
+                    <Image 
+                        className={cx('pin-image')}
+                        src={item.messages.at(-1).pin && `data:image/jpeg;base64,${item.messages.at(-1).pin.image}`}
+                        alt={'no image'}
+                    />
+                : ''
+            }
             <div 
                 className={cx('wrapper-button')}
             >
@@ -55,7 +76,7 @@ function ConversationCard({ handleChange, avatar, senderName, lastMessage, isSee
 ConversationCard.prototype = {
     avatar: PropTypes.string,
     senderName: PropTypes.string,
-    lastMessage: PropTypes.string,
+    lastAction: PropTypes.string,
     isSeen: PropTypes.bool
 };
 

@@ -4,13 +4,13 @@ import className from 'classnames/bind';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
 const cx = className.bind(styles);
-function HeartMessage() {
+function HeartMessage({messageOwner}) {
     return (
-        <div className={cx('wrapper-receiver-message')}>
+        <div className={cx(messageOwner)}>
             <div className={cx('message-content')}>
-                <div className={cx('message_name')}>You</div>
-                <div style={{ textAlign: 'right', minWidth: 'auto' }} className={cx('message_body')}>
-                    <FontAwesomeIcon icon={faHeart} />
+                <div className={cx('message-name')}>You</div>
+                <div style={{ textAlign: 'right', minWidth: 'auto' }} className={cx('heart-message-body')}>
+                    <FontAwesomeIcon className={cx('heart-icon')} icon={faHeart} />
                 </div>
             </div>
         </div>

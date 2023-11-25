@@ -6,7 +6,7 @@
 }
 
 .mini-menu {
-    position: absolute;
+    // position: absolute;
     z-index: 1;
     width: 100%;
     background-color: var(--message-menu-background-color);
@@ -64,7 +64,7 @@
 // MESSAGE LIST
 .wrapper-conversation-list {
     overflow-y: auto;
-    margin-top: 158px;
+    // margin-top: 110px;
     height: 100%;
     // margin-left: 13px;
     .title {
@@ -91,13 +91,19 @@
         }
     }
 
-    & > img {
+    .conversation-avatar {
         flex: 1;
         min-width: 56px;
         max-height: 56px;
         margin-right: 1rem;
         margin-left: 0.8rem;
         border-radius: 50%;
+    }
+    .pin-image {
+        height: 55px;
+        width: 35px;
+        object-fit: cover;
+        border-radius: 8px;
     }
 }
 

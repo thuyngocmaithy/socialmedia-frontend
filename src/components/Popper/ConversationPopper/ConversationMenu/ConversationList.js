@@ -21,11 +21,8 @@ function ConversationList({ handleChange, conversationList }) {
                     <div key={index}>
                         <ConversationCard
                             handleChange={handleChange}
-                            avatar={item.user.avatar}
-                            senderName={item.user.username}
-                            lastMessage={item.lastMessage}
+                            item={item}
                             isSeen={isSeen}
-                            conversation_id={item.conversation.id}
                         ></ConversationCard>
                     </div>
                 );

@@ -58,10 +58,12 @@ function MessageBox({ handleChange, chatWith }) {
 
     useEffect(() => {
         if(Object.keys(newMessage).length !== 0) { 
-            chatWith.messages = [...chatWith.messages, newMessage];
-            setCurrentMessage('');
-            setIsEntering(false);
-            setLastestMessageId((lastestMessageId) => lastestMessageId + 1);
+            if(!chatWith.messages.some(e => e.id === newMessage.id)) {
+                chatWith.messages = [...chatWith.messages, newMessage];
+                setCurrentMessage('');
+                setIsEntering(false);
+                setLastestMessageId((lastestMessageId) => lastestMessageId + 1);
+            }
         }
     }, [newMessage]);
 
@@ -87,6 +89,7 @@ function MessageBox({ handleChange, chatWith }) {
                 user_id: userId,
                 content: currentMessage,
                 conversation_id: chatWith.conversation_id,
+                pin_id: -1
             }),
         });
     };
