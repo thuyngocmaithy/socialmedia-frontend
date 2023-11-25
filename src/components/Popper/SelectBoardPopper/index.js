@@ -11,7 +11,7 @@ import { ThemeContext } from '../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
-function SelectBoardPopper({ getData }) {
+function SelectBoardPopper({ handleTurnOnCreateBoard , getData }) {
     const { theme } = useContext(ThemeContext);
     const [listBoard, setListBoard] = useState([]);
     useEffect(() => {
@@ -45,6 +45,13 @@ function SelectBoardPopper({ getData }) {
         fetchApi();
     }, []);
 
+    
+    //create Type
+    // const [createType, setCreateType] = useState(false);
+    const handleCreateBoard = () => {
+        handleTurnOnCreateBoard(true);
+    };
+
     return (
         <div className={cx('wrapper')}>
             <Search className={cx('search-conversation')} width="300px" />
@@ -68,7 +75,7 @@ function SelectBoardPopper({ getData }) {
                 })}
             </div>
 
-            <div className={cx('bottom-create', theme === 'dark' ? 'dark' : '')}>
+            <div className={cx('bottom-create', theme === 'dark' ? 'dark' : '')} onClick={() => handleCreateBoard()}>
                 <button className={cx('createBtn')}>
                     <CreateBoardIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
                 </button>

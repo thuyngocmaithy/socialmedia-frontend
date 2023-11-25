@@ -65,11 +65,9 @@ function CreateBoard({ handleTurnOnCreateBoard, handleChooseBoard }) {
                     ></input>
                 </div>
                 <div className={cx('optionBtn')}>
-                    {/* {primary &&
-                        <Button className={cx('saveBtn')} primary>
-                            Tạo
-                        </Button>
-                    } */}
+                    <Button className={cx('saveBtn')} primary onClick={() => handleTurnOnCreateBoard(false)}>
+                            Hủy
+                    </Button>
                     {red ? (
                         <Button className={cx('saveBtn')} red onClick={() => handleSaveBoard()}>
                             Tạo

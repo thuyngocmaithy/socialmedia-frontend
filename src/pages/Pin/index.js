@@ -98,7 +98,6 @@ function DisplayPin() {
     // HandleChooseBoard
     const handleChooseBoard = (currentBoard) => {
         setBoard(currentBoard);
-        // console.log(currentBoard.name);
     };
 
     //save pin
@@ -128,8 +127,12 @@ function DisplayPin() {
 
     // Turn on CreateBoard
     const [showCreateBoard, setShowCreateBoard] = React.useState(false);
+
     const handleTurnOnCreateBoard = (isShown) => {
         setShowCreateBoard(isShown);
+    };
+    const handleCloseCreate = () => {
+        setShowCreateBoard(false);
     };
 
     // Turn on select report
@@ -187,14 +190,14 @@ function DisplayPin() {
                                     <ClickAwayListener onClickAway={handleClickAway}>
                                         <button className={cx('select-board-btn')} onClick={() => handleDisplay()}>
                                             <Popper
-                                                // idPopper={id}
                                                 contentTitle={currentBoard.name}
+                                                // contentTitle={currentBoard.name}
                                                 title={<FontAwesomeIcon icon={faChevronDown} />}
                                                 className={cx('select-board')}
                                                 body={
                                                     <SelectBoardPopper
-                                                        handleTurnOnCreateBoard={handleTurnOnCreateBoard}
-                                                        handleChooseBoard={handleChooseBoard}
+                                                        getData={handleChooseBoard}
+                                                        handleTurnOnCreateBoard = {handleTurnOnCreateBoard}
                                                     />
                                                 }
                                                 widthBody="maxContent"
@@ -223,8 +226,7 @@ function DisplayPin() {
                                     Kết bạn
                                 </Button>
                             </div>
-                            {/* <div className={cx('comment-container')}>
-                            </div> */}
+                            {/* comment & like  */}
                             <div className={cx('comment-input')}>
                                 <div className={cx('like')}>
                                     <h3 className={cx('comment-title')}>Nhận xét</h3>

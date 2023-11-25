@@ -115,6 +115,10 @@ function Create() {
                             const result = await pinServices.save(pin);
                             if (result) {
                                 showAlert('save');
+                                setTimeout(() => {
+                                    showAlert('save');
+                                }, 4500);
+                                window.location.reload(); //reload để xóa dữ liệu
                             }
                         } else {
                             showAlert('errorInfo');
