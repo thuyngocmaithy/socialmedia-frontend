@@ -172,3 +172,13 @@
 .grey-button:hover {
     background: #e2e2e2;
 }
+
+@media screen and (max-width: 768px) {
+    .wrapper {
+        width: 200px;
+        padding: 10px;
+        + .wrapper {
+            padding-left: 5px;
+        }
+    }
+}

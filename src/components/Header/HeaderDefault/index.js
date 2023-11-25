@@ -127,7 +127,7 @@ function HeaderDefault() {
                     )}
                     {userLogin === 0 && (
                         <Button red to={config.routes.login}>
-                            Log in
+                            Login
                         </Button>
                     )}
 

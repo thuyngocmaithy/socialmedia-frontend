@@ -112,3 +112,29 @@
     padding: 14px 16px;
     min-width: 140px;
 }
+
+
+@media screen {
+    .red {
+        color: #ffffff;
+        background-color: var(--color-red);
+        border-color: var(--color-red);
+        font-size: smaller;
+        &:hover {
+            background: var(--color-red-hover);
+            border-color: var(--color-red-hover);
+        }
+    }
+
+    .primary {
+        color: #111111;
+        background-color: #efefef;
+        border-color: #efefef;
+        font-size: smaller;
+    
+        &:hover {
+            background: #e2e2e2;
+            border-color: #e2e2e2;
+        }
+    }
+}

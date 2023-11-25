@@ -1,7 +1,7 @@
 $default-text-color: black;
 $default-background-color: white;
 $circle-radius: 50%;
-.wrapper {
+
     .container-infoProfile {
         margin-top: 20px;
         margin-left: 80px;
@@ -50,43 +50,48 @@ $circle-radius: 50%;
                 align-items: center;
             }
         }
-    }
 
-    .GenderOption {
-        display: flex;
-        flex-direction: column;
-        padding: 10px;
-    }
-
-    .GenderOptionLabel {
-        font-size: large;
-        font-weight: bold;
-        margin-bottom: 10px;
-        /* Đặt khoảng cách dưới giữa label và select */
-    }
-
-    select {
-        padding: 10px;
-        border: 2px solid;
-        border-radius: 10px;
-        font-size: 16px;
-        width: 240px;
-        transition: border-color 0.3s ease-in-out;
-    }
-
-    @media (max-width: 768px) {
-        margin-right: 10%;
-        margin-left: 10%;
-
-        .discription {
-            width: 100%;
+        .GenderOption {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
         }
+    
+        .GenderOptionLabel {
+            font-size: large;
+            font-weight: bold;
+            margin-bottom: 10px;
+            /* Đặt khoảng cách dưới giữa label và select */
+        }
+    
+        select {
+            padding: 10px;
+            border: 2px solid;
+            border-radius: 10px;
+            font-size: 16px;
+            width: 240px;
+            transition: border-color 0.3s ease-in-out;
+        }
+    }
 
+
+
+  
+
+
+@media screen and (max-width: 768px) {
+    
         .container-infoProfile {
-            width: 100%;
+            display: block;
+            margin-left: 60px; 
+            width: auto;
 
+            .discription {
+                width: 300px ;
+            }
+    
             .setUserProfilePhoto {
-                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
             }
 
             .setUserProfilePhoto-btn {
@@ -97,5 +102,31 @@ $circle-radius: 50%;
                 }
             }
         }
-    }
+    
 }
+// @media screen and (max-width: 430px) {
+    
+//     .container-infoProfile {
+//         display: block;
+//         margin-left: 60px; 
+//         width: auto;
+        
+
+//         .discription {
+//             width: 300px ;
+//         }
+
+//         .setUserProfilePhoto {
+//             grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+//         }
+
+//         .setUserProfilePhoto-btn {
+//             .changeImageBtn {
+//                 width: 100px;
+//                 height: 40px;
+//                 font-size: 16px;
+//             }
+//         }
+//     }
+
+// }

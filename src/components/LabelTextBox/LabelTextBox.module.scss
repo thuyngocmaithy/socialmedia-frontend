@@ -53,29 +53,57 @@
 
     //dung` cho rieng le
     .small {
-        width: 250px !important;
-        height: 45px !important;
+        width: 250px ;
+        height: 45px ;
     }
 
     //dung cho binh thuong
     .medium {
-        width: 500px !important;
-        height: 50px !important;
+        height: 50px ;
+        width: 500px ;
     }
 
     .medium2 {
-        width: 550px !important;
-        height: 50px !important;
+        width: 550px ;
+        height: 50px ;
     }
 
     //dung` cho story
     .large {
-        width: 500px !important;
-        height: 100px !important;
+        width: 500px ;
+        height: 100px ;
     }
 
     .sizeTextArea {
-        width: 500px !important;
-        height: 100px !important;
+        width: 500px ;
+        height: 100px ;
+    }
+
+    @media screen and (max-width: 768px) {
+       //dung cho binh thuong
+        .medium {
+            max-width: 50%  ;
+            height: 50px ;
+        }
+    }
+
+    @media screen and (max-width: 600px) {
+        //dung cho binh thuong}
+        .medium {
+            max-width: 50% ;
+            height: 50px ;
+        }
+    }
+
+    @media screen and (max-width: 430px) {
+        //dung cho binh thuong
+        .medium {
+            max-width: 50% !important ;
+            height: 50px ;
+        }
+        .large {
+            max-width: 50% !important ;
+            height: 50px ;
+        }
     }
 }

@@ -68,3 +68,15 @@ $circle-radius: 50%;
         }
     }
 }
+@media screen and (max-width: 768px) {
+
+    .container-accountsetting {
+        margin-left: 60px;
+        width: auto;
+        
+        .discription {
+            max-width: 300px;
+        }
+
+    }
+}

@@ -12,10 +12,10 @@
     margin-right: 4px;
     padding: 2px 0;
 }
-// @media only screen and (max-width: 920px) {
-//     .card-container {
-//         display: flex;
-//         justify-content: space-around;
-//         margin-bottom: 20px;
-//     }
-// }
+@media only screen and (max-width: 920px) {
+    .card-container {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+}

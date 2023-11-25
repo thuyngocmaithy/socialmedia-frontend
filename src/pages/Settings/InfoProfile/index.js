@@ -155,68 +155,68 @@ function UserProfile({ admin = false }) {
         // userData && (
 
         <Wrapper onSave={handleSave} admin={admin}>
-            <div className={cx('wrapper')}>
-                <div className={cx('container-infoProfile')}>
-                    <h1>Chỉnh sửa hồ sơ</h1>
-                    <p className={cx('discription')}>
-                        Hãy giữ riêng tư thông tin cá nhân của bạn. Thông tin bạn thêm vào đây hiển thị cho bất kỳ ai có
-                        thể xem hồ sơ của bạn.
-                    </p>
-                    <div className={cx('setUserProfilePhoto')}>
-                        <div className={cx('UserPhoto')}>
-                            <Image src={userData.avatar && `data:image/jpeg;base64,${userData.avatar}`} />
-                        </div>
-                        <div className={cx('setUserProfilePhoto-btn')}>
-                            <Button primary className={cx('changeImageBtn')} onClick={() => setPopupVisible(true)}>
-                                Thay đổi
-                            </Button>
-                            {isPopupVisible && (
-                                <ChangeAvatar
-                                    onClose={handlePopupClose}
-                                    onSave={handlePopupSave}
-                                    onSelectImage={handleUserphoto}
-                                />
-                            )}
-                        </div>
-                    </div>
-                    <div className={cx('name-and-lastname')}>
-                        <LabelTextBox
-                            placeholder={'Họ và Tên'}
-                            label={'Họ Tên'}
-                            selectedSize={'medium'}
-                            text={userFullname}
-                            onChange={handlGetUserFullname}
-                        />
-                    </div>
-                    {admin === false && (
-                        <>
-                            <LabelTextBox
-                                placeholder={'Giới thiệu câu chuyện của bạn'}
-                                label={'Giới thiệu'}
-                                selectedSize={'large'}
-                                text={userIntroduce}
-                                onChange={handlGetUserIntroduce}
-                            />
-                            <LabelTextBox
-                                placeholder={'Thêm liên kết để hướng lưu lượng vào trang web'}
-                                label={'Trang web'}
-                                selectedSize={'medium'}
-                                text={userWebsite}
-                                onChange={handleGetUserWebsite}
-                            />
-                        </>
-                    )}
 
+            <div className={cx('container-infoProfile')}>
+                <h1>Chỉnh sửa hồ sơ</h1>
+                <p className={cx('discription')}>
+                    Hãy giữ riêng tư thông tin cá nhân của bạn. Thông tin bạn thêm vào đây hiển thị cho bất kỳ ai có
+                    thể xem hồ sơ của bạn.
+                </p>
+                <div className={cx('setUserProfilePhoto')}>
+                    <div className={cx('UserPhoto')}>
+                        <Image src={userData.avatar && `data:image/jpeg;base64,${userData.avatar}`} />
+                    </div>
+                    <div className={cx('setUserProfilePhoto-btn')}>
+                        <Button primary className={cx('changeImageBtn')} onClick={() => setPopupVisible(true)}>
+                            Thay đổi
+                        </Button>
+                        {isPopupVisible && (
+                            <ChangeAvatar
+                                onClose={handlePopupClose}
+                                onSave={handlePopupSave}
+                                onSelectImage={handleUserphoto}
+                            />
+                        )}
+                    </div>
+                </div>
+                <div className={cx('name-and-lastname')}>
                     <LabelTextBox
-                        placeholder={'Tên người dùng'}
-                        label={'Tên người dùng'}
+                        placeholder={'Họ và Tên'}
+                        label={'Họ Tên'}
                         selectedSize={'medium'}
-                        text={username}
-                        onChange={handleGetUsername}
+                        text={userFullname}
+                        onChange={handlGetUserFullname}
                     />
                 </div>
-                {alertType === 'editAvatar' && <ActionAlerts content={`Lưu ảnh thành công`} />}
+                {admin === false && (
+                    <>
+                        <LabelTextBox
+                            placeholder={'Giới thiệu câu chuyện của bạn'}
+                            label={'Giới thiệu'}
+                            selectedSize={'large'}
+                            text={userIntroduce}
+                            onChange={handlGetUserIntroduce}
+                        />
+                        <LabelTextBox
+                            placeholder={'Thêm liên kết để hướng lưu lượng vào trang web'}
+                            label={'Trang web'}
+                            selectedSize={'medium'}
+                            text={userWebsite}
+                            onChange={handleGetUserWebsite}
+                        />
+                    </>
+                )}
+
+                <LabelTextBox
+                    placeholder={'Tên người dùng'}
+                    label={'Tên người dùng'}
+                    selectedSize={'medium'}
+                    text={username}
+                    onChange={handleGetUsername}
+                />
             </div>
+            {alertType === 'editAvatar' && <ActionAlerts content={`Lưu ảnh thành công`} />}
+
         </Wrapper>
 
         // )

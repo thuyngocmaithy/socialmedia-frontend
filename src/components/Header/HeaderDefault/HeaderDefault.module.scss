@@ -93,7 +93,72 @@
     cursor: pointer;
 }
 
+
 .user-avatar {
     object-fit: cover; //ảnh giữ được tỷ lệ, tràn hình tròn của border radius
     cursor: pointer;
 }
+
+//tablet
+@media screen and (min-width :430px) and (max-width: 768px) {
+    .wrapper{
+        .inner{
+            float: left;
+            padding: 0;
+            justify-content: left;
+            flex: auto;
+            .logo-link{
+                // margin-right: 15px;
+                display: none;
+            }
+            .action-btn {
+                font-size: 2.2rem;
+                color: #161823;
+                background-color: transparent;
+                padding: 0px;
+                cursor: pointer;
+            }
+
+        }
+    }
+}
+
+//mobile
+@media screen and (max-with: 430px) {
+    .wrapper{
+        .inner{
+            float: left;
+            padding: 0;
+            justify-content: left;
+            flex: auto;
+            .logo-link{
+                // margin-right: 15px;
+                display: none;
+            }
+
+
+        }
+    }
+}
+@media only screen and (min-width:768px) and (max-with: 1240px) {
+    .wrapper{
+        .inner{
+            float: left;
+            padding: 0;
+            justify-content: left;
+            flex: auto;
+            .logo-link{
+                margin-right: 20px;
+            }
+            .action-btn {
+                font-size: 2.2rem;
+                color: #161823;
+                background-color: transparent;
+                padding: 0px;
+                cursor: pointer;
+            }
+
+        }
+    }
+}
+

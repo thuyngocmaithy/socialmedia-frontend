@@ -54,77 +54,79 @@ function Wrapper({ children, bottom = true, admin = false, onSave, account = tru
         },
     ];
 
-    const SideBarItems2 = [
-        {
-            title: 'Dashboard',
-            to: '/admin/dashboard',
-            icon: <HomeIcon />,
-        },
+    // const SideBarItems2 = [
+    //     {
+    //         title: 'Dashboard',
+    //         to: '/admin/dashboard',
+    //         icon: <HomeIcon />,
+    //     },
 
-        {
-            title: 'Quản lý loại bài đăng',
-            to: '/admin/type-post',
-            icon: <BarsIcon />,
-        },
-        {
-            title: 'Quản lý báo cáo',
-            to: '/admin/content-report',
-            icon: <ReportIcon />,
-        },
-        {
-            title: 'Quản lý bài đăng',
-            to: '/admin/post',
-            icon: <PostIcon />,
-        },
-        {
-            title: 'Quản lý bình luận',
-            to: '/admin/comment',
-            icon: <CommentIcon />,
-        },
-        {
-            title: 'Thống kê',
-            to: '/admin/statistic',
-            icon: <ChartLineIcon />,
-        },
-        {
-            title: 'Quản lý người dùng',
-            to: '/admin/user',
-            icon: <UserIcon />,
-        },
-        {
-            title: 'Quản lý chức năng',
-            to: '/admin/function',
-            icon: <AccountSettingIcon />,
-        },
-        {
-            title: 'Cài đặt quyền',
-            to: '/admin/permission',
-            icon: <PermissionIcon />,
-        },
+    //     {
+    //         title: 'Quản lý loại bài đăng',
+    //         to: '/admin/type-post',
+    //         icon: <BarsIcon />,
+    //     },
+    //     {
+    //         title: 'Quản lý báo cáo',
+    //         to: '/admin/content-report',
+    //         icon: <ReportIcon />,
+    //     },
+    //     {
+    //         title: 'Quản lý bài đăng',
+    //         to: '/admin/post',
+    //         icon: <PostIcon />,
+    //     },
+    //     {
+    //         title: 'Quản lý bình luận',
+    //         to: '/admin/comment',
+    //         icon: <CommentIcon />,
+    //     },
+    //     {
+    //         title: 'Thống kê',
+    //         to: '/admin/statistic',
+    //         icon: <ChartLineIcon />,
+    //     },
+    //     {
+    //         title: 'Quản lý người dùng',
+    //         to: '/admin/user',
+    //         icon: <UserIcon />,
+    //     },
+    //     {
+    //         title: 'Quản lý chức năng',
+    //         to: '/admin/function',
+    //         icon: <AccountSettingIcon />,
+    //     },
+    //     {
+    //         title: 'Cài đặt quyền',
+    //         to: '/admin/permission',
+    //         icon: <PermissionIcon />,
+    //     },
 
-        {
-            title: 'Chỉnh sửa hồ sơ',
-            to: `/admin/${user.username}/edit-profile`,
+    //     {
+    //         title: 'Chỉnh sửa hồ sơ',
+    //         to: `/admin/${user.username}/edit-profile`,
 
-            icon: <UserIcon />,
-        },
-        {
-            title: 'Quản lý tài khoản',
-            to: `/admin/${user.username}/account-setting`,
-            icon: <AccountSettingIcon />,
+    //         icon: <UserIcon />,
+    //     },
+    //     {
+    //         title: 'Quản lý tài khoản',
+    //         to: `/admin/${user.username}/account-setting`,
+    //         icon: <AccountSettingIcon />,
 
-        },
-        {
-            title: 'Chỉnh sửa mật khẩu',
-            to: `/admin/${user.username}/password`,
-            icon: <KeyIcon />,
-        }
-    ];
+    //     },
+    //     {
+    //         title: 'Chỉnh sửa mật khẩu',
+    //         to: `/admin/${user.username}/password`,
+    //         icon: <KeyIcon />,
+    //     }
+    // ];
     return (
         <>
             <div className={cx('wrapper')}>
-                {(admin === false && account === true) && <SideBar SideBarItems={SideBarItems1} />}
-                {(admin === true || account === false) && <SideBar SideBarItems={SideBarItems2} />}
+                {/* {(admin === false && account === true) &&
+                    <SideBar SideBarItems={SideBarItems1} />} */}
+                {(admin === true || account === true) &&
+                    <SideBar SideBarItems={SideBarItems1} />}
 
                 {children}
             </div>

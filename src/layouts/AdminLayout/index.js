@@ -107,31 +107,27 @@ function AdminLayout({ children, account = false }) {
             icon: <PermissionIcon />,
         },
 
-        {
-            title: 'Chỉnh sửa hồ sơ',
-            to: account === false ? `/admin/${user.username}/edit-profile` : `/${user.username}/edit-profile`,
+        // {
+        //     title: 'Chỉnh sửa hồ sơ',
+        //     to: account === false ? `/admin/${user.username}/edit-profile` : `/${user.username}/edit-profile`,
 
-            icon: <UserIcon />,
-        },
-        {
-            title: 'Quản lý tài khoản',
-            to: account === false ? `/admin/${user.username}/account-setting` : `/${user.username}/account-setting`,
-            icon: <AccountSettingIcon />,
+        //     icon: <UserIcon />,
+        // },
+        // {
+        //     title: 'Quản lý tài khoản',
+        //     to: account === false ? `/admin/${user.username}/account-setting` : `/${user.username}/account-setting`,
+        //     icon: <AccountSettingIcon />,
 
-        },
-        {
-            title: 'Chỉnh sửa mật khẩu',
-            to: account === false ? `/admin/${user.username}/password` : `/${user.username}/password`,
-            icon: <KeyIcon />,
-        }
+        // },
+        // {
+        //     title: 'Chỉnh sửa mật khẩu',
+        //     to: account === false ? `/admin/${user.username}/password` : `/${user.username}/password`,
+        //     icon: <KeyIcon />,
+        // }
     ];
 
     const handleOpenMenu = () => {
-        if (displayMenu === 'none') {
-            setDisplayMenu('block');
-        } else {
-            setDisplayMenu('none');
-        }
+        setDisplayMenu(prevDisplayMenu => (prevDisplayMenu === 'none' ? 'block' : 'none'));
     };
     const handleOnclickMenuItem = () => {
         setDisplayMenu('none');
@@ -164,7 +160,7 @@ function AdminLayout({ children, account = false }) {
             )}
 
             <div className={cx('container', theme === 'dark' ? 'dark' : '')}>
-                {console.log(theme)}
+                {/* {console.log(theme)} */}
                 <HeaderAdmin
                     account={account}
                     className={cx('header', theme === 'dark' ? 'dark' : '')}
