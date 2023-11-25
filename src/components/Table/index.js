@@ -393,6 +393,7 @@ export default function EnhancedTable({
                                             <TableCell
                                                 align="center"
                                                 sx={{ fontSize: '14px', color: theme === 'dark' ? '#fff' : '#000' }}
+                                                onClick={(event) => handleSelectFunction(event, row.id)}
                                             >
                                                 <FontAwesomeIcon icon={faListCheck} />
                                             </TableCell>

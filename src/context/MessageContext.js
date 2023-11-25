@@ -25,7 +25,7 @@ function MessageProvider({ children }) {
             setLoad(false);
         };
         loadRoom();
-        console.log('conversation:' + JSON.stringify(conversation));
+        // console.log('conversation:' + JSON.stringify(conversation));
         // console.log(conversation.current);
     });
     const stompOutputObject = {

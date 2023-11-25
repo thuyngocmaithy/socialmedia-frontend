@@ -42,3 +42,16 @@ export const getByPinId = async (pin_id) => {
         console.log(error);
     }
 };
+
+export const del = async (comment) => {
+    try {
+        const res = await httpRequest.post(`comments/delete`, comment, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};

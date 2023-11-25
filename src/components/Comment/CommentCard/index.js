@@ -1,18 +1,36 @@
+import React, { useEffect, useState } from 'react';
+import Tippy from '@tippyjs/react';
+import { faTrash, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
 import styles from '../Comment.module.scss';
 import AccountInfo from '../../../components/AccountInfo';
-import { useEffect } from 'react';
-import Tippy from '@tippyjs/react';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as commentServices from '../../../services/commentServices';
+import SelectReportOption from '../../SelectReportOption';
 
 const cx = classNames.bind(styles);
-function CommentCard({ comment }) {
+function CommentCard({ comment, currentUser }) {
+
+    const [del, setDelComment] = useState(false);
     useEffect(() => {
-        // console.log(comment.user.avatar);
+        if (comment.user.id === currentUser.id) {
+            setDelComment(true);
+        }
     }, []);
 
-    const deleteComment = () => {};
+    const deleteComment = (comment) => {
+        const fetchApi = async () => {
+            const rs = await commentServices.del(comment);
+        };
+        fetchApi();
+        window.location.reload();
+    };
+
+    // Turn on select report
+    const [showSelectReport, setShowSelectReport] = React.useState(false);
+    const handleTurnOnSelectReport = (isShown) => {
+        setShowSelectReport(isShown);
+    }
 
     return (
         <div className={cx('comment-wrapper')}>
@@ -25,14 +43,25 @@ function CommentCard({ comment }) {
                 </div>
             </div>
             <div className={cx('comment-option')}>
-                <Tippy delay={[0, 100]} content="Xóa bình luận" placement="bottom">
-                    <div className={cx('delete-comment')}>
-                        <button className={cx('delete-button')} onClick={() => deleteComment()}>
-                            <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                    </div>
-                </Tippy>
+                {(del) ? (
+                    <Tippy delay={[0, 100]} content="Xóa bình luận" placement="bottom">
+                        <div className={cx('action-comment')}>
+                            <button className={cx('action-button', 'delete-button')} onClick={() => deleteComment(comment)}>
+                                <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                        </div>
+                    </Tippy>
+                ) : (
+                    <Tippy delay={[0, 100]} content="Báo cáo bình luận" placement="bottom">
+                        <div className={cx('action-comment')}>
+                            <button className={cx('action-button', 'report-button')} onClick={() => handleTurnOnSelectReport(true)}>
+                                <FontAwesomeIcon icon={faTriangleExclamation} />
+                            </button>
+                        </div>
+                    </Tippy>   
+                )}
             </div>
+            {showSelectReport && <SelectReportOption handleTurnOnSelectReport={handleTurnOnSelectReport} comment={comment} user={currentUser} />}
         </div>
     );
 }

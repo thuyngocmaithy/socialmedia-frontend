@@ -36,3 +36,17 @@ export const changeApprove = async (id, userRatify, approveState) => {
         throw error;
     }
 };
+
+export const save = async (report) => {
+    try {
+        const res = await httpRequest.post(`report_comments/add`, report, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': true,
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};

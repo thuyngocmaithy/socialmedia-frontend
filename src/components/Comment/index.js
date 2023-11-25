@@ -15,19 +15,21 @@ const cx = classNames.bind(styles);
 let stompClient = null;
 
 function CommentApp({ pinID, currentUser }) {
-    // console.log(pin);
+    
     // handle comment
     let comments = useRef([]);
     const [pin, setPin] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [load, setLoad] = useState(false);
+
+
     useEffect(() => {
         let stompObject = null;
         const fetchData = async () => {
             setPin(await pinServices.getPinById(pinID));
             comments.current = await commentServices.getByPinId(pinID);
             setLoad(true);
-            console.log(comments.current);
+            // console.log(comments.current);
         };
         const createStompConnect = () => {
             const socket = new SockJS('http://localhost:8080/ws');
@@ -55,17 +57,23 @@ function CommentApp({ pinID, currentUser }) {
     };
 
     const sendComment = () => {
+        let commentId = 1;
+        if (comments.current.length > 0) {
+            commentId = comments.current.at(-1).id + 1
+        }
         console.log(comments.current);
         stompClient.publish({
             destination: `/app/addComment/pin_id/${pinID}`,
 
             body: JSON.stringify({
-                commentId: comments.current.at(-1).id + 1,
+                // commentId: comments.current.at(-1).id + 1,
+                commentId,
                 userId: currentUser.id,
                 pinId: pin.id,
                 content: newComment,
             }),
         });
+        setRed(false);
     }
 
     const handlePressEnter = (event) => {
@@ -73,23 +81,7 @@ function CommentApp({ pinID, currentUser }) {
             sendComment();
         }
     }
-    //red button
-    const [red, setRed] = useState(false);
-    const changeBtn = (e) => {
-        const current = e.target.value;
-        if (current.length >= 1) {
-            setRed(true);
-        }
-        else {
-            setRed(false);
-        }
-    }
 
-    const handlePressEnter = (event) => {
-        if (event.key === 'Enter') {
-            sendComment();
-        }
-    };
     //red button
     const [red, setRed] = useState(false);
     const changeBtn = (e) => {
@@ -106,7 +98,7 @@ function CommentApp({ pinID, currentUser }) {
             <div className={cx('comment-panel')}>
                 <div className={cx('wrapper')}>
                     {comments.current.map((comment, index) => (
-                        <CommentCard key={index} comment={comment}></CommentCard>
+                        <CommentCard key={index} comment={comment} currentUser={currentUser}></CommentCard>
                     ))}
                 </div>
             </div>

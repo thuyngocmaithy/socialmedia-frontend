@@ -26,13 +26,15 @@ const cx = classNames.bind(styles);
 function DisplayPin() {
     const [currentUser, setCurrentUser] = useState('');
     const { theme } = useContext(ThemeContext);
-    const userLogin = useContext(AccountLoginContext);
+    const { userId } = useContext(AccountLoginContext);
 
+    // console.log(userId);
 
     useEffect(() => {
         const fetchApi = async () => {
-            const user = await userServices.getUserById(userLogin);
+            const user = await userServices.getUserById(userId);
             setCurrentUser(user);
+            // console.log(currentUser);
         };
 
         fetchApi();

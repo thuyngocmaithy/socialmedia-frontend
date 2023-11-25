@@ -10,6 +10,7 @@ import axios from "axios";
 const cx = classNames.bind(styles);
 
 function LikeCard({pinID, currentUser}) {
+    // console.log(currentUser);
     const [count, setCount] = useState(0);
     const [pin, setPin] = useState([]);
     useEffect(() => {
@@ -17,7 +18,7 @@ function LikeCard({pinID, currentUser}) {
             setPin(await pinServices.getPinById(pinID));
             const result = await likeServices.getLikeByPinId(pinID);
             setCount(result.length);
-            console.log(result);
+            // console.log(result);
             
             for (let i = 0; i < result.length; i++) {
                 if (result[i].user.id === currentUser.id) {
