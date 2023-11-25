@@ -1,16 +1,20 @@
+import styles from './SelectBoardPopper.module.scss';
 import classNames from 'classnames/bind';
-import { useContext, useEffect, useState } from 'react';
-import { ThemeContext } from '../../../context/ThemeContext';
+import { CreateBoardIcon } from '../../Icons';
+import Search from '../../Search';
+import { useState, useEffect, useContext } from 'react';
 import * as boardServices from '../../../services/boardServices';
 import * as userSavePinServices from '../../../services/userSavePinServices';
-import { CreateBoardIcon } from '../../Icons';
 import Image from '../../Image';
-import Search from '../../Search';
-import styles from './SelectBoardPopper.module.scss';
+import images from '../../../assets/images';
+import { ThemeContext } from '../../../context/ThemeContext';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import LabelTextBox from '../../LabelTextBox';
+import Button from '../../Button';
 
 const cx = classNames.bind(styles);
 
-function SelectBoardPopper({ getData }) {
+function SelectBoardPopper({ handleTurnOnCreateBoard, getData }) {
     const { theme } = useContext(ThemeContext);
     const [listBoard, setListBoard] = useState([]);
     useEffect(() => {
@@ -44,6 +48,14 @@ function SelectBoardPopper({ getData }) {
         fetchApi();
     }, []);
 
+    //create Type
+    // const [createType, setCreateType] = useState(false);
+    const handleCreateBoard = () => {
+        handleTurnOnCreateBoard(true);
+    };
+
+    //tạo bảng
+    
     return (
         <div className={cx('wrapper')}>
             <Search className={cx('search-conversation')} width="300px" />
@@ -67,12 +79,13 @@ function SelectBoardPopper({ getData }) {
                 })}
             </div>
 
-            <div className={cx('bottom-create', theme === 'dark' ? 'dark' : '')}>
+            <div className={cx('bottom-create', theme === 'dark' ? 'dark' : '')} onClick={() => handleCreateBoard()}>
                 <button className={cx('createBtn')}>
                     <CreateBoardIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
                 </button>
                 <p>Tạo bảng</p>
             </div>
+
         </div>
     );
 }

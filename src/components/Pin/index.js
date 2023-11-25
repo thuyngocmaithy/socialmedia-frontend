@@ -1,3 +1,5 @@
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react';
@@ -5,22 +7,21 @@ import 'tippy.js/dist/tippy.css';
 import classNames from 'classnames/bind';
 import styles from './Pin.module.scss';
 import { ShareIcon, DownloadIcon, AccessIcon, EditIcon, SearchIcon, People } from '../Icons';
-import { NavLink } from 'react-router-dom';
-import 'tippy.js/dist/tippy.css';
-import { AccountLoginContext } from '../../context/AccountLoginContext';
-import { NotificationContext } from '../../context/NotificationContext';
-import * as boardServices from '../../services/boardServices';
-import * as pinServices from '../../services/pinServices';
-import * as userSavePinServices from '../../services/userSavePinServices';
-import * as userServices from '../../services/userServices';
 import AccountInfo from '../AccountInfo';
 import Button from '../Button';
 import SelectBoardPopper from '../Popper/SelectBoardPopper';
-import { useState, useContext } from 'react';
+import CreateBoard from '../CreateBoard';
 import Popper from '../Popper';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import * as userSavePinServices from '../../services/userSavePinServices';
+import * as pinServices from '../../services/pinServices';
+import * as boardServices from '../../services/boardServices';
+import * as userServices from '../../services/userServices';
 import SharePopper from '../Popper/SharePopper';
+import { NavLink } from 'react-router-dom';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
 import DialogConfirmLogin from '../DialogConfirmLogin';
+import { NotificationContext } from '../../context/NotificationContext';
 
 const cx = classNames.bind(styles);
 
@@ -38,7 +39,7 @@ function Pin({
     onSaveResult,
     showAlert,
 }) {
-    const { userId } = useContext(AccountLoginContext);
+    const { userId, permission } = useContext(AccountLoginContext);
     const [activeOptionTop, setActiveOptionTop] = useState(false);
     const [activeOptionBottom, setActiveOptionBottom] = useState(false);
     const [openConfirmLogin, setOpenConfirmLogin] = useState(false);
@@ -58,15 +59,15 @@ function Pin({
         setActiveOptionBottom(false);
     };
 
-    const [data, setData] = useState('');
+    const [data, setData] = useState({ name: 'Chọn bảng' });
 
-    const getData = (boardId) => {
-        setData(boardId);
+    const getData = (board) => {
+        setData(board);
     };
     const handleSave = () => {
         const fetchApi = async () => {
-            const pinId = id;
-            const boardId = data.id;
+            const user = await userServices.getUserById(userId);
+
             {
                 // Tăng biến đếm để tạo thông báo bài pin liên quan
                 const pinCount = localStorage.getItem('pinCount');
@@ -81,10 +82,11 @@ function Pin({
                 }
                 console.log(pinCount);
             }
-            const user = await userServices.getUserById(userId);
+
+            const pinId = id;
+            const boardId = data.id;
             const pin = await pinServices.getPinById(pinId);
             const board = await boardServices.getBoardById(boardId);
-
             if (pin.user.id === userId) {
                 showAlert('errorSave');
             } else {
@@ -92,15 +94,17 @@ function Pin({
                 const result = await userSavePinServices.save(userSavePin);
                 if (result) {
                     onSaveResult(true);
-                    setData('');
+                    setData({ name: 'Chọn bảng' });
                 }
             }
         };
-        if (userId !== 0) {
-            if (data !== '') {
-                fetchApi();
-            } else {
+        if (permission !== null) {
+            showAlert('errorAdmin');
+        } else if (userId !== 0) {
+            if (data.name === 'Chọn bảng') {
                 showAlert('warning');
+            } else {
+                fetchApi();
             }
         } else {
             setOpenConfirmLogin(true);
@@ -124,11 +128,32 @@ function Pin({
         document.body.removeChild(link);
     };
 
+    const navigate = useNavigate();
+    const handleDisplayPin = () => {
+        if (userId === 0) {
+            // setTimeout(() => {
+            setOpenConfirmLogin(true);
+            navigate('/login');
+
+            // }, 900000);
+        }
+    };
+
+    // Turn on CreateBoard
+    const [showCreateBoard, setShowCreateBoard] = React.useState(false);
+
+    const handleTurnOnCreateBoard = (isShown) => {
+        setShowCreateBoard(isShown);
+    };
+    const handleCloseCreate = () => {
+        setShowCreateBoard(false);
+    };
+
     return (
         <>
             <div className={cx('wrapper')} style={{ width: width }}>
                 <div className={cx('container-image')}>
-                    <NavLink className={(nav) => cx('menu-item')} to={`/pin/${id}`}>
+                    <NavLink className={(nav) => cx('menu-item')} to={`/pin/${id}`} onClick={() => handleDisplayPin()}>
                         <img className={cx('image')} src={image && `data:image/jpeg;base64,${image}`} alt="" />
                     </NavLink>
                     {pinCreated ? null : (
@@ -137,10 +162,15 @@ function Pin({
                                 <button className={cx('select-board-btn')} onClick={handleDisplay}>
                                     <Popper
                                         idPopper={`selectBoard${stt}`}
-                                        contentTitle={data.name || 'Chọn bảng'}
+                                        contentTitle={data.name}
                                         title={<FontAwesomeIcon icon={faChevronDown} />}
                                         className={cx('select-board')}
-                                        body={<SelectBoardPopper getData={getData} />}
+                                        body={
+                                            <SelectBoardPopper
+                                                getData={getData}
+                                                handleTurnOnCreateBoard={handleTurnOnCreateBoard}
+                                            />
+                                        }
                                         widthBody="maxContent"
                                     />
                                 </button>
@@ -205,21 +235,11 @@ function Pin({
             </div>
             {openConfirmLogin && <DialogConfirmLogin open={openConfirmLogin} setOpen={setOpenConfirmLogin} />}
 
-            {/* <Popover
-                id={shareMenuId}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                }}
-                transformOrigin={{
-                    horizontal: 'center',
-                }}
-                open={openedShare}
-                onClose={handleCloseShare}
-                anchorEl={anchorEl}
-            >
-                <ShareMenu />
-            </Popover> */}
+            {showCreateBoard && (
+                <div className={cx('createBoard')}>
+                    <CreateBoard handleTurnOnCreateBoard={handleTurnOnCreateBoard} handleChooseBoard={getData} />
+                </div>
+            )}
         </>
     );
 }

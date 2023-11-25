@@ -22,9 +22,9 @@ import * as userSavePinServices from '../../services/userSavePinServices';
 import * as commentServices from '../../services/commentServices';
 import { AccountLoginContext } from '../../context/AccountLoginContext';
 import { ThemeContext } from '../../context/ThemeContext';
+import { CircularProgress } from '@mui/material';
 import { Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
-import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
 let stompClient = null;
@@ -32,7 +32,7 @@ let stompClient = null;
 function DisplayPin() {
     const [currentUser, setCurrentUser] = useState('');
     const { theme } = useContext(ThemeContext);
-    const { userId } = useContext(AccountLoginContext);
+    const { userId, permission } = useContext(AccountLoginContext);
 
     // console.log(userId);
 
@@ -56,6 +56,33 @@ function DisplayPin() {
     const [user, setUser] = useState('');
     const [load, setLoad] = useState(true);
     const [loadComment, setLoadComment] = useState(false);
+    //Hiển thị hộp thoại thông báo
+    const [alertType, setAlertType] = useState(null);
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const showAlert = (type) => {
+        setAlertType(type);
+        setAlertVisible(true);
+
+        const timeoutId = setTimeout(() => {
+            setAlertVisible(false);
+            setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+        }, 2500);
+
+        return timeoutId;
+    };
+
+    useEffect(() => {
+        if (alertVisible) {
+            const timeoutId = setTimeout(() => {
+                setAlertVisible(false);
+                setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+            }, 2500);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [alertVisible]);
+
     useEffect(() => {
         const fetchApi = async () => {
             setLoad(true);
@@ -104,38 +131,34 @@ function DisplayPin() {
     // HandleChooseBoard
     const handleChooseBoard = (currentBoard) => {
         setBoard(currentBoard);
-        // console.log(currentBoard.name);
     };
 
     //save pin
     const handleInsertPin = async () => {
-        if (currentBoard.name !== 'Chọn bảng') {
+        if (permission !== null) {
+            showAlert('errorAdmin');
+        } else if (pin.user.id === userId) {
+            showAlert('errorSave');
+        } else if (currentBoard.name !== 'Chọn bảng') {
             const board = currentBoard;
             const pinSaved = { board, pin, user };
             console.log(pinSaved);
             const result = await userSavePinServices.save(pinSaved);
 
-            handleSaveResult(true);
+            showAlert('saveSuccess');
         } else {
-            alert('Chọn bảng !!!');
+            showAlert('errorBoard');
         }
-    };
-    const [statusSave, setSatusSave] = useState(false);
-
-    const handleSaveResult = (result) => {
-        setSatusSave(result);
-        if (result) {
-            setTimeout(() => {
-                setSatusSave(false);
-            }, 2500);
-        }
-        window.location.reload();
     };
 
     // Turn on CreateBoard
     const [showCreateBoard, setShowCreateBoard] = React.useState(false);
+
     const handleTurnOnCreateBoard = (isShown) => {
         setShowCreateBoard(isShown);
+    };
+    const handleCloseCreate = () => {
+        setShowCreateBoard(false);
     };
 
     // Turn on select report
@@ -148,7 +171,6 @@ function DisplayPin() {
     let comments = useRef([]);
     const [newComment, setNewComment] = useState('');
     const [submitComment, setSubmitComment] = useState(false);
-
     useEffect(() => {
         let stompObject = null;
         const fetchData = async () => {
@@ -169,12 +191,10 @@ function DisplayPin() {
         };
         createStompConnect();
         fetchData();
-
         return () => {
             stompClient.unsubscribe(stompObject.id);
         };
     }, [submitComment]);
-
     const [scroll, setScroll] = useState(false);
     const handleCommentSubmit = (comment) => {
         comments.current = [...comments.current, comment];
@@ -182,7 +202,6 @@ function DisplayPin() {
         setNewComment('');
         setLoadComment(false);
     };
-
     const sendComment = () => {
         setLoadComment(true);
         let commentId = 1;
@@ -192,7 +211,6 @@ function DisplayPin() {
         console.log(comments.current);
         stompClient.publish({
             destination: `/app/addComment/pin_id/${pinID}`,
-
             body: JSON.stringify({
                 // commentId: comments.current.at(-1).id + 1,
                 commentId,
@@ -204,13 +222,11 @@ function DisplayPin() {
         setSubmitComment(true);
         setRed(false);
     };
-
     const handlePressEnter = (event) => {
         if (event.key === 'Enter') {
             sendComment();
         }
     };
-
     //red button
     const [red, setRed] = useState(false);
     const changeBtn = (e) => {
@@ -221,7 +237,6 @@ function DisplayPin() {
             setRed(false);
         }
     };
-
     return (
         <div className={cx('wrapper-createPage')}>
             <div className={cx('createBox')}>
@@ -270,14 +285,14 @@ function DisplayPin() {
                                     <ClickAwayListener onClickAway={handleClickAway}>
                                         <button className={cx('select-board-btn')} onClick={() => handleDisplay()}>
                                             <Popper
-                                                // idPopper={id}
                                                 contentTitle={currentBoard.name}
+                                                // contentTitle={currentBoard.name}
                                                 title={<FontAwesomeIcon icon={faChevronDown} />}
                                                 className={cx('select-board')}
                                                 body={
                                                     <SelectBoardPopper
+                                                        getData={handleChooseBoard}
                                                         handleTurnOnCreateBoard={handleTurnOnCreateBoard}
-                                                        handleChooseBoard={handleChooseBoard}
                                                     />
                                                 }
                                                 widthBody="maxContent"
@@ -302,9 +317,11 @@ function DisplayPin() {
                             </div>
                             <div className={cx('container-user')}>
                                 <AccountInfo userImage={user.avatar} username={user.username} />
+                                <Button className={cx('addFriendBtn')} primary>
+                                    Kết bạn
+                                </Button>
                             </div>
-                            {/* <div className={cx('comment-container')}>
-                            </div> */}
+                            {/* comment & like  */}
                             <div className={cx('comment-container')}>
                                 <div className={cx('like')}>
                                     <h3 className={cx('comment-title')}>Nhận xét</h3>
@@ -322,7 +339,6 @@ function DisplayPin() {
                             <div className={cx('userComment')}>
                                 <AccountInfo userImage={currentUser.avatar} username={' '} />
                             </div>
-
                             <div className={cx('comment')}>
                                 <input
                                     type="text"
@@ -361,7 +377,12 @@ function DisplayPin() {
                     />
                 </div>
             )}
-            {statusSave && <ActionAlerts content={`Đã lưu pin`} action="UNDO" />}
+            {alertType === 'saveSuccess' && <ActionAlerts content={`Đã lưu pin`} action="UNDO" />}
+            {alertType === 'errorBoard' && <ActionAlerts severity="warning" content={`Chọn bảng bạn muốn lưu vào`} />}
+            {alertType === 'errorSave' && <ActionAlerts severity="error" content={`Không thể lưu pin của chính bạn`} />}
+            {alertType === 'errorAdmin' && (
+                <ActionAlerts severity="error" content={`Hãy đăng nhập tài khoản user để lưu pin`} />
+            )}
             {showSelectReport && (
                 <SelectReportOption handleTurnOnSelectReport={handleTurnOnSelectReport} pin={pin} user={currentUser} />
             )}
