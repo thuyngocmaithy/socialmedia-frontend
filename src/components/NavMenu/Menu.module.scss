@@ -20,12 +20,8 @@
 
 .menu-item {
     &.active {
-        background-color: var(--black);
+        background-color: var(--color-red);
         color: var(--white-200);
-        &.dark {
-            background-color: var(--white-200);
-            color: var(--black);
-        }
     }
 }
 .activeUnderline {

@@ -8,7 +8,7 @@
     height: var(--default-layout-header-height);
     box-shadow: 0px 1px 1px rgb(0 0 0 / 12%);
     &.dark {
-        box-shadow: 0px 1px 1px rgba(255, 255, 255, 0.8);
+        box-shadow: 0px 1px 1px var(--color-blue-pastel);
     }
 }
 
@@ -50,17 +50,23 @@
     align-items: center;
 }
 .icon {
-    color: var(--color-red-darker);
+    color: var(--color-red-hover);
     display: block;
     fill: currentColor;
     stroke-width: 0;
     width: 36px;
     height: 36px;
+    &.dark {
+        color: var(--color-red-100);
+    }
 }
 .name {
-    color: var(--color-red-darker);
+    color: var(--color-red-hover);
     font-weight: 600;
     margin-left: 8px;
+    &.dark {
+        color: var(--color-red-100);
+    }
 }
 //Logo
 .logo-link {

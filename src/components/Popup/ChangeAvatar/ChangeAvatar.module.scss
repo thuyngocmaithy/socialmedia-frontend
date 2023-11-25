@@ -34,6 +34,9 @@
     input[type='file'] {
         display: none;
     }
+    &.dark {
+        background-color: #232323;
+    }
 }
 
 .saveBtn {
@@ -44,6 +47,11 @@
         color: #000;
         font-size: 35px;
         margin-bottom: 10px;
+    }
+    &.dark {
+        h2 {
+            color: var(--white-200);
+        }
     }
 }
 .choose-image {

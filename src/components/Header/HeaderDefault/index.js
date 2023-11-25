@@ -34,7 +34,7 @@ function HeaderDefault() {
     // MENU KHI CHƯA ĐĂNG NHẬP
     const MENU_ITEMS = [
         {
-            switchToggle: <Switch {...label} onChange={toggleTheme} />,
+            switchToggle: <Switch defaultChecked={theme === 'dark' ? true : false} {...label} onChange={toggleTheme} />,
             title: 'Dark Mode',
         },
     ];
@@ -90,10 +90,10 @@ function HeaderDefault() {
             <div className={cx('inner')}>
                 {/* LOGO */}
                 <Link to={config.routes.home} className={cx('logo-link')}>
-                    <LogoPinterest className={cx('logo')} />
+                    <LogoPinterest className={cx('logo', theme === 'dark' ? 'dark' : '')} />
                 </Link>
 
-                <NavMenu menu={menuNavbarLeft} />
+                <NavMenu className={cx('nav-menu')} menu={menuNavbarLeft} />
 
                 {/* THANH TÌM KIẾM */}
                 <Search />

@@ -10,10 +10,12 @@ import { getUserById, changeUserInfo, ChangeUserAvatar } from '../../../services
 import axios from 'axios';
 import ActionAlerts from '../../../components/Alert';
 import { AccountLoginContext } from '../../../context/AccountLoginContext';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function UserProfile({ admin = false }) {
+    const { theme } = useContext(ThemeContext);
     const { userId } = useContext(AccountLoginContext);
     const [userData, setUserData] = useState({});
     const [saveSuccess, setSaveSuccess] = useState(false);
@@ -157,11 +159,7 @@ function UserProfile({ admin = false }) {
         <Wrapper onSave={handleSave} admin={admin}>
             <div className={cx('wrapper')}>
                 <div className={cx('container-infoProfile')}>
-                    <h1>Chỉnh sửa hồ sơ</h1>
-                    <p className={cx('discription')}>
-                        Hãy giữ riêng tư thông tin cá nhân của bạn. Thông tin bạn thêm vào đây hiển thị cho bất kỳ ai có
-                        thể xem hồ sơ của bạn.
-                    </p>
+                    <h1 className={cx(theme === 'dark' ? 'dark' : '')}>Chỉnh sửa hồ sơ</h1>
                     <div className={cx('setUserProfilePhoto')}>
                         <div className={cx('UserPhoto')}>
                             <Image src={userData.avatar && `data:image/jpeg;base64,${userData.avatar}`} />
@@ -214,6 +212,9 @@ function UserProfile({ admin = false }) {
                         text={username}
                         customGetValue={handleGetUsername}
                     />
+                </div>
+                <div className={cx('image-container')}>
+                    <img className={cx('image')} src="../../info-profile.png" alt="" />
                 </div>
                 {alertType === 'editAvatar' && <ActionAlerts severity="success" content={`Lưu ảnh thành công`} />}
                 {alertType === 'editSuccess' && <ActionAlerts severity="success" content={`Lưu thành công`} />}

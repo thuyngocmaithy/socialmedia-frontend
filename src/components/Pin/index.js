@@ -16,7 +16,7 @@ import * as userServices from '../../services/userServices';
 import AccountInfo from '../AccountInfo';
 import Button from '../Button';
 import SelectBoardPopper from '../Popper/SelectBoardPopper';
-import { useState, useEffect, useRef, useContext } from 'react';
+import { useState, useContext } from 'react';
 import Popper from '../Popper';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import SharePopper from '../Popper/SharePopper';
@@ -24,9 +24,21 @@ import DialogConfirmLogin from '../DialogConfirmLogin';
 
 const cx = classNames.bind(styles);
 
-function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated = false, handleEdit, onSaveResult }) {
+function Pin({
+    stt,
+    id,
+    width,
+    image,
+    linkImage,
+    title,
+    userImage,
+    username,
+    pinCreated = false,
+    handleEdit,
+    onSaveResult,
+    showAlert,
+}) {
     const { userId } = useContext(AccountLoginContext);
-    const [userLogin, setUserLogin] = useState(null);
     const [activeOptionTop, setActiveOptionTop] = useState(false);
     const [activeOptionBottom, setActiveOptionBottom] = useState(false);
     const [openConfirmLogin, setOpenConfirmLogin] = useState(false);
@@ -72,17 +84,23 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
             const user = await userServices.getUserById(userId);
             const pin = await pinServices.getPinById(pinId);
             const board = await boardServices.getBoardById(boardId);
-            const userSavePin = { user, pin, board };
-            const result = await userSavePinServices.save(userSavePin);
-            if (result) {
-                onSaveResult(true);
-                setData('Chọn bảng');
+
+            if (pin.user.id === userId) {
+                showAlert('errorSave');
+            } else {
+                const userSavePin = { user, pin, board };
+                const result = await userSavePinServices.save(userSavePin);
+                if (result) {
+                    onSaveResult(true);
+                    setData('');
+                }
             }
         };
         if (userId !== 0) {
             if (data !== '') {
                 fetchApi();
             } else {
+                showAlert('warning');
             }
         } else {
             setOpenConfirmLogin(true);
@@ -108,7 +126,7 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
 
     return (
         <>
-            <div className={cx('wrapper')}>
+            <div className={cx('wrapper')} style={{ width: width }}>
                 <div className={cx('container-image')}>
                     <NavLink className={(nav) => cx('menu-item')} to={`/pin/${id}`}>
                         <img className={cx('image')} src={image && `data:image/jpeg;base64,${image}`} alt="" />
@@ -149,15 +167,19 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
                         )}
 
                         <ClickAwayListener onClickAway={handleClickAwayShare}>
-                            <button onClick={handleOpenShare} className={cx(pinCreated ? 'btn-end' : 'btn')}>
-                                <Popper
-                                    idPopper={`share${id}`}
-                                    contentTitle={<ShareIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />}
-                                    className={cx('share-menu')}
-                                    body={<SharePopper />}
-                                    widthBody="maxContent"
-                                />
-                            </button>
+                            <Tippy delay={[0, 100]} content="Chia sẻ" placement="bottom">
+                                <button onClick={handleOpenShare} className={cx(pinCreated ? 'btn-end' : 'btn')}>
+                                    <Popper
+                                        idPopper={`share${id}`}
+                                        contentTitle={
+                                            <ShareIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
+                                        }
+                                        className={cx('share-menu')}
+                                        body={<SharePopper />}
+                                        widthBody="maxContent"
+                                    />
+                                </button>
+                            </Tippy>
                         </ClickAwayListener>
 
                         {pinCreated ? null : (

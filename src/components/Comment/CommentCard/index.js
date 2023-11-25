@@ -1,18 +1,52 @@
+import React, { useContext, useEffect, useState } from 'react';
+import Tippy from '@tippyjs/react';
+import { faTrash, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
 import styles from '../Comment.module.scss';
 import AccountInfo from '../../../components/AccountInfo';
-import { useEffect } from 'react';
-import Tippy from '@tippyjs/react';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as commentServices from '../../../services/commentServices';
+import SelectReportOption from '../../SelectReportOption';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import Button from '../../Button';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
-function CommentCard({ comment }) {
+function CommentCard({ comment, currentUser }) {
+    const [del, setDelComment] = useState(false);
+    const { theme } = useContext(ThemeContext);
+    const [commentDelete, setCommentDelete] = useState({});
+    const [confirmDelete, setConfirmDelete] = useState(false); //Mở dialog xóa
     useEffect(() => {
-        // console.log(comment.user.avatar);
+        if (comment.user.id === currentUser.id) {
+            setDelComment(true);
+        }
     }, []);
 
-    const deleteComment = () => {};
+    const confirmDeleteComment = (comment) => {
+        setCommentDelete(comment);
+        setConfirmDelete(true);
+    };
+
+    const deleteComment = () => {
+        const fetchApi = async () => {
+            const rs = await commentServices.del(commentDelete);
+            if (rs) {
+                setConfirmDelete(false);
+            }
+        };
+        fetchApi();
+        window.location.reload();
+    };
+
+    const handleCloseConfirm = () => {
+        setConfirmDelete(false);
+    };
+    // Turn on select report
+    const [showSelectReport, setShowSelectReport] = React.useState(false);
+    const handleTurnOnSelectReport = (isShown) => {
+        setShowSelectReport(isShown);
+    };
 
     return (
         <div className={cx('comment-wrapper')}>
@@ -25,14 +59,62 @@ function CommentCard({ comment }) {
                 </div>
             </div>
             <div className={cx('comment-option')}>
-                <Tippy delay={[0, 100]} content="Xóa bình luận" placement="bottom">
-                    <div className={cx('delete-comment')}>
-                        <button className={cx('delete-button')} onClick={() => deleteComment()}>
-                            <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                    </div>
-                </Tippy>
+                {del ? (
+                    <Tippy delay={[0, 100]} content="Xóa bình luận" placement="bottom">
+                        <div className={cx('action-comment')}>
+                            <button
+                                className={cx('action-button', 'delete-button')}
+                                onClick={() => confirmDeleteComment(comment)}
+                            >
+                                <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                        </div>
+                    </Tippy>
+                ) : (
+                    <Tippy delay={[0, 100]} content="Báo cáo bình luận" placement="bottom">
+                        <div className={cx('action-comment')}>
+                            <button
+                                className={cx('action-button', 'report-button')}
+                                onClick={() => handleTurnOnSelectReport(true)}
+                            >
+                                <FontAwesomeIcon icon={faTriangleExclamation} />
+                            </button>
+                        </div>
+                    </Tippy>
+                )}
             </div>
+            {showSelectReport && (
+                <SelectReportOption
+                    handleTurnOnSelectReport={handleTurnOnSelectReport}
+                    comment={comment}
+                    user={currentUser}
+                />
+            )}
+            {confirmDelete && (
+                <Dialog
+                    className={cx(theme === 'dark' ? 'dark' : '')}
+                    fullWidth={true}
+                    maxWidth="sm"
+                    open={confirmDelete}
+                >
+                    <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
+                        Xóa nhận xét?
+                    </DialogTitle>
+                    <form onSubmit={deleteComment}>
+                        <DialogContent>Nhận xét bạn đã gửi cho ghim này sẽ bị xóa.</DialogContent>
+                        <DialogActions sx={{ marginBottom: '10px' }}>
+                            <div>
+                                <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseConfirm}>
+                                    Hủy
+                                </Button>
+                                <Button style={{ fontSize: '14px', marginLeft: '8px' }} red type="submit">
+                                    Xóa
+                                </Button>
+                            </div>
+                        </DialogActions>
+                    </form>
+                </Dialog>
+            )}
         </div>
     );
 }

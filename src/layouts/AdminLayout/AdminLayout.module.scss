@@ -8,7 +8,7 @@
     min-height: 100%;
 }
 .sidebar {
-    background-color: #e3a0aa;
+    background-color: var(--color-blue-pastel);
     &.dark {
         & > nav > a {
             color: black;
@@ -31,7 +31,7 @@
 
 .content {
     flex: 1;
-    margin: 20px;
+    // margin: 20px;
 }
 //TOP SIDEBAR
 .container-title {
@@ -54,7 +54,7 @@
 }
 //CUSTOM ICON
 .icon {
-    color: var(--color-red-darker);
+    color: var(--color-red-hover);
     display: block;
     fill: currentColor;
     stroke-width: 0;
@@ -63,7 +63,7 @@
 }
 
 .name {
-    color: var(--color-red-darker);
+    color: var(--color-red-hover);
     font-weight: 600;
     margin-left: 8px;
 }

@@ -3,7 +3,9 @@ import styles from './ChangeAvatar.module.scss';
 import classNames from 'classnames/bind';
 import Button from '../../Button';
 import LoadImage from '../../LoadImage';
+import { ThemeContext } from '../../../context/ThemeContext';
 function PopupForm({ onClose, onSave, onSelectImage }) {
+    const { theme } = useContext(ThemeContext);
     const [selectedImage, setSelectedImage] = useState(null);
 
     const handleSaveImage = () => {
@@ -13,8 +15,8 @@ function PopupForm({ onClose, onSave, onSelectImage }) {
     const cx = classNames.bind(styles);
     return (
         <div className={cx('popup-background')}>
-            <div className={cx('popup-container')}>
-                <div className={cx('popup-top')}>
+            <div className={cx('popup-container', theme === 'dark' ? 'dark' : '')}>
+                <div className={cx('popup-top', theme === 'dark' ? 'dark' : '')}>
                     <h2>Thay đổi ảnh của bạn</h2>
                 </div>
 

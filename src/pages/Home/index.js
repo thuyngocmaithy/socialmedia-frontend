@@ -93,21 +93,27 @@ function Home() {
             }, 2500);
         }
     };
-
+    let count = 0;
     return (
-        <div className={cx('wrapper')} style={{ height: loading ? 'calc(100vh - 70px)' : 'auto' }}>
+        <div className={cx('wrapper')} style={{ height: loading && 'calc(100vh - 70px)' }}>
             {loading && <CircularProgress sx={{ display: 'flex', margin: 'auto' }} />}
 
             {LIST_PIN.map((pin, index) => {
-                // console.log(pin);
+                if (count === 9) {
+                    count = 1;
+                } else {
+                    count = count + 1;
+                }
                 const user = pin.user;
+
                 return (
                     <Pin
                         key={index}
                         stt={index + 1}
                         id={pin.id}
+                        width={count === 6 || count === 7 || count === 8 || count === 9 ? '315px' : '252px'}
                         image={pin.image}
-                        // linkImage={pin.linkImage}
+                        linkImage={pin.linkImage}
                         title={pin.title}
                         userImage={user.avatar}
                         username={user.username}

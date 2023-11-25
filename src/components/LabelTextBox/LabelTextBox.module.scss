@@ -44,7 +44,12 @@
             /* Hiệu ứng bóng đổ */
         }
     }
-
+    &.dark {
+        input,
+        textarea {
+            background-color: #dfdfdf;
+        }
+    }
     input::placeholder,
     textarea::placeholder {
         font-size: 15px;
@@ -81,6 +86,6 @@
 }
 .error {
     font-size: 1.3rem;
-    color: var(--color-red-darker);
+    color: #cc0000;
     margin: 8px 0 0 5px;
 }
