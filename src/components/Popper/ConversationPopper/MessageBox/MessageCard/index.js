@@ -20,9 +20,9 @@ function MessageCard({ message }) {
                     <TextMessage message={message} messageOwner={messageOwner}></TextMessage>
                 :
                     isPinMessage ?
-                        <PinMessage pin={message.pin} messageOwner={messageOwner}></PinMessage>
+                        <PinMessage message={message} messageOwner={messageOwner}></PinMessage>
                     :
-                        <HeartMessage messageOwner={messageOwner}></HeartMessage>
+                        <HeartMessage message={message} messageOwner={messageOwner}></HeartMessage>
             }
         </div>
     );

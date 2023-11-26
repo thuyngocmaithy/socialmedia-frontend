@@ -115,7 +115,7 @@ function MessageBox({ handleChange, chatWith }) {
             <div className={cx('wrapper-message-list')}>
                 <div className={cx('message-list')}>
                     {   
-                        chatWith.messages.length !== 0 ?
+                        chatWith.messages && chatWith.messages.length !== 0 ?
                             chatWith.messages.map((message) => {
                                 return <MessageCard key={message.id} message={message}></MessageCard>;
                             })

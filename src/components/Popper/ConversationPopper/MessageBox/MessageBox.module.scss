@@ -1,7 +1,7 @@
 .wrapper-message {
     overflow: hidden;
-    height: 490px;
-    width: 312px;
+    height: 100%;
+    width: 100%;
     position: relative;
 }
 
@@ -45,7 +45,7 @@
 
 //BODY
 .wrapper-message-list {
-    height: 378px;
+    height: 78%;
     overflow: scroll;
     &::-webkit-scrollbar {
         display: none;

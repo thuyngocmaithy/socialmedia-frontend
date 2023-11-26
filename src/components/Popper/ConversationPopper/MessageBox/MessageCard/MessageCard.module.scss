@@ -23,7 +23,7 @@
     padding: 0.9rem;
     border-radius: 12px;
     word-break: break-all;
-    max-width: 270px;
+    max-width: 286px;
 }
 
 .friend-message {
@@ -54,6 +54,9 @@
 }
 
 .heart-message-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     .heart-icon {
         width: 34px;
         height: 34px;

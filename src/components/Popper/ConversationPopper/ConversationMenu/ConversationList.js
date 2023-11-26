@@ -10,23 +10,27 @@ function ConversationList({ handleChange, conversationList }) {
     return (
         <div className={cx('wrapper-conversation-list')}>
             <h3 className={cx('title')}>Messages</h3>
-            {conversationList.map((item, index) => {
-                let isSeen = true;
-                item.messages.forEach((item) => {
-                    if(item.seen === false && item.user.id !== userId) {
-                        isSeen = false;
+            {
+                conversationList.map((item, index) => {
+                    let isSeen = true;
+                    if(item.messages.length > 0) {      
+                        item.messages.forEach((item) => {
+                            if(item.seen === false && item.user.id !== userId) {
+                                isSeen = false;
+                            }
+                        });
                     }
-                });
-                return (
-                    <div key={index}>
-                        <ConversationCard
-                            handleChange={handleChange}
-                            item={item}
-                            isSeen={isSeen}
-                        ></ConversationCard>
-                    </div>
-                );
-            })}
+                    return (
+                        <div key={index}>
+                            <ConversationCard
+                                handleChange={handleChange}
+                                item={item}
+                                isSeen={isSeen}
+                            ></ConversationCard>
+                        </div>
+                    );
+                })
+            }
         </div>
     );
 }

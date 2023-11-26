@@ -9,7 +9,7 @@ const MessageContext = createContext({});
 function MessageProvider({ children }) {
     const stompClient = useContext(StompContext);
     const { userId } = useContext(AccountLoginContext);
-    let conversations = useContext(ConversationContext);
+    let {conversationList} = useContext(ConversationContext);
     let conversationJoined = [];
     const [messageCount, setMessageCount] = useState(0);
     const [newMessage, setNewMessage] = useState({});
@@ -47,20 +47,28 @@ function MessageProvider({ children }) {
         
     }, [userId]);
 
+    // useEffect(() => {
+    //     if(Object.keys(newMessage).length > 0) {
+    //         countMessage();
+    //     }
+    // }, [newMessage]);
+
     const countMessage = () => {
         let count = 0;
-        conversations.current.forEach((item) => {
-            item.messages.forEach((message) => {
-                if(!message.seen && message.user.id !== userId) {
-                    count ++;
-                }
-            });
+        conversationList.current.forEach((item) => {
+            if(item.messages.length > 0) {
+                item.messages.forEach((message) => {
+                    if(!message.seen && message.user.id !== userId) {
+                        count ++;
+                    }
+                });
+            }
         });
         setMessageCount(count);
     };
 
     const updateMessages = (message) => {
-        conversations.current.forEach((item) => {
+        conversationList.current.forEach((item) => {
             if(item.conversation.id === message.conversation.id) {
                 item.messages = [...item.messages, message];
                 if(message.content !== '') {
@@ -71,19 +79,15 @@ function MessageProvider({ children }) {
                 }
             }
         });
-        if(!message.seen && message.user.id !== userId) {
-            const tempCount = messageCount + 1;
-            setMessageCount(tempCount);
-        }
-        console.log(conversations.current);
         setNewMessage(message);
     }
 
     const setAllSeen = (conversation_id) => {
-        conversations.current.forEach((item) => {
+        conversationList.current.forEach((item) => {
             if(item.conversation.id === conversation_id) {
                 item.messages.forEach(async (message) => {
                     const res = await messageServices.update(message);
+                    message.seen = true;
                 })
             }
         });

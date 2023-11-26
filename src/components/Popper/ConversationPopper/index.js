@@ -11,22 +11,22 @@ import SearchMenu from './SearchMenu';
 const cx = classNames.bind(styles);
 function ConversationPopper() {
     const { theme } = useContext(ThemeContext);
-    const conversationList = useContext(ConversationContext);
+    const {conversationList} = useContext(ConversationContext);
     const { setAllSeen } = useContext(MessageContext);
     const [messageIsShown, setMessageIsShown] = useState(false);
     const [ isSearching, setIsSearching ] = useState(false);
     const [currentInfor, setCurrentInfor] = useState({});
 
-    const changeConversation = (chatWith = '', isSearching = false, conversation_id = 0) => {
+    const changeConversation = (chatWith = {}, isSearching = false, conversation_id = 0) => {
         if (messageIsShown) {
             setMessageIsShown(false);
             setIsSearching(false);
             setCurrentInfor({});
         } else {
             setIsSearching(isSearching);
-            if(chatWith !== '') {
+            if(Object.keys(chatWith).length > 0) {
                 conversationList.current.forEach((conv) => {
-                    if (conv.user.username === chatWith) {
+                    if (conv.user.username === chatWith.username) {
                         setCurrentInfor({
                             conversation_id: conv.conversation.id,
                             name: conv.user.fullname,

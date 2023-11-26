@@ -16,7 +16,7 @@ function SharePopper({ pin_id }) {
     const [listUser, setListUser] = useState([]);
     const [loading, setLoading] = useState(true);
     const stompClient = useContext(StompContext);
-    const conversations = useContext(ConversationContext);
+    const {conversationList} = useContext(ConversationContext);
 
     useEffect(() => {
         const fetchApi = async () => {
@@ -28,7 +28,7 @@ function SharePopper({ pin_id }) {
         };
         let stompList = [];
         const loginToChat = () => {
-            const conv = conversations.current.map(e => e.conversation);
+            const conv = conversationList.current.map(e => e.conversation);
             conv.forEach((e) => {
                 let stompObject = stompClient.subscribe(
                     `/app/login/${e.id}`,
@@ -54,9 +54,9 @@ function SharePopper({ pin_id }) {
 
     const sharePin = (e) => {
         const senderId = parseInt(e.target.getAttribute("value"));
-        const conv = conversations.current.find((conv) => conv.user.id === senderId);
+        const conv = conversationList.current.find((conv) => conv.user.id === senderId);
         let tempList = [];
-        conversations.current.forEach((item) => {
+        conversationList.current.forEach((item) => {
             tempList = [...tempList, ...item.messages];
         });
         tempList.sort((a,b) => a.id - b.id);

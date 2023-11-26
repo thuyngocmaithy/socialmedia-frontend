@@ -36,3 +36,17 @@ export const update = async (message) => {
         console.log(error);
     }
 };
+
+export const save = async (message) => {
+    try {
+        const res = await httpRequest.post(`messages/add`, message, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': true,
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
