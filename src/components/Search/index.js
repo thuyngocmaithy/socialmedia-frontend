@@ -105,7 +105,6 @@ function Search({ className, width = '750px' }) {
         const searchValue = e.target.value;
         // setSearchResult(searchResult);
         if (!searchValue.startsWith(' ')) {
-            //     // Không cho người dùng gõ dấu cách đầu tiên
             setSearchValue(searchValue);
             setShowResult(true);
         }
@@ -158,8 +157,30 @@ function Search({ className, width = '750px' }) {
                                     </div>
                                 </div>
                             ) : (
-                                <div className={cx('searchUser')}>
-                                    <h4 className={cx('searchUser-title')}>Tìm kiếm Pin của bạn</h4>
+                                <div>
+                                    <div className={cx('searchUser')}>
+                                        <h4 className={cx('searchUser-title')}>Tìm kiếm Pin của bạn</h4>
+                                    </div>
+                                    <h4 className={cx('search-title')}>Ý tưởng dành cho bạn</h4>
+                                    <div className={cx('type')}>
+                                        {listType.map((item, index) => {
+                                            return (
+                                                <NavLink
+                                                    key={index}
+                                                    className={(nav) => cx('menu-item')}
+                                                    to={`/search/type=${item.id}`}
+                                                >
+                                                    <button
+                                                        key={index}
+                                                        className={cx('item-type')}
+                                                        onClick={handleHideResult}
+                                                    >
+                                                        <p>{item.typeName}</p>
+                                                    </button>
+                                                </NavLink>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             )}
                         </PopperWrapper>

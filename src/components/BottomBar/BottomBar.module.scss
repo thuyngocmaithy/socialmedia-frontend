@@ -2,7 +2,7 @@
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,6 +10,9 @@
     padding: 10px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 5);
     z-index: 10;
+    &.dark {
+        background-color: #232323;
+    }
 }
 .saveBtn {
     margin-left: 8px;

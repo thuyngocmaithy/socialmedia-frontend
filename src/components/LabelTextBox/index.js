@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import classNames from 'classnames/bind';
 import style from './LabelTextBox.module.scss';
 import PropTypes from 'prop-types';
+import { ThemeContext } from '../../context/ThemeContext';
 
 function LabelTextBox({
     name,
@@ -19,6 +20,7 @@ function LabelTextBox({
     ...passProps
 }) {
     const cx = classNames.bind(style);
+    const { theme } = useContext(ThemeContext);
     const [inputValue, setInputValue] = useState(text); // Sử dụng giá trị text từ prop
     const [change, setChange] = useState(false);
 
@@ -61,7 +63,7 @@ function LabelTextBox({
             break;
     }
 
-    const wrapperClasses = cx('wrapper');
+    const wrapperClasses = cx('wrapper', theme === 'dark' ? 'dark' : '');
     return (
         <div className={wrapperClasses}>
             <label>{label}</label>

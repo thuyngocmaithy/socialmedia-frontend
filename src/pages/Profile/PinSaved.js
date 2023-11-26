@@ -244,7 +244,7 @@ function PinSaved() {
                             placement="bottom-end"
                         />
                     </div>
-                )}{' '}
+                )}
                 <div className={cx('pin-saved')}>
                     {listBoard.map((board, index) => {
                         return (
@@ -259,15 +259,15 @@ function PinSaved() {
                                 handleEdit={() => handleEdit(board.id)}
                             />
                         );
-                    })}{' '}
-                </div>{' '}
+                    })}
+                </div>
                 <Dialog className={cx('')} fullWidth={true} maxWidth="sm" open={openEdit}>
                     <form onSubmit={handleSubmitEdit}>
                         <DialogTitle
                             sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
                         >
-                            Chỉnh sửa{' '}
-                        </DialogTitle>{' '}
+                            Chỉnh sửa
+                        </DialogTitle>
                         <DialogContent>
                             <LabelTextBox
                                 name={'nameEdit'}
@@ -275,43 +275,37 @@ function PinSaved() {
                                 label={'Tên bảng'}
                                 selectedSize={'medium'}
                                 text={boardEdit.name ? boardEdit.name : ''}
-                            />{' '}
+                            />
                             <LabelTextBox
                                 name={'descriptionEdit'}
                                 placeholder={'Mô tả'}
                                 label={'Mô tả'}
                                 selectedSize={'medium'}
                                 text={boardEdit.description ? boardEdit.description : ''}
-                            />{' '}
-                        </DialogContent>{' '}
+                            />
+                        </DialogContent>
                         <DialogActions sx={{ justifyContent: 'space-between', margin: '10px' }}>
                             <Button style={{ fontSize: '14px' }} primary type="button" onClick={handleDelete}>
-                                Xóa{' '}
-                            </Button>{' '}
+                                Xóa
+                            </Button>
                             <div>
                                 <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseEdit}>
-                                    Hủy{' '}
-                                </Button>{' '}
+                                    Hủy
+                                </Button>
                                 <Button style={{ fontSize: '14px' }} red type="submit">
-                                    Sửa{' '}
-                                </Button>{' '}
-                            </div>{' '}
-                        </DialogActions>{' '}
-                    </form>{' '}
-                </Dialog>{' '}
-                <Dialog
-                    className={cx('')}
-                    fullWidth={true}
-                    maxWidth="sm"
-                    open={openCreateBoard}
-                    onClose={handleCloseCreateBoard}
-                >
+                                    Sửa
+                                </Button>
+                            </div>
+                        </DialogActions>
+                    </form>
+                </Dialog>
+                <Dialog fullWidth={true} maxWidth="sm" open={openCreateBoard} onClose={handleCloseCreateBoard}>
                     <form onSubmit={handleSubmitCreate}>
                         <DialogTitle
                             sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
                         >
-                            Tạo bảng{' '}
-                        </DialogTitle>{' '}
+                            Tạo bảng
+                        </DialogTitle>
                         <DialogContent>
                             <LabelTextBox
                                 name={'nameAdd'}
@@ -319,47 +313,47 @@ function PinSaved() {
                                 label={'Tên bảng'}
                                 selectedSize={'medium'}
                                 // text={boardEdit.name ? boardEdit.name : ''}
-                            />{' '}
+                            />
                             <LabelTextBox
                                 name={'descriptionAdd'}
                                 placeholder={'Mô tả'}
                                 label={'Mô tả'}
                                 selectedSize={'medium'}
                                 // text={boardEdit.description ? boardEdit.description : ''}
-                            />{' '}
-                        </DialogContent>{' '}
+                            />
+                        </DialogContent>
                         <DialogActions sx={{ marginBottom: '10px' }}>
                             <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseCreateBoard}>
-                                Hủy{' '}
-                            </Button>{' '}
+                                Hủy
+                            </Button>
                             <Button style={{ fontSize: '14px' }} red type="submit">
-                                Tạo{' '}
-                            </Button>{' '}
-                        </DialogActions>{' '}
-                    </form>{' '}
-                </Dialog>{' '}
+                                Tạo
+                            </Button>
+                        </DialogActions>
+                    </form>
+                </Dialog>
                 {confirmDelete && (
                     <Dialog className={cx('')} fullWidth={true} maxWidth="sm" open={confirmDelete}>
                         <DialogTitle
                             sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
                         >
                             Xóa Bảng này ?
-                        </DialogTitle>{' '}
+                        </DialogTitle>
                         <form onSubmit={handleSubmitDelete}>
                             <DialogContent>
-                                Bảng và tất cả các Ghim thuộc bảng này sẽ bị xóa khỏi hồ sơ của bạn.{' '}
-                            </DialogContent>{' '}
+                                Bảng và tất cả các Ghim thuộc bảng này sẽ bị xóa khỏi hồ sơ của bạn.
+                            </DialogContent>
                             <DialogActions sx={{ marginBottom: '10px' }}>
                                 <div>
                                     <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseConfirm}>
-                                        Hủy{' '}
-                                    </Button>{' '}
+                                        Hủy
+                                    </Button>
                                     <Button style={{ fontSize: '14px' }} red type="submit">
-                                        Xóa{' '}
-                                    </Button>{' '}
-                                </div>{' '}
-                            </DialogActions>{' '}
-                        </form>{' '}
+                                        Xóa
+                                    </Button>
+                                </div>
+                            </DialogActions>
+                        </form>
                     </Dialog>
                 )}
             </div>

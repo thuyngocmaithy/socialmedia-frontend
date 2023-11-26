@@ -1,11 +1,10 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
 import classNames from 'classnames/bind';
-import styles from './Pin.module.scss';
-import { ShareIcon, DownloadIcon, AccessIcon, EditIcon, SearchIcon, People } from '../Icons';
-import { NavLink } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import 'tippy.js/dist/tippy.css';
 import { AccountLoginContext } from '../../context/AccountLoginContext';
 import { NotificationContext } from '../../context/NotificationContext';
@@ -15,18 +14,31 @@ import * as userSavePinServices from '../../services/userSavePinServices';
 import * as userServices from '../../services/userServices';
 import AccountInfo from '../AccountInfo';
 import Button from '../Button';
-import SelectBoardPopper from '../Popper/SelectBoardPopper';
-import { useState, useEffect, useRef, useContext } from 'react';
-import Popper from '../Popper';
-import { ClickAwayListener } from '@mui/base/ClickAwayListener';
-import SharePopper from '../Popper/SharePopper';
+import CreateBoard from '../CreateBoard';
 import DialogConfirmLogin from '../DialogConfirmLogin';
+import { AccessIcon, DownloadIcon, EditIcon, ShareIcon } from '../Icons';
+import Popper from '../Popper';
+import SelectBoardPopper from '../Popper/SelectBoardPopper';
+import SharePopper from '../Popper/SharePopper';
+import styles from './Pin.module.scss';
 
 const cx = classNames.bind(styles);
 
-function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated = false, handleEdit, onSaveResult }) {
-    const { userId } = useContext(AccountLoginContext);
-    const [userLogin, setUserLogin] = useState(null);
+function Pin({
+    stt,
+    id,
+    width,
+    image,
+    linkImage,
+    title,
+    userImage,
+    username,
+    pinCreated = false,
+    handleEdit,
+    onSaveResult,
+    showAlert,
+}) {
+    const { userId, permission } = useContext(AccountLoginContext);
     const [activeOptionTop, setActiveOptionTop] = useState(false);
     const [activeOptionBottom, setActiveOptionBottom] = useState(false);
     const [openConfirmLogin, setOpenConfirmLogin] = useState(false);
@@ -46,15 +58,15 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
         setActiveOptionBottom(false);
     };
 
-    const [data, setData] = useState('');
+    const [data, setData] = useState({ name: 'Chọn bảng' });
 
-    const getData = (boardId) => {
-        setData(boardId);
+    const getData = (board) => {
+        setData(board);
     };
     const handleSave = () => {
         const fetchApi = async () => {
-            const pinId = id;
-            const boardId = data.id;
+            const user = await userServices.getUserById(userId);
+
             {
                 // Tăng biến đếm để tạo thông báo bài pin liên quan
                 const pinCount = localStorage.getItem('pinCount');
@@ -69,20 +81,29 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
                 }
                 console.log(pinCount);
             }
-            const user = await userServices.getUserById(userId);
+
+            const pinId = id;
+            const boardId = data.id;
             const pin = await pinServices.getPinById(pinId);
             const board = await boardServices.getBoardById(boardId);
-            const userSavePin = { user, pin, board };
-            const result = await userSavePinServices.save(userSavePin);
-            if (result) {
-                onSaveResult(true);
-                setData('Chọn bảng');
+            if (pin.user.id === userId) {
+                showAlert('errorSave');
+            } else {
+                const userSavePin = { user, pin, board };
+                const result = await userSavePinServices.save(userSavePin);
+                if (result) {
+                    onSaveResult(true);
+                    setData({ name: 'Chọn bảng' });
+                }
             }
         };
-        if (userId !== 0) {
-            if (data !== '') {
-                fetchApi();
+        if (permission !== null) {
+            showAlert('errorAdmin');
+        } else if (userId !== 0) {
+            if (data.name === 'Chọn bảng') {
+                showAlert('warning');
             } else {
+                fetchApi();
             }
         } else {
             setOpenConfirmLogin(true);
@@ -106,11 +127,32 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
         document.body.removeChild(link);
     };
 
+    const navigate = useNavigate();
+    const handleDisplayPin = () => {
+        if (userId === 0) {
+            // setTimeout(() => {
+            setOpenConfirmLogin(true);
+            navigate('/login');
+
+            // }, 900000);
+        }
+    };
+
+    // Turn on CreateBoard
+    const [showCreateBoard, setShowCreateBoard] = React.useState(false);
+
+    const handleTurnOnCreateBoard = (isShown) => {
+        setShowCreateBoard(isShown);
+    };
+    const handleCloseCreate = () => {
+        setShowCreateBoard(false);
+    };
+
     return (
         <>
-            <div className={cx('wrapper')}>
+            <div className={cx('wrapper')} style={{ width: width }}>
                 <div className={cx('container-image')}>
-                    <NavLink className={(nav) => cx('menu-item')} to={`/pin/${id}`}>
+                    <NavLink className={(nav) => cx('menu-item')} to={`/pin/${id}`} onClick={() => handleDisplayPin()}>
                         <img className={cx('image')} src={image && `data:image/jpeg;base64,${image}`} alt="" />
                     </NavLink>
                     {pinCreated ? null : (
@@ -119,10 +161,15 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
                                 <button className={cx('select-board-btn')} onClick={handleDisplay}>
                                     <Popper
                                         idPopper={`selectBoard${stt}`}
-                                        contentTitle={data.name || 'Chọn bảng'}
+                                        contentTitle={data.name}
                                         title={<FontAwesomeIcon icon={faChevronDown} />}
                                         className={cx('select-board')}
-                                        body={<SelectBoardPopper getData={getData} />}
+                                        body={
+                                            <SelectBoardPopper
+                                                getData={getData}
+                                                handleTurnOnCreateBoard={handleTurnOnCreateBoard}
+                                            />
+                                        }
                                         widthBody="maxContent"
                                     />
                                 </button>
@@ -149,15 +196,19 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
                         )}
 
                         <ClickAwayListener onClickAway={handleClickAwayShare}>
-                            <button onClick={handleOpenShare} className={cx(pinCreated ? 'btn-end' : 'btn')}>
-                                <Popper
-                                    idPopper={`share${id}`}
-                                    contentTitle={<ShareIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />}
-                                    className={cx('share-menu')}
-                                    body={<SharePopper />}
-                                    widthBody="maxContent"
-                                />
-                            </button>
+                            <Tippy delay={[0, 100]} content="Chia sẻ" placement="bottom">
+                                <button onClick={handleOpenShare} className={cx(pinCreated ? 'btn-end' : 'btn')}>
+                                    <Popper
+                                        idPopper={`share${id}`}
+                                        contentTitle={
+                                            <ShareIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
+                                        }
+                                        className={cx('share-menu')}
+                                        body={<SharePopper />}
+                                        widthBody="maxContent"
+                                    />
+                                </button>
+                            </Tippy>
                         </ClickAwayListener>
 
                         {pinCreated ? null : (
@@ -183,21 +234,11 @@ function Pin({ stt, id, image, linkImage, title, userImage, username, pinCreated
             </div>
             {openConfirmLogin && <DialogConfirmLogin open={openConfirmLogin} setOpen={setOpenConfirmLogin} />}
 
-            {/* <Popover
-                id={shareMenuId}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                }}
-                transformOrigin={{
-                    horizontal: 'center',
-                }}
-                open={openedShare}
-                onClose={handleCloseShare}
-                anchorEl={anchorEl}
-            >
-                <ShareMenu />
-            </Popover> */}
+            {showCreateBoard && (
+                <div className={cx('createBoard')}>
+                    <CreateBoard handleTurnOnCreateBoard={handleTurnOnCreateBoard} handleChooseBoard={getData} />
+                </div>
+            )}
         </>
     );
 }

@@ -2,10 +2,12 @@ import classNames from 'classnames/bind';
 import styles from './LoadImage.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleArrowUp } from '@fortawesome/free-solid-svg-icons';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
-function LoadImage({ height = '300px', width = '300px', onSelectImage }) {
+function LoadImage({ height = '300px', width = '292px', onSelectImage }) {
+    const { theme } = useContext(ThemeContext);
     //preview img
     const [img, setIMG] = useState();
     const [showDiv, setShowDiv] = useState(true);
@@ -39,14 +41,16 @@ function LoadImage({ height = '300px', width = '300px', onSelectImage }) {
                 </div>
             )}
             <input
-                className={cx('inputIMG', 'uploadText')}
+                className={cx('inputIMG', 'uploadText', theme === 'dark' ? 'dark' : '')}
                 hidden
                 name="uploadPhoto"
                 type="file"
                 accept="image/gif, image/jpeg, image/png"
                 onChange={handlePreviewIMG}
             />
-            {img && <img src={img.preview} style={{ height: height, width: width }} alt="userPhoto" />}
+            {img && (
+                <img src={img.preview} style={{ borderRadius: '12px', height: height, width: width }} alt="userPhoto" />
+            )}
         </div>
     );
 }

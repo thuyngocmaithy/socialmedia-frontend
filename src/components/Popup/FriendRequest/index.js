@@ -8,6 +8,7 @@ import classNames from 'classnames/bind';
 import PropTypes from 'prop-types';
 import { useContext, useEffect, useState } from 'react';
 import { StompContext } from '../../../context/StompContext';
+import { ThemeContext } from '../../../context/ThemeContext';
 import * as friendshipServices from '../../../services/friendshipServices';
 import AccountInfo from '../../AccountInfo';
 import Button from '../../Button';
@@ -44,6 +45,7 @@ function a11yProps(index) {
 }
 function FriendRequest({ idUser, onClose }) {
     const stompClient = useContext(StompContext);
+    const { theme } = useContext(ThemeContext);
     const [listRequest, setListRequest] = useState([]);
     const [listSent, setListSent] = useState([]);
     const [updateSuccess, setUpdateSuccess] = useState(false);
@@ -100,7 +102,7 @@ function FriendRequest({ idUser, onClose }) {
     return (
         <div className={cx('wrapper')}>
             {loading && <CircularProgress sx={{ display: 'flex', margin: '0 auto' }} />}
-            <div className={cx('container')}>
+            <div className={cx('container', theme === 'dark' ? 'dark' : '')}>
                 <div className={cx('header')}>
                     <h2 className={cx('title')}>Bạn bè</h2>
                     <button className={cx('closeBtn')} onClick={onClose}>
@@ -113,12 +115,12 @@ function FriendRequest({ idUser, onClose }) {
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs value={value} onChange={handleChange} variant="fullWidth" aria-label="basic tabs example">
                             <Tab
-                                sx={{ fontSize: '1.3rem', fontWeight: 600 }}
+                                sx={{ fontSize: '1.3rem', fontWeight: 600, color: theme === 'dark' ? '#ccc' : '#333' }}
                                 label="Lời mời kết bạn"
                                 {...a11yProps(0)}
                             />
                             <Tab
-                                sx={{ fontSize: '1.3rem', fontWeight: 600 }}
+                                sx={{ fontSize: '1.3rem', fontWeight: 600, color: theme === 'dark' ? '#ccc' : '#333' }}
                                 label="Lời mời đã gửi"
                                 {...a11yProps(1)}
                             />

@@ -5,14 +5,16 @@ import Popper from '../../components/Popper';
 import { FilterIcon } from '../../components/Icons';
 import OptionPopper from '../../components/Popper/OptionPopper';
 import { useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import * as boardServices from '../../services/boardServices';
 import * as userSavePinServices from '../../services/userSavePinServices';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function Board() {
     const location = useLocation();
+    const { theme } = useContext(ThemeContext);
     const [boardName, setBoardName] = useState('');
     const [listPin, setListPin] = useState([]);
     const [countPin, setCountPin] = useState(0);
@@ -62,10 +64,10 @@ function Board() {
     };
     return (
         <div className={cx('wrapper')}>
-            <h1 className={cx('title')}>{boardName}</h1>
+            <h1 className={cx('title', theme === 'dark' ? 'dark' : '')}>{boardName}</h1>
             <div className={cx('option')}>
                 <Popper
-                    title={<FilterIcon className={cx('action', 'icon')} />}
+                    title={<FilterIcon className={cx('action', 'icon', theme === 'dark' ? 'dark' : '')} />}
                     body={<OptionPopper data={filterBoardPopper} />}
                     widthBody="maxContent"
                     placement="bottom-start"

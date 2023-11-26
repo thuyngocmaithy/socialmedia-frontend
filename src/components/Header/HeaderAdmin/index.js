@@ -27,7 +27,7 @@ function HeaderAdmin({ className, account = false, handleOpenMenu }) {
     // MENU KHI CHƯA ĐĂNG NHẬP
     const MENU_ITEMS = [
         {
-            switchToggle: <Switch {...label} onChange={toggleTheme} />,
+            switchToggle: <Switch defaultChecked={theme === 'dark' ? true : false} {...label} onChange={toggleTheme} />,
             title: 'Dark Mode',
         },
     ];
@@ -70,8 +70,8 @@ function HeaderAdmin({ className, account = false, handleOpenMenu }) {
                 {account ? (
                     <div className={cx('container-title')}>
                         <Link to={config.routes.admin} className={cx('logo-link')}>
-                            <LogoPinterest className={cx('icon')} />
-                            <h1 className={cx('name')}>DATH</h1>
+                            <LogoPinterest className={cx('icon', theme === 'dark' ? 'dark' : '')} />
+                            <h1 className={cx('name', theme === 'dark' ? 'dark' : '')}>DATH</h1>
                         </Link>
                     </div>
                 ) : (
@@ -84,11 +84,6 @@ function HeaderAdmin({ className, account = false, handleOpenMenu }) {
                 <div className={cx('actions')}>
                     {userLoaded && (
                         <>
-                            <Popper
-                                title={<NotificationIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
-                                body={<NotificationPopper />}
-                                widthBody="maxContent"
-                            />
                             <Popper
                                 title={<MessageIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
                                 body={<ConversationPopper />}

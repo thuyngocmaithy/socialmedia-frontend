@@ -8,7 +8,8 @@
     width: 100%;
     height: var(--default-layout-header-height);
     box-shadow: 0px 1px 1px rgb(0 0 0 / 12%);
-    background-color: var(--white-200);
+    // background-color: var(--white-200);
+    background-color: var(--color-header);
     &.dark {
         background-color: var(--black);
         box-shadow: var(--box-shadow-dark);
@@ -68,6 +69,14 @@
 .logo {
     color: var(--color-red);
     fill: currentColor;
+    &.dark {
+        color: var(--color-red-100);
+    }
+}
+.nav-menu {
+    & > a {
+        background-color: var(--color-header);
+    }
 }
 
 .link-avatar {

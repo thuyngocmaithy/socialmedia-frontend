@@ -1,3 +1,4 @@
+import { ClickAwayListener } from '@mui/material';
 import * as httpRequest from '../utils/httpRequest';
 
 export const countAll = async () => {
@@ -26,6 +27,43 @@ export const percent7days = async () => {
         console.log(error);
     }
 };
+
+export const getLikeByPinId = async (PinId) => {
+    try {
+        const res = await httpRequest.get(`likes/getLikeByPinId/${PinId}`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const save = async (like) => {
+    try {
+        const res = await httpRequest.post(`likes/add`, like, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': true,
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const del = async (like) => {
+    try {
+        const res = await httpRequest.post(`likes/delete`, like, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const countLikeByCreatedAt = async () => {
     try {
         const res = await httpRequest.get(`likes/countLikeByCreatedAt`);

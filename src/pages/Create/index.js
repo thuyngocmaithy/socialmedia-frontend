@@ -115,6 +115,10 @@ function Create() {
                             const result = await pinServices.save(pin);
                             if (result) {
                                 showAlert('save');
+                                setTimeout(() => {
+                                    showAlert('save');
+                                }, 4500);
+                                window.location.reload(); //reload để xóa dữ liệu
                             }
                         } else {
                             showAlert('errorInfo');
@@ -205,7 +209,7 @@ function Create() {
 
     return (
         <div className={cx('wrapper-createPage')}>
-            <div className={cx('createBox')}>
+            <div className={cx('createBox', theme === 'dark' ? 'dark' : '')}>
                 <div className={cx('wrapperBtns')}>
                     <div className={cx('save-pin')}>
                         <Button className={cx('save-btn')} onClick={() => handleInsertPin()} red>
@@ -220,7 +224,7 @@ function Create() {
                     <div className={cx('insertData')}>
                         <div className={cx('title')}>
                             <textarea
-                                className={cx('inputTitle')}
+                                className={cx('inputTitle', theme === 'dark' ? 'dark' : '')}
                                 type="text"
                                 placeholder="Tạo tiêu đề"
                                 maxLength="100"
@@ -246,7 +250,7 @@ function Create() {
 
                         <div className={cx('content')}>
                             <textarea
-                                className={cx('inputContent')}
+                                className={cx('inputContent', theme === 'dark' ? 'dark' : '')}
                                 type="text"
                                 placeholder="Cho mọi người biết Ghim của bạn giới thiệu điều gì"
                                 maxLength="500"
@@ -269,7 +273,10 @@ function Create() {
                         {/* select type */}
                         <div className={cx('selectType', { active: activeOptionTop })}>
                             <ClickAwayListener onClickAway={handleClickAway}>
-                                <button className={cx('select-type-btn')} onClick={() => handleDisplay()}>
+                                <button
+                                    className={cx('select-type-btn', theme === 'dark' ? 'dark' : '')}
+                                    onClick={() => handleDisplay()}
+                                >
                                     <Popper
                                         // idPopper={id}
                                         contentTitle={currentType.typeName}

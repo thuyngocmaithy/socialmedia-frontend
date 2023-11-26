@@ -7,7 +7,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import 'tippy.js/dist/tippy.css';
 import { notificationDeleted } from '../../../services/notificationService';
-import Popper from '../../Popper';
 import Cards from './Card';
 import styles from './NotificationPopper.module.scss';
 
@@ -16,10 +15,11 @@ const cx = classNames.bind(styles);
 function NotificationCard({ time, detail, id, type }) {
     const [appear, setAppear] = useState(true);
 
+    console.log(detail);
     const contents = [
-        { content: <Cards detail={detail.user} title="đã like bài viết của bạn" />, link: '/pin/' + detail.pin.id },
-        { content: <Cards detail={detail.user} title="đã bình luận về bài viết của bạn" />, link: '/pin/' + detail.pin.id },
-        { content: <Cards detail={detail.user1} title={detail.status === 'ACCEPTED' ? " đã chấp nhận lời mời kết bạn" : "đã gửi cho bạn lời mời kết bạn"} />, link: '/friendship/' + id },
+        { content: <Cards detail={detail.user} title="đã like bài viết của bạn" />, link: '/pin/' + (detail !== undefined) ? detail.id : '' },
+        { content: <Cards detail={detail.user} title="đã bình luận về bài viết của bạn" /> },
+        { content: <Cards detail={detail.user1} title={detail.status === 'ACCEPTED' ? " đã chấp nhận lời mời kết bạn" : "đã gửi cho bạn lời mời kết bạn"} />, link: '/friendship/' + detail.id },
     ];
 
     // Xóa thông báo
@@ -27,24 +27,26 @@ function NotificationCard({ time, detail, id, type }) {
         setAppear(false);
         notificationDeleted(id);
     };
-    const renderResult = (attrs) => (
-        <div className={cx('menu-list')} tabIndex="-1" {...attrs}>
-            <Popper className={cx('menu-popper')}>
+    const renderResult = (attrs) => {
+        return (
+            <div className={cx('menu-list')} tabIndex="-1" {...attrs}>
+                {/* <Popper className={cx('menu-popper')}> */}
                 <div className={cx('menu-body')}>
                     <button className={cx('button-action')} onClick={handleDelete}>
                         Xóa cập nhật
                     </button>
                 </div>
-            </Popper>
-        </div>
-    );
+                {/* </Popper> */}
+            </div>
+        )
+    };
     switch (type) {
         // Tùy thuộc theo loại mà detail sẽ mang theo những biến detail tương ứng
         case 'Like':
-            type = contents[0];
+            type = { ...contents[0], link: '/pin/' + detail.pin.id || '' };
             break;
         case 'Comment':
-            type = contents[1];
+            type = { ...contents[1], link: '/pin/' + detail.pin.id || '' };
             break;
         case 'Friend':
             type = contents[2];

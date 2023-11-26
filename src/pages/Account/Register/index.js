@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from '../Account.module.scss';
 import LabelTextBox from '../../../components/LabelTextBox';
@@ -6,11 +6,13 @@ import Wrapper from '../Wrapper';
 import Button from '../../../components/Button';
 
 import * as userServices from '../../../services/userServices';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 // logout xử lý ở phần header
 const cx = classNames.bind(styles);
 
 function Register() {
+    const { theme } = useContext(ThemeContext);
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -62,7 +64,7 @@ function Register() {
 
     return (
         <Wrapper>
-            <div className={cx('container-form')}>
+            <div className={cx('container-form', theme === 'dark' ? 'dark' : '')}>
                 <h1 className={cx('title')}>Register account</h1>
 
                 <form onSubmit={handleSubmit}>
@@ -110,7 +112,9 @@ function Register() {
                     </div>
 
                     <div className={cx('submit-btn')}>
-                        <Button red>Register</Button>
+                        <Button primary={theme === 'dark' ? 'primary' : ''} red={theme === 'dark' ? '' : 'red'}>
+                            Register
+                        </Button>
                     </div>
                 </form>
             </div>

@@ -1,38 +1,50 @@
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import { CircularProgress } from '@mui/material';
 import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ShareIcon, DownloadIcon, ReportIcon } from '../../components/Icons';
 import AccountInfo from '../../components/AccountInfo';
 import ActionAlerts from '../../components/Alert';
 import Button from '../../components/Button';
 import CommentApp from '../../components/Comment';
 import CreateBoard from '../../components/CreateBoard';
+import { DownloadIcon, ReportIcon, ShareIcon } from '../../components/Icons';
+import LikeCard from '../../components/LikeCard';
 import Popper from '../../components/Popper';
 import SelectBoardPopper from '../../components/Popper/SelectBoardPopper';
+import SelectReportOption from '../../components/SelectReportOption';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
 import { StompContext } from '../../context/StompContext';
+import { ThemeContext } from '../../context/ThemeContext';
+import * as commentServices from '../../services/commentServices';
 import * as pinServices from '../../services/pinServices';
 import * as userSavePinServices from '../../services/userSavePinServices';
-import SelectReportOption from '../../components/SelectReportOption';
 import * as userServices from '../../services/userServices';
 import styles from './DisplayPin.module.scss';
-import { AccountLoginContext } from '../../context/AccountLoginContext';
-import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
+let stompClient = null;
 
 function DisplayPin() {
-    const { userId } = useContext(AccountLoginContext);
-    const [currentUser, setCurrentUser] = useState(null);
     const stompClient = useContext(StompContext);
-    // useEffect(() => {
-    //     const fetchApi = async () => {};
+    const [currentUser, setCurrentUser] = useState('');
+    const { theme } = useContext(ThemeContext);
+    const { userId, permission } = useContext(AccountLoginContext);
 
-    //     fetchApi();
-    // }, [userId]);
+    // console.log(userId);
+
+    useEffect(() => {
+        const fetchApi = async () => {
+            const user = await userServices.getUserById(userId);
+            setCurrentUser(user);
+            // console.log(currentUser);
+        };
+
+        fetchApi();
+    }, []);
 
     const location = useLocation();
     const pinID = location.pathname.split('/')[2];
@@ -41,26 +53,49 @@ function DisplayPin() {
     const [img, setIMG] = useState();
     const [valContent, setValContent] = useState('');
     const [valTitle, setValTitle] = useState('');
-    const [user, setUser] = useState(null);
-    const [load, setLoad] = useState(false);
+    const [user, setUser] = useState('');
+    const [load, setLoad] = useState(true);
+    const [loadComment, setLoadComment] = useState(false);
+    //Hiển thị hộp thoại thông báo
+    const [alertType, setAlertType] = useState(null);
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const showAlert = (type) => {
+        setAlertType(type);
+        setAlertVisible(true);
+
+        const timeoutId = setTimeout(() => {
+            setAlertVisible(false);
+            setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+        }, 2500);
+
+        return timeoutId;
+    };
+
+    useEffect(() => {
+        if (alertVisible) {
+            const timeoutId = setTimeout(() => {
+                setAlertVisible(false);
+                setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+            }, 2500);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [alertVisible]);
+
     useEffect(() => {
         const fetchApi = async () => {
-            const user = await userServices.getUserById(userId);
-            setCurrentUser(user);
-
+            setLoad(true);
             const pin = await pinServices.getPinById(pinID);
-            console.log(pin);
             setPin(pin);
-            // setBoard(pin.board);
             setIMG(pin.image);
             setValContent(pin.description);
             setValTitle(pin.title);
             setUser(pin.user);
             setLoad(false);
         };
-
         fetchApi();
-    }, [userId]);
+    }, []);
 
     //auto resize textarea
     const titleRef = React.useRef();
@@ -96,44 +131,34 @@ function DisplayPin() {
     // HandleChooseBoard
     const handleChooseBoard = (currentBoard) => {
         setBoard(currentBoard);
-        // console.log(currentBoard.name);
-    };
-
-    // Make Friend
-    const handleFriendships = async () => {
-        const data = JSON.stringify({ notifications: { notificationType: 'Friend' }, friendships: { user1: 1 } });
-        stompClient.send(`/app/sendNot/${currentUser.id}`, {}, data);
     };
 
     //save pin
     const handleInsertPin = async () => {
-        if (currentBoard.name !== 'Chọn bảng') {
+        if (permission !== null) {
+            showAlert('errorAdmin');
+        } else if (pin.user.id === userId) {
+            showAlert('errorSave');
+        } else if (currentBoard.name !== 'Chọn bảng') {
             const board = currentBoard;
             const pinSaved = { board, pin, user };
             console.log(pinSaved);
             const result = await userSavePinServices.save(pinSaved);
 
-            handleSaveResult(true);
+            showAlert('saveSuccess');
         } else {
-            alert('Chọn bảng !!!');
+            showAlert('errorBoard');
         }
-    };
-    const [statusSave, setSatusSave] = useState(false);
-
-    const handleSaveResult = (result) => {
-        setSatusSave(result);
-        if (result) {
-            setTimeout(() => {
-                setSatusSave(false);
-            }, 2500);
-        }
-        window.location.reload();
     };
 
     // Turn on CreateBoard
     const [showCreateBoard, setShowCreateBoard] = React.useState(false);
+
     const handleTurnOnCreateBoard = (isShown) => {
         setShowCreateBoard(isShown);
+    };
+    const handleCloseCreate = () => {
+        setShowCreateBoard(false);
     };
 
     // Turn on select report
@@ -142,9 +167,80 @@ function DisplayPin() {
         setShowSelectReport(isShown);
     };
 
+    //handle comment
+    let comments = useRef([]);
+    const [newComment, setNewComment] = useState('');
+    const [submitComment, setSubmitComment] = useState(false);
+    useEffect(() => {
+        // let stompObject = null;
+        const fetchData = async () => {
+            comments.current = await commentServices.getByPinId(pinID);
+            setLoad(true);
+        };
+        const createStompConnect = () => {
+            stompClient.connect({}, function (frame) {
+                console.log('Connected: ' + frame);
+                stompClient.subscribe(`/room/comment/pin_id/${pinID}`, function (comment) {
+                    console.log(JSON.parse(comment.body));
+                    handleCommentSubmit(JSON.parse(comment.body));
+                    setSubmitComment(false);
+                });
+            });
+        };
+        createStompConnect();
+        fetchData();
+        return () => {
+            // console.log(stompObject);
+            // stompClient.unsubscribe(stompObject.id);
+        };
+    }, [submitComment]);
+    const [scroll, setScroll] = useState(false);
+    const handleCommentSubmit = (comment) => {
+        comments.current = [...comments.current, comment];
+        setScroll(true);
+        setNewComment('');
+        setLoadComment(false);
+    };
+    const sendComment = () => {
+        setLoadComment(true);
+        // let commentId = 1;
+        // if (comments.current.length > 0) {
+        //     commentId = comments.current.at(-1).id + 1;
+        // }
+        // console.log(comments.current);
+        console.log(currentUser.id);
+        stompClient.publish({
+            destination: `/app/sendNot/${pin.user.id}`,
+            body: JSON.stringify({
+                notifications: { notificationType: 'Comment' },
+                comments: {
+                    user: { id: currentUser.id },
+                    pin: { id: pin.id },
+                    content: newComment,
+                }
+            }),
+        });
+
+        setSubmitComment(true);
+        setRed(false);
+    };
+    const handlePressEnter = (event) => {
+        if (event.key === 'Enter') {
+            sendComment();
+        }
+    };
+    //red button
+    const [red, setRed] = useState(false);
+    const changeBtn = (e) => {
+        const current = e.target.value;
+        if (current.length >= 1) {
+            setRed(true);
+        } else {
+            setRed(false);
+        }
+    };
     return (
         <div className={cx('wrapper-createPage')}>
-            {load && <CircularProgress sx={{ display: 'flex', margin: '0 auto' }} />}
             <div className={cx('createBox')}>
                 <div className={cx('mainContent')}>
                     <div className={cx('imgWrapper')}>
@@ -191,14 +287,14 @@ function DisplayPin() {
                                     <ClickAwayListener onClickAway={handleClickAway}>
                                         <button className={cx('select-board-btn')} onClick={() => handleDisplay()}>
                                             <Popper
-                                                // idPopper={id}
                                                 contentTitle={currentBoard.name}
+                                                // contentTitle={currentBoard.name}
                                                 title={<FontAwesomeIcon icon={faChevronDown} />}
                                                 className={cx('select-board')}
                                                 body={
                                                     <SelectBoardPopper
+                                                        getData={handleChooseBoard}
                                                         handleTurnOnCreateBoard={handleTurnOnCreateBoard}
-                                                        handleChooseBoard={handleChooseBoard}
                                                     />
                                                 }
                                                 widthBody="maxContent"
@@ -222,14 +318,53 @@ function DisplayPin() {
                                 <div className={cx('inputContent')}>{valContent}</div>
                             </div>
                             <div className={cx('container-user')}>
-                                {user !== null && <AccountInfo userImage={user.avatar} username={user.username} />}
-                                <Button className={cx('addFriendBtn')} primary onClick={handleFriendships}>
+                                <AccountInfo userImage={user.avatar} username={user.username} />
+                                <Button className={cx('addFriendBtn')} primary>
                                     Kết bạn
                                 </Button>
                             </div>
-                            <div className={cx('comment-input')}>
-                                <h3 className={cx('comment-title')}>Nhận xét</h3>
-                                {currentUser !== null && <CommentApp pinID={pinID} currentUser={currentUser} />}
+                            {/* comment & like  */}
+                            <div className={cx('comment-container')}>
+                                <div className={cx('like')}>
+                                    <h3 className={cx('comment-title')}>Nhận xét</h3>
+                                    <LikeCard pinID={pinID} currentUser={currentUser} />
+                                </div>
+                                <CommentApp
+                                    scroll={scroll}
+                                    setScroll={setScroll}
+                                    comments={comments}
+                                    currentUser={currentUser}
+                                />
+                            </div>
+                        </div>
+                        <div className={cx('comment-input')}>
+                            <div className={cx('userComment')}>
+                                <AccountInfo userImage={currentUser.avatar} username={' '} />
+                            </div>
+                            <div className={cx('comment')}>
+                                <input
+                                    type="text"
+                                    placeholder="Thêm nhận xét"
+                                    value={newComment}
+                                    onChange={(e) => {
+                                        setNewComment(e.target.value);
+                                        changeBtn(e);
+                                    }}
+                                    onKeyDown={(e) => handlePressEnter(e)}
+                                />
+                                {red ? (
+                                    <Button className={cx('send-btn')} onClick={() => sendComment()} red>
+                                        <FontAwesomeIcon icon={faPaperPlane} style={{ fontsize: '14px' }} />
+                                    </Button>
+                                ) : (
+                                    <Button className={cx('send-btn')} primary>
+                                        {loadComment ? (
+                                            <CircularProgress style={{ width: '16px', height: '16px' }} />
+                                        ) : (
+                                            <FontAwesomeIcon icon={faPaperPlane} style={{ fontsize: '14px' }} />
+                                        )}
+                                    </Button>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -244,7 +379,12 @@ function DisplayPin() {
                     />
                 </div>
             )}
-            {statusSave && <ActionAlerts severity="success" content={`Đã lưu pin`} action="UNDO" />}
+            {alertType === 'saveSuccess' && <ActionAlerts content={`Đã lưu pin`} action="UNDO" />}
+            {alertType === 'errorBoard' && <ActionAlerts severity="warning" content={`Chọn bảng bạn muốn lưu vào`} />}
+            {alertType === 'errorSave' && <ActionAlerts severity="error" content={`Không thể lưu pin của chính bạn`} />}
+            {alertType === 'errorAdmin' && (
+                <ActionAlerts severity="error" content={`Hãy đăng nhập tài khoản user để lưu pin`} />
+            )}
             {showSelectReport && (
                 <SelectReportOption handleTurnOnSelectReport={handleTurnOnSelectReport} pin={pin} user={currentUser} />
             )}
