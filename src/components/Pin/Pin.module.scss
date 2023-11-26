@@ -1,8 +1,7 @@
 .wrapper {
     width: 252px;
     padding: 10px 10px 10px 5px;
-    // + .wrapper {
-    // }
+    /* Chọn các item ở các dòng lẻ */
 }
 .container-image {
     background-color: rgb(201, 178, 177);
@@ -10,7 +9,7 @@
     position: relative;
     cursor: zoom-in;
     border-radius: 16px;
-    height: 350px;
+    height: 420px;
     margin-bottom: 10px;
     &:hover {
         .option-top {
@@ -24,7 +23,7 @@
 .image {
     width: 100%;
     border: 0;
-    height: 350px;
+    height: 420px;
     vertical-align: middle;
     border-radius: 16px;
     position: absolute;

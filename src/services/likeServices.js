@@ -28,7 +28,6 @@ export const percent7days = async () => {
     }
 };
 
-
 export const getLikeByPinId = async (PinId) => {
     try {
         const res = await httpRequest.get(`likes/getLikeByPinId/${PinId}`);

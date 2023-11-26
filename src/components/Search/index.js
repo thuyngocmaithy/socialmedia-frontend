@@ -105,7 +105,6 @@ function Search({ className, width = '750px' }) {
         const searchValue = e.target.value;
         // setSearchResult(searchResult);
         if (!searchValue.startsWith(' ')) {
-          
             setSearchValue(searchValue);
             setShowResult(true);
         }

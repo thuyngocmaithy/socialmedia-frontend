@@ -16,3 +16,9 @@
     object-fit: cover; //ảnh giữ được tỷ lệ, tràn hình tròn của border radius
     cursor: default;
 }
+.username {
+    color: var(--black);
+    &.dark {
+        color: var(--white-500);
+    }
+}

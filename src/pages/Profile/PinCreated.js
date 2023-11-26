@@ -21,7 +21,7 @@ const cx = classNames.bind(styles);
 
 function PinCreated() {
     const { theme } = useContext(ThemeContext);
-    const accountOther = useContext(AccountOtherContext);
+    const { accountOther } = useContext(AccountOtherContext);
     const [isLoading, setIsLoading] = useState(true);
     const [openEdit, setOpenEdit] = useState(false);
     const [listPin, setListPin] = useState([]);

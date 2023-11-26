@@ -2,24 +2,22 @@ $default-text-color: black;
 $default-background-color: white;
 $circle-radius: 50%;
 .wrapper {
+    display: flex;
+    width: calc(100vw - 270px);
     .container-infoProfile {
         margin-top: 20px;
         margin-left: 80px;
-        background-color: white;
-        width: 550px;
+        width: 55%;
+        margin-bottom: 70px;
 
         h1 {
             color: var(--color-red);
             font-weight: bold;
             font-size: 30px;
             margin-bottom: 20px;
-        }
-
-        .discription {
-            margin: 10px 0;
-            font-size: medium;
-            color: black;
-            width: 520px;
+            &.dark {
+                color: var(--color-blue-pastel);
+            }
         }
 
         .name-and-lastname {
@@ -74,6 +72,16 @@ $circle-radius: 50%;
         transition: border-color 0.3s ease-in-out;
     }
 
+    .image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .image {
+        width: 400px;
+        height: 200px;
+        object-fit: cover;
+    }
     @media (max-width: 768px) {
         margin-right: 10%;
         margin-left: 10%;

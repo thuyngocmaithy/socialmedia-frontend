@@ -19,7 +19,6 @@ import NotificationPopper from '../../Popper/NotificationPopper';
 import MenuSettingHeader from '../../Popup/MenuSettingHeader';
 import Search from '../../Search';
 import styles from './HeaderDefault.module.scss';
-import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
@@ -35,7 +34,7 @@ function HeaderDefault() {
     // MENU KHI CHƯA ĐĂNG NHẬP
     const MENU_ITEMS = [
         {
-            switchToggle: <Switch {...label} onChange={toggleTheme} />,
+            switchToggle: <Switch defaultChecked={theme === 'dark' ? true : false} {...label} onChange={toggleTheme} />,
             title: 'Dark Mode',
         },
     ];
@@ -57,6 +56,7 @@ function HeaderDefault() {
     const handleMenuChange = (menuItem) => {
         console.log(menuItem);
     };
+
     // LOGOUT
     function logout() {
         localStorage.removeItem('userLogin');
@@ -90,10 +90,10 @@ function HeaderDefault() {
             <div className={cx('inner')}>
                 {/* LOGO */}
                 <Link to={config.routes.home} className={cx('logo-link')}>
-                    <LogoPinterest className={cx('logo')} />
+                    <LogoPinterest className={cx('logo', theme === 'dark' ? 'dark' : '')} />
                 </Link>
 
-                <NavMenu menu={menuNavbarLeft} />
+                <NavMenu className={cx('nav-menu')} menu={menuNavbarLeft} />
 
                 {/* THANH TÌM KIẾM */}
                 <Search />
@@ -103,6 +103,7 @@ function HeaderDefault() {
                     {userLoaded && (
                         <>
                             <Popper
+                                news={0}
                                 title={<NotificationIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
                                 body={<NotificationPopper />}
                                 widthBody="maxContent"

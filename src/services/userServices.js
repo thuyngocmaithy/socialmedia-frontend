@@ -78,10 +78,10 @@ export const getUserByPassword = async (password) => {
         console.log(error);
     }
 };
-export const login = async (username, password) => {
+export const login = async (email, password) => {
     try {
         const userlog = {
-            username: username,
+            email: email,
             password: password,
         };
 
@@ -171,3 +171,4 @@ export const countUserByCreatedAt = async () => {
         console.log(error);
     }
 };
+

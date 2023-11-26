@@ -15,7 +15,6 @@ import { useContext, useEffect, useState } from 'react';
 import { ThemeContext } from '../../../context/ThemeContext';
 import { AccountLoginContext } from '../../../context/AccountLoginContext';
 import { getUserById } from '../../../services/userServices';
-import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
@@ -28,7 +27,7 @@ function HeaderAdmin({ className, account = false, handleOpenMenu }) {
     // MENU KHI CHƯA ĐĂNG NHẬP
     const MENU_ITEMS = [
         {
-            switchToggle: <Switch {...label} onChange={toggleTheme} />,
+            switchToggle: <Switch defaultChecked={theme === 'dark' ? true : false} {...label} onChange={toggleTheme} />,
             title: 'Dark Mode',
         },
     ];
@@ -71,8 +70,8 @@ function HeaderAdmin({ className, account = false, handleOpenMenu }) {
                 {account ? (
                     <div className={cx('container-title')}>
                         <Link to={config.routes.admin} className={cx('logo-link')}>
-                            <LogoPinterest className={cx('icon')} />
-                            <h1 className={cx('name')}>DATH</h1>
+                            <LogoPinterest className={cx('icon', theme === 'dark' ? 'dark' : '')} />
+                            <h1 className={cx('name', theme === 'dark' ? 'dark' : '')}>DATH</h1>
                         </Link>
                     </div>
                 ) : (
@@ -86,17 +85,12 @@ function HeaderAdmin({ className, account = false, handleOpenMenu }) {
                     {userLoaded && (
                         <>
                             <Popper
-                                title={<NotificationIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
-                                body={<NotificationPopper />}
-                                widthBody="maxContent"
-                            />
-                            <Popper
                                 title={<MessageIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
                                 body={<ConversationPopper />}
                                 left="-48px"
                                 widthBody="maxContent"
                             />
-                            <Link className={cx('link-avatar')} to={`/${user.username}`}>
+                            <Link className={cx('link-avatar')} to={`/admin/${user.username}/edit-profile`}>
                                 <Image
                                     src={user.avatar && `data:image/jpeg;base64,${user.avatar}`}
                                     className={cx('action', 'user-avatar', theme === 'dark' ? 'dark' : '')}

@@ -4,13 +4,15 @@ import styles from './SelectReportOption.module.scss';
 import Button from '../Button';
 import * as contentReportServices from '../../services/contentReportServices';
 import * as report_pinServices from '../../services/report_pinServices';
-import * as report_commentServices from '../../services/report_commentServices'
+import * as report_commentServices from '../../services/report_commentServices';
 import ActionAlerts from '../Alert';
 
 const cx = classNames.bind(styles);
 
-function SelectReportOption({ handleTurnOnSelectReport, pin, user, comment}) {
-   
+function SelectReportOption({ handleTurnOnSelectReport, pin, user, comment }) {
+
+    // const [turnOnSelectReport, handleTurnOnSelectReport] = useState(true);
+
     const [listReport, setListReport] = useState([]);
     useEffect(() => {
         const fetchApi = async () => {
@@ -40,7 +42,7 @@ function SelectReportOption({ handleTurnOnSelectReport, pin, user, comment}) {
     const handleReport = () => {
         const fetchApi = async () => {
             let result = false;
-            if (comment === undefined) {
+            if (Object.keys(comment).length === 0) {
                 const report = {
                     approve: false,
                     reject: true,
@@ -49,10 +51,9 @@ function SelectReportOption({ handleTurnOnSelectReport, pin, user, comment}) {
                     userRatify: null,
                     userReport: user,
                 };
-                // console.log(report);
-                result = await report_pinServices.save(report);
+                console.log(report);
+                // result = await report_pinServices.save(report);
                 // console.log(result);
-            
             } else {
                 const report = {
                     approve: false,
@@ -73,13 +74,7 @@ function SelectReportOption({ handleTurnOnSelectReport, pin, user, comment}) {
         <div className={cx('popup-background')}>
             <div className={cx('gray-background')} onClick={() => handleTurnOnSelectReport(false)}></div>
             <div className={cx('popup-container')}>
-                <div className={cx('popup-top')}>
-                    {(!comment) ? (
-                        <h2>Báo cáo Ghim</h2>
-                    ) : (
-                        <h2>Báo cáo nhận xét</h2>
-                    )}
-                    </div>
+                <div className={cx('popup-top')}>{Object.keys(comment).length === 0 ? <h2>Báo cáo Ghim</h2> : <h2>Báo cáo nhận xét</h2>}</div>
                 <div className={cx('list-report')}>
                     {listReport.map((item, index) => {
                         return (

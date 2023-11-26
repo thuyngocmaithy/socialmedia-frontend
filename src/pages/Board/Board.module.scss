@@ -4,6 +4,9 @@
     margin: 20px 0;
     text-align: center;
     color: var(--color-red);
+    &.dark {
+        color: var(--color-red-100);
+    }
 }
 .option {
     display: flex;
@@ -19,6 +22,10 @@
 
     &:hover {
         background-color: rgba(22, 24, 35, 0.06);
+    }
+    &.dark {
+        color: var(--white-200);
+        fill: currentColor;
     }
 }
 .count {

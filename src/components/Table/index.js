@@ -1,7 +1,10 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
+import { faListCheck, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Radio } from '@mui/material';
 import Box from '@mui/material/Box';
+import Checkbox from '@mui/material/Checkbox';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -12,15 +15,12 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faPen, faListCheck } from '@fortawesome/free-solid-svg-icons';
+import { alpha } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
-import Button from '../Button';
-import { Radio } from '@mui/material';
+import PropTypes from 'prop-types';
+import * as React from 'react';
 import { ThemeContext } from '../../context/ThemeContext';
+import Button from '../Button';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -372,7 +372,7 @@ export default function EnhancedTable({
                                                             checked={
                                                                 selectedValue[`radio${row.id}`] !== undefined
                                                                     ? selectedValue[`radio${row.id}`] ===
-                                                                      `${row.id}_${key}`
+                                                                    `${row.id}_${key}`
                                                                     : row[key]
                                                             }
                                                             onChange={(event) => handleSelectRadio(event)}
