@@ -57,3 +57,19 @@
 .acceptBtn {
     margin-left: 8px;
 }
+
+
+@media screen and (max-width: 768px) {
+    .container{
+        width: 350px;
+        height: 350px;
+    }
+}
+
+@media screen and (max-width: 430px) {
+    
+}
+
+@media screen and (min-width: 430px) and (max-width: 768px) {
+    
+}

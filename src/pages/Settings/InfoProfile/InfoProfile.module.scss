@@ -104,29 +104,30 @@ $circle-radius: 50%;
         }
     
 }
-// @media screen and (max-width: 430px) {
+@media screen and (max-width: 430px) {
     
-//     .container-infoProfile {
-//         display: block;
-//         margin-left: 60px; 
-//         width: auto;
+    .container-infoProfile {
+        display: block;
+        margin-left: 60px; 
+        margin-top: 0px;
+        width: auto;
         
 
-//         .discription {
-//             width: 300px ;
-//         }
+        .discription {
+            width: 300px ;
+        }
 
-//         .setUserProfilePhoto {
-//             grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-//         }
+        .setUserProfilePhoto {
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        }
 
-//         .setUserProfilePhoto-btn {
-//             .changeImageBtn {
-//                 width: 100px;
-//                 height: 40px;
-//                 font-size: 16px;
-//             }
-//         }
-//     }
+        .setUserProfilePhoto-btn {
+            .changeImageBtn {
+                width: 100px;
+                height: 40px;
+                font-size: 16px;
+            }
+        }
+    }
 
-// }
+}

@@ -218,7 +218,7 @@ function Create() {
                 </div>
                 {/* end header  */}
                 <div className={cx('mainContent')}>
-                    <LoadImage height="565px" width="355px" onSelectImage={handleChangeImage}></LoadImage>
+                    <LoadImage className={cx('loadimage')} height="565px" width="355px" onSelectImage={handleChangeImage}></LoadImage>
                     {/* end upload IMG */}
                     <div className={cx('insertData')}>
                         <div className={cx('title')}>
