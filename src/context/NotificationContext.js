@@ -22,6 +22,7 @@ function NotificationProvider({ children }) {
         stompClient.connect({}, () => {
             stompClient.subscribe(`/room/updateNots/${userId}`, (result) => {
                 nots.current = [...nots.current, JSON.parse(result.body).notifications];
+                fetch2();
                 console.log(result.body);
             });
         });

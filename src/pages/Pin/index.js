@@ -1,35 +1,35 @@
-import classNames from 'classnames/bind';
-import styles from './DisplayPin.module.scss';
-import Tippy from '@tippyjs/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import { CircularProgress } from '@mui/material';
+import Tippy from '@tippyjs/react';
+import classNames from 'classnames/bind';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import React, { useEffect, useState, useContext, useRef } from 'react';
-import { ShareIcon, DownloadIcon, ReportIcon } from '../../components/Icons';
 import AccountInfo from '../../components/AccountInfo';
+import ActionAlerts from '../../components/Alert';
 import Button from '../../components/Button';
+import CommentApp from '../../components/Comment';
+import CreateBoard from '../../components/CreateBoard';
+import { DownloadIcon, ReportIcon, ShareIcon } from '../../components/Icons';
+import LikeCard from '../../components/LikeCard';
 import Popper from '../../components/Popper';
 import SelectBoardPopper from '../../components/Popper/SelectBoardPopper';
-import CreateBoard from '../../components/CreateBoard';
-import ActionAlerts from '../../components/Alert';
 import SelectReportOption from '../../components/SelectReportOption';
-import CommentApp from '../../components/Comment';
-import LikeCard from '../../components/LikeCard';
-import * as userServices from '../../services/userServices';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
+import { StompContext } from '../../context/StompContext';
+import { ThemeContext } from '../../context/ThemeContext';
+import * as commentServices from '../../services/commentServices';
 import * as pinServices from '../../services/pinServices';
 import * as userSavePinServices from '../../services/userSavePinServices';
-import * as commentServices from '../../services/commentServices';
-import { AccountLoginContext } from '../../context/AccountLoginContext';
-import { ThemeContext } from '../../context/ThemeContext';
-import { CircularProgress } from '@mui/material';
-import { Stomp } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
+import * as userServices from '../../services/userServices';
+import styles from './DisplayPin.module.scss';
 
 const cx = classNames.bind(styles);
 let stompClient = null;
 
 function DisplayPin() {
+    const stompClient = useContext(StompContext);
     const [currentUser, setCurrentUser] = useState('');
     const { theme } = useContext(ThemeContext);
     const { userId, permission } = useContext(AccountLoginContext);
@@ -172,17 +172,15 @@ function DisplayPin() {
     const [newComment, setNewComment] = useState('');
     const [submitComment, setSubmitComment] = useState(false);
     useEffect(() => {
-        let stompObject = null;
+        // let stompObject = null;
         const fetchData = async () => {
             comments.current = await commentServices.getByPinId(pinID);
             setLoad(true);
         };
         const createStompConnect = () => {
-            const socket = new SockJS('http://localhost:8080/ws');
-            stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
                 console.log('Connected: ' + frame);
-                stompObject = stompClient.subscribe(`/room/comment/pin_id/${pinID}`, function (comment) {
+                stompClient.subscribe(`/room/comment/pin_id/${pinID}`, function (comment) {
                     console.log(JSON.parse(comment.body));
                     handleCommentSubmit(JSON.parse(comment.body));
                     setSubmitComment(false);
@@ -192,10 +190,12 @@ function DisplayPin() {
         createStompConnect();
         fetchData();
         return () => {
-            stompClient.unsubscribe(stompObject.id);
+            // console.log(stompObject);
+            // stompClient.unsubscribe(stompObject.id);
         };
     }, [submitComment]);
     const [scroll, setScroll] = useState(false);
+
     const handleCommentSubmit = (comment) => {
         comments.current = [...comments.current, comment];
         setScroll(true);
@@ -204,21 +204,19 @@ function DisplayPin() {
     };
     const sendComment = () => {
         setLoadComment(true);
-        let commentId = 1;
-        if (comments.current.length > 0) {
-            commentId = comments.current.at(-1).id + 1;
-        }
-        console.log(comments.current);
         stompClient.publish({
-            destination: `/app/addComment/pin_id/${pinID}`,
+            destination: `/app/sendNot/${pin.user.id}`,
             body: JSON.stringify({
-                // commentId: comments.current.at(-1).id + 1,
-                commentId,
-                userId: currentUser.id,
-                pinId: pin.id,
-                content: newComment,
+                notifications: { notificationType: 'Comment' },
+                comments: {
+                    user: { id: currentUser.id },
+                    pin: { id: pin.id },
+                    content: newComment,
+                },
             }),
         });
+        console.log(444444444444444);
+
         setSubmitComment(true);
         setRed(false);
     };

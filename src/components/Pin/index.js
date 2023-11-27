@@ -1,27 +1,26 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import Tippy from '@tippyjs/react';
-import 'tippy.js/dist/tippy.css';
 import classNames from 'classnames/bind';
-import styles from './Pin.module.scss';
-import { ShareIcon, DownloadIcon, AccessIcon, EditIcon, SearchIcon, People } from '../Icons';
+import React, { useContext, useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import 'tippy.js/dist/tippy.css';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
+import { NotificationContext } from '../../context/NotificationContext';
+import * as boardServices from '../../services/boardServices';
+import * as pinServices from '../../services/pinServices';
+import * as userSavePinServices from '../../services/userSavePinServices';
+import * as userServices from '../../services/userServices';
 import AccountInfo from '../AccountInfo';
 import Button from '../Button';
-import SelectBoardPopper from '../Popper/SelectBoardPopper';
 import CreateBoard from '../CreateBoard';
-import Popper from '../Popper';
-import { ClickAwayListener } from '@mui/base/ClickAwayListener';
-import * as userSavePinServices from '../../services/userSavePinServices';
-import * as pinServices from '../../services/pinServices';
-import * as boardServices from '../../services/boardServices';
-import * as userServices from '../../services/userServices';
-import SharePopper from '../Popper/SharePopper';
-import { NavLink } from 'react-router-dom';
-import { AccountLoginContext } from '../../context/AccountLoginContext';
 import DialogConfirmLogin from '../DialogConfirmLogin';
-import { NotificationContext } from '../../context/NotificationContext';
+import { AccessIcon, DownloadIcon, EditIcon, ShareIcon } from '../Icons';
+import Popper from '../Popper';
+import SelectBoardPopper from '../Popper/SelectBoardPopper';
+import SharePopper from '../Popper/SharePopper';
+import styles from './Pin.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -189,40 +188,46 @@ function Pin({
                             </button>
                         )}
                         {pinCreated && (
-                            <Tippy delay={[0, 100]} content="Chỉnh sửa" placement="bottom">
-                                <button className={cx('btn')} onClick={handleEdit}>
-                                    <EditIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
-                                </button>
-                            </Tippy>
+                            <div>
+                                <Tippy delay={[0, 100]} content="Chỉnh sửa" placement="bottom">
+                                    <button className={cx('btn')} onClick={handleEdit}>
+                                        <EditIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
+                                    </button>
+                                </Tippy>
+                            </div>
                         )}
 
                         <ClickAwayListener onClickAway={handleClickAwayShare}>
-                            <Tippy delay={[0, 100]} content="Chia sẻ" placement="bottom">
-                                <button onClick={handleOpenShare} className={cx(pinCreated ? 'btn-end' : 'btn')}>
-                                    <Popper
-                                        idPopper={`share${id}`}
-                                        contentTitle={
-                                            <ShareIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
-                                        }
-                                        className={cx('share-menu')}
-                                        body={<SharePopper />}
-                                        widthBody="maxContent"
-                                    />
-                                </button>
-                            </Tippy>
+                            <div>
+                                <Tippy delay={[0, 100]} content="Chia sẻ" placement="bottom">
+                                    <button onClick={handleOpenShare} className={cx(pinCreated ? 'btn-end' : 'btn')}>
+                                        <Popper
+                                            idPopper={`share${id}`}
+                                            contentTitle={
+                                                <ShareIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
+                                            }
+                                            className={cx('share-menu')}
+                                            body={<SharePopper />}
+                                            widthBody="maxContent"
+                                        />
+                                    </button>
+                                </Tippy>
+                            </div>
                         </ClickAwayListener>
 
                         {pinCreated ? null : (
-                            <Tippy delay={[0, 100]} content="Lưu ảnh" placement="bottom">
-                                <button
-                                    onClick={() => {
-                                        download(image, title);
-                                    }}
-                                    className={cx('btn-end')}
-                                >
-                                    <DownloadIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
-                                </button>
-                            </Tippy>
+                            <div>
+                                <Tippy delay={[0, 100]} content="Lưu ảnh" placement="bottom">
+                                    <button
+                                        onClick={() => {
+                                            download(image, title);
+                                        }}
+                                        className={cx('btn-end')}
+                                    >
+                                        <DownloadIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
+                                    </button>
+                                </Tippy>
+                            </div>
                         )}
                     </div>
                 </div>

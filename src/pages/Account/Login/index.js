@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
 import React, { useContext, useEffect, useState } from 'react';
+import ActionAlerts from '../../../components/Alert';
 import Button from '../../../components/Button';
 import { GoogleIcon } from '../../../components/Icons';
 import LabelTextBox from '../../../components/LabelTextBox';
@@ -7,7 +8,6 @@ import { ThemeContext } from '../../../context/ThemeContext';
 import * as userServices from '../../../services/userServices';
 import styles from '../Account.module.scss';
 import Wrapper from '../Wrapper';
-import ActionAlerts from '../../../components/Alert';
 
 // logout xử lý ở phần header
 const cx = classNames.bind(styles);
@@ -60,6 +60,7 @@ function Login() {
         const fetchApi = async () => {
             const email = e.target.elements.email.value !== '' ? e.target.elements.email.value : null;
             const password = e.target.elements.password.value !== '' ? e.target.elements.password.value : null;
+            console.log({ email, password });
             const result = await userServices.login(email, password);
 
             if (result.a === 'errorEmail') {

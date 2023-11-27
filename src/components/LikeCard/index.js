@@ -1,16 +1,18 @@
-import classNames from 'classnames/bind';
 import Tippy from '@tippyjs/react';
-import { useState, useEffect } from 'react';
-import styles from './LikeCard.module.scss';
-import { LikeIcon, LikedIcon } from '../Icons';
+import classNames from 'classnames/bind';
+import { useContext, useEffect, useState } from 'react';
+import { StompContext } from '../../context/StompContext';
 import * as likeServices from '../../services/likeServices';
+import { notificationDeleted } from '../../services/notificationService';
 import * as pinServices from '../../services/pinServices';
-import axios from 'axios';
+import { LikeIcon, LikedIcon } from '../Icons';
+import styles from './LikeCard.module.scss';
 
 const cx = classNames.bind(styles);
 
 function LikeCard({ pinID, currentUser }) {
     // console.log(currentUser);
+    const stompClient = useContext(StompContext);
     const [count, setCount] = useState(0);
     const [pin, setPin] = useState([]);
     useEffect(() => {
@@ -42,6 +44,16 @@ function LikeCard({ pinID, currentUser }) {
         console.log(like);
         const fetchApi = async () => {
             const result = await likeServices.save(like);
+            stompClient.publish({
+                destination: `/app/sendNot/${pin.user.id}`,
+                body: JSON.stringify({
+                    notifications: { notificationType: 'Like' },
+                    likes: {
+                        user: { id: currentUser.id },
+                        pin: { id: pinID },
+                    },
+                }),
+            });
         };
         fetchApi();
     };
@@ -53,6 +65,7 @@ function LikeCard({ pinID, currentUser }) {
             for (let i = 0; i < result.length; i++) {
                 if (result[i].user.id === currentUser.id) {
                     const rs = await likeServices.del(result[i]);
+                    notificationDeleted(result.id);
                     break;
                 }
             }

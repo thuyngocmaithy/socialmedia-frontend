@@ -1,14 +1,7 @@
-import classNames from 'classnames/bind';
+import classNames from 'classnames';
+import { useEffect, useRef } from 'react';
 import styles from './Comment.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-
-import AccountInfo from '../../components/AccountInfo';
-import Button from '../../components/Button';
-import * as commentServices from '../../services/commentServices';
-import * as pinServices from '../../services/pinServices';
 import CommentCard from './CommentCard';
-import { useEffect, useRef, useState } from 'react';
 
 const cx = classNames.bind(styles);
 

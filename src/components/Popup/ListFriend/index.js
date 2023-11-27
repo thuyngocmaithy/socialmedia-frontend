@@ -48,6 +48,8 @@ function ListFriend({ idUser, onClose }) {
     const [updateSuccess, setUpdateSuccess] = useState(false);
     const [deleteSuccess, setDeleteSuccess] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [frienshipCurrent, setFriendshipCurrent] = useState(false);
+    const [statusFriend, setSatusFriend] = useState('');
 
     useEffect(() => {
         const fetchApi = async () => {
@@ -82,8 +84,8 @@ function ListFriend({ idUser, onClose }) {
         }
     };
 
-    const handleCancelFriend = async (id) => {
-        const result = await friendshipServices.deleteById(id);
+    const handleCancelFriend = async (item) => {
+        const result = await friendshipServices.deleteFriendship(item);
         if (result) {
             setDeleteSuccess(true);
         }
@@ -116,7 +118,7 @@ function ListFriend({ idUser, onClose }) {
                                             fontSize="1.5rem"
                                             fontWeight="500"
                                         />
-                                        <Button primary onClick={() => handleCancelFriend(item.id)}>
+                                        <Button primary onClick={() => handleCancelFriend(item)}>
                                             Hủy kết bạn
                                         </Button>
                                     </div>

@@ -4,7 +4,6 @@ import { useLocation } from 'react-router-dom';
 import Pin from '../../components/Pin';
 import { getNewsHub } from '../../services/notificationService';
 import styles from './News_Hub.module.scss';
-import { CircularProgress } from '@mui/material';
 const cx = classNames.bind(styles);
 
 function News_Hub() {
@@ -13,7 +12,7 @@ function News_Hub() {
     id = id.substring(id.lastIndexOf('/') + 1);
     useEffect(() => {
         getNewsHub(id).then((e) => {
-            setNews_hub(e);    
+            setNews_hub(e);
         });
     }, [id]);
 

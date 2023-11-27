@@ -58,9 +58,9 @@ export const update = async (id, friendship) => {
     }
 };
 
-export const deleteById = async (id) => {
+export const deleteFriendship = async (friendship) => {
     try {
-        const res = await httpRequest.post(`/friendships/delete/${id}`, {
+        const res = await httpRequest.post(`/friendships/delete`, friendship, {
             headers: {
                 'Content-Type': 'application/json',
             },

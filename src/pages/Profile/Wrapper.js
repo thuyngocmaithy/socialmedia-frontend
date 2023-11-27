@@ -1,21 +1,20 @@
-import PropTypes from 'prop-types';
-import classNames from 'classnames/bind';
-import styles from './Profile.module.scss';
-import NavMenu from '../../components/NavMenu';
-import { memo } from 'react';
-import Image from '../../components/Image';
-import Button from '../../components/Button';
-import { AccountOtherContext, AccountOtherProvider } from '../../context/AccountOtherContext';
-import { useContext, useEffect, useState } from 'react';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
-import * as userServices from '../../services/userServices';
-import * as friendshipServices from '../../services/friendshipServices';
-import ListFriend from '../../components/Popup/ListFriend';
-import FriendRequest from '../../components/Popup/FriendRequest';
-import { ThemeContext } from '../../context/ThemeContext';
-import { AccountLoginContext } from '../../context/AccountLoginContext';
 import { CircularProgress } from '@mui/material';
+import classNames from 'classnames/bind';
+import PropTypes from 'prop-types';
+import { memo, useContext, useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Button from '../../components/Button';
+import Image from '../../components/Image';
+import NavMenu from '../../components/NavMenu';
+import FriendRequest from '../../components/Popup/FriendRequest';
+import ListFriend from '../../components/Popup/ListFriend';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
+import { AccountOtherContext } from '../../context/AccountOtherContext';
 import { StompContext } from '../../context/StompContext';
+import { ThemeContext } from '../../context/ThemeContext';
+import * as friendshipServices from '../../services/friendshipServices';
+import * as userServices from '../../services/userServices';
+import styles from './Profile.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -30,7 +29,8 @@ function Wrapper({ children, className }) {
     const [renderFriend, setRenderFriend] = useState(false);
     const [renderFriendRequest, setRenderFriendRequest] = useState(false);
     const [statusFriend, setSatusFriend] = useState('');
-    const [idFriend, setIdFriend] = useState(false);
+    const [frienshipCurrent, setFriendshipCurrent] = useState(false);
+    const [updateFriend, setUpdateFriend] = useState(false);
 
     const { userId } = useContext(AccountLoginContext);
 
@@ -56,7 +56,7 @@ function Wrapper({ children, className }) {
 
                         if (checkFriend !== undefined && checkFriend !== '') {
                             setSatusFriend(checkFriend.status);
-                            setIdFriend(checkFriend.id);
+                            setFriendshipCurrent(checkFriend);
                         }
                     }
                 }
@@ -69,13 +69,14 @@ function Wrapper({ children, className }) {
                 setCountFriend(resultFriend);
                 setCountRequest(resultRequest.length);
                 setLoading(false);
+                setUpdateFriend(false);
             } else {
                 navigate(-1);
             }
         };
 
         fetchApi();
-    }, [pathname, accountOther, userId, handleAccount]);
+    }, [pathname, accountOther, userId, handleAccount, updateFriend]);
 
     const handleRenderFriend = () => {
         setRenderFriend(true);
@@ -104,26 +105,22 @@ function Wrapper({ children, className }) {
     ];
     //add friend
     const handleAddFriend = async () => {
-        const createdAt = null;
         const status = 'PENDING';
         const user1 = await userServices.getUserById(userId); //User đang login
         const user2 = await userServices.getUserByUsername(pathname); //User nhận lời mời
 
-        const friendship = { createdAt, status, user1, user2 };
-        const result = await friendshipServices.add(friendship);
-        if (result) {
-            setSatusFriend('PENDING');
-            const data = JSON.stringify({
-                notifications: { notificationType: 'Friend' },
-                friendships: { user1: user1, user2: user2 },
-            });
-            console.log('data.friendships:' + data.friendships);
-            stompClient.send(`/app/sendNot/${user2.id}`, {}, data);
-        }
+        setSatusFriend('PENDING');
+        const data = JSON.stringify({
+            notifications: { notificationType: 'Friend' },
+            friendships: { status, user1: { id: user1.id }, user2: { id: user2.id } },
+        });
+        setFriendshipCurrent(data.friendships);
+        console.log('data.friendships:' + data);
+        stompClient.send(`/app/sendNot/${user2.id}`, {}, data);
     };
     //cancel friend
     const handleCancelFriend = async () => {
-        const result = await friendshipServices.deleteById(idFriend);
+        const result = await friendshipServices.deleteFriendship(frienshipCurrent);
         if (result) {
             setSatusFriend('REJECT');
         }
@@ -159,7 +156,13 @@ function Wrapper({ children, className }) {
                             )}
                         </div>
                         {renderFriend && <ListFriend onClose={handleClose} idUser={info.id} />}
-                        {renderFriendRequest && <FriendRequest onClose={handleCloseRequest} idUser={info.id} />}
+                        {renderFriendRequest && (
+                            <FriendRequest
+                                setUpdateFriend={setUpdateFriend}
+                                onClose={handleCloseRequest}
+                                idUser={info.id}
+                            />
+                        )}
 
                         <Button className={cx('shareBtn')} primary>
                             Chia sẻ
