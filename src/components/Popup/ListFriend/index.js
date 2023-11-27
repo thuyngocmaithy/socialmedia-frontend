@@ -5,13 +5,14 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import AccountInfo from '../../AccountInfo';
 import Button from '../../Button';
 import * as friendshipServices from '../../../services/friendshipServices';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { CircularProgress } from '@mui/material';
+import { AccountOtherContext } from '../../../context/AccountOtherContext';
 
 const cx = classNames.bind(styles);
 function CustomTabPanel(props) {
@@ -43,6 +44,7 @@ function a11yProps(index) {
     };
 }
 function ListFriend({ idUser, onClose }) {
+    const { accountOther } = useContext(AccountOtherContext);
     const [listFriend, setListFriend] = useState([]);
     const [listRequest, setListRequest] = useState([]);
     const [updateSuccess, setUpdateSuccess] = useState(false);
@@ -118,9 +120,11 @@ function ListFriend({ idUser, onClose }) {
                                             fontSize="1.5rem"
                                             fontWeight="500"
                                         />
-                                        <Button primary onClick={() => handleCancelFriend(item)}>
-                                            Hủy kết bạn
-                                        </Button>
+                                        {accountOther ? null : (
+                                            <Button primary onClick={() => handleCancelFriend(item)}>
+                                                Hủy kết bạn
+                                            </Button>
+                                        )}
                                     </div>
                                 );
                             })}

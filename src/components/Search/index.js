@@ -30,32 +30,10 @@ function Search({ className, width = '750px' }) {
 
     const location = useLocation();
     const pathname = location.pathname.split('/')[1];
-    // const [info, setInfo] = useState({});
-    // useEffect(() => {
-    //     const fetchApi = async () => {
-    //         console.log(pathname);
-    //         const resultInfo = await userServices.getUserByUsername(pathname);
 
-    //         setInfo(resultInfo);
-    //     };
-    //     fetchApi();
-    // }, [pathname]);
 
     const [pinByUser, setPinByUser] = useState([]);
-    // useEffect(() =>  {
-    //     const fetchApi = async () => {
-    //         console.log(pathname);
-    //         const result = await pinServices.getPinsByUsername(pathname);
-    //         setPinByUser(result);
-    //         console.log(result);
-    //         console.log(pinByUser);
-    //         const rs = await userSavePinServices.getPinByUserId(info.id);
-    //         setPinByUser([...pinByUser, rs]);
-    //     };
-    //     fetchApi();
-    // },[debouncedValue]);
 
-    // console.log(pinByUser);
 
     const [listType, setListType] = useState([]);
     useEffect(() => {
@@ -186,6 +164,7 @@ function Search({ className, width = '750px' }) {
                         </PopperWrapper>
                     </div>
                 )}
+                
                 onClickOutside={handleHideResult}
                 //Bấm ngoài khu vực tippy
             >
@@ -215,7 +194,7 @@ function Search({ className, width = '750px' }) {
                             <FontAwesomeIcon icon={faCircleXmark} />
                         </button>
                     )}
-
+                    
                     {loading && <FontAwesomeIcon className={cx('loading-btn')} icon={faSpinner} />}
 
                     {searchResult.length > 0 ? (

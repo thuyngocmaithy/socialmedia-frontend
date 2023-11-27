@@ -9,11 +9,11 @@ import { ThemeContext } from '../../../context/ThemeContext';
 import * as commentServices from '../../../services/commentServices';
 import { notificationDeleted } from '../../../services/notificationService';
 import Button from '../../Button';
-import SelectReportOption from '../../SelectReportOption';
 import styles from '../Comment.module.scss';
 
 const cx = classNames.bind(styles);
-function CommentCard({ comment, currentUser }) {
+
+function CommentCard({ handleTurnOnSelectReport, comment, currentUser }) {
     const [del, setDelComment] = useState(false);
     const { theme } = useContext(ThemeContext);
     const [commentDelete, setCommentDelete] = useState({});
@@ -33,7 +33,6 @@ function CommentCard({ comment, currentUser }) {
     const deleteComment = () => {
         const fetchApi = async () => {
             const rs = await commentServices.del(commentDelete);
-            console.log(rs);
             if (rs) {
                 notificationDeleted(commentDelete.notification.id);
                 setConfirmDelete(false);
@@ -45,11 +44,6 @@ function CommentCard({ comment, currentUser }) {
 
     const handleCloseConfirm = () => {
         setConfirmDelete(false);
-    };
-    // Turn on select report
-    const [showSelectReport, setShowSelectReport] = React.useState(false);
-    const handleTurnOnSelectReport = (isShown) => {
-        setShowSelectReport(isShown);
     };
 
     return (
@@ -75,11 +69,12 @@ function CommentCard({ comment, currentUser }) {
                         </div>
                     </Tippy>
                 ) : (
-                    <Tippy delay={[0, 100]} content="Báo cáo bình luận" placement="bottom">
+                    <Tippy delay={[0, 100]} content="Báo cáo nhận xét" placement="bottom">
                         <div className={cx('action-comment')}>
                             <button
                                 className={cx('action-button', 'report-button')}
-                                onClick={() => handleTurnOnSelectReport(true)}
+                                onClick={() => handleTurnOnSelectReport(true, comment)}
+                                // onClick={() => turnOnReportComment(comment)}
                             >
                                 <FontAwesomeIcon icon={faTriangleExclamation} />
                             </button>
@@ -87,13 +82,6 @@ function CommentCard({ comment, currentUser }) {
                     </Tippy>
                 )}
             </div>
-            {showSelectReport && (
-                <SelectReportOption
-                    handleTurnOnSelectReport={handleTurnOnSelectReport}
-                    comment={comment}
-                    user={currentUser}
-                />
-            )}
             {confirmDelete && (
                 <Dialog
                     className={cx(theme === 'dark' ? 'dark' : '')}

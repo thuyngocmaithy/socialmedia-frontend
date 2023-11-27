@@ -7,10 +7,7 @@ import AccountInfo from '../../components/AccountInfo';
 import Button from '../../components/Button';
 import LoadImage from '../../components/LoadImage';
 import Popper from '../../components/Popper';
-import SelectBoardPopper from '../../components/Popper/SelectBoardPopper';
-import CreateBoard from '../../components/CreateBoard';
 import SelectTypePopper from '../../components/Popper/SelectTypePopper';
-import CreateType from '../../components/CreateType';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import ActionAlerts from '../../components/Alert';
 import * as userServices from '../../services/userServices';
@@ -44,6 +41,7 @@ function Create() {
     const handleChooseType = (currentType) => {
         setType(currentType);
     };
+    //submit create type
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
         const typeName = event.target.elements.typeName.value !== '' ? event.target.elements.typeName.value : null;
@@ -51,11 +49,17 @@ function Create() {
         const type = {
             typeName,
         };
-        const result = await typeServices.add(type);
-        if (result) {
-            setCreateSuccess(true);
-            setShowCreateType(false);
-            showAlert('createType');
+        console.log(typeName);
+        if (typeName !== null) {
+            const result = await typeServices.add(type);
+            if (result) {
+                setCreateSuccess(true);
+                setShowCreateType(false);
+                showAlert('createType');
+            }
+        }
+        else {
+            showAlert('errorInfo');
         }
     };
     //count length

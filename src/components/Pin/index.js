@@ -1,26 +1,26 @@
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import React, { useState, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
-import React, { useContext, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import 'tippy.js/dist/tippy.css';
-import { AccountLoginContext } from '../../context/AccountLoginContext';
-import { NotificationContext } from '../../context/NotificationContext';
-import * as boardServices from '../../services/boardServices';
-import * as pinServices from '../../services/pinServices';
-import * as userSavePinServices from '../../services/userSavePinServices';
-import * as userServices from '../../services/userServices';
+import styles from './Pin.module.scss';
+import { ShareIcon, DownloadIcon, AccessIcon, EditIcon } from '../Icons';
 import AccountInfo from '../AccountInfo';
 import Button from '../Button';
-import CreateBoard from '../CreateBoard';
-import DialogConfirmLogin from '../DialogConfirmLogin';
-import { AccessIcon, DownloadIcon, EditIcon, ShareIcon } from '../Icons';
-import Popper from '../Popper';
 import SelectBoardPopper from '../Popper/SelectBoardPopper';
+import Popper from '../Popper';
+import * as userSavePinServices from '../../services/userSavePinServices';
+import * as pinServices from '../../services/pinServices';
+import * as boardServices from '../../services/boardServices';
+import * as userServices from '../../services/userServices';
 import SharePopper from '../Popper/SharePopper';
-import styles from './Pin.module.scss';
+import { NavLink } from 'react-router-dom';
+import { AccountLoginContext } from '../../context/AccountLoginContext';
+import DialogConfirmLogin from '../DialogConfirmLogin';
+import { NotificationContext } from '../../context/NotificationContext';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import LabelTextBox from '../LabelTextBox';
 
 const cx = classNames.bind(styles);
 
@@ -48,7 +48,7 @@ function Pin({
         setActiveOptionBottom(true);
     };
 
-    const handleDisplay = () => {
+    const handleDisplaySelectBoardPopper = (e) => {
         setActiveOptionTop(true);
     };
     const handleClickAwaySelectBoard = () => {
@@ -127,51 +127,76 @@ function Pin({
         document.body.removeChild(link);
     };
 
-    const navigate = useNavigate();
-    const handleDisplayPin = () => {
+    const handleDisplayPin = (e) => {
         if (userId === 0) {
-            // setTimeout(() => {
+            e.preventDefault();
             setOpenConfirmLogin(true);
-            navigate('/login');
-
-            // }, 900000);
         }
     };
 
-    // Turn on CreateBoard
+    // handle CreateBoard
     const [showCreateBoard, setShowCreateBoard] = React.useState(false);
 
     const handleTurnOnCreateBoard = (isShown) => {
         setShowCreateBoard(isShown);
     };
-    const handleCloseCreate = () => {
+    const handleCloseCreateBoard = () => {
         setShowCreateBoard(false);
+    };
+
+    const handleSubmitCreate = async (event) => {
+        event.preventDefault();
+        const user = await userServices.getUserById(userId);
+        const description =
+            event.target.elements.descriptionAdd.value !== '' ? event.target.elements.descriptionAdd.value : null;
+        const name = event.target.elements.nameAdd.value !== '' ? event.target.elements.nameAdd.value : null;
+        const createdAt = null;
+
+        if (name == null || description == null) {
+            showAlert('errorInfo');
+        } else {
+            const board = { description, name, user, createdAt };
+            const result = await boardServices.add(board);
+            if (result) {
+                setShowCreateBoard(false);
+                showAlert('create');
+            }
+        }
     };
 
     return (
         <>
             <div className={cx('wrapper')} style={{ width: width }}>
                 <div className={cx('container-image')}>
-                    <NavLink className={(nav) => cx('menu-item')} to={`/pin/${id}`} onClick={() => handleDisplayPin()}>
+                    <NavLink
+                        className={(nav) => cx('menu-item')}
+                        to={`/pin/${id}`}
+                        onClick={(e) => handleDisplayPin(e)}
+                    >
                         <img className={cx('image')} src={image && `data:image/jpeg;base64,${image}`} alt="" />
                     </NavLink>
                     {pinCreated ? null : (
                         <div className={cx('option-top', { active: activeOptionTop })}>
                             <ClickAwayListener onClickAway={handleClickAwaySelectBoard}>
-                                <button className={cx('select-board-btn')} onClick={handleDisplay}>
-                                    <Popper
-                                        idPopper={`selectBoard${stt}`}
-                                        contentTitle={data.name}
-                                        title={<FontAwesomeIcon icon={faChevronDown} />}
-                                        className={cx('select-board')}
-                                        body={
-                                            <SelectBoardPopper
-                                                getData={getData}
-                                                handleTurnOnCreateBoard={handleTurnOnCreateBoard}
-                                            />
-                                        }
-                                        widthBody="maxContent"
-                                    />
+                                <button
+                                    className={cx('select-board-btn')}
+                                    onClick={() => handleDisplaySelectBoardPopper()}
+                                >
+                                    {userId && (
+                                        <Popper
+                                            idPopper={`selectBoard${stt}`}
+                                            contentTitle={data.name}
+                                            title={<FontAwesomeIcon icon={faChevronDown} />}
+                                            className={cx('select-board')}
+                                            body={
+                                                <SelectBoardPopper
+                                                    getData={getData}
+                                                    handleTurnOnCreateBoard={handleTurnOnCreateBoard}
+                                                />
+                                            }
+                                            widthBody="maxContent"
+                                        />
+                                    )}
                                 </button>
                             </ClickAwayListener>
 
@@ -231,20 +256,45 @@ function Pin({
                         )}
                     </div>
                 </div>
-                {pinCreated ? null : (
-                    <div className={cx('info-pin')}>
-                        {title && <h3>{title}</h3>}
-                        <AccountInfo userImage={userImage} username={username} />
-                    </div>
-                )}
+
+                <div className={cx('info-pin')}>
+                    {title && <h3>{title}</h3>}
+                    {pinCreated ? null : <AccountInfo userImage={userImage} username={username} />}
+                </div>
             </div>
             {openConfirmLogin && <DialogConfirmLogin open={openConfirmLogin} setOpen={setOpenConfirmLogin} />}
 
-            {showCreateBoard && (
-                <div className={cx('createBoard')}>
-                    <CreateBoard handleTurnOnCreateBoard={handleTurnOnCreateBoard} handleChooseBoard={getData} />
-                </div>
-            )}
+            <Dialog fullWidth={true} maxWidth="sm" open={showCreateBoard} onClose={handleCloseCreateBoard}>
+                <form onSubmit={handleSubmitCreate}>
+                    <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
+                        Tạo bảng
+                    </DialogTitle>
+                    <DialogContent>
+                        <LabelTextBox
+                            name={'nameAdd'}
+                            placeholder={'Tiêu đề'}
+                            label={'Tên bảng'}
+                            selectedSize={'medium'}
+                            // text={boardEdit.name ? boardEdit.name : ''}
+                        />
+                        <LabelTextBox
+                            name={'descriptionAdd'}
+                            placeholder={'Mô tả'}
+                            label={'Mô tả'}
+                            selectedSize={'medium'}
+                            // text={boardEdit.description ? boardEdit.description : ''}
+                        />
+                    </DialogContent>
+                    <DialogActions sx={{ marginBottom: '10px' }}>
+                        <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseCreateBoard}>
+                            Hủy
+                        </Button>
+                        <Button style={{ fontSize: '14px' }} red type="submit">
+                            Tạo
+                        </Button>
+                    </DialogActions>
+                </form>
+            </Dialog>
         </>
     );
 }
