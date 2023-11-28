@@ -16,6 +16,12 @@ const cx = classNames.bind(styles);
 
 function ContentReport() {
     const { theme } = useContext(ThemeContext);
+    //change input
+    const [changeNameEdit, setChangeNameEdit] = useState(false);
+    const [changeDiscriptionEdit, setChangeDiscriptionEdit] = useState(false);
+    const [changeNameAdd, setChangeNameAdd] = useState(false);
+    const [changeDiscriptionAdd, setChangeDiscriptionAdd] = useState(false);
+
     const [listContent, setListContent] = useState([]);
 
     const [openCreate, setOpenCreate] = useState(false); //Mở dialog thêm
@@ -92,6 +98,10 @@ function ContentReport() {
 
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
+
+        setChangeDiscriptionAdd(true);
+        setChangeNameAdd(true);
+
         const content = event.target.elements.content.value !== '' ? event.target.elements.content.value : null;
         const description =
             event.target.elements.description.value !== '' ? event.target.elements.description.value : null;
@@ -145,6 +155,10 @@ function ContentReport() {
     };
     const handleSubmitEdit = async (event) => {
         event.preventDefault();
+
+        setChangeNameEdit(true);
+        setChangeDiscriptionEdit(true);
+
         const id = contentEdit.id;
         const content = event.target.elements.contentEdit.value !== '' ? event.target.elements.contentEdit.value : null;
         const description =
@@ -209,6 +223,8 @@ function ContentReport() {
                             label={'Tên nội dung báo cáo'}
                             selectedSize={'medium'}
                             text={contentEdit.content ? contentEdit.content : ''}
+                            change={changeNameEdit}
+                            setChange={setChangeNameEdit}
                         />
                         <LabelTextBox
                             name={'descriptionEdit'}
@@ -216,6 +232,8 @@ function ContentReport() {
                             label={'Mô tả'}
                             selectedSize={'medium'}
                             text={contentEdit.description ? contentEdit.description : ''}
+                            change={changeDiscriptionEdit}
+                            setChange={setChangeDiscriptionEdit}
                         />
                     </DialogContent>
                     <DialogActions sx={{ justifyContent: 'flex-end', margin: '10px' }}>
@@ -245,6 +263,8 @@ function ContentReport() {
                             placeholder={'Tên nội dung báo cáo'}
                             label={'Tên nội dung báo cáo'}
                             selectedSize={'medium'}
+                            change={changeNameAdd}
+                            setChange={setChangeNameAdd}
                         />
                         <LabelTextBox
                             area={true}
@@ -252,6 +272,8 @@ function ContentReport() {
                             placeholder={'Mô tả'}
                             label={'Mô tả'}
                             selectedSize={'medium'}
+                            change={changeDiscriptionAdd}
+                            setChange={setChangeDiscriptionAdd}
                         />
                     </DialogContent>
                     <DialogActions sx={{ marginBottom: '10px' }}>

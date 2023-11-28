@@ -25,6 +25,12 @@ const cx = classNames.bind(styles);
 function PinSaved() {
     const navigate = useNavigate();
     const { theme } = useContext(ThemeContext);
+
+    const [changeNameEdit, setChangeNameEdit] = useState(false);
+    const [changeDiscriptionEdit, setChangeDiscriptionEdit] = useState(false);
+    const [changeNameAdd, setChangeNameAdd] = useState(false);
+    const [changeDiscriptionAdd, setChangeDiscriptionAdd] = useState(false);
+
     const { accountOther } = useContext(AccountOtherContext);
     //Open hộp thoại edit
     const [openEdit, setOpenEdit] = useState(false);
@@ -84,6 +90,10 @@ function PinSaved() {
     };
     const handleSubmitEdit = async (event) => {
         event.preventDefault();
+
+        setChangeDiscriptionEdit(true);
+        setChangeNameEdit(true);
+
         const id = boardEdit.id;
         const user = boardEdit.user;
         const description =
@@ -92,12 +102,14 @@ function PinSaved() {
 
         const createdAt = null;
 
-        const board = { id, description, name, user, createdAt };
-        const result = await boardServices.update(id, board);
-        if (result) {
-            setOpenEdit(false);
-            setUpdateSuccess(true);
-            showAlert('edit');
+        if (description !== null && name !== null) {
+            const board = { id, description, name, user, createdAt };
+            const result = await boardServices.update(id, board);
+            if (result) {
+                setOpenEdit(false);
+                setUpdateSuccess(true);
+                showAlert('edit');
+            }
         }
     };
     // HANDLE DELETE
@@ -127,19 +139,25 @@ function PinSaved() {
 
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
+
+        setChangeDiscriptionAdd(true);
+        setChangeNameAdd(true);
+
         const user = await userServices.getUserByUsername(pathname);
         const description =
             event.target.elements.descriptionAdd.value !== '' ? event.target.elements.descriptionAdd.value : null;
         const name = event.target.elements.nameAdd.value !== '' ? event.target.elements.nameAdd.value : null;
         const createdAt = null;
 
-        const board = { description, name, user, createdAt };
-        const result = await boardServices.add(board);
+        if (description !== null && name !== null) {
+            const board = { description, name, user, createdAt };
+            const result = await boardServices.add(board);
 
-        if (result) {
-            setOpenCreateBoard(false);
-            setCreateSuccess(true);
-            showAlert('create');
+            if (result) {
+                setOpenCreateBoard(false);
+                setCreateSuccess(true);
+                showAlert('create');
+            }
         }
     };
 
@@ -275,6 +293,8 @@ function PinSaved() {
                                 label={'Tên bảng'}
                                 selectedSize={'medium'}
                                 text={boardEdit.name ? boardEdit.name : ''}
+                                change={changeNameEdit}
+                                setChange={setChangeNameEdit}
                             />
                             <LabelTextBox
                                 name={'descriptionEdit'}
@@ -282,6 +302,8 @@ function PinSaved() {
                                 label={'Mô tả'}
                                 selectedSize={'medium'}
                                 text={boardEdit.description ? boardEdit.description : ''}
+                                change={changeDiscriptionEdit}
+                                setChange={setChangeDiscriptionEdit}
                             />
                         </DialogContent>
                         <DialogActions sx={{ justifyContent: 'space-between', margin: '10px' }}>
@@ -312,14 +334,16 @@ function PinSaved() {
                                 placeholder={'Tiêu đề'}
                                 label={'Tên bảng'}
                                 selectedSize={'medium'}
-                                // text={boardEdit.name ? boardEdit.name : ''}
+                                change={changeNameAdd}
+                                setChange={setChangeNameAdd}
                             />
                             <LabelTextBox
                                 name={'descriptionAdd'}
                                 placeholder={'Mô tả'}
                                 label={'Mô tả'}
                                 selectedSize={'medium'}
-                                // text={boardEdit.description ? boardEdit.description : ''}
+                                change={changeDiscriptionAdd}
+                                setChange={setChangeDiscriptionAdd}
                             />
                         </DialogContent>
                         <DialogActions sx={{ marginBottom: '10px' }}>

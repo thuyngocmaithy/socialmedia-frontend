@@ -5,7 +5,7 @@ import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import styles from './Pin.module.scss';
-import { ShareIcon, DownloadIcon, AccessIcon, EditIcon } from '../Icons';
+import { ShareIcon, DownloadIcon, AccessIcon, EditIcon, DeleteIcon } from '../Icons';
 import AccountInfo from '../AccountInfo';
 import Button from '../Button';
 import SelectBoardPopper from '../Popper/SelectBoardPopper';
@@ -15,7 +15,7 @@ import * as pinServices from '../../services/pinServices';
 import * as boardServices from '../../services/boardServices';
 import * as userServices from '../../services/userServices';
 import SharePopper from '../Popper/SharePopper';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { AccountLoginContext } from '../../context/AccountLoginContext';
 import DialogConfirmLogin from '../DialogConfirmLogin';
 import { NotificationContext } from '../../context/NotificationContext';
@@ -27,17 +27,19 @@ const cx = classNames.bind(styles);
 function Pin({
     stt,
     id,
-    width,
     image,
     linkImage,
     title,
     userImage,
     username,
     pinCreated = false,
+    pinSaved = false,
     handleEdit,
     onSaveResult,
     showAlert,
 }) {
+    const [changeName, setChangeName] = useState(false);
+    const [changeDiscription, setChangeDiscription] = useState(false);
     const { userId, permission } = useContext(AccountLoginContext);
     const [activeOptionTop, setActiveOptionTop] = useState(false);
     const [activeOptionBottom, setActiveOptionBottom] = useState(false);
@@ -66,7 +68,6 @@ function Pin({
     const handleSave = () => {
         const fetchApi = async () => {
             const user = await userServices.getUserById(userId);
-
             {
                 // Tăng biến đếm để tạo thông báo bài pin liên quan
                 const pinCount = localStorage.getItem('pinCount');
@@ -109,7 +110,49 @@ function Pin({
             setOpenConfirmLogin(true);
         }
     };
+    const location = useLocation();
+    const currentPath = location.pathname;
 
+    // Tìm boardId từ đường dẫn hiện tại
+    const boardIdCurrent = currentPath.split('/')[3]; // Lấy phần tử đầu tiên trong mảng chia tách bởi "/"
+
+    const handleChange = () => {
+        const fetchApi = async () => {
+            const boardId = data.id;
+            const user = await userServices.getUserById(userId);
+            const pinId = id;
+            const pin = await pinServices.getPinById(pinId);
+            const board = await boardServices.getBoardById(boardId);
+
+            const userSavePin = { user, pin, board };
+            const result = await userSavePinServices.update(userSavePin);
+            if (result) {
+                showAlert('changeSuccess');
+                setData({ name: 'Chọn bảng' });
+            }
+        };
+        if (data.name === 'Chọn bảng') {
+            showAlert('warning');
+        } else {
+            fetchApi();
+        }
+    };
+
+    const handleDelete = () => {
+        const fetchApi = async () => {
+            const user = await userServices.getUserById(userId);
+            const pin = await pinServices.getPinById(id);
+            const board = await boardServices.getBoardById(boardIdCurrent);
+
+            const userSavePin = { board: board, pin: pin, user: user };
+
+            const result = await userSavePinServices.del(userSavePin);
+            if (result) {
+                showAlert('deleteSuccess');
+            }
+        };
+        fetchApi();
+    };
     const download = (url, title) => {
         const linkSource = `data:image/jpeg;base64,${url}`;
         const downloadLink = document.createElement('a');
@@ -146,15 +189,17 @@ function Pin({
 
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
+
+        setChangeDiscription(true);
+        setChangeName(true);
+
         const user = await userServices.getUserById(userId);
         const description =
             event.target.elements.descriptionAdd.value !== '' ? event.target.elements.descriptionAdd.value : null;
         const name = event.target.elements.nameAdd.value !== '' ? event.target.elements.nameAdd.value : null;
         const createdAt = null;
 
-        if (name == null || description == null) {
-            showAlert('errorInfo');
-        } else {
+        if (name !== null && description !== null) {
             const board = { description, name, user, createdAt };
             const result = await boardServices.add(board);
             if (result) {
@@ -166,7 +211,7 @@ function Pin({
 
     return (
         <>
-            <div className={cx('wrapper')} style={{ width: width }}>
+            <div className={cx('wrapper')}>
                 <div className={cx('container-image')}>
                     <NavLink
                         className={(nav) => cx('menu-item')}
@@ -175,14 +220,14 @@ function Pin({
                     >
                         <img className={cx('image')} src={image && `data:image/jpeg;base64,${image}`} alt="" />
                     </NavLink>
-                    {pinCreated ? null : (
-                        <div className={cx('option-top', { active: activeOptionTop })}>
-                            <ClickAwayListener onClickAway={handleClickAwaySelectBoard}>
-                                <button
-                                    className={cx('select-board-btn')}
-                                    onClick={() => handleDisplaySelectBoardPopper()}
-                                >
-                                    {userId && (
+                    {userId ? (
+                        pinCreated ? null : (
+                            <div className={cx('option-top', { active: activeOptionTop })}>
+                                <ClickAwayListener onClickAway={handleClickAwaySelectBoard}>
+                                    <button
+                                        className={cx('select-board-btn')}
+                                        onClick={() => handleDisplaySelectBoardPopper()}
+                                    >
                                         <Popper
                                             idPopper={`selectBoard${stt}`}
                                             contentTitle={data.name}
@@ -192,19 +237,26 @@ function Pin({
                                                 <SelectBoardPopper
                                                     getData={getData}
                                                     handleTurnOnCreateBoard={handleTurnOnCreateBoard}
+                                                    idBoardCurrent={pinSaved ? Number(boardIdCurrent) : null}
                                                 />
                                             }
                                             widthBody="maxContent"
                                         />
-                                    )}
-                                </button>
-                            </ClickAwayListener>
+                                    </button>
+                                </ClickAwayListener>
 
-                            <Button className={cx('saveBtn')} red onClick={handleSave}>
-                                Lưu
-                            </Button>
-                        </div>
-                    )}
+                                {pinSaved ? (
+                                    <Button className={cx('changeBtn')} red onClick={handleChange}>
+                                        Đổi
+                                    </Button>
+                                ) : (
+                                    <Button className={cx('saveBtn')} red onClick={handleSave}>
+                                        Lưu
+                                    </Button>
+                                )}
+                            </div>
+                        )
+                    ) : null}
                     <div className={cx('option-bottom', { active: activeOptionBottom })}>
                         {linkImage && (
                             <button onClick={() => openImage(linkImage)} className={cx('btn-text')}>
@@ -212,35 +264,46 @@ function Pin({
                                 <span className={cx('link-image')}>{linkImage}</span>
                             </button>
                         )}
+
+                        {userId ? (
+                            <ClickAwayListener onClickAway={handleClickAwayShare}>
+                                <div>
+                                    <Tippy delay={[0, 100]} content="Chia sẻ" placement="bottom">
+                                        <button className={cx('btn')} onClick={handleOpenShare}>
+                                            <Popper
+                                                idPopper={`share${id}`}
+                                                contentTitle={
+                                                    <ShareIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
+                                                }
+                                                className={cx('share-menu')}
+                                                body={<SharePopper />}
+                                                widthBody="maxContent"
+                                            />
+                                        </button>
+                                    </Tippy>
+                                </div>
+                            </ClickAwayListener>
+                        ) : null}
                         {pinCreated && (
                             <div>
                                 <Tippy delay={[0, 100]} content="Chỉnh sửa" placement="bottom">
-                                    <button className={cx('btn')} onClick={handleEdit}>
+                                    <button className={cx(pinCreated ? 'btn-end' : 'btn')} onClick={handleEdit}>
                                         <EditIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
                                     </button>
                                 </Tippy>
                             </div>
                         )}
-
-                        <ClickAwayListener onClickAway={handleClickAwayShare}>
-                            <div>
-                                <Tippy delay={[0, 100]} content="Chia sẻ" placement="bottom">
-                                    <button onClick={handleOpenShare} className={cx(pinCreated ? 'btn-end' : 'btn')}>
-                                        <Popper
-                                            idPopper={`share${id}`}
-                                            contentTitle={
-                                                <ShareIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
-                                            }
-                                            className={cx('share-menu')}
-                                            body={<SharePopper />}
-                                            widthBody="maxContent"
-                                        />
+                        {pinSaved && (
+                            <div className={cx('option')}>
+                                <Tippy delay={[0, 100]} content="Xóa" placement="bottom">
+                                    <button className={cx(pinSaved ? 'btn-end' : 'btn')} onClick={handleDelete}>
+                                        <DeleteIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
                                     </button>
                                 </Tippy>
                             </div>
-                        </ClickAwayListener>
+                        )}
 
-                        {pinCreated ? null : (
+                        {pinCreated || pinSaved ? null : (
                             <div>
                                 <Tippy delay={[0, 100]} content="Lưu ảnh" placement="bottom">
                                     <button
@@ -275,6 +338,8 @@ function Pin({
                             placeholder={'Tiêu đề'}
                             label={'Tên bảng'}
                             selectedSize={'medium'}
+                            change={changeName}
+                            setChange={setChangeName}
                             // text={boardEdit.name ? boardEdit.name : ''}
                         />
                         <LabelTextBox
@@ -282,6 +347,8 @@ function Pin({
                             placeholder={'Mô tả'}
                             label={'Mô tả'}
                             selectedSize={'medium'}
+                            change={changeDiscription}
+                            setChange={setChangeDiscription}
                             // text={boardEdit.description ? boardEdit.description : ''}
                         />
                     </DialogContent>

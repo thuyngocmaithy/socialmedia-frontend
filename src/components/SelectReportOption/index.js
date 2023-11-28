@@ -10,7 +10,6 @@ import ActionAlerts from '../Alert';
 const cx = classNames.bind(styles);
 
 function SelectReportOption({ handleTurnOnSelectReport, pin, user, comment }) {
-
     // const [turnOnSelectReport, handleTurnOnSelectReport] = useState(true);
 
     const [listReport, setListReport] = useState([]);
@@ -74,7 +73,9 @@ function SelectReportOption({ handleTurnOnSelectReport, pin, user, comment }) {
         <div className={cx('popup-background')}>
             <div className={cx('gray-background')} onClick={() => handleTurnOnSelectReport(false)}></div>
             <div className={cx('popup-container')}>
-                <div className={cx('popup-top')}>{Object.keys(comment).length === 0 ? <h2>Báo cáo Ghim</h2> : <h2>Báo cáo nhận xét</h2>}</div>
+                <div className={cx('popup-top')}>
+                    {Object.keys(comment).length === 0 ? <h2>Báo cáo Ghim</h2> : <h2>Báo cáo nhận xét</h2>}
+                </div>
                 <div className={cx('list-report')}>
                     {listReport.map((item, index) => {
                         return (
@@ -107,7 +108,7 @@ function SelectReportOption({ handleTurnOnSelectReport, pin, user, comment }) {
                         </Button>
                     )}
                 </div>
-                {statusSave && <ActionAlerts content={`Đã báo cáo`} action="UNDO" />}
+                {statusSave && <ActionAlerts content={`Đã báo cáo`} />}
             </div>
         </div>
     );

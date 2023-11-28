@@ -16,6 +16,11 @@ const cx = classNames.bind(styles);
 
 function UserProfile({ admin = false }) {
     const { theme } = useContext(ThemeContext);
+
+    const [changeName, setChangeName] = useState(false);
+    const [changeIntroduce, setChangeIntroduce] = useState(false);
+    const [changeWebsite, setChangeWebsite] = useState(false);
+
     const { userId } = useContext(AccountLoginContext);
     const [userData, setUserData] = useState({});
     const [saveSuccess, setSaveSuccess] = useState(false);
@@ -140,18 +145,24 @@ function UserProfile({ admin = false }) {
     };
 
     const handleSave = () => {
-        const updatedUser = {
-            fullname: userFullname,
-            introduce: userIntroduce,
-            website: userWebsite,
-            username: username,
-        };
+        setChangeIntroduce(true);
+        setChangeName(true);
+        setChangeWebsite(true);
 
-        changeUserInfo(userId, updatedUser)
-            .then((response) => {
-                showAlert('editSuccess');
-            })
-            .catch((error) => console.log(error));
+        if (userFullname !== '' && userIntroduce !== '' && userWebsite !== '') {
+            const updatedUser = {
+                fullname: userFullname,
+                introduce: userIntroduce,
+                website: userWebsite,
+                username: username,
+            };
+
+            changeUserInfo(userId, updatedUser)
+                .then((response) => {
+                    showAlert('editSuccess');
+                })
+                .catch((error) => console.log(error));
+        }
     };
     return (
         // userData && (
@@ -184,6 +195,8 @@ function UserProfile({ admin = false }) {
                             selectedSize={'medium'}
                             text={userFullname}
                             customGetValue={handlGetUserFullname}
+                            change={changeName}
+                            setChange={setChangeName}
                         />
                     </div>
                     {admin === false && (
@@ -194,6 +207,8 @@ function UserProfile({ admin = false }) {
                                 selectedSize={'large'}
                                 text={userIntroduce}
                                 customGetValue={handlGetUserIntroduce}
+                                change={changeIntroduce}
+                                setChange={setChangeIntroduce}
                             />
                             <LabelTextBox
                                 placeholder={'Thêm liên kết để hướng lưu lượng vào trang web'}
@@ -201,6 +216,8 @@ function UserProfile({ admin = false }) {
                                 selectedSize={'medium'}
                                 text={userWebsite}
                                 customGetValue={handleGetUserWebsite}
+                                change={changeWebsite}
+                                setChange={setChangeWebsite}
                             />
                         </>
                     )}

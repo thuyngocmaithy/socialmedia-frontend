@@ -17,6 +17,7 @@ const cx = classNames.bind(styles);
 
 function AccountSetting({ admin = false }) {
     const { theme } = useContext(ThemeContext);
+
     const label1 = { inputProps: { 'aria-label': 'Switch demo' } };
     const timeoutRef = useRef(null);
     const { userId } = useContext(AccountLoginContext);

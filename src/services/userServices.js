@@ -9,6 +9,19 @@ export const getAllUser = async () => {
     }
 };
 
+export const getAllUserByEmail = async (email) => {
+    try {
+        const res = await httpRequest.get(`users/checkEmail?email=${email}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const getUserByUsername = async (username) => {
     try {
         const res = await httpRequest.get(`users/username/${username}`);
@@ -171,4 +184,3 @@ export const countUserByCreatedAt = async () => {
         console.log(error);
     }
 };
-

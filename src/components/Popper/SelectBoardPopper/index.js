@@ -14,15 +14,17 @@ import Button from '../../Button';
 import ActionAlerts from '../../Alert';
 import { AccountLoginContext } from '../../../context/AccountLoginContext';
 
-
 const cx = classNames.bind(styles);
 
-function SelectBoardPopper({ handleTurnOnCreateBoard, getData }) {
+function SelectBoardPopper({ handleTurnOnCreateBoard, getData, idBoardCurrent = null }) {
     const { theme } = useContext(ThemeContext);
+    const [changeName, setChangeName] = useState(false);
+    const [changeDiscription, setChangeDiscription] = useState(false);
     const [listBoard, setListBoard] = useState([]);
     useEffect(() => {
         const fetchApi = async () => {
-            const result = await boardServices.getBoardByUsername('thuyngocmaithyy');
+            let result = await boardServices.getBoardByUsername('thuyngocmaithyy');
+            result = result.filter((item) => item.id !== idBoardCurrent);
             const promises = result.map(async (board) => {
                 const resultPin = await userSavePinServices.getPinByUserIdAndBoardId('thuyngocmaithyy', board.id);
                 let detailBoard = [];
@@ -63,19 +65,24 @@ function SelectBoardPopper({ handleTurnOnCreateBoard, getData }) {
 
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
+
+        setChangeName(true);
+        setChangeDiscription(true);
         const user = await userServices.getUserById(userId);
         const description =
             event.target.elements.descriptionAdd.value !== '' ? event.target.elements.descriptionAdd.value : null;
         const name = event.target.elements.nameAdd.value !== '' ? event.target.elements.nameAdd.value : null;
         const createdAt = null;
 
-        const board = { description, name, user, createdAt };
-        const result = await boardServices.add(board);
+        if (name !== null && description !== null) {
+            const board = { description, name, user, createdAt };
+            const result = await boardServices.add(board);
 
-        if (result) {
-            setOpenCreateBoard(false);
-            setCreateSuccess(true);
-            showAlert('create');
+            if (result) {
+                setOpenCreateBoard(false);
+                setCreateSuccess(true);
+                showAlert('create');
+            }
         }
     };
 
@@ -97,7 +104,17 @@ function SelectBoardPopper({ handleTurnOnCreateBoard, getData }) {
 
         return timeoutId;
     };
-    
+    useEffect(() => {
+        if (alertVisible) {
+            const timeoutId = setTimeout(() => {
+                setAlertVisible(false);
+                setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+            }, 2500);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [alertVisible]);
+
     return (
         <>
             <div className={cx('wrapper')}>
@@ -122,7 +139,10 @@ function SelectBoardPopper({ handleTurnOnCreateBoard, getData }) {
                     })}
                 </div>
 
-                <div className={cx('bottom-create', theme === 'dark' ? 'dark' : '')} onClick={() => handleCreateBoard()}>
+                <div
+                    className={cx('bottom-create', theme === 'dark' ? 'dark' : '')}
+                    onClick={() => handleCreateBoard()}
+                >
                     <button className={cx('createBtn')}>
                         <CreateBoardIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
                     </button>
@@ -131,9 +151,7 @@ function SelectBoardPopper({ handleTurnOnCreateBoard, getData }) {
             </div>
             <Dialog fullWidth={true} maxWidth="sm" open={openCreateBoard} onClose={handleCloseCreateBoard}>
                 <form onSubmit={handleSubmitCreate}>
-                    <DialogTitle
-                        sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
-                    >
+                    <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
                         Tạo bảng
                     </DialogTitle>
                     <DialogContent>
@@ -142,6 +160,8 @@ function SelectBoardPopper({ handleTurnOnCreateBoard, getData }) {
                             placeholder={'Tiêu đề'}
                             label={'Tên bảng'}
                             selectedSize={'medium'}
+                            change={changeName}
+                            setChange={setChangeName}
                             // text={boardEdit.name ? boardEdit.name : ''}
                         />
                         <LabelTextBox
@@ -149,6 +169,8 @@ function SelectBoardPopper({ handleTurnOnCreateBoard, getData }) {
                             placeholder={'Mô tả'}
                             label={'Mô tả'}
                             selectedSize={'medium'}
+                            change={changeDiscription}
+                            setChange={setChangeDiscription}
                             // text={boardEdit.description ? boardEdit.description : ''}
                         />
                     </DialogContent>
@@ -161,8 +183,8 @@ function SelectBoardPopper({ handleTurnOnCreateBoard, getData }) {
                         </Button>
                     </DialogActions>
                 </form>
-        </Dialog>
-        {alertType === 'create' && <ActionAlerts severity="success" content={`Đã thêm thành công`} />}
+            </Dialog>
+            {alertType === 'create' && <ActionAlerts severity="success" content={`Đã thêm thành công`} />}
         </>
     );
 }

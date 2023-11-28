@@ -24,6 +24,9 @@ const cx = classNames.bind(styles);
 
 function Create() {
     const { theme } = useContext(ThemeContext);
+
+    const [changeName, setChangeName] = useState(false);
+
     const { userId } = useContext(AccountLoginContext);
     //select board
     const [activeOptionTop, setActiveOptionTop] = useState(false);
@@ -44,12 +47,15 @@ function Create() {
     //submit create type
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
+
+        setChangeName(true);
+
         const typeName = event.target.elements.typeName.value !== '' ? event.target.elements.typeName.value : null;
 
         const type = {
             typeName,
         };
-        console.log(typeName);
+
         if (typeName !== null) {
             const result = await typeServices.add(type);
             if (result) {
@@ -57,8 +63,7 @@ function Create() {
                 setShowCreateType(false);
                 showAlert('createType');
             }
-        }
-        else {
+        } else {
             showAlert('errorInfo');
         }
     };
@@ -318,6 +323,8 @@ function Create() {
                             placeholder={'Tên loại'}
                             label={'Tên loại'}
                             selectedSize={'medium'}
+                            change={changeName}
+                            setChange={setChangeName}
                         />
                     </DialogContent>
                     <DialogActions sx={{ marginBottom: '10px' }}>

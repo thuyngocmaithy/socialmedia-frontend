@@ -7,7 +7,7 @@ export const getPinByUserId = async (userId) => {
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 export const getPinByUserIdAndBoardId = async (userId, boardId) => {
     try {
@@ -52,6 +52,19 @@ export const getPinsSavedByUserId = async (userId) => {
 export const del = async (userSavePin) => {
     try {
         const res = await httpRequest.post(`userSavePin/delete`, userSavePin, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const update = async (userSavePin) => {
+    try {
+        const res = await httpRequest.put(`/userSavePin/edit`, userSavePin, {
             headers: {
                 'Content-Type': 'application/json',
             },

@@ -34,6 +34,10 @@ let stompClient = null;
 
 function DisplayPin() {
     const [currentUser, setCurrentUser] = useState('');
+
+    const [changeName, setChangeName] = useState(false);
+    const [changeDiscription, setChangeDiscription] = useState(false);
+
     const { theme } = useContext(ThemeContext);
     const { userId, permission } = useContext(AccountLoginContext);
 
@@ -239,15 +243,17 @@ function DisplayPin() {
 
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
+
+        setChangeDiscription(true);
+        setChangeName(true);
+
         const user = await userServices.getUserById(userId);
         const description =
             event.target.elements.descriptionAdd.value !== '' ? event.target.elements.descriptionAdd.value : null;
         const name = event.target.elements.nameAdd.value !== '' ? event.target.elements.nameAdd.value : null;
         const createdAt = null;
 
-        if (name == null || description == null) {
-            showAlert('errorInfo');
-        } else {
+        if (name !== null && description !== null) {
             const board = { description, name, user, createdAt };
             const result = await boardServices.add(board);
             if (result) {
@@ -415,14 +421,16 @@ function DisplayPin() {
                             placeholder={'Tiêu đề'}
                             label={'Tên bảng'}
                             selectedSize={'medium'}
-                            // text={boardEdit.name ? boardEdit.name : ''}
+                            change={changeName}
+                            setChange={setChangeName}
                         />
                         <LabelTextBox
                             name={'descriptionAdd'}
                             placeholder={'Mô tả'}
                             label={'Mô tả'}
                             selectedSize={'medium'}
-                            // text={boardEdit.description ? boardEdit.description : ''}
+                            change={changeDiscription}
+                            setChange={setChangeDiscription}
                         />
                     </DialogContent>
                     <DialogActions sx={{ marginBottom: '10px' }}>
@@ -436,7 +444,7 @@ function DisplayPin() {
                 </form>
             </Dialog>
 
-            {alertType === 'saveSuccess' && <ActionAlerts content={`Đã lưu pin`} action="UNDO" />}
+            {alertType === 'saveSuccess' && <ActionAlerts content={`Đã lưu pin`} />}
             {alertType === 'errorBoard' && <ActionAlerts severity="warning" content={`Chọn bảng bạn muốn lưu vào`} />}
             {alertType === 'errorSave' && <ActionAlerts severity="error" content={`Không thể lưu pin của chính bạn`} />}
             {alertType === 'create' && <ActionAlerts severity="success" content={`Đã thêm thành công`} />}

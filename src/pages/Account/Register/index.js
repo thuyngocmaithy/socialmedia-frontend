@@ -1,64 +1,136 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from '../Account.module.scss';
 import LabelTextBox from '../../../components/LabelTextBox';
 import Wrapper from '../Wrapper';
 import Button from '../../../components/Button';
-
 import * as userServices from '../../../services/userServices';
 import { ThemeContext } from '../../../context/ThemeContext';
+import ActionAlerts from '../../../components/Alert';
 
 // logout xử lý ở phần header
 const cx = classNames.bind(styles);
 
 function Register() {
     const { theme } = useContext(ThemeContext);
+    const [changeFirstname, setChangeFirstname] = useState(false);
+    const [changeLastname, setChangeLastname] = useState(false);
+    const [changeEmail, setChangeEmail] = useState(false);
+    const [changePassword, setChangePassword] = useState(false);
+    const [changeConfirmPassword, setChangeConfirmPassword] = useState(false);
+
+    //xử lý nhập email
+    const [errorEmail, setErrorEmail] = useState('');
+    const [currentEmail, setCurrentEmail] = useState('');
+
+    const handlgetEmail = (value) => {
+        setCurrentEmail(value);
+    };
+
+    const handleErrorEmail = async (event) => {
+        const checkEmail = await userServices.getAllUserByEmail(event.target.value);
+
+        if (event.target.value === '') {
+            setErrorEmail('');
+        } else {
+            if (checkEmail !== 0) {
+                setErrorEmail('Email đã tồn tại');
+            } else {
+                setErrorEmail('');
+            }
+        }
+    };
+
+    //xử lý nhập mật khẩu
+    const [errorPassword, setErrorPassword] = useState('');
+    const [currentPassword, setCurrentPassword] = useState('');
+
+    const handlgetPassword = (value) => {
+        setCurrentPassword(value);
+    };
+
+    const handleErrorPassword = async (event) => {
+        if (event.target.value === '') {
+            setErrorPassword('');
+        } else {
+            if (event.target.value.length < 8) {
+                setErrorPassword('Mật khẩu phải từ 8 ký tự trở lên');
+            } else {
+                setErrorPassword('');
+            }
+        }
+    };
+
+    //xử lý nhập mật khẩu mới
+    const [errorConfirmPassword, setErrorConfirmPassword] = useState('');
+    const [currentConfirmPassword, setCurrentConfirmPassword] = useState('');
+
+    const handlgetConfirmPassword = (value) => {
+        setCurrentConfirmPassword(value);
+    };
+
+    const handleErrorConfirmPassword = async (event) => {
+        if (event.target.value === '') {
+            setErrorConfirmPassword('');
+        } else {
+            if (currentPassword !== event.target.value) {
+                setErrorConfirmPassword('Mật khẩu nhập lại không chính xác');
+            } else {
+                setErrorConfirmPassword('');
+            }
+        }
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setChangeFirstname(true);
+        setChangeLastname(true);
+        setChangeEmail(true);
+        setChangePassword(true);
+        setChangeConfirmPassword(true);
 
-        const email = event.target.elements.email.value !== '' ? event.target.elements.email.value : null;
-        const password = event.target.elements.password.value !== '' ? event.target.elements.password.value : null;
-        const confirmPassword =
-            event.target.elements.confirmPassword.value !== '' ? event.target.elements.confirmPassword.value : null;
+        const email = currentEmail !== '' ? currentEmail : null;
+        const password = currentPassword !== '' ? currentPassword : null;
         const firstName = event.target.elements.firstName.value !== '' ? event.target.elements.firstName.value : null;
         const lastName = event.target.elements.lastName.value !== '' ? event.target.elements.lastName.value : null;
         const birthdate = event.target.elements.birthdate.value !== '' ? event.target.elements.birthdate.value : null;
         const fullname = firstName + ' ' + lastName;
 
-        // Kiểm tra xem password và confirmPassword có giống nhau không
-        if (password !== confirmPassword) {
-            console.error('Password and Confirm Password do not match');
-            console.log('password: ' + password, 'confirm password: ' + confirmPassword);
-            return;
-        }
+        if (
+            firstName !== null &&
+            lastName !== null &&
+            errorEmail === '' &&
+            errorPassword === '' &&
+            errorConfirmPassword === ''
+        ) {
+            // Tạo đối tượng người dùng từ thông tin nhập
+            const userSave = {
+                email: email,
+                username: email.split('@')[0],
+                fullname: fullname,
+                birthdate: birthdate,
+                password: password,
+                introduce: null,
+                avatar: null,
+                website: null,
+                gender: null,
+                language: null,
+                privateBool: false,
+                createdAt: null,
+            };
 
-        // Tạo đối tượng người dùng từ thông tin nhập
-        const userSave = {
-            email: email,
-            username: email.split('@')[0],
-            fullname: fullname,
-            birthdate: birthdate,
-            password: password,
-            introduce: null,
-            avatar: null,
-            website: null,
-            gender: null,
-            language: null,
-            privateBool: false,
-            createdAt: null,
-        };
+            // Gửi yêu cầu đăng ký đến máy chủ
+            try {
+                const response = await userServices.save(userSave);
 
-        // Gửi yêu cầu đăng ký đến máy chủ
-        try {
-            const response = await userServices.save(userSave);
-
-            if (response) {
-                console.log(response);
-            } else {
-                console.log(response);
+                if (response) {
+                    console.log(response);
+                } else {
+                    console.log(response);
+                }
+            } catch (error) {
+                console.error('An error occurred:', error);
             }
-        } catch (error) {
-            console.error('An error occurred:', error);
         }
     };
 
@@ -75,16 +147,31 @@ function Register() {
                                 name={'firstName'}
                                 label={'First Name'}
                                 selectedSize={'small'}
+                                change={changeFirstname}
+                                setChange={setChangeFirstname}
                             />
                             <LabelTextBox
                                 placeholder={'Last Name'}
                                 name={'lastName'}
                                 label={'Last Name'}
                                 selectedSize={'small'}
+                                change={changeLastname}
+                                setChange={setChangeLastname}
                             />
                         </div>
                         <div className={cx('container-input')}>
-                            <LabelTextBox placeholder={'Email'} name={'email'} label={'Email'} selectedSize={'small'} />
+                            <LabelTextBox
+                                placeholder={'Email'}
+                                name={'email'}
+                                label={'Email'}
+                                selectedSize={'small'}
+                                error={errorEmail}
+                                onChange={handleErrorEmail}
+                                text={currentEmail}
+                                customGetValue={handlgetEmail}
+                                change={changeEmail}
+                                setChange={setChangeEmail}
+                            />
                             <LabelTextBox
                                 placeholder={'Birthdate'}
                                 name={'birthdate'}
@@ -100,6 +187,12 @@ function Register() {
                                 type={'password'}
                                 label={'Pasword'}
                                 selectedSize={'small'}
+                                error={errorPassword}
+                                onChange={handleErrorPassword}
+                                text={currentPassword}
+                                customGetValue={handlgetPassword}
+                                change={changePassword}
+                                setChange={setChangePassword}
                             />
                             <LabelTextBox
                                 placeholder={'Confirm pasword'}
@@ -107,12 +200,18 @@ function Register() {
                                 type={'password'}
                                 label={'Confirm password'}
                                 selectedSize={'small'}
+                                error={errorConfirmPassword}
+                                onChange={handleErrorConfirmPassword}
+                                text={currentConfirmPassword}
+                                customGetValue={handlgetConfirmPassword}
+                                change={changeConfirmPassword}
+                                setChange={setChangeConfirmPassword}
                             />
                         </div>
                     </div>
 
                     <div className={cx('submit-btn')}>
-                        <Button primary={theme === 'dark' ? 'primary' : ''} red={theme === 'dark' ? '' : 'red'}>
+                        <Button primary={theme === 'dark' ? true : false} red={theme === 'dark' ? false : true}>
                             Register
                         </Button>
                     </div>

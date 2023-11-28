@@ -93,17 +93,11 @@ function Home() {
             }, 2500);
         }
     };
-    let count = 0;
     return (
         <div className={cx('wrapper')} style={{ height: loading && 'calc(100vh - 70px)' }}>
             {loading && <CircularProgress sx={{ display: 'flex', margin: 'auto' }} />}
 
             {LIST_PIN.map((pin, index) => {
-                if (count === 9) {
-                    count = 1;
-                } else {
-                    count = count + 1;
-                }
                 const user = pin.user;
 
                 return (
@@ -111,9 +105,8 @@ function Home() {
                         key={index}
                         stt={index + 1}
                         id={pin.id}
-                        width={count === 6 || count === 7 || count === 8 || count === 9 ? '315px' : '252px'}
                         image={pin.image}
-                        linkImage={pin.linkImage}
+                        linkImage={pin.link}
                         title={pin.title}
                         userImage={user.avatar}
                         username={user.username}
@@ -122,7 +115,7 @@ function Home() {
                     />
                 );
             })}
-            {statusSave && <ActionAlerts severity="success" content={`Đã lưu pin`} action="UNDO" />}
+            {statusSave && <ActionAlerts severity="success" content={`Đã lưu pin`} />}
             {alertType === 'warning' && <ActionAlerts severity="warning" content={`Chọn bảng bạn muốn lưu vào`} />}
             {alertType === 'errorSave' && <ActionAlerts severity="error" content={`Không thể lưu pin của chính bạn`} />}
             {alertType === 'errorInfo' && <ActionAlerts severity="error" content={`Nhập đầy đủ thông tin`} />}

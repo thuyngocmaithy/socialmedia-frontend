@@ -57,20 +57,11 @@
 .submit-btn {
     display: block;
     text-align: center;
-    margin-top: 15px;
+    margin-top: 10px;
     font-size: 20px;
     align-self: center;
     padding: 10px;
     &.dark {
         background-color: var(--color-red-darker);
     }
-}
-.or {
-    font-size: 13px;
-    margin: 10px 0;
-}
-.registerGoogle {
-    font-size: 15px;
-    padding: 5px 17px;
-    margin-bottom: 10px;
 }

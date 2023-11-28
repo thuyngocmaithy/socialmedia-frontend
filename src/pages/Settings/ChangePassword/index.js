@@ -13,6 +13,12 @@ const cx = classNames.bind(styles);
 
 function ChangePassword({ admin = false }) {
     const { theme } = useContext(ThemeContext);
+
+    const [changeEmail, setChangeEmail] = useState(false);
+    const [changeOldPassword, setChangeOldPassword] = useState(false);
+    const [changeNewPassword, setChangeNewPassword] = useState(false);
+    const [changeConfirmPassword, setChangeConfirmPassword] = useState(false);
+
     const [editSuccess, setEditSuccess] = useState(false);
     //Hiển thị hộp thoại thông báo
     const [alertType, setAlertType] = useState(null);
@@ -111,6 +117,11 @@ function ChangePassword({ admin = false }) {
         }
     };
     const handlePasswordChange = () => {
+        setChangeConfirmPassword(true);
+        setChangeEmail(true);
+        setChangeNewPassword(true);
+        setChangeOldPassword(true);
+
         try {
             if (
                 errorPassword === '' &&
@@ -149,6 +160,8 @@ function ChangePassword({ admin = false }) {
                         placeholder={'Email'}
                         selectedSize={'medium'}
                         text={userData.email}
+                        change={changeEmail}
+                        setChange={setChangeEmail}
                     />
                     <LabelTextBox
                         className={cx('Password')}
@@ -161,6 +174,8 @@ function ChangePassword({ admin = false }) {
                         customGetValue={handlgetPassword}
                         error={errorPassword}
                         onChange={handleErrorPassword}
+                        change={changeOldPassword}
+                        setChange={setChangeOldPassword}
                     />
 
                     <LabelTextBox
@@ -173,6 +188,8 @@ function ChangePassword({ admin = false }) {
                         customGetValue={handlGetnewPassword}
                         error={errorNewPassword}
                         onChange={handleErrorNewPassword}
+                        change={changeNewPassword}
+                        setChange={setChangeNewPassword}
                     />
                     <LabelTextBox
                         className={cx('Password')}
@@ -184,6 +201,8 @@ function ChangePassword({ admin = false }) {
                         customGetValue={handlGetconfirmPassword}
                         error={errorConfirmPassword}
                         onChange={handleErrorConfirmPassword}
+                        change={changeConfirmPassword}
+                        setChange={setChangeConfirmPassword}
                     />
 
                     <Button className={cx('changeBtn')} red onClick={handlePasswordChange}>

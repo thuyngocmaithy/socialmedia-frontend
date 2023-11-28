@@ -27,7 +27,7 @@ function NotificationPopper() {
 
     return (
         <div className={cx('wrapper-notification-popper')}>
-            <h2 className={cx('title')}> Updates </h2>
+            <h2 className={cx('title')}> Thông báo </h2>
             {notifications.map((notification, key) => {
                 return (
                     <NotificationCard

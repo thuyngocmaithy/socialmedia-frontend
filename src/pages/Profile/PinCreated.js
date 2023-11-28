@@ -21,6 +21,11 @@ const cx = classNames.bind(styles);
 
 function PinCreated() {
     const { theme } = useContext(ThemeContext);
+
+    const [changeName, setChangeName] = useState(false);
+    const [changeDiscription, setChangeDiscription] = useState(false);
+    const [changeLink, setChangeLink] = useState(false);
+
     const { accountOther } = useContext(AccountOtherContext);
     const [isLoading, setIsLoading] = useState(true);
     const [openEdit, setOpenEdit] = useState(false);
@@ -66,6 +71,11 @@ function PinCreated() {
     };
     const handleUpdate = async (event) => {
         event.preventDefault();
+
+        setChangeDiscription(true);
+        setChangeLink(true);
+        setChangeName(true);
+
         const id = pinEdit.id;
         const image = pinEdit.image;
         const user = pinEdit.user;
@@ -81,12 +91,14 @@ function PinCreated() {
             type = null;
         }
 
-        const pin = { id, description, image, link, title, type, user };
-        const result = await pinServices.update(id, pin);
-        if (result) {
-            setOpenEdit(false);
-            setUpdateSuccess(true);
-            showAlert('edit');
+        if (description !== null && title !== null && link !== null) {
+            const pin = { id, description, image, link, title, type, user };
+            const result = await pinServices.update(id, pin);
+            if (result) {
+                setOpenEdit(false);
+                setUpdateSuccess(true);
+                showAlert('edit');
+            }
         }
     };
     const handleDelete = async () => {
@@ -163,6 +175,8 @@ function PinCreated() {
                                         label={'Tiêu đề'}
                                         text={pinEdit.title ? pinEdit.title : ''}
                                         selectedSize={'medium'}
+                                        change={changeName}
+                                        setChange={setChangeName}
                                     />
                                     <LabelTextBox
                                         name={'description'}
@@ -171,6 +185,8 @@ function PinCreated() {
                                         text={pinEdit.description ? pinEdit.description : ''}
                                         selectedSize={'sizeTextArea'}
                                         area
+                                        change={changeDiscription}
+                                        setChange={setChangeDiscription}
                                     />
                                     <LabelTextBox
                                         name={'link'}
@@ -178,6 +194,8 @@ function PinCreated() {
                                         label={'Liên kết'}
                                         text={pinEdit.link ? pinEdit.link : ''}
                                         selectedSize={'medium'}
+                                        change={changeLink}
+                                        setChange={setChangeLink}
                                     />
                                     <Options
                                         type="other"

@@ -13,60 +13,64 @@ const cx = classNames.bind(styles);
 
 function DisplaySearch() {
     const location = useLocation();
-    let searchValue = '';
-    let searchType = '';
-    let searchUser = '';
-    let searchUserValue = '';
 
     //RENDER LIST PIN
     const [LIST_PIN, setListPin] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const searchType = location.pathname.split('=')[1];
+
     useEffect(() => {
-        searchValue = location.pathname.split('/')[2];
-        searchType = location.pathname.split('=')[1];
-        searchUser = location.pathname.split(':')[1];
-        searchUserValue = location.pathname.split(':')[2];
-        // console.log(searchUser);
-        // console.log(searchUserValue);
+        const searchUser = location.pathname.split(':')[1];
+        const searchUserValue = location.pathname.split(':')[2];
+
         const fetchApi = async () => {
             const result = await pinServices.getAllPins();
-            // console.log(result);
             let temp = [];
 
-            if (searchUser !== '') {
-                const pinCreated = await pinServices.getPinsByUsername(searchUser);
-                const user = await userServices.getUserByUsername(searchUser);
-                // console.log(user.id);
-                // const pinSaved = await userSavePin.getPinByUserId(user.id);
-                // console.log(pinSaved);
-                for (let i = 0; i < pinCreated.length; i++) {
-                    if (
-                        (pinCreated[i].title && pinCreated[i].title.includes(searchUserValue)) ||
-                        (pinCreated[i].descriptio && pinCreated[i].description.includes(searchUserValue))
-                    ) {
-                        temp.push(result[i]);
-                    }
-                }
-                // for (let i = 0; i < pinSaved.length; i++) {
-                //     if ((pinSaved[i].title && pinSaved[i].title.includes(searchUserValue)) || (pinSaved[i].descriptio && pinSaved[i].description.includes(searchUserValue)) ) {
-                //         temp.push(result[i]);
-                //     }
-                // }
-            }
-            if (searchType !== '') {
+            if (searchType) {
                 for (let i = 0; i < result.length; i++) {
                     if (result[i].type !== null && result[i].type.id === parseInt(searchType)) {
                         temp.push(result[i]);
                     }
                 }
-            }
-            if (searchValue !== '') {
-                for (let i = 0; i < result.length; i++) {
-                    if (
-                        (result[i].title && result[i].title.includes(searchValue)) ||
-                        (result[i].descriptio && result[i].description.includes(searchValue))
-                    ) {
-                        temp.push(result[i]);
+            } else {
+                if (searchUser) {
+                    const pinCreated = await pinServices.getPinsByUsername(searchUser);
+                    const user = await userServices.getUserByUsername(searchUser);
+                    const pinSaved = await userSavePin.getPinByUserId(user.id);
+                    console.log(pinSaved);
+                    for (let i = 0; i < pinCreated.length; i++) {
+                        if (
+                            (pinCreated[i].title && pinCreated[i].title.includes(searchUserValue)) ||
+                            (pinCreated[i].description && pinCreated[i].description.includes(searchUserValue))
+                        ) {
+                            temp.push(pinCreated[i]);
+                        }
+                    }
+
+                    for (let i = 0; i < pinSaved.length; i++) {
+                        if (
+                            (pinSaved[i].pin.title && pinSaved[i].pin.title.includes(searchUserValue)) ||
+                            (pinSaved[i].pin.description && pinSaved[i].pin.description.includes(searchUserValue))
+                        ) {
+                            console.log('a');
+                            temp.push(pinSaved[i].pin);
+                        }
+                    }
+                } else {
+                    const searchValue = location.pathname.split('/')[2];
+                    if (searchValue) {
+                        console.log('home');
+                        for (let i = 0; i < result.length; i++) {
+                            if (
+                                (result[i].title && result[i].title.includes(searchValue)) ||
+                                (result[i].descriptio && result[i].description.includes(searchValue))
+                            ) {
+                                temp.push(result[i]);
+                            }
+                        }
+                        setListPin(temp);
                     }
                 }
             }
@@ -76,7 +80,7 @@ function DisplaySearch() {
         };
 
         fetchApi();
-    }, []);
+    }, [searchType]);
 
     const [statusSave, setSatusSave] = useState(false);
 
@@ -97,7 +101,6 @@ function DisplaySearch() {
                 <CircularProgress sx={{ display: 'flex', margin: 'auto' }} />
             ) : LIST_PIN.length > 0 ? (
                 LIST_PIN.map((pin, index) => {
-                    // console.log(pin);
                     const user = pin.user;
                     return (
                         <Pin

@@ -2,7 +2,6 @@ import classNames from 'classnames/bind';
 import React, { useContext, useEffect, useState } from 'react';
 import ActionAlerts from '../../../components/Alert';
 import Button from '../../../components/Button';
-import { GoogleIcon } from '../../../components/Icons';
 import LabelTextBox from '../../../components/LabelTextBox';
 import { ThemeContext } from '../../../context/ThemeContext';
 import * as userServices from '../../../services/userServices';
@@ -14,6 +13,8 @@ const cx = classNames.bind(styles);
 
 function Login() {
     const { theme } = useContext(ThemeContext);
+    const [changeEmail, setChangeEmail] = useState(false);
+    const [changePassword, setChangePassword] = useState(false);
     //Hiển thị hộp thoại thông báo
     const [alertType, setAlertType] = useState(null);
     const [alertVisible, setAlertVisible] = useState(false);
@@ -57,23 +58,27 @@ function Login() {
     }, []);
     const handleSubmit = (e) => {
         e.preventDefault();
+        setChangeEmail(true);
+        setChangePassword(true);
+
         const fetchApi = async () => {
             const email = e.target.elements.email.value !== '' ? e.target.elements.email.value : null;
             const password = e.target.elements.password.value !== '' ? e.target.elements.password.value : null;
-            console.log({ email, password });
-            const result = await userServices.login(email, password);
+            if (email !== null && password !== null) {
+                const result = await userServices.login(email, password);
 
-            if (result.a === 'errorEmail') {
-                showAlert('errorEmail');
-            } else if (result.a === 'errorPassword') {
-                showAlert('errorPassword');
-            } else {
-                // Sử dụng hàm đặt giá trị vào localStorage với thời gian hết hạn
-                setLocalStorageWithExpiration('userLogin', { id: result.a, permission: result.b }, 60); // 60 phút
-                if (result.b !== null) {
-                    window.location.href = '/admin/dashboard';
+                if (result.a === 'errorEmail') {
+                    showAlert('errorEmail');
+                } else if (result.a === 'errorPassword') {
+                    showAlert('errorPassword');
                 } else {
-                    window.location.href = '/';
+                    // Sử dụng hàm đặt giá trị vào localStorage với thời gian hết hạn
+                    setLocalStorageWithExpiration('userLogin', { id: result.a, permission: result.b }, 60); // 60 phút
+                    if (result.b !== null) {
+                        window.location.href = '/admin/dashboard';
+                    } else {
+                        window.location.href = '/';
+                    }
                 }
             }
         };
@@ -87,22 +92,27 @@ function Login() {
                 <form onSubmit={handleSubmit}>
                     {/* <form> */}
                     <div className={cx('infomation')}>
-                        <LabelTextBox placeholder={'Email'} name={'email'} label={'Email'} selectedSize={'small'} />
+                        <LabelTextBox
+                            placeholder={'Email'}
+                            name={'email'}
+                            label={'Email'}
+                            selectedSize={'small'}
+                            change={changeEmail}
+                            setChange={setChangeEmail}
+                        />
                         <LabelTextBox
                             placeholder={'Password'}
                             name={'password'}
                             type={'password'}
                             label={'Pasword'}
                             selectedSize={'small'}
+                            change={changePassword}
+                            setChange={setChangePassword}
                         />
                     </div>
                     <div className={cx('submit-btn')}>
                         <Button primary={theme === 'dark' ? true : false} red={theme === 'dark' ? false : true}>
                             Login
-                        </Button>
-                        <h4 className={cx('or')}> OR </h4>
-                        <Button className={cx('registerGoogle')} primary leftIcon={<GoogleIcon />}>
-                            Sign in with Google
                         </Button>
                     </div>
                 </form>
