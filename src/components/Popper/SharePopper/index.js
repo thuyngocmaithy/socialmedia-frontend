@@ -15,7 +15,7 @@ function SharePopper({ pin_id }) {
     const { userId } = useContext(AccountLoginContext);
     const [listUser, setListUser] = useState([]);
     const [loading, setLoading] = useState(true);
-    const stompClient = useContext(StompContext);
+    const { stompClient } = useContext(StompContext);
     const {conversationList} = useContext(ConversationContext);
 
     useEffect(() => {
@@ -26,19 +26,6 @@ function SharePopper({ pin_id }) {
             setListUser(result);
             setLoading(false);
         };
-        let stompList = [];
-        const loginToChat = () => {
-            const conv = conversationList.current.map(e => e.conversation);
-            conv.forEach((e) => {
-                let stompObject = stompClient.subscribe(
-                    `/app/login/${e.id}`,
-                    (response) => {
-                        // console.log(`Conversation ID: ${JSON.parse(response.body)}`);
-                    }
-                );
-                stompList = [...stompList, stompObject.id];
-            });
-        };
         if (userId !== 0) {
             fetchApi();
             loginToChat();
@@ -46,11 +33,35 @@ function SharePopper({ pin_id }) {
             setLoading(false);
         }
         return () => {
-            stompList.forEach((id) => {
-                stompClient.unsubscribe(id);
-            })
+            logoutToChat();
         }
     }, [userId]);
+
+    const loginToChat = () => {
+        const conv = conversationList.current.map(e => e.conversation);
+        conv.forEach((item, index) => {
+            setTimeout(() => {
+                stompClient.send(
+                    `/app/login`,
+                    {},
+                    item.id
+                );
+            }, index*500);
+        });
+    };
+
+    const logoutToChat = () => {
+        const conv = conversationList.current.map(e => e.conversation);
+        conv.forEach((item, index) => {
+            setTimeout(() => {
+                stompClient.send(
+                    `/app/unsubscribe`,
+                    {},
+                    item.id
+                );
+            }, index*500);
+        });
+    }
 
     const sharePin = (e) => {
         const senderId = parseInt(e.target.getAttribute("value"));
@@ -61,17 +72,29 @@ function SharePopper({ pin_id }) {
         });
         tempList.sort((a,b) => a.id - b.id);
         let messageID = tempList.at(-1).id+1;
-
-        stompClient.publish({
-            destination: `/app/chat/conversation_id/${conv.conversation.id}`,
-            body: JSON.stringify({
+        console.log(pin_id);
+        // stompClient.publish({
+        //     destination: `/app/chat/conversation_id/${conv.conversation.id}`,
+        //     body: JSON.stringify({
+        //         id: messageID,
+        //         user_id: userId,
+        //         conversation_id: conv.conversation.id,
+        //         content: '',
+        //         pin_id: pin_id
+        //     }),
+        // });
+        
+        stompClient.send(
+            `/app/chat/conversation_id/${conv.conversation.id}`,
+            {},
+            JSON.stringify({
                 id: messageID,
                 user_id: userId,
                 conversation_id: conv.conversation.id,
                 content: '',
                 pin_id: pin_id
             }),
-        });
+        );
     }
 
     return (

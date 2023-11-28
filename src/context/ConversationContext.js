@@ -11,7 +11,7 @@ function ConversationProvider({ children }) {
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         if (userId !== 0) {
-            fetchApi();
+            // fetchApi();
         }
         setLoading(false);
     }, [userId]);
@@ -33,6 +33,7 @@ function ConversationProvider({ children }) {
             }
             delete item.id;
         });
+        return true;
     };
 
     const reloadList = () => {
@@ -40,15 +41,9 @@ function ConversationProvider({ children }) {
         setLoading(false);
     }
 
-    const saveConversation = () => {
-        const newConv = {
-            
-        };
-    }
-
     return (
         loading === false && (
-            <ConversationContext.Provider value={userId !== 0 ? {conversationList: conversationList, reloadList: reloadList} : ''}>
+            <ConversationContext.Provider value={userId !== 0 ? {conversationList: conversationList, conversationFetchApi: fetchApi, reloadList: reloadList} : ''}>
                 {children}
             </ConversationContext.Provider>
         )

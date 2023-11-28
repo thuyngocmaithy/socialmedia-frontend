@@ -11,6 +11,7 @@ import { NotificationProvider } from './context/NotificationContext';
 import { StompProvider } from './context/StompContext';
 import { ThemeProvider } from './context/ThemeContext';
 import reportWebVitals from './reportWebVitals';
+import { ChatProvider } from './context/ChatContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -21,13 +22,15 @@ root.render(
                 <AccountOtherProvider>
                     <CountAccessProvider>
                         <StompProvider>
-                            <NotificationProvider>
-                                <ConversationProvider>
-                                    <MessageProvider>
-                                        <App />
-                                    </MessageProvider>
-                                </ConversationProvider>
-                            </NotificationProvider>
+                            <ConversationProvider>
+                                <MessageProvider>
+                                    <ChatProvider>
+                                        <NotificationProvider>
+                                            <App />
+                                        </NotificationProvider>
+                                    </ChatProvider>
+                                </MessageProvider>
+                            </ConversationProvider>
                         </StompProvider>
                     </CountAccessProvider>
                 </AccountOtherProvider>

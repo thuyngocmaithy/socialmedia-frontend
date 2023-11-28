@@ -36,7 +36,7 @@ function ConversationPopper() {
                     }
                     if(conv.conversation.id === conversation_id) {
                         conv.messages.forEach((message) => {
-                            message.seen = true;
+                            // message.seen = true;
                             setAllSeen(conversation_id);
                         })
                     }

@@ -25,7 +25,7 @@ function HeaderAdmin({ className, account = false, handleOpenMenu }) {
     const navigate = useNavigate();
     const { userId } = useContext(AccountLoginContext);
     const { theme, toggleTheme } = useContext(ThemeContext);
-    const newMessageCount = useContext(MessageContext).messageCount;
+    const { messageCount } = useContext(MessageContext);
     const [userLoaded, setUserLoaded] = useState(false);
     // MENU KHI CHƯA ĐĂNG NHẬP
     const MENU_ITEMS = [
@@ -93,7 +93,7 @@ function HeaderAdmin({ className, account = false, handleOpenMenu }) {
                                 widthBody="maxContent"
                             />
                             <Popper
-                                title={<MessageIcon newMessageCount={newMessageCount} className={cx('action', theme === 'dark' ? 'dark' : '')} />}
+                                title={<MessageIcon newMessageCount={messageCount.state} className={cx('action', theme === 'dark' ? 'dark' : '')} />}
                                 body={<ConversationPopper />}
                                 left="-48px"
                                 widthBody="maxContent"

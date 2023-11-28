@@ -43,12 +43,12 @@ function Popper({ idPopper, contentTitle, title, body, className, left = '0', pl
     const { theme } = useContext(ThemeContext);
     const [anchor, setAnchor] = useState(null);
     const [open, setOpen] = useState(false);
-    let { setMessageCount } = useContext(MessageContext);
+    let { messageCount } = useContext(MessageContext);
 
     const handleClick = (event) => {
         setAnchor(anchor ? null : event.currentTarget);
         setOpen(!open);
-        setMessageCount(0);
+        messageCount.setState(0);
     };
 
     // const open = Boolean(anchor);

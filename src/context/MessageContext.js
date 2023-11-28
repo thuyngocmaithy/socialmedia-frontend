@@ -7,56 +7,66 @@ import * as messageServices from '../services/messageServices';
 const MessageContext = createContext({});
 
 function MessageProvider({ children }) {
-    const stompClient = useContext(StompContext);
+    const { stompClient } = useContext(StompContext);
     const { userId } = useContext(AccountLoginContext);
-    let {conversationList} = useContext(ConversationContext);
-    let conversationJoined = [];
+    let { conversationList } = useContext(ConversationContext);
+    const [conversationJoined, setConversationJoined] = useState([]);
     const [messageCount, setMessageCount] = useState(0);
     const [newMessage, setNewMessage] = useState({});
+    const [reloadFlag, setReloadFlag] = useState(false);
+    let stompIdList = useRef([]);
     useEffect(() => {
-        const fetchAPI = async () => {
-            var temp = await participantsService.getConversationJoinedByUserId(userId);
-            temp.forEach(element => {
-                conversationJoined = [...conversationJoined, element.conversation.id];
-            });
-            loadRoom();
+        return () => {
+            stompIdList.current.forEach((item) => {
+                stompClient.unsubscribe(item);
+            })
+            stompIdList.current = [];
         }
-        const loadRoom = async () => {
-            setTimeout(() => {
-                conversationJoined.forEach((conversation_id) => {
-                    stompClient.subscribe(
-                        `/room/conversation_id/${conversation_id}`,
-                        function (message) {
-                            updateMessages(JSON.parse(message.body));
-                        },
-                    );
-                });
-                stompClient.subscribe(
-                    '/room/testUnsubscribe',
-                    (response) => {
-                        console.log(response.body)
-                    }
-                );
-                countMessage();
-            }, 1500);
-        };
-
-        if(userId !== 0) {
-            fetchAPI();
-        }
-        
     }, [userId]);
 
-    // useEffect(() => {
-    //     if(Object.keys(newMessage).length > 0) {
-    //         countMessage();
-    //     }
-    // }, [newMessage]);
+    useEffect(() => {
+        if(conversationJoined.length > 0) {
+            loadRoom();
+        }
+    }, [conversationJoined]);
+
+    useEffect(() => {
+        countMessage();
+    }, [newMessage]);
+    
+    const fetchApi = async () => {
+        var convJoined = await participantsService.getConversationJoinedByUserId(userId);
+        let temp = [];
+        convJoined.forEach((element) => {
+            temp.push(element.conversation.id);
+        });
+        setConversationJoined([...temp]);
+    }
+
+    const loadRoom = () => {
+        conversationJoined.forEach((conversation_id) => {
+            let stompObject = stompClient.subscribe(
+                `/room/conversation_id/${conversation_id}`,
+                function (message) {
+                    updateMessages(JSON.parse(message.body));
+                },
+            );
+            stompIdList.current = [...stompIdList.current, stompObject.id];
+        });
+        const reloadStompObject = stompClient.subscribe(
+            '/room/reload', 
+            (response) => {
+                console.log(JSON.parse(response.body));
+                setReloadFlag(JSON.parse(response.body));
+            }
+        );
+        stompIdList.current = [...stompIdList.current, reloadStompObject.id];
+    };
 
     const countMessage = () => {
         let count = 0;
         conversationList.current.forEach((item) => {
-            if(item.messages.length > 0) {
+            if(item.messages && item.messages.length > 0) {
                 item.messages.forEach((message) => {
                     if(!message.seen && message.user.id !== userId) {
                         count ++;
@@ -70,7 +80,7 @@ function MessageProvider({ children }) {
     const updateMessages = (message) => {
         conversationList.current.forEach((item) => {
             if(item.conversation.id === message.conversation.id) {
-                item.messages = [...item.messages, message];
+                item.messages = [...item.messages, {...message}];
                 if(message.content !== '') {
                     item.lastAction = 'text';
                 }
@@ -82,18 +92,31 @@ function MessageProvider({ children }) {
         setNewMessage(message);
     }
 
-    const setAllSeen = (conversation_id) => {
-        conversationList.current.forEach((item) => {
+    const setAllSeen = async (conversation_id) => {
+        conversationList.current.forEach((item, convIndex) => {
             if(item.conversation.id === conversation_id) {
-                item.messages.forEach(async (message) => {
-                    const res = await messageServices.update(message);
-                    message.seen = true;
+                item.messages.forEach(async (message, messageIndex) => {
+                    if(message.seen === false && message.user.id !== userId) {
+                        message.seen = true;
+                        const res = await messageServices.update(message);
+                    }
                 })
             }
         });
     }
 
-    return <MessageContext.Provider value={{messageCount: messageCount, setAllSeen: setAllSeen, setMessageCount: setMessageCount, newMessage: newMessage}}>{children}</MessageContext.Provider>;
+    return <MessageContext.Provider value={{
+                messageCount: {state: messageCount, setState: setMessageCount}, 
+                stompIdList: stompIdList, 
+                reloadFlag: {state: reloadFlag, setState: setReloadFlag}, 
+                newMessage: newMessage,
+                loadRoom: loadRoom,
+                countMessage: countMessage, 
+                messageFetchApi: fetchApi, 
+                setAllSeen: setAllSeen,
+            }}>
+                {children}
+            </MessageContext.Provider>;
 }
 
 export { MessageProvider, MessageContext };

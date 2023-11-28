@@ -11,7 +11,7 @@ const cx = classNames.bind(styles);
 function NotificationPopper() {
     const notificationList = useContext(NotificationContext);
     const { userId } = useContext(AccountLoginContext);
-    const stompClient = useContext(StompContext);
+    const { stompClient } = useContext(StompContext);
     const [notifications, setNotifications] = useState([]);
     // userId lấy từ session
     useEffect(() => {

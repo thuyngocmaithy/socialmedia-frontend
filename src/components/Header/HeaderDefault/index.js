@@ -32,7 +32,7 @@ function HeaderDefault() {
     const [user, setUser] = useState({});
     const [userLoaded, setUserLoaded] = useState(false);
     const [openConfirmLogin, setOpenConfirmLogin] = useState(false);
-    const newMessageCount = useContext(MessageContext).messageCount;
+    const { messageCount } = useContext(MessageContext);
 
     // MENU KHI CHƯA ĐĂNG NHẬP
     const MENU_ITEMS = [
@@ -111,7 +111,7 @@ function HeaderDefault() {
                                 widthBody="maxContent"
                             />
                             <Popper
-                                title={<MessageIcon newMessageCount={newMessageCount} className={cx('action', theme === 'dark' ? 'dark' : '')} />}
+                                title={<MessageIcon newMessageCount={messageCount.state} className={cx('action', theme === 'dark' ? 'dark' : '')} />}
                                 body={<ConversationPopper />}
                                 left="-48px"
                                 widthBody="maxContent"

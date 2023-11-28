@@ -12,7 +12,7 @@ import { MessageContext } from '../../../../context/MessageContext';
 const cx = classNames.bind(styles);
 
 function MessageBox({ handleChange, chatWith }) {
-    let stompClient = useContext(StompContext);
+    let { stompClient } = useContext(StompContext);
     let { userId } = useContext(AccountLoginContext);
     let { newMessage } = useContext(MessageContext);
     const messagesEndRef = useRef(null);
@@ -24,9 +24,8 @@ function MessageBox({ handleChange, chatWith }) {
     // Get lastest message id
     let [lastestMessageId, setLastestMessageId] = useState(0);
     useLayoutEffect(() => {
-        // sendMessage()
         const fetchLastestMessageID = async () => {
-            const messages = await messageServices.getAllConversations();
+            const messages = await messageServices.getAllMessage();
             if(messages === null || messages === undefined) {
                 setLastestMessageId(1);
             }
@@ -35,30 +34,19 @@ function MessageBox({ handleChange, chatWith }) {
             }
         };
         fetchLastestMessageID();
-
-        let stompObject = null;
-        const loginToChat = () => {
-            stompObject = stompClient.subscribe(
-                `/app/login/${chatWith.conversation_id}`,
-                (response) => {
-                    // console.log(`Conversation ID: ${JSON.parse(response.body)}`);
-                }
-            );
-        };
         loginToChat();
 
         return () => {
-            stompClient.publish({
-                destination: `/app/unsubscribe`, 
-                body: chatWith.conversation_id.toString()
-            });
-            stompClient.unsubscribe(stompObject.id);
+            logoutToChat();
         };
     }, []);
 
     useEffect(() => {
-        if(Object.keys(newMessage).length !== 0) { 
-            if(!chatWith.messages.some(e => e.id === newMessage.id)) {
+        if(Object.keys(newMessage).length !== 0) {
+            if(
+                chatWith.conversation_id === newMessage.conversation.id &&
+                !chatWith.messages.some(e => e.id === newMessage.id)
+            ) {
                 chatWith.messages = [...chatWith.messages, newMessage];
                 setCurrentMessage('');
                 setIsEntering(false);
@@ -66,6 +54,22 @@ function MessageBox({ handleChange, chatWith }) {
             }
         }
     }, [newMessage]);
+
+    const loginToChat = () => {
+        stompClient.send(
+            `/app/login`,
+            {},
+            chatWith.conversation_id
+        );
+    };
+
+    const logoutToChat = () => {
+        stompClient.send(
+            `/app/unsubscribe`,
+            {},
+            chatWith.conversation_id
+        );
+    }
 
     // Change chat icon
     const [isEntering, setIsEntering] = useState(false);
@@ -82,16 +86,27 @@ function MessageBox({ handleChange, chatWith }) {
     // Add new message
     const [currentMessage, setCurrentMessage] = useState('');
     const sendMessage = () => {
-        stompClient.publish({
-            destination: `/app/chat/conversation_id/${chatWith.conversation_id}`,
-            body: JSON.stringify({
+        // stompClient.publish({
+        //     destination: `/app/chat/conversation_id/${chatWith.conversation_id}`,
+        //     body: JSON.stringify({
+        //         id: lastestMessageId,
+        //         user_id: userId,
+        //         content: currentMessage,
+        //         conversation_id: chatWith.conversation_id,
+        //         pin_id: -1
+        //     }),
+        // });
+        stompClient.send(
+            `/app/chat/conversation_id/${chatWith.conversation_id}`,
+            {},
+            JSON.stringify({
                 id: lastestMessageId,
                 user_id: userId,
                 content: currentMessage,
                 conversation_id: chatWith.conversation_id,
                 pin_id: -1
-            }),
-        });
+            })
+        );
     };
 
     const handleKeyDown = (e) => {
