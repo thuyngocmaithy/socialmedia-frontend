@@ -7,7 +7,7 @@ function ThemeProvider({ children }) {
         const initialData = localStorage.getItem('theme');
         return initialData || 'light';
     });
-
+        
     useEffect(() => {
         // Lưu giá trị theme vào localStorage khi giá trị thay đổi
         localStorage.setItem('theme', theme);

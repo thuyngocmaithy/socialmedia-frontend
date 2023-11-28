@@ -47,3 +47,17 @@ export const getFriendChattingWith = async (user_id) => {
         console.log(error);
     }
 };
+
+export const save = async (participant) => {
+    try {
+        const res = await httpRequest.post(`participants/add`, participant, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': true,
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};

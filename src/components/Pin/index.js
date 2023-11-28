@@ -269,14 +269,14 @@ function Pin({
                             <ClickAwayListener onClickAway={handleClickAwayShare}>
                                 <div>
                                     <Tippy delay={[0, 100]} content="Chia sẻ" placement="bottom">
-                                        <button className={cx('btn')} onClick={handleOpenShare}>
+                                        <button onClick={handleOpenShare} className={cx('btn')}>
                                             <Popper
                                                 idPopper={`share${id}`}
                                                 contentTitle={
                                                     <ShareIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
                                                 }
                                                 className={cx('share-menu')}
-                                                body={<SharePopper />}
+                                                body={<SharePopper pin_id={id} />}
                                                 widthBody="maxContent"
                                             />
                                         </button>
@@ -298,21 +298,6 @@ function Pin({
                                 <Tippy delay={[0, 100]} content="Xóa" placement="bottom">
                                     <button className={cx(pinSaved ? 'btn-end' : 'btn')} onClick={handleDelete}>
                                         <DeleteIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
-                                    </button>
-                                </Tippy>
-                            </div>
-                        )}
-
-                        {pinCreated || pinSaved ? null : (
-                            <div>
-                                <Tippy delay={[0, 100]} content="Lưu ảnh" placement="bottom">
-                                    <button
-                                        onClick={() => {
-                                            download(image, title);
-                                        }}
-                                        className={cx('btn-end')}
-                                    >
-                                        <DownloadIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
                                     </button>
                                 </Tippy>
                             </div>

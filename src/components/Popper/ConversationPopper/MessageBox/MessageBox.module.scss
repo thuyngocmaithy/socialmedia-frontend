@@ -1,7 +1,7 @@
 .wrapper-message {
     overflow: hidden;
-    height: 475px;
-    width: 312px;
+    height: 100%;
+    width: 100%;
     position: relative;
 }
 
@@ -44,16 +44,19 @@
 }
 
 //BODY
+.wrapper-message-list {
+    height: 78%;
+    overflow: scroll;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
 .message-list {
     padding-top: 0.8rem;
-    min-height: 380px;
-    max-height: 380px;
     display: flex;
     justify-content: flex-end;
     flex-direction: column;
-    & > div:last-child {
-        margin-bottom: 30px;
-    }
 }
 
 // FOOTER

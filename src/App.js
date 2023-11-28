@@ -10,7 +10,6 @@ function App() {
 
     return (
         <Router>
-            {console.log('2222222222222222222222222222222222222:' + userId + '/////' + permission)}
             <div className="App">
                 <Routes>
                     {publicRoutes.map((route, index) => {
@@ -44,7 +43,6 @@ function App() {
                             Layout = route.layout;
                         }
                         const Page = route.component;
-
                         return (
                             <Route
                                 key={index}

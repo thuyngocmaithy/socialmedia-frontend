@@ -1,12 +1,11 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './MessageCard.module.scss';
 import className from 'classnames/bind';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import Image from '../../../../Image';
 
 const cx = className.bind(styles);
-function HeartMessage({message, messageOwner}) {
+function TextMessage({ message, messageOwner }) {
     const avatar = message.user.avatar;
+    const content = message.content;
     const haveImage = messageOwner === 'my-message' ? false : true;
     return (
         <div className={cx(messageOwner)}>
@@ -22,12 +21,10 @@ function HeartMessage({message, messageOwner}) {
                     :
                         <div className={cx('message-name')}>You</div>
                 }
-                <div className={cx('message-body', 'heart-message-body')}>
-                    <FontAwesomeIcon className={cx('heart-icon')} icon={faHeart} />
-                </div>
+                <div className={cx('message-body')}>{content}</div>
             </div>
         </div>
     );
 }
 
-export default HeartMessage;
+export default TextMessage;

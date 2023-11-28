@@ -1,38 +1,102 @@
-import { createContext, useContext, useLayoutEffect, useState } from 'react';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { ConversationContext } from './ConversationContext';
 import { StompContext } from './StompContext';
+import * as participantsService from '../services/participantServices';
+import { AccountLoginContext } from './AccountLoginContext';
+import * as messageServices from '../services/messageServices';
 const MessageContext = createContext({});
 
 function MessageProvider({ children }) {
-    const [load, setLoad] = useState(false);
-    let stompClient = useContext(StompContext);
-    const conversation = useContext(ConversationContext);
-    let id = 0;
-    let message = {};
-    let stompObject = [];
-    useLayoutEffect(() => {
-        const loadRoom = () => {
-            setLoad(true);
-            // conversation.current.forEach((item) => {
-            //     const tempObject = stompClient.subscribe(`/room/conversation_id/${item.conversation.id}`, function(message) {
-            //         message = JSON.parse(message.body);
-            //     })
-            //     stompObject.push(tempObject);
-            //     id = tempObject.id;
-            //     console.log(item);
-            // });
-
-            setLoad(false);
+    const stompClient = useContext(StompContext);
+    const { userId } = useContext(AccountLoginContext);
+    let { conversationList } = useContext(ConversationContext);
+    let conversationJoined = [];
+    const [messageCount, setMessageCount] = useState(0);
+    const [newMessage, setNewMessage] = useState({});
+    useEffect(() => {
+        const fetchAPI = async () => {
+            var temp = await participantsService.getConversationJoinedByUserId(userId);
+            temp.forEach((element) => {
+                conversationJoined = [...conversationJoined, element.conversation.id];
+            });
+            loadRoom();
         };
-        loadRoom();
-        // console.log('conversation:' + JSON.stringify(conversation));
-        // console.log(conversation.current);
-    });
-    const stompOutputObject = {
-        stompID: id,
-        stompMessage: message,
+        const loadRoom = async () => {
+            setTimeout(() => {
+                conversationJoined.forEach((conversation_id) => {
+                    stompClient.subscribe(`/room/conversation_id/${conversation_id}`, function (message) {
+                        updateMessages(JSON.parse(message.body));
+                    });
+                });
+                stompClient.subscribe('/room/testUnsubscribe', (response) => {
+                    console.log(response.body);
+                });
+                countMessage();
+            }, 1500);
+        };
+
+        if (userId !== 0) {
+            fetchAPI();
+        }
+    }, [userId]);
+
+    // useEffect(() => {
+    //     if(Object.keys(newMessage).length > 0) {
+    //         countMessage();
+    //     }
+    // }, [newMessage]);
+
+    const countMessage = () => {
+        let count = 0;
+        conversationList.current.forEach((item) => {
+            if (item.messages.length > 0) {
+                item.messages.forEach((message) => {
+                    if (!message.seen && message.user.id !== userId) {
+                        count++;
+                    }
+                });
+            }
+        });
+        setMessageCount(count);
     };
-    return <MessageContext.Provider value={stompOutputObject}>{children}</MessageContext.Provider>;
+
+    const updateMessages = (message) => {
+        conversationList.current.forEach((item) => {
+            if (item.conversation.id === message.conversation.id) {
+                item.messages = [...item.messages, message];
+                if (message.content !== '') {
+                    item.lastAction = 'text';
+                } else {
+                    item.lastAction = item.pin !== null ? 'pin' : 'heart';
+                }
+            }
+        });
+        setNewMessage(message);
+    };
+
+    const setAllSeen = (conversation_id) => {
+        conversationList.current.forEach((item) => {
+            if (item.conversation.id === conversation_id) {
+                item.messages.forEach(async (message) => {
+                    const res = await messageServices.update(message);
+                    message.seen = true;
+                });
+            }
+        });
+    };
+
+    return (
+        <MessageContext.Provider
+            value={{
+                messageCount: messageCount,
+                setAllSeen: setAllSeen,
+                setMessageCount: setMessageCount,
+                newMessage: newMessage,
+            }}
+        >
+            {children}
+        </MessageContext.Provider>
+    );
 }
 
 export { MessageProvider, MessageContext };

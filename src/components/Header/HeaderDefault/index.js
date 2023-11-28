@@ -9,6 +9,7 @@ import { AccountLoginContext } from '../../../context/AccountLoginContext';
 import { ThemeContext } from '../../../context/ThemeContext';
 import { getUserById } from '../../../services/userServices';
 import Button from '../../Button';
+import { MessageContext } from '../../../context/MessageContext';
 import DialogConfirmLogin from '../../DialogConfirmLogin';
 import { LogoPinterest, MessageIcon, NotificationIcon } from '../../Icons';
 import Image from '../../Image';
@@ -30,6 +31,7 @@ function HeaderDefault() {
     const [user, setUser] = useState({});
     const [userLoaded, setUserLoaded] = useState(false);
     const [openConfirmLogin, setOpenConfirmLogin] = useState(false);
+    const newMessageCount = useContext(MessageContext).messageCount;
 
     // MENU KHI CHƯA ĐĂNG NHẬP
     const MENU_ITEMS = [
@@ -38,13 +40,14 @@ function HeaderDefault() {
             title: 'Dark Mode',
         },
     ];
+
     useEffect(() => {
         // Gửi yêu cầu GET để lấy thông tin người dùng
         if (userId !== 0) {
             getUserById(userId)
                 .then((response) => {
                     setUser(response);
-                    console.log(response);
+                    // console.log(response);
                     setUserLoaded(true);
                 })
                 .catch((error) => {
@@ -109,7 +112,7 @@ function HeaderDefault() {
                                 widthBody="maxContent"
                             />
                             <Popper
-                                title={<MessageIcon className={cx('action', theme === 'dark' ? 'dark' : '')} />}
+                                title={<MessageIcon newMessageCount={newMessageCount} className={cx('action', theme === 'dark' ? 'dark' : '')} />}
                                 body={<ConversationPopper />}
                                 left="-48px"
                                 widthBody="maxContent"

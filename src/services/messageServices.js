@@ -21,3 +21,32 @@ export const getMessageByConversationId = async (conversation_id) => {
         console.log(error);
     }
 };
+
+
+
+export const update = async (message) => {
+    try {
+        const res = await httpRequest.put(`messages/edit/${message.id}`, message, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const save = async (message) => {
+    try {
+        const res = await httpRequest.post(`messages/add`, message, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': true,
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};

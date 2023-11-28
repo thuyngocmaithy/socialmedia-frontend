@@ -23,7 +23,6 @@ import Wrapper from './Wrapper';
 const cx = classNames.bind(styles);
 
 function PinSaved() {
-    const navigate = useNavigate();
     const { theme } = useContext(ThemeContext);
 
     const [changeNameEdit, setChangeNameEdit] = useState(false);
@@ -31,6 +30,7 @@ function PinSaved() {
     const [changeNameAdd, setChangeNameAdd] = useState(false);
     const [changeDiscriptionAdd, setChangeDiscriptionAdd] = useState(false);
 
+    const navigate = useNavigate();
     const { accountOther } = useContext(AccountOtherContext);
     //Open hộp thoại edit
     const [openEdit, setOpenEdit] = useState(false);

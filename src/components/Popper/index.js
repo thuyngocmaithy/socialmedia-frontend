@@ -4,6 +4,7 @@ import { styled } from '@mui/system';
 import classNames from 'classnames/bind';
 import { useContext, useState } from 'react';
 import { ThemeContext } from '../../context/ThemeContext';
+import { MessageContext } from '../../context/MessageContext';
 import styles from './Popper.module.scss';
 
 const cx = classNames.bind(styles);
@@ -42,10 +43,12 @@ function Popper({ idPopper, contentTitle, title, body, className, left = '0', pl
     const { theme } = useContext(ThemeContext);
     const [anchor, setAnchor] = useState(null);
     const [open, setOpen] = useState(false);
+    let { setMessageCount } = useContext(MessageContext);
 
     const handleClick = (event) => {
         setAnchor(anchor ? null : event.currentTarget);
         setOpen(!open);
+        setMessageCount(0);
     };
 
     // const open = Boolean(anchor);
