@@ -119,12 +119,14 @@
     }
     .sender-name {
         font-weight: 400;
+        font-size: 1.4rem;
         &.unSeen {
             font-weight: 600;
         }
     }
     .lastMessage {
         color: rgb(95, 95, 95);
+        font-size: 1.4rem;
         &.unSeen {
             font-weight: 600;
             color: var(--black);
