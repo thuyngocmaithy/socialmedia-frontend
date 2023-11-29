@@ -302,6 +302,20 @@ function Pin({
                                 </Tippy>
                             </div>
                         )}
+                        {pinCreated || pinSaved ? null : (
+                            <div>
+                                <Tippy delay={[0, 100]} content="Lưu ảnh" placement="bottom">
+                                    <button
+                                        onClick={() => {
+                                            download(image, title);
+                                        }}
+                                        className={cx('btn-end')}
+                                    >
+                                        <DownloadIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
+                                    </button>
+                                </Tippy>
+                            </div>
+                        )}
                     </div>
                 </div>
 

@@ -105,6 +105,7 @@
     right: 0px;
     display: none;
     justify-content: flex-end;
+    width: 100%;
 }
 .option-bottom.active {
     display: flex;
@@ -140,7 +141,7 @@
 }
 .btn-text {
     display: flex;
-    width: 132px;
+    width: 100%;
     border-radius: 18px;
     font-weight: bold;
 }
