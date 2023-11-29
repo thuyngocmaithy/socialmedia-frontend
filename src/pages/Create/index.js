@@ -14,7 +14,6 @@ import * as userServices from '../../services/userServices';
 import * as pinServices from '../../services/pinServices';
 import { AccountLoginContext } from '../../context/AccountLoginContext';
 import axios from 'axios';
-import { async } from 'q';
 import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import LabelTextBox from '../../components/LabelTextBox';
 import * as typeServices from '../../services/typeServices';
@@ -23,6 +22,24 @@ import { ThemeContext } from '../../context/ThemeContext';
 const cx = classNames.bind(styles);
 
 function Create() {
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    // Sử dụng useEffect để theo dõi thay đổi của screenWidth
+    useEffect(() => {
+        // Hàm xử lý khi screenWidth thay đổi
+        function handleResize() {
+            setScreenWidth(window.innerWidth);
+        }
+
+        // Thêm một sự kiện lắng nghe sự thay đổi của cửa sổ
+        window.addEventListener('resize', handleResize);
+
+        // Loại bỏ sự kiện lắng nghe khi component bị hủy
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     const { theme } = useContext(ThemeContext);
 
     const [changeName, setChangeName] = useState(false);
@@ -228,7 +245,20 @@ function Create() {
                 </div>
                 {/* end header  */}
                 <div className={cx('mainContent')}>
-                    <LoadImage height="565px" width="355px" onSelectImage={handleChangeImage}></LoadImage>
+                    <LoadImage
+                        className={cx('loadimage')}
+                        height={screenWidth < 500 ? '400px' : '565px'}
+                        width={
+                            screenWidth < 1015
+                                ? screenWidth > 830
+                                    ? '270px'
+                                    : screenWidth < 500
+                                    ? '240px'
+                                    : '355px'
+                                : '355px'
+                        }
+                        onSelectImage={handleChangeImage}
+                    ></LoadImage>
                     {/* end upload IMG */}
                     <div className={cx('insertData')}>
                         <div className={cx('title')}>

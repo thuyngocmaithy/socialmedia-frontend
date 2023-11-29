@@ -32,9 +32,10 @@
     width: 100%;
     border-radius: 0;
     font-weight: 600;
-    padding: 11px 16px;
+    padding: 11px 10px;
     line-height: 1.8rem;
     margin-left: 0px;
+    cursor: pointer;
 
     &.separate {
         border-top: 1px solid rgba(22, 24, 35, 0.12);

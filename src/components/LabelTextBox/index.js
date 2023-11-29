@@ -82,7 +82,9 @@ function LabelTextBox({
                             handleChange(event);
                         }}
                     ></textarea>
-                    {error === '' && inputValue === '' && change ? `${label} rỗng` : error !== '' ? error : ''}
+                    <span className={cx('error')}>
+                        {error === '' && inputValue === '' && change ? `${label} rỗng` : error !== '' ? error : ''}
+                    </span>
                 </>
             ) : (
                 <>

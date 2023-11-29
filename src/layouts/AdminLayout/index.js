@@ -98,7 +98,7 @@ function AdminLayout({ children, account = false }) {
             to: '/admin/permission',
             icon: <PermissionIcon />,
         },
-    ];
+    ]
     useEffect(() => {
         const fetchApi = async () => {
             console.log(permission);
@@ -113,11 +113,7 @@ function AdminLayout({ children, account = false }) {
         fetchApi();
     }, []);
     const handleOpenMenu = () => {
-        if (displayMenu === 'none') {
-            setDisplayMenu('block');
-        } else {
-            setDisplayMenu('none');
-        }
+        setDisplayMenu(prevDisplayMenu => (prevDisplayMenu === 'none' ? 'block' : 'none'));
     };
     const handleOnclickMenuItem = () => {
         setDisplayMenu('none');
@@ -149,7 +145,7 @@ function AdminLayout({ children, account = false }) {
             )}
 
             <div className={cx('container', theme === 'dark' ? 'dark' : '')}>
-                {console.log(theme)}
+                {/* {console.log(theme)} */}
                 <HeaderAdmin
                     account={account}
                     className={cx('header', theme === 'dark' ? 'dark' : '')}

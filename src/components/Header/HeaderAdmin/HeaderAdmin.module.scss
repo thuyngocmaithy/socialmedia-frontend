@@ -24,7 +24,7 @@
     }
 }
 .menu {
-    background-color: #e3a0aa;
+    background-color: var(--color-blue-pastel);
     padding: 5px 10px 3px 10px;
     border-radius: 5px;
     font-size: 27px;
@@ -169,7 +169,7 @@
 .ztu {
     color: #5f5f5f;
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 900px) {
     .menu {
         display: block;
     }

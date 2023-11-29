@@ -91,3 +91,27 @@ $circle-radius: 50%;
         }
     }
 }
+@media screen and (max-width: 1030px) {
+    .wrapper {
+        .container-infoProfile {
+            width: 45%;
+        }
+        .image {
+            width: 300px;
+            height: 150px;
+        }
+    }
+}
+@media screen and (max-width: 915px) {
+    .wrapper {
+        .container-accountsetting {
+            width: 100%;
+        }
+        .image-container {
+            display: none;
+        }
+        .labelCheckPrivate {
+            font-size: 16px;
+        }
+    }
+}

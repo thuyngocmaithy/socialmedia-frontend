@@ -20,6 +20,7 @@ function UserProfile({ admin = false }) {
     const [changeName, setChangeName] = useState(false);
     const [changeIntroduce, setChangeIntroduce] = useState(false);
     const [changeWebsite, setChangeWebsite] = useState(false);
+    const [changeUsername, setChangeUsername] = useState(false);
 
     const { userId } = useContext(AccountLoginContext);
     const [userData, setUserData] = useState({});
@@ -57,7 +58,6 @@ function UserProfile({ admin = false }) {
             .then((response) => {
                 setSaveSuccess(false);
                 setUserData(response);
-                console.log(userId);
             })
             .catch((error) => {
                 console.error(error);
@@ -148,8 +148,20 @@ function UserProfile({ admin = false }) {
         setChangeIntroduce(true);
         setChangeName(true);
         setChangeWebsite(true);
+        setChangeUsername(true);
 
-        if (userFullname !== '' && userIntroduce !== '' && userWebsite !== '') {
+        let save = false;
+        if (admin) {
+            if (userFullname !== '' && username !== '') {
+                save = true;
+            }
+        } else {
+            if (userFullname !== '' && userIntroduce !== '' && userWebsite !== '' && username !== '') {
+                save = true;
+            }
+        }
+
+        if (save) {
             const updatedUser = {
                 fullname: userFullname,
                 introduce: userIntroduce,
@@ -209,6 +221,7 @@ function UserProfile({ admin = false }) {
                                 customGetValue={handlGetUserIntroduce}
                                 change={changeIntroduce}
                                 setChange={setChangeIntroduce}
+                                area
                             />
                             <LabelTextBox
                                 placeholder={'Thêm liên kết để hướng lưu lượng vào trang web'}
@@ -228,6 +241,8 @@ function UserProfile({ admin = false }) {
                         selectedSize={'medium'}
                         text={username}
                         customGetValue={handleGetUsername}
+                        change={changeUsername}
+                        setChange={setChangeUsername}
                     />
                 </div>
                 <div className={cx('image-container')}>

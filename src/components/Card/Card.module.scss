@@ -57,6 +57,18 @@
         color: var(--white-500);
     }
 }
+@media only screen and (max-width: 1030px) {
+    .wrapper {
+        padding: 20px 10px;
+    }
+
+    .data,
+    .detail,
+    .title {
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+}
 @media only screen and (max-width: 920px) {
     .wrapper {
         width: calc(48%);

@@ -16,6 +16,24 @@ import { ThemeContext } from '../../../context/ThemeContext';
 const cx = classNames.bind(styles);
 
 function User() {
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    // Sử dụng useEffect để theo dõi thay đổi của screenWidth
+    useEffect(() => {
+        // Hàm xử lý khi screenWidth thay đổi
+        function handleResize() {
+            setScreenWidth(window.innerWidth);
+        }
+
+        // Thêm một sự kiện lắng nghe sự thay đổi của cửa sổ
+        window.addEventListener('resize', handleResize);
+
+        // Loại bỏ sự kiện lắng nghe khi component bị hủy
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     const { theme } = useContext(ThemeContext);
 
     const [changeFirstname, setChangeFirstname] = useState(false);
@@ -223,12 +241,12 @@ function User() {
                         Thêm người dùng
                     </DialogTitle>
                     <DialogContent>
-                        <div style={{ display: 'flex' }}>
+                        <div style={{ display: screenWidth < 650 ? 'block' : 'flex' }}>
                             <LabelTextBox
                                 name={'firstname'}
                                 placeholder={'Họ'}
                                 label={'Họ'}
-                                selectedSize={'small'}
+                                selectedSize={screenWidth < 650 ? 'medium' : 'small'}
                                 change={changeFirstname}
                                 setChange={setChangeFirstname}
                             />
@@ -236,17 +254,17 @@ function User() {
                                 name={'lastname'}
                                 placeholder={'Tên'}
                                 label={'Tên'}
-                                selectedSize={'small'}
+                                selectedSize={screenWidth < 650 ? 'medium' : 'small'}
                                 change={changeLastname}
                                 setChange={setChangeLastname}
                             />
                         </div>
-                        <div style={{ display: 'flex' }}>
+                        <div style={{ display: screenWidth < 650 ? 'block' : 'flex' }}>
                             <LabelTextBox
                                 name={'email'}
                                 placeholder={'Email'}
                                 label={'Email'}
-                                selectedSize={'small'}
+                                selectedSize={screenWidth < 650 ? 'medium' : 'small'}
                                 change={changeEmail}
                                 setChange={setChangeEmail}
                             />
@@ -255,7 +273,7 @@ function User() {
                                 placeholder={'Ngày sinh'}
                                 label={'Ngày sinh'}
                                 type={'date'}
-                                selectedSize={'small'}
+                                selectedSize={screenWidth < 650 ? 'medium' : 'small'}
                             />
                         </div>
                     </DialogContent>

@@ -11,9 +11,7 @@
 }
 
 .container {
-    width: 500px;
-    height: 450px;
-    transform: translateY(-50%);
+    transform: translateY(-70%);
     top: 50%;
     position: absolute;
     background: white;
@@ -21,9 +19,6 @@
     border-radius: 20px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     text-align: center;
-    &.dark {
-        background-color: #232323;
-    }
 }
 .header {
     display: flex;
@@ -43,36 +38,7 @@
         border-radius: 50%;
     }
 }
-.option-container {
-    margin-top: 10px;
-}
-.body {
-    // margin: 0x 25px;
-    overflow-y: scroll;
-    height: 83%;
-    // padding-right: 10px;
-}
-.item-friend {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-.acceptBtn {
-    margin-left: 8px;
-}
-@media only screen and (max-width: 550px) {
-    .container {
-        width: 350px;
-        height: 350px;
-    }
-    .deleteBtn {
-        font-size: 1.3rem;
-        min-width: 30px;
-        padding: 8px 10px;
-    }
-    .acceptBtn {
-        font-size: 1.3rem;
-        min-width: 30px;
-        padding: 8px 10px;
-    }
+
+.search-component {
+    margin: 20px 10px;
 }

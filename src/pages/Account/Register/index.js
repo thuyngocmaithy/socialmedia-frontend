@@ -12,6 +12,24 @@ import ActionAlerts from '../../../components/Alert';
 const cx = classNames.bind(styles);
 
 function Register() {
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    // Sử dụng useEffect để theo dõi thay đổi của screenWidth
+    useEffect(() => {
+        // Hàm xử lý khi screenWidth thay đổi
+        function handleResize() {
+            setScreenWidth(window.innerWidth);
+        }
+
+        // Thêm một sự kiện lắng nghe sự thay đổi của cửa sổ
+        window.addEventListener('resize', handleResize);
+
+        // Loại bỏ sự kiện lắng nghe khi component bị hủy
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     const { theme } = useContext(ThemeContext);
     const [changeFirstname, setChangeFirstname] = useState(false);
     const [changeLastname, setChangeLastname] = useState(false);
@@ -135,7 +153,7 @@ function Register() {
     };
 
     return (
-        <Wrapper>
+        <Wrapper style={{ display: screenWidth < 1145 ? 'none' : 'block' }}>
             <div className={cx('container-form', theme === 'dark' ? 'dark' : '')}>
                 <h1 className={cx('title')}>Register account</h1>
 

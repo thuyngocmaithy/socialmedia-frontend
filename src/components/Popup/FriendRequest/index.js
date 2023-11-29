@@ -138,7 +138,11 @@ function FriendRequest({ idUser, onClose, setUpdateFriend }) {
                                             fontWeight="500"
                                         />
                                         <div>
-                                            <Button primary onClick={() => handleCancelFriend(item)}>
+                                            <Button
+                                                className={cx('deleteBtn')}
+                                                primary
+                                                onClick={() => handleCancelFriend(item)}
+                                            >
                                                 Xóa
                                             </Button>
                                             <Button

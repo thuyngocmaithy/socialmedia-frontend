@@ -58,14 +58,15 @@
     z-index: 3;
     border-radius: 50%;
     background-color: transparent;
+    width: 65%;
 }
 .select-board {
-    width: 150px;
+    width: 100%;
     height: 36px;
     span {
         background-color: #f0f0f0;
         border-radius: 24px;
-        width: 150px;
+        width: 100%;
         height: 36px;
         font-size: 16px;
         cursor: pointer;
@@ -176,4 +177,28 @@
 }
 .grey-button:hover {
     background: #e2e2e2;
+}
+@media screen and (max-width: 1036px) {
+    .wrapper {
+        width: 25%;
+    }
+}
+@media screen and (max-width: 768px) {
+    .wrapper {
+        width: 33%;
+        padding: 10px;
+        + .wrapper {
+            padding-left: 5px;
+        }
+    }
+}
+@media screen and (max-width: 640px) {
+    .wrapper {
+        width: 50%;
+    }
+}
+@media screen and (max-width: 400px) {
+    .wrapper {
+        width: 100%;
+    }
 }

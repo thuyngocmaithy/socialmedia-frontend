@@ -6,5 +6,8 @@
     },
     "[scss]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
-    }
+    },
+    "CodeGPT.windowMemory": 5,
+    "CodeGPT.Autocomplete.enabled": true,
+    "CodeGPT.organizationId": ""
 }

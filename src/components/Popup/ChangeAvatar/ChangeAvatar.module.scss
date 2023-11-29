@@ -66,3 +66,28 @@
     justify-content: center;
     align-items: center;
 }
+
+
+@media screen and (max-width: 768px) {
+    .popup-container {
+        width: 300px;
+        height: 350px;
+    }
+    h2 {
+        font-size: 20px !important;
+    }
+    .choose-image{
+        
+        height: 200px;
+        width: 200px;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (max-width: 430px) {
+    
+}
+
+@media screen and (min-width: 430px) and (max-width: 768px) {
+    
+}

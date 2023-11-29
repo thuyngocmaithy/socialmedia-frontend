@@ -15,6 +15,24 @@ import { ThemeContext } from '../../../context/ThemeContext';
 const cx = classNames.bind(styles);
 
 function Type() {
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    // Sử dụng useEffect để theo dõi thay đổi của screenWidth
+    useEffect(() => {
+        // Hàm xử lý khi screenWidth thay đổi
+        function handleResize() {
+            setScreenWidth(window.innerWidth);
+        }
+
+        // Thêm một sự kiện lắng nghe sự thay đổi của cửa sổ
+        window.addEventListener('resize', handleResize);
+
+        // Loại bỏ sự kiện lắng nghe khi component bị hủy
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     const { theme } = useContext(ThemeContext);
 
     const [changeNameEdit, setChangeNameEdit] = useState(false);
@@ -195,12 +213,12 @@ function Type() {
                     <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
                         Chỉnh sửa
                     </DialogTitle>
-                    <DialogContent>
+                    <DialogContent sx={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
                         <LabelTextBox
                             name={'typeNameEdit'}
                             placeholder={'Tên loại'}
                             label={'Tên loại'}
-                            selectedSize={'medium'}
+                            selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                             text={typeEdit.typeName ? typeEdit.typeName : ''}
                             change={changeNameEdit}
                             setChange={setChangeNameEdit}
@@ -227,12 +245,12 @@ function Type() {
                     <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
                         Thêm loại bài đăng
                     </DialogTitle>
-                    <DialogContent>
+                    <DialogContent sx={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
                         <LabelTextBox
                             name={'typeName'}
                             placeholder={'Tên loại'}
                             label={'Tên loại'}
-                            selectedSize={'medium'}
+                            selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                             change={changeNameAdd}
                             setChange={setChangeNameAdd}
                         />

@@ -24,9 +24,15 @@
     align-items: center;
     justify-content: space-between;
 }
+.container-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 //Logo
 .logo-link {
     display: flex;
+    margin-right: 10px;
 }
 
 // category
@@ -107,4 +113,7 @@
 .user-avatar {
     object-fit: cover; //ảnh giữ được tỷ lệ, tràn hình tròn của border radius
     cursor: pointer;
+}
+.search-component {
+    margin: 0 30px 30px 30px;
 }

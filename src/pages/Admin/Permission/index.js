@@ -18,6 +18,24 @@ import { ThemeContext } from '../../../context/ThemeContext';
 const cx = classNames.bind(styles);
 
 function Permission() {
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    // Sử dụng useEffect để theo dõi thay đổi của screenWidth
+    useEffect(() => {
+        // Hàm xử lý khi screenWidth thay đổi
+        function handleResize() {
+            setScreenWidth(window.innerWidth);
+        }
+
+        // Thêm một sự kiện lắng nghe sự thay đổi của cửa sổ
+        window.addEventListener('resize', handleResize);
+
+        // Loại bỏ sự kiện lắng nghe khi component bị hủy
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     const { theme } = useContext(ThemeContext);
 
     const [changeNameEdit, setChangeNameEdit] = useState(false);
@@ -253,12 +271,14 @@ function Permission() {
             numeric: false,
             disablePadding: true,
             label: 'ID',
+            width: '10px',
         },
         {
             id: 'name',
             numeric: true,
             disablePadding: false,
             label: 'Tên',
+            width: '30%',
         },
     ];
     return (
@@ -330,7 +350,7 @@ function Permission() {
                             name={'nameEdit'}
                             placeholder={'Tên quyền'}
                             label={'Tên quyền'}
-                            selectedSize={'medium'}
+                            selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                             text={functionEdit.name ? functionEdit.name : ''}
                             change={changeNameEdit}
                             setChange={setChangeNameEdit}
@@ -362,7 +382,7 @@ function Permission() {
                             name={'name'}
                             placeholder={'Tên quyền'}
                             label={'Tên quyền'}
-                            selectedSize={'medium'}
+                            selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                             change={changeNameAdd}
                             setChange={setChangeNameAdd}
                         />

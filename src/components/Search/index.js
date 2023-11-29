@@ -15,7 +15,7 @@ import * as userServices from '../../services/userServices';
 
 const cx = classNames.bind(styles);
 
-function Search({ className, width = '750px' }) {
+function Search({ className, width = '750px', display = 'block' }) {
     const { theme } = useContext(ThemeContext);
 
     const [searchValue, setSearchValue] = useState('');
@@ -134,7 +134,7 @@ function Search({ className, width = '750px' }) {
     return (
         /*Using a wrapper <div> tag around the reference element solves this 
         by creating a new parentNode context.*/
-        <div className={cx('wrapper', className)} style={{ width: width }}>
+        <div className={cx('wrapper', className)} style={{ width: width, display: display }}>
             <HeadlessTippy
                 interactive //tippy được tương tác mà không ẩn đi
                 visible={showResult} //Visible là Hiển thị không cần hover

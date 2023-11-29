@@ -1,4 +1,4 @@
-import { faArrowRightFromBracket, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faArrowRightFromBracket, faChevronDown, faMoon } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Switch from '@mui/material/Switch';
 import classNames from 'classnames/bind';
@@ -19,6 +19,7 @@ import ConversationPopper from '../../Popper/ConversationPopper';
 import NotificationPopper from '../../Popper/NotificationPopper';
 import MenuSettingHeader from '../../Popup/MenuSettingHeader';
 import Search from '../../Search';
+import SearchPopup from '../../Popup/SearchPopup';
 import styles from './HeaderDefault.module.scss';
 
 const cx = classNames.bind(styles);
@@ -31,15 +32,57 @@ function HeaderDefault() {
     const [user, setUser] = useState({});
     const [userLoaded, setUserLoaded] = useState(false);
     const [openConfirmLogin, setOpenConfirmLogin] = useState(false);
+    const [openSearch, setOpenSearch] = useState(false);
     const newMessageCount = useContext(MessageContext).messageCount;
 
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    // Sử dụng useEffect để theo dõi thay đổi của screenWidth
+    useEffect(() => {
+        // Hàm xử lý khi screenWidth thay đổi
+        function handleResize() {
+            setScreenWidth(window.innerWidth);
+        }
+
+        // Thêm một sự kiện lắng nghe sự thay đổi của cửa sổ
+        window.addEventListener('resize', handleResize);
+
+        // Loại bỏ sự kiện lắng nghe khi component bị hủy
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    let MENU_ITEMS;
     // MENU KHI CHƯA ĐĂNG NHẬP
-    const MENU_ITEMS = [
-        {
-            switchToggle: <Switch defaultChecked={theme === 'dark' ? true : false} {...label} onChange={toggleTheme} />,
-            title: 'Dark Mode',
-        },
-    ];
+    if (screenWidth < 880) {
+        MENU_ITEMS = [
+            {
+                icon: <FontAwesomeIcon icon={faMagnifyingGlass} />,
+                title: 'Tìm kiếm',
+                handleClickMenuItem: () => {
+                    setOpenSearch(true);
+                },
+            },
+            {
+                icon: <FontAwesomeIcon icon={faMoon} />,
+                switchToggle: (
+                    <Switch defaultChecked={theme === 'dark' ? true : false} {...label} onChange={toggleTheme} />
+                ),
+                title: 'Dark Mode',
+            },
+        ];
+    } else {
+        MENU_ITEMS = [
+            {
+                icon: <FontAwesomeIcon icon={faMoon} />,
+                switchToggle: (
+                    <Switch defaultChecked={theme === 'dark' ? true : false} {...label} onChange={toggleTheme} />
+                ),
+                title: 'Dark Mode',
+            },
+        ];
+    }
 
     useEffect(() => {
         // Gửi yêu cầu GET để lấy thông tin người dùng
@@ -92,14 +135,15 @@ function HeaderDefault() {
         <header className={cx('wrapper', theme === 'dark' ? 'dark' : '')}>
             <div className={cx('inner')}>
                 {/* LOGO */}
-                <Link to={config.routes.home} className={cx('logo-link')}>
-                    <LogoPinterest className={cx('logo', theme === 'dark' ? 'dark' : '')} />
-                </Link>
+                <div className={cx('container-left')}>
+                    <Link to={config.routes.home} className={cx('logo-link')}>
+                        <LogoPinterest className={cx('logo', theme === 'dark' ? 'dark' : '')} />
+                    </Link>
 
-                <NavMenu className={cx('nav-menu')} menu={menuNavbarLeft} />
-
+                    <NavMenu className={cx('nav-menu')} menu={menuNavbarLeft} />
+                </div>
                 {/* THANH TÌM KIẾM */}
-                <Search />
+                <Search width={screenWidth < 1030 ? '500px' : '730px'} display={screenWidth < 880 ? 'none' : 'block'} />
 
                 {/* ACTIONS */}
                 <div className={cx('actions')}>
@@ -112,7 +156,12 @@ function HeaderDefault() {
                                 widthBody="maxContent"
                             />
                             <Popper
-                                title={<MessageIcon newMessageCount={newMessageCount} className={cx('action', theme === 'dark' ? 'dark' : '')} />}
+                                title={
+                                    <MessageIcon
+                                        newMessageCount={newMessageCount}
+                                        className={cx('action', theme === 'dark' ? 'dark' : '')}
+                                    />
+                                }
                                 body={<ConversationPopper />}
                                 left="-48px"
                                 widthBody="maxContent"
@@ -126,9 +175,10 @@ function HeaderDefault() {
                             </Link>
                         </>
                     )}
+
                     {userId === 0 && (
-                        <Button className={cx('btnLogin')} red to={config.routes.login}>
-                            Log in
+                        <Button red to={config.routes.login}>
+                            Login
                         </Button>
                     )}
 
@@ -140,6 +190,13 @@ function HeaderDefault() {
                 </div>
             </div>
             {openConfirmLogin && <DialogConfirmLogin open={openConfirmLogin} setOpen={setOpenConfirmLogin} />}
+            {openSearch && (
+                <SearchPopup
+                    onClose={() => {
+                        setOpenSearch(false);
+                    }}
+                />
+            )}
         </header>
     );
 }

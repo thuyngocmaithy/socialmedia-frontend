@@ -7,9 +7,6 @@ import Button from '../../Button';
 import * as friendshipServices from '../../../services/friendshipServices';
 import { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { CircularProgress } from '@mui/material';
 import { AccountOtherContext } from '../../../context/AccountOtherContext';
@@ -37,12 +34,6 @@ CustomTabPanel.propTypes = {
     value: PropTypes.number.isRequired,
 };
 
-function a11yProps(index) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    };
-}
 function ListFriend({ idUser, onClose }) {
     const { accountOther } = useContext(AccountOtherContext);
     const [listFriend, setListFriend] = useState([]);

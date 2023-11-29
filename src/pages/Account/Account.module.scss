@@ -2,11 +2,13 @@
     display: flex;
     align-items: center;
     // height: 493px;
+    min-width: 360px;
     height: calc(100vh - 70px);
     object-fit: cover;
     overflow: hidden;
     position: relative;
     justify-content: flex-end;
+    justify-items: center;
 }
 .img {
     // margin-top: -400px;
@@ -63,5 +65,30 @@
     padding: 10px;
     &.dark {
         background-color: var(--color-red-darker);
+    }
+}
+
+@media only screen and (min-width: 360px) and (max-width: 768px) {
+    .wrapper {
+        height: auto;
+        .container-input {
+            display: block;
+        }
+        .container-form {
+            margin: 100px 0;
+            margin-right: 7%;
+        }
+        .container-text {
+            .content {
+                display: none;
+            }
+        }
+    }
+}
+@media screen and (max-width: 940px) {
+    .container-text {
+        .content {
+            font-size: 25px;
+        }
     }
 }
