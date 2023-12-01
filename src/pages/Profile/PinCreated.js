@@ -20,6 +20,24 @@ import Wrapper from './Wrapper';
 const cx = classNames.bind(styles);
 
 function PinCreated() {
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    // Sử dụng useEffect để theo dõi thay đổi của screenWidth
+    useEffect(() => {
+        // Hàm xử lý khi screenWidth thay đổi
+        function handleResize() {
+            setScreenWidth(window.innerWidth);
+        }
+
+        // Thêm một sự kiện lắng nghe sự thay đổi của cửa sổ
+        window.addEventListener('resize', handleResize);
+
+        // Loại bỏ sự kiện lắng nghe khi component bị hủy
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     const { theme } = useContext(ThemeContext);
 
     const [changeName, setChangeName] = useState(false);
@@ -174,7 +192,7 @@ function PinCreated() {
                                         placeholder={'Tiêu đề'}
                                         label={'Tiêu đề'}
                                         text={pinEdit.title ? pinEdit.title : ''}
-                                        selectedSize={'medium'}
+                                        selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                                         change={changeName}
                                         setChange={setChangeName}
                                     />
@@ -183,7 +201,7 @@ function PinCreated() {
                                         placeholder={'Mô tả'}
                                         label={'Mô tả'}
                                         text={pinEdit.description ? pinEdit.description : ''}
-                                        selectedSize={'sizeTextArea'}
+                                        selectedSize={screenWidth < 650 ? 'sizeTextAreaMedium' : 'sizeTextAreaMedium2'}
                                         area
                                         change={changeDiscription}
                                         setChange={setChangeDiscription}
@@ -193,7 +211,7 @@ function PinCreated() {
                                         placeholder={'Liên kết'}
                                         label={'Liên kết'}
                                         text={pinEdit.link ? pinEdit.link : ''}
-                                        selectedSize={'medium'}
+                                        selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                                         change={changeLink}
                                         setChange={setChangeLink}
                                     />

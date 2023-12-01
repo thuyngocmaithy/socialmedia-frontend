@@ -10,7 +10,7 @@ const cx = classNames.bind(styles);
 
 function AccountItemSearch({ data }) {
     return (
-        <Link to={`/profile/@${data.username}`} className={cx('wrapper')}>
+        <Link to={`/${data.username}`} className={cx('wrapper')}>
             <Image className={cx('avatar')} src={`data:image/jpeg;base64,${data.avatar}`} alt={data.fullname} />
             <div className={cx('info')}>
                 <h4 className={cx('name')}>

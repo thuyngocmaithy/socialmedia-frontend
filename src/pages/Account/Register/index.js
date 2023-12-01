@@ -30,6 +30,33 @@ function Register() {
         };
     }, []);
 
+    //Hiển thị hộp thoại thông báo
+    const [alertType, setAlertType] = useState(null);
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const showAlert = (type) => {
+        setAlertType(type);
+        setAlertVisible(true);
+
+        const timeoutId = setTimeout(() => {
+            setAlertVisible(false);
+            setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+        }, 2500);
+
+        return timeoutId;
+    };
+
+    useEffect(() => {
+        if (alertVisible) {
+            const timeoutId = setTimeout(() => {
+                setAlertVisible(false);
+                setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+            }, 2500);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [alertVisible]);
+
     const { theme } = useContext(ThemeContext);
     const [changeFirstname, setChangeFirstname] = useState(false);
     const [changeLastname, setChangeLastname] = useState(false);
@@ -129,7 +156,7 @@ function Register() {
                 birthdate: birthdate,
                 password: password,
                 introduce: null,
-                avatar: null,
+                avatar: '',
                 website: null,
                 gender: null,
                 language: null,
@@ -142,9 +169,7 @@ function Register() {
                 const response = await userServices.save(userSave);
 
                 if (response) {
-                    console.log(response);
-                } else {
-                    console.log(response);
+                    showAlert('registerSuccess');
                 }
             } catch (error) {
                 console.error('An error occurred:', error);
@@ -235,6 +260,9 @@ function Register() {
                     </div>
                 </form>
             </div>
+            {alertType === 'registerSuccess' && (
+                <ActionAlerts severity="success" content={'Đăng ký tài khoản thành công'} />
+            )}
         </Wrapper>
     );
 }

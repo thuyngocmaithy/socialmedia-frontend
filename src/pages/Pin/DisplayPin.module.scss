@@ -33,8 +33,9 @@
 
 .imgWrapper img {
     border-radius: 8px 0px 0px 8px;
-    min-width: 459px;
-    max-height: 764px;
+    width: 459px;
+    height: 764px;
+    object-fit: cover;
 }
 
 .insertData {
@@ -238,6 +239,7 @@
         border-radius: 8px;
         width: 430px !important;
         max-height: 630px;
+        object-fit: cover;
     }
     .insertData {
         height: 100%;

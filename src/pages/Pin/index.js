@@ -54,7 +54,7 @@ function DisplayPin() {
 
     const location = useLocation();
     const pinID = location.pathname.split('/')[2];
-    const [pin, setPin] = useState([]);
+    const [pin, setPin] = useState({});
     const [currentBoard, setBoard] = useState({ name: 'Chọn bảng' });
     const [img, setIMG] = useState();
     const [valContent, setValContent] = useState('');
@@ -62,6 +62,7 @@ function DisplayPin() {
     const [user, setUser] = useState('');
     const [load, setLoad] = useState(true);
     const [loadComment, setLoadComment] = useState(false);
+    //load tất cả comment lần đầu
     //Hiển thị hộp thoại thông báo
     const [alertType, setAlertType] = useState(null);
     const [alertVisible, setAlertVisible] = useState(false);
@@ -91,14 +92,12 @@ function DisplayPin() {
 
     useEffect(() => {
         const fetchApi = async () => {
-            setLoad(true);
             const pin = await pinServices.getPinById(pinID);
             setPin(pin);
             setIMG(pin.image);
             setValContent(pin.description);
             setValTitle(pin.title);
             setUser(pin.user);
-            setLoad(false);
         };
         fetchApi();
     }, []);
@@ -169,7 +168,7 @@ function DisplayPin() {
         let stompObject = null;
         const fetchData = async () => {
             comments.current = await commentServices.getByPinId(pinID);
-            setLoad(true);
+            setLoad(false);
         };
         const createStompConnect = () => {
             const socket = new SockJS('http://localhost:8080/ws');
@@ -177,7 +176,6 @@ function DisplayPin() {
             stompClient.connect({}, function (frame) {
                 console.log('Connected: ' + frame);
                 stompObject = stompClient.subscribe(`/room/comment/pin_id/${pinID}`, function (comment) {
-                    console.log(JSON.parse(comment.body));
                     handleCommentSubmit(JSON.parse(comment.body));
                     setSubmitComment(false);
                 });
@@ -275,139 +273,147 @@ function DisplayPin() {
     return (
         <div className={cx('wrapper-createPage')}>
             <div className={cx('createBox')}>
-                <div className={cx('mainContent')}>
-                    <div className={cx('imgWrapper')}>
-                        <img src={img && `data:image/jpeg;base64,${img}`} alt="" />
-                    </div>
-                    {/* end upload IMG */}
-                    <div className={cx('insertData')}>
-                        <div className={cx('wrapperBtns')}>
-                            <div className={cx('option-bottom')}>
-                                <Tippy delay={[0, 100]} content="Báo cáo" placement="bottom">
-                                    <button
-                                        className={cx('btn-end', 'report-btn')}
-                                        onClick={() => handleTurnOnSelectReport(true)}
-                                    >
-                                        <ReportIcon
-                                            width="2.4rem"
-                                            height="2.4rem"
-                                            className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')}
-                                        />
-                                    </button>
-                                </Tippy>
-                                <Tippy delay={[0, 100]} content="Chia sẻ" placement="bottom">
-                                    <button className={cx('btn-end', 'share-btn')}>
-                                        <ShareIcon
-                                            width="2.0rem"
-                                            height="2.0rem"
-                                            className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')}
-                                        />
-                                    </button>
-                                </Tippy>
-                                <Tippy delay={[0, 100]} content="Lưu ảnh" placement="bottom">
-                                    <button
-                                        className={cx('btn-end', 'saveIMG-btn')}
-                                        onClick={() => {
-                                            download();
-                                        }}
-                                    >
-                                        <DownloadIcon
-                                            width="2.0rem"
-                                            height="2.0rem"
-                                            className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')}
-                                        />
-                                    </button>
-                                </Tippy>
-                            </div>
+                {load ? (
+                    <CircularProgress sx={{ display: 'flex', margin: '0 auto' }} />
+                ) : (
+                    <div className={cx('mainContent')}>
+                        <div className={cx('imgWrapper')}>
+                            <img src={img && `data:image/jpeg;base64,${img}`} alt="" />
+                        </div>
+                        {/* end upload IMG */}
+                        <div className={cx('insertData')}>
+                            <div className={cx('wrapperBtns')}>
+                                <div className={cx('option-bottom')}>
+                                    {console.log(JSON.stringify(pin))}
+                                    {user.id !== userId && (
+                                        <Tippy delay={[0, 100]} content="Báo cáo" placement="bottom">
+                                            <button
+                                                className={cx('btn-end', 'report-btn')}
+                                                onClick={() => handleTurnOnSelectReport(true)}
+                                            >
+                                                <ReportIcon
+                                                    width="2.4rem"
+                                                    height="2.4rem"
+                                                    className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')}
+                                                />
+                                            </button>
+                                        </Tippy>
+                                    )}
 
-                            <div className={cx('wrapperBoardandSaveBtn')}>
-                                <div className={cx('option-top', { active: activeOptionTop })}>
-                                    <ClickAwayListener onClickAway={handleClickAway}>
-                                        <button className={cx('select-board-btn')} onClick={() => handleDisplay()}>
-                                            <Popper
-                                                contentTitle={currentBoard.name}
-                                                // contentTitle={currentBoard.name}
-                                                title={<FontAwesomeIcon icon={faChevronDown} />}
-                                                className={cx('select-board')}
-                                                body={
-                                                    <SelectBoardPopper
-                                                        getData={handleChooseBoard}
-                                                        handleTurnOnCreateBoard={handleTurnOnCreateBoard}
-                                                    />
-                                                }
-                                                widthBody="maxContent"
+                                    <Tippy delay={[0, 100]} content="Chia sẻ" placement="bottom">
+                                        <button className={cx('btn-end', 'share-btn')}>
+                                            <ShareIcon
+                                                width="2.0rem"
+                                                height="2.0rem"
+                                                className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')}
                                             />
                                         </button>
-                                    </ClickAwayListener>
+                                    </Tippy>
+                                    <Tippy delay={[0, 100]} content="Lưu ảnh" placement="bottom">
+                                        <button
+                                            className={cx('btn-end', 'saveIMG-btn')}
+                                            onClick={() => {
+                                                download();
+                                            }}
+                                        >
+                                            <DownloadIcon
+                                                width="2.0rem"
+                                                height="2.0rem"
+                                                className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')}
+                                            />
+                                        </button>
+                                    </Tippy>
                                 </div>
-                                <div className={cx('save-pin')}>
-                                    <Button className={cx('save-btn')} onClick={() => handleInsertPin()} red>
-                                        Lưu
+
+                                <div className={cx('wrapperBoardandSaveBtn')}>
+                                    <div className={cx('option-top', { active: activeOptionTop })}>
+                                        <ClickAwayListener onClickAway={handleClickAway}>
+                                            <button className={cx('select-board-btn')} onClick={() => handleDisplay()}>
+                                                <Popper
+                                                    contentTitle={currentBoard.name}
+                                                    // contentTitle={currentBoard.name}
+                                                    title={<FontAwesomeIcon icon={faChevronDown} />}
+                                                    className={cx('select-board')}
+                                                    body={
+                                                        <SelectBoardPopper
+                                                            getData={handleChooseBoard}
+                                                            handleTurnOnCreateBoard={handleTurnOnCreateBoard}
+                                                        />
+                                                    }
+                                                    widthBody="maxContent"
+                                                />
+                                            </button>
+                                        </ClickAwayListener>
+                                    </div>
+                                    <div className={cx('save-pin')}>
+                                        <Button className={cx('save-btn')} onClick={() => handleInsertPin()} red>
+                                            Lưu
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                            {/* end header  */}
+                            <div className={cx('info-pin-container')}>
+                                <div className={cx('title')}>
+                                    <div className={cx('inputTitle')}>{valTitle}</div>
+                                </div>
+                                <div className={cx('content')}>
+                                    <div className={cx('inputContent')}>{valContent}</div>
+                                </div>
+                                <div className={cx('container-user')}>
+                                    <AccountInfo userImage={user.avatar} username={user.username} />
+                                    <Button className={cx('addFriendBtn')} primary>
+                                        Kết bạn
                                     </Button>
                                 </div>
-                            </div>
-                        </div>
-                        {/* end header  */}
-                        <div className={cx('info-pin-container')}>
-                            <div className={cx('title')}>
-                                <div className={cx('inputTitle')}>{valTitle}</div>
-                            </div>
-                            <div className={cx('content')}>
-                                <div className={cx('inputContent')}>{valContent}</div>
-                            </div>
-                            <div className={cx('container-user')}>
-                                <AccountInfo userImage={user.avatar} username={user.username} />
-                                <Button className={cx('addFriendBtn')} primary>
-                                    Kết bạn
-                                </Button>
-                            </div>
-                            {/* comment & like  */}
-                            <div className={cx('comment-container')}>
-                                <div className={cx('like')}>
-                                    <h3 className={cx('comment-title')}>Nhận xét</h3>
-                                    <LikeCard pinID={pinID} currentUser={currentUser} />
+                                {/* comment & like  */}
+                                <div className={cx('comment-container')}>
+                                    <div className={cx('like')}>
+                                        <h3 className={cx('comment-title')}>Nhận xét</h3>
+                                        <LikeCard pinID={pinID} currentUser={currentUser} />
+                                    </div>
+                                    <CommentApp
+                                        scroll={scroll}
+                                        setScroll={setScroll}
+                                        comments={comments}
+                                        currentUser={currentUser}
+                                        handleTurnOnSelectReport={handleTurnOnSelectReport}
+                                    />
                                 </div>
-                                <CommentApp
-                                    scroll={scroll}
-                                    setScroll={setScroll}
-                                    comments={comments}
-                                    currentUser={currentUser}
-                                    handleTurnOnSelectReport={handleTurnOnSelectReport}
-                                />
                             </div>
-                        </div>
-                        <div className={cx('comment-input')}>
-                            <div className={cx('userComment')}>
-                                <AccountInfo userImage={currentUser.avatar} username={' '} />
-                            </div>
-                            <div className={cx('comment')}>
-                                <input
-                                    type="text"
-                                    placeholder="Thêm nhận xét"
-                                    value={newComment}
-                                    onChange={(e) => {
-                                        setNewComment(e.target.value);
-                                        changeBtn(e);
-                                    }}
-                                    onKeyDown={(e) => handlePressEnter(e)}
-                                />
-                                {red ? (
-                                    <Button className={cx('send-btn')} onClick={() => sendComment()} red>
-                                        <FontAwesomeIcon icon={faPaperPlane} style={{ fontsize: '14px' }} />
-                                    </Button>
-                                ) : (
-                                    <Button className={cx('send-btn')} primary>
-                                        {loadComment ? (
-                                            <CircularProgress style={{ width: '16px', height: '16px' }} />
-                                        ) : (
+                            <div className={cx('comment-input')}>
+                                <div className={cx('userComment')}>
+                                    <AccountInfo userImage={currentUser.avatar} username={' '} />
+                                </div>
+                                <div className={cx('comment')}>
+                                    <input
+                                        type="text"
+                                        placeholder="Thêm nhận xét"
+                                        value={newComment}
+                                        onChange={(e) => {
+                                            setNewComment(e.target.value);
+                                            changeBtn(e);
+                                        }}
+                                        onKeyDown={(e) => handlePressEnter(e)}
+                                    />
+                                    {red ? (
+                                        <Button className={cx('send-btn')} onClick={() => sendComment()} red>
                                             <FontAwesomeIcon icon={faPaperPlane} style={{ fontsize: '14px' }} />
-                                        )}
-                                    </Button>
-                                )}
+                                        </Button>
+                                    ) : (
+                                        <Button className={cx('send-btn')} primary>
+                                            {loadComment ? (
+                                                <CircularProgress style={{ width: '16px', height: '16px' }} />
+                                            ) : (
+                                                <FontAwesomeIcon icon={faPaperPlane} style={{ fontsize: '14px' }} />
+                                            )}
+                                        </Button>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                )}
             </div>
 
             <Dialog fullWidth={true} maxWidth="sm" open={showCreateBoard} onClose={handleCloseCreateBoard}>

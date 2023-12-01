@@ -80,7 +80,12 @@ function Search({ className, width = '750px', display = 'block' }) {
             .then((res) => {
                 let temp = [];
                 for (let i = 0; i < res.length; i++) {
-                    if (res[i].username.includes(debouncedValue)) {
+                    if (
+                        (res[i].username.toLowerCase().includes(debouncedValue.toLowerCase()) &&
+                            res[i].permission === null) ||
+                        (res[i].fullname.toLowerCase().includes(debouncedValue.toLowerCase()) &&
+                            res[i].permission === null)
+                    ) {
                         temp.push(res[i]);
                     }
                 }
@@ -175,6 +180,14 @@ function Search({ className, width = '750px', display = 'block' }) {
                                 </div>
                             ) : (
                                 <div className={cx('search-body')}>
+                                    {searchResult.length > 0 && (
+                                        <div>
+                                            <h4 className={cx('search-title')}>Accounts</h4>
+                                            {searchResult.map((result) => (
+                                                <AccountItemSearch key={result.id} data={result} />
+                                            ))}
+                                        </div>
+                                    )}
                                     <div className={cx('searchUser')}>
                                         <h4 className={cx('searchUser-title')}>Tìm kiếm Pin của bạn</h4>
                                     </div>

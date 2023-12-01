@@ -118,7 +118,6 @@ function SelectBoardPopper({ handleTurnOnCreateBoard, getData, idBoardCurrent = 
     return (
         <>
             <div className={cx('wrapper')}>
-                <Search className={cx('search-conversation')} width="300px" />
                 <p className={cx('information')}>Tất cả các bảng</p>
                 <div className={cx('list-board')}>
                     {listBoard.map((item, index) => {

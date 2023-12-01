@@ -139,6 +139,13 @@ function Wrapper({ children, className }) {
                         />
                         <h1 className={cx('fullname', theme === 'dark' ? 'dark' : '')}>{info.fullname}</h1>
                         <p className={cx('username', theme === 'dark' ? 'dark' : '')}>@{info.username}</p>
+                        <div className={cx('container-info')}>
+                            <p className={cx('website', theme === 'dark' ? 'dark' : '')}>
+                                <a href={`${info.website}`}>{info.website}</a>
+                            </p>
+                            <p className={cx('dash')}>-</p>
+                            <p className={cx('introduce', theme === 'dark' ? 'dark' : '')}>{info.introduce}</p>
+                        </div>
                         <div className={cx('container-friend')}>
                             <h4
                                 className={cx('count-friend', theme === 'dark' ? 'dark' : '')}
@@ -146,6 +153,7 @@ function Wrapper({ children, className }) {
                             >
                                 {countFriend} Bạn bè
                             </h4>
+                            <h4 className={cx('dash')}>-</h4>
                             {accountOther === false && (
                                 <h4
                                     className={cx('count-friend-request', theme === 'dark' ? 'dark' : '')}

@@ -12,7 +12,7 @@ function SelectTypePopper({ handleTurnOnCreateType, handleChooseType }) {
     useEffect(() => {
         const fetchApi = async () => {
             const result = await typeServices.getAllType();
-            // console.log(result);
+            console.log(result);
             setListType(result);
         };
         fetchApi();
@@ -29,11 +29,9 @@ function SelectTypePopper({ handleTurnOnCreateType, handleChooseType }) {
     };
     return (
         <div className={cx('wrapper')}>
-            <Search className={cx('search-conversation')} width="300px" />
             <p className={cx('information')}>Tất cả các Thể Loại</p>
             <div className={cx('list-type')}>
                 {listType.map((item, index) => {
-                    // console.log(item.detailType[0]);
                     return (
                         <button
                             key={index}
@@ -42,7 +40,6 @@ function SelectTypePopper({ handleTurnOnCreateType, handleChooseType }) {
                                 selectType(item);
                             }}
                         >
-                            <img src={item.detailType[0]} alt="" />
                             <p>{item.typeName}</p>
                         </button>
                     );

@@ -164,7 +164,7 @@ function User() {
         const birthdate = event.target.elements.birthdate.value !== '' ? event.target.elements.birthdate.value : null;
         const language = 'Tiếng Việt';
         const privateBool = false;
-        const avtar = null;
+        const avtar = '';
         const gender = null;
         const website = null;
         const introduce = null;

@@ -56,8 +56,12 @@ function LabelTextBox({
             inputClassname = 'large';
             break;
 
-        case 'sizeTextArea':
-            inputClassname = 'sizeTextArea';
+        case 'sizeTextAreaMedium':
+            inputClassname = 'sizeTextAreaMedium';
+            break;
+
+        case 'sizeTextAreaMedium2':
+            inputClassname = 'sizeTextAreaMedium2';
             break;
         default:
             // Nếu không có selectedSize hoặc không khớp, sử dụng một class mặc định hoặc không có class
@@ -118,7 +122,7 @@ LabelTextBox.propTypes = {
     editable: PropTypes.bool,
     hoverable: PropTypes.bool,
     onChange: PropTypes.func,
-    selectedSize: PropTypes.oneOf(['small', 'medium', 'medium2', 'large', 'sizeTextArea']),
+    selectedSize: PropTypes.oneOf(['small', 'medium', 'medium2', 'large', 'sizeTextAreaMedium', 'sizeTextAreaMedium2']),
 };
 
 export default LabelTextBox;
