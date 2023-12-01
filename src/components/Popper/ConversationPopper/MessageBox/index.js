@@ -8,13 +8,14 @@ import * as messageServices from '../../../../services/messageServices';
 import { AccountLoginContext } from '../../../../context/AccountLoginContext';
 import { StompContext } from '../../../../context/StompContext';
 import { MessageContext } from '../../../../context/MessageContext';
+import { ConversationContext } from '../../../../context/ConversationContext';
 
 const cx = classNames.bind(styles);
 
 function MessageBox({ handleChange, chatWith }) {
-    let { stompClient } = useContext(StompContext);
-    let { userId } = useContext(AccountLoginContext);
-    let { newMessage } = useContext(MessageContext);
+    const { stompClient } = useContext(StompContext);
+    const { userId } = useContext(AccountLoginContext);
+    const { newMessage } = useContext(MessageContext);
     const messagesEndRef = useRef(null);
     const scrollToBottom = () => {
         messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -86,16 +87,6 @@ function MessageBox({ handleChange, chatWith }) {
     // Add new message
     const [currentMessage, setCurrentMessage] = useState('');
     const sendMessage = () => {
-        // stompClient.publish({
-        //     destination: `/app/chat/conversation_id/${chatWith.conversation_id}`,
-        //     body: JSON.stringify({
-        //         id: lastestMessageId,
-        //         user_id: userId,
-        //         content: currentMessage,
-        //         conversation_id: chatWith.conversation_id,
-        //         pin_id: -1
-        //     }),
-        // });
         stompClient.send(
             `/app/chat/conversation_id/${chatWith.conversation_id}`,
             {},
@@ -104,7 +95,8 @@ function MessageBox({ handleChange, chatWith }) {
                 user_id: userId,
                 content: currentMessage,
                 conversation_id: chatWith.conversation_id,
-                pin_id: -1
+                pin_id: -1,
+                sharedUserId: -1
             })
         );
     };

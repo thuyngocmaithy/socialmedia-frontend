@@ -3,7 +3,7 @@ import { faCircleXmark, faSpinner, faMagnifyingGlass } from '@fortawesome/free-s
 import { useEffect, useState, useRef, useContext } from 'react';
 import HeadlessTippy from '@tippyjs/react/headless';
 import classNames from 'classnames/bind';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import styles from './Search.module.scss';
 import { Wrapper as PopperWrapper } from '../../components/Popup';
@@ -12,9 +12,6 @@ import { useDebounce } from '../../hooks';
 import { ThemeContext } from '../../context/ThemeContext';
 import * as typeServices from '../../services/typeServices';
 import * as userServices from '../../services/userServices';
-import * as pinServices from '../../services/pinServices';
-import * as userSavePinServices from '../../services/userSavePinServices';
-import Pin from '../Pin';
 
 const cx = classNames.bind(styles);
 
@@ -29,39 +26,43 @@ function Search({ className, width = '750px' }) {
     const inputRef = useRef();
 
     const location = useLocation();
-    const pathname = location.pathname.split('/')[1];
-    // const [info, setInfo] = useState({});
-    // useEffect(() => {
-    //     const fetchApi = async () => {
-    //         console.log(pathname);
-    //         const resultInfo = await userServices.getUserByUsername(pathname);
+    const navigate = useNavigate();
+    const [username, setUsername] = useState(null);
 
-    //         setInfo(resultInfo);
-    //     };
-    //     fetchApi();
-    // }, [pathname]);
+    const [info, setInfo] = useState({});
 
-    const [pinByUser, setPinByUser] = useState([]);
-    // useEffect(() =>  {
-    //     const fetchApi = async () => {
-    //         console.log(pathname);
-    //         const result = await pinServices.getPinsByUsername(pathname);
-    //         setPinByUser(result);
-    //         console.log(result);
-    //         console.log(pinByUser);
-    //         const rs = await userSavePinServices.getPinByUserId(info.id);
-    //         setPinByUser([...pinByUser, rs]);
-    //     };
-    //     fetchApi();
-    // },[debouncedValue]);
+    //Tìm đường dẫn chứa username => setUsername (trang user)
+    useEffect(() => {
+        const pathname = window.location.pathname;
 
-    // console.log(pinByUser);
+        const pathRegex = /^\/([a-zA-Z0-9_-]+)$/; // Regex cho '/:username'
+
+        const isUsernamePath = pathRegex.test(pathname);
+
+        //nếu là path '/:username'
+        if (isUsernamePath) {
+            setSearchValue('');
+            setUsername(location.pathname.split('/')[1]);
+        } else {
+            setUsername(null);
+        }
+        if (pathname === '/') {
+            setSearchValue('');
+        }
+    }, [location]);
+
+    useEffect(() => {
+        const fetchApi = async () => {
+            const resultInfo = await userServices.getUserByUsername(username);
+            setInfo(resultInfo);
+        };
+        fetchApi();
+    }, [username]);
 
     const [listType, setListType] = useState([]);
     useEffect(() => {
         const fetchApi = async () => {
             const result = await typeServices.getAllType();
-            // console.log(result);
             setListType(result);
         };
         fetchApi();
@@ -105,7 +106,6 @@ function Search({ className, width = '750px' }) {
         const searchValue = e.target.value;
         // setSearchResult(searchResult);
         if (!searchValue.startsWith(' ')) {
-            //     // Không cho người dùng gõ dấu cách đầu tiên
             setSearchValue(searchValue);
             setShowResult(true);
         }
@@ -115,6 +115,22 @@ function Search({ className, width = '750px' }) {
         setShowResult(true);
     };
 
+    const handlePressEnterSearch = (event) => {
+        if (event.key === 'Enter') {
+            if (!username) {
+                handleHideResult();
+                navigate(`/search/${searchValue}`);
+            }
+        }
+    };
+    const handlePressEnterSearchInUser = (event) => {
+        if (event.key === 'Enter') {
+            if (!username) {
+                handleHideResult();
+                navigate(`/search/user:${username}:${searchValue}`);
+            }
+        }
+    };
     return (
         /*Using a wrapper <div> tag around the reference element solves this 
         by creating a new parentNode context.*/
@@ -126,7 +142,7 @@ function Search({ className, width = '750px' }) {
                 render={(attrs) => (
                     <div style={{ width: width }} className={cx('search-result')} tabIndex="-1" {...attrs}>
                         <PopperWrapper>
-                            {!pathname ? (
+                            {!username ? (
                                 <div className={cx('search-body')}>
                                     {searchResult.length > 0 && (
                                         <div>
@@ -158,8 +174,30 @@ function Search({ className, width = '750px' }) {
                                     </div>
                                 </div>
                             ) : (
-                                <div className={cx('searchUser')}>
-                                    <h4 className={cx('searchUser-title')}>Tìm kiếm Pin của bạn</h4>
+                                <div className={cx('search-body')}>
+                                    <div className={cx('searchUser')}>
+                                        <h4 className={cx('searchUser-title')}>Tìm kiếm Pin của bạn</h4>
+                                    </div>
+                                    <h4 className={cx('search-title')}>Ý tưởng dành cho bạn</h4>
+                                    <div className={cx('type')}>
+                                        {listType.map((item, index) => {
+                                            return (
+                                                <NavLink
+                                                    key={index}
+                                                    className={(nav) => cx('menu-item')}
+                                                    to={`/search/type=${item.id}`}
+                                                >
+                                                    <button
+                                                        key={index}
+                                                        className={cx('item-type')}
+                                                        onClick={handleHideResult}
+                                                    >
+                                                        <p>{item.typeName}</p>
+                                                    </button>
+                                                </NavLink>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             )}
                         </PopperWrapper>
@@ -169,7 +207,7 @@ function Search({ className, width = '750px' }) {
                 //Bấm ngoài khu vực tippy
             >
                 <div className={cx('search', theme === 'dark' ? 'dark' : '')} style={{ width: width }}>
-                    {!pathname ? (
+                    {!username ? (
                         <input
                             ref={inputRef} //Lấy DOM element
                             value={searchValue}
@@ -177,6 +215,7 @@ function Search({ className, width = '750px' }) {
                             spellCheck={false}
                             onChange={handleChange}
                             onClick={handleClick}
+                            onKeyDown={(e) => handlePressEnterSearch(e)}
                         />
                     ) : (
                         <input
@@ -186,6 +225,7 @@ function Search({ className, width = '750px' }) {
                             spellCheck={false}
                             onChange={handleChange}
                             onClick={handleClick}
+                            onKeyDown={(e) => handlePressEnterSearchInUser(e)}
                         />
                     )}
 
@@ -197,8 +237,8 @@ function Search({ className, width = '750px' }) {
 
                     {loading && <FontAwesomeIcon className={cx('loading-btn')} icon={faSpinner} />}
 
-                    {searchResult.length > 0 ? (
-                        !pathname ? (
+                    {searchValue.length > 0 ? (
+                        !username ? (
                             <NavLink className={(nav) => cx('menu-item')} to={`/search/${searchValue}`}>
                                 <button
                                     className={cx('search-btn')}
@@ -211,7 +251,7 @@ function Search({ className, width = '750px' }) {
                         ) : (
                             <NavLink
                                 className={(nav) => cx('menu-item')}
-                                to={`/search/user:${pathname}:${searchValue}`}
+                                to={`/search/user:${username}:${searchValue}`}
                             >
                                 <button
                                     className={cx('search-btn')}

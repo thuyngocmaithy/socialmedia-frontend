@@ -56,7 +56,7 @@ function Dashboard() {
         setChart({
             series: [
                 {
-                    name: 'Desktops',
+                    name: 'Lượt truy cập',
                     data: data,
                 },
             ],
@@ -112,7 +112,7 @@ function Dashboard() {
     const [chart, setChart] = useState({
         series: [
             {
-                name: 'Desktops',
+                name: 'Lượt truy cập',
                 data: data,
             },
         ],

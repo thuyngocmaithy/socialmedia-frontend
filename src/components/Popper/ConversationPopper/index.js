@@ -11,46 +11,55 @@ import SearchMenu from './SearchMenu';
 const cx = classNames.bind(styles);
 function ConversationPopper() {
     const { theme } = useContext(ThemeContext);
-    const {conversationList} = useContext(ConversationContext);
+    const { conversationList, listLoading } = useContext(ConversationContext);
     const { setAllSeen } = useContext(MessageContext);
     const [messageIsShown, setMessageIsShown] = useState(false);
     const [ isSearching, setIsSearching ] = useState(false);
     const [currentInfor, setCurrentInfor] = useState({});
+    const [loading, setLoading] = useState(true);
 
-    const changeConversation = (chatWith = {}, isSearching = false, conversation_id = 0) => {
+    const changeConversation = (chatWith = {}, searching = false, conversation_id = 0) => {
         if (messageIsShown) {
             setMessageIsShown(false);
             setIsSearching(false);
             setCurrentInfor({});
         } else {
-            setIsSearching(isSearching);
-            if(Object.keys(chatWith).length > 0) {
-                conversationList.current.forEach((conv) => {
-                    if (conv.user.username === chatWith.username) {
-                        setCurrentInfor({
-                            conversation_id: conv.conversation.id,
-                            name: conv.user.fullname,
-                            avatar: conv.user.avatar,
-                            messages: conv.messages,
-                        });
-                    }
-                    if(conv.conversation.id === conversation_id) {
-                        conv.messages.forEach((message) => {
-                            // message.seen = true;
+            if(searching) {
+                setIsSearching(searching);
+            }
+            else if(Object.keys(chatWith).length > 0){
+                if(!listLoading) {
+                    conversationList.current.forEach((conv) => {
+                    if (conv.user.id === chatWith.id) {
+                            setCurrentInfor({
+                                conversation_id: conv.conversation.id,
+                                name: chatWith.fullname,
+                                avatar: chatWith.avatar,
+                                messages: conv.messages,
+                            });
+                        }
+                        if(conv.conversation.id === conversation_id) {
                             setAllSeen(conversation_id);
-                        })
-                    }
-                });
-                setMessageIsShown(true);
+                        }
+                    });
+                    setTimeout(() => {
+                        setMessageIsShown(true);
+                    }, 500);
+                }
+            }
+            else {
+                setMessageIsShown(false);
+                setIsSearching(false);
             }
         }
+        setLoading(false);
     };
 
     return (
         <div className={cx('wrapper-conversation-popper', theme === 'dark' ? 'dark' : '')}>
             {!messageIsShown ? (
                 isSearching ?
-                    <SearchMenu handleChange={changeConversation}></SearchMenu>
+                    <SearchMenu handleChange={changeConversation} />
                 :
                     <ConversationMenu handleChange={changeConversation} conversationList={conversationList.current} />
             ) : (

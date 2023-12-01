@@ -8,6 +8,7 @@
     justify-content: space-between;
     align-content: center;
     font-size: 16px;
+    margin: 15px 5px;
     .title-container {
         font-weight: 600;
         vertical-align: middle;
@@ -19,6 +20,7 @@
         font-size: 16px;
         font-weight: 600;
         padding: 0.8rem;
+        margin-right: 8px;
         border-radius: 14px;
         background-color: var(--white);
         &:hover {
@@ -33,6 +35,7 @@
     height: var(--search-height);
     padding-left: 16px;
     display: flex;
+    margin-bottom: 10px;
     background-color: rgba(22, 24, 35, 0.06);
     border-radius: var(--search-border-radius);
     border: 1.5px solid transparent;
@@ -85,7 +88,7 @@
         width: 32px;
         border-radius: 50%;
         object-fit: cover;
-    }        
+    }
     .user-names-container {
         padding-left: 1.2rem;
         font-size: 15px;

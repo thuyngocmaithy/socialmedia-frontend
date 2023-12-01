@@ -28,24 +28,6 @@ export default function ActionAlerts({ content, action, id, severity }) {
         return null;
     }
 
-    const handleUndoClick = () => {
-        const fetchApi = async () => {
-            const userId = 1;
-            const pinId = id;
-            const boardId = 1;
-
-            const user = await userServices.getUserById(userId);
-            const pin = await pinServices.getPinById(pinId);
-            const board = await boardServices.getBoardById(boardId);
-
-            const userSavePin = { user, pin, board };
-            const result = await userSavePinServices.del(userSavePin);
-            if (result) {
-                alert('Hủy');
-            }
-        };
-        fetchApi();
-    };
     return (
         <Stack className={cx('wrapper')} sx={{ width: '25%' }} spacing={2}>
             <Alert
@@ -54,7 +36,7 @@ export default function ActionAlerts({ content, action, id, severity }) {
                 sx={{ fontSize: '16px', fontWeight: '600', textAlign: 'center', justifyContent: 'center' }}
                 action={
                     action ? (
-                        <Button red small onClick={handleUndoClick}>
+                        <Button red small>
                             {action}
                         </Button>
                     ) : null

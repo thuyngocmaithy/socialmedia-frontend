@@ -2,6 +2,8 @@ import classNames from 'classnames/bind';
 import styles from './SearchMenu.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { CircularProgress } from '@mui/material';
+import SearchResult from './SearchResult';
 import { useContext, useEffect, useRef, useState } from 'react';
 import * as friendshipServices from '../../../../services/friendshipServices';
 import * as conversationServices from '../../../../services/conversationServices';
@@ -10,7 +12,6 @@ import * as participantServices from '../../../../services/participantServices';
 import { ConversationContext } from '../../../../context/ConversationContext';
 import { AccountLoginContext } from '../../../../context/AccountLoginContext';
 import { StompContext } from '../../../../context/StompContext';
-import SearchResult from './SearchResult';
 import { useDebounce } from '../../../../hooks';
 
 const cx = classNames.bind(styles)
@@ -18,12 +19,12 @@ const cx = classNames.bind(styles)
 function SearchMenu({handleChange}) {
     const {conversationList, reloadList} = useContext(ConversationContext);
     const { stompClient } = useContext(StompContext);
+    const { userId } = useContext(AccountLoginContext);
     const [searchResult, setSearchResult] = useState([]);
     const [searchValue, setSearchValue] = useState('');
-    const { userId } = useContext(AccountLoginContext);
     const debouncedValue = useDebounce(searchValue, 500);
     const inputRef = useRef();
-    const [load, setLoad] = useState(false);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         const fetchFriendList = async () => {
             const temp = await friendshipServices.getListFriend(userId);
@@ -35,9 +36,11 @@ function SearchMenu({handleChange}) {
                 }
             })
             inputRef.current.focus();
-            setLoad(true);
+            setLoading(false);
         }
-        fetchFriendList();
+        if(fetchFriendList.length === 0) {
+            fetchFriendList();
+        }
     },[]);
 
     useEffect(() => {
@@ -52,15 +55,15 @@ function SearchMenu({handleChange}) {
             .then((res) => {
                 let temp = [];
                 for (let i = 0; i < res.length; i++) {
-                    if (res[i].username.includes(debouncedValue)) {
+                    if (res[i].username.includes(debouncedValue) && res[i].id !== userId) {
                         temp.push(res[i]);
                     }
                 }
                 setSearchResult(temp);
-                setLoad(false); //bỏ loading sau khi gọi api
+                setLoading(false); //bỏ loading sau khi gọi api
             })
             .catch(() => {
-                setLoad(false); //bỏ loading khi bị lỗi
+                setLoading(false); //bỏ loading khi bị lỗi
             });
     }, [debouncedValue]); //Khi người dùng gõ vào input => chạy lại useEffect
 
@@ -69,47 +72,58 @@ function SearchMenu({handleChange}) {
         if (!searchValue.startsWith(' ')) {
             // Không cho người dùng gõ dấu cách đầu tiên
             setSearchValue(searchValue);
+            setLoading(true);
         }
     };
 
-    const handleSelect = () => {
+    const handleSelect = async (user_id) => {
+        const currentUser = await userServices.getUserById(user_id);
+        let conversation_id = 0;
+        let createdConversation = false;
+        conversationList.current.forEach((item) => {
+            if(item.user.id === user_id) {
+                conversation_id = item.conversation.id;
+                createdConversation = true;
+            }
+        });
+        if(createdConversation) {
+            handleChange(currentUser, false, conversation_id);
+        }
+        else {
+            let lastID = 0;
+            const convs = await conversationServices.getAllConversations();
+            convs.forEach((item) => {
+                if(item.id > lastID) {
+                    lastID = item.id;
+                }
+            })
+            ++lastID;
+            const createdConv = await conversationServices.save({
+                id: lastID+1,
+                name:null,
+                create_at: new Date()
+            });
+            const temp = [await userServices.getUserById(userId), await userServices.getUserById(user_id)];
+            const conv = await conversationServices.getById(createdConv.id);
+            temp.forEach(async (user) => {
+                await participantServices.save({
+                    conversation: conv,
+                    user: user
+                });
+            })
+            forceReloadConversationList();
+            setTimeout(() => {
+                handleChange(currentUser, false, createdConv.id);
+            },500);
+        }
+    }
+
+    const forceReloadConversationList = () => {
         stompClient.send(
             '/app/reload',
             {},
             ''
         );
-        //     let lastID = 0;
-        //     let created = false;
-        //     let result = await participantServices.getFriendChattingWith(userId);
-        //     result = result.map((item) => {return item.user});
-        //     if(result.filter(e => e.id === user_id).length < 1) {
-    
-        //         const temp = [await userServices.getUserById(userId), await userServices.getUserById(user_id)];
-        //         const conv = await conversationServices.getById(3);
-        //         const convs = await conversationServices.getAllConversations();
-        //         convs.forEach((item) => {
-        //             if(item.id > lastID) {
-        //                 lastID = item.id;
-        //             }
-        //         })
-        //         // const createConv = await conversationServices.save({
-        //         //     id: lastID+1,
-        //         //     name:null,
-        //         //     create_at: new Date()
-        //         // });
-        //         temp.forEach(async (user) => {
-        //             const createPar = await participantServices.save({
-        //                 conversation: conv,
-        //                 user: user
-        //             });
-        //             if(createPar) {
-        //                 created = true;
-        //             }
-        //         })
-        //         if(created) {
-        //             reloadList();
-        //         }
-        //     } 
     }
 
     return ( 
@@ -137,8 +151,9 @@ function SearchMenu({handleChange}) {
                 </div>
             </div>
             <div className={cx('search-result-container')}>
+                {loading && <CircularProgress sx={{ display: 'flex', margin: 'auto' }} />}
                 {
-                    searchResult.map((user) => {
+                    !loading && searchResult.map((user) => {
                         return (
                             <SearchResult handleSelect={handleSelect} key={user.id} user={user}></SearchResult>
                         );

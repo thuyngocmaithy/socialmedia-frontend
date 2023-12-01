@@ -4,11 +4,14 @@ import styles from './SelectReportOption.module.scss';
 import Button from '../Button';
 import * as contentReportServices from '../../services/contentReportServices';
 import * as report_pinServices from '../../services/report_pinServices';
+import * as report_commentServices from '../../services/report_commentServices';
 import ActionAlerts from '../Alert';
 
 const cx = classNames.bind(styles);
 
-function SelectReportOption({ handleTurnOnSelectReport, pin, user }) {
+function SelectReportOption({ handleTurnOnSelectReport, pin, user, comment }) {
+    // const [turnOnSelectReport, handleTurnOnSelectReport] = useState(true);
+
     const [listReport, setListReport] = useState([]);
     useEffect(() => {
         const fetchApi = async () => {
@@ -37,17 +40,30 @@ function SelectReportOption({ handleTurnOnSelectReport, pin, user }) {
 
     const handleReport = () => {
         const fetchApi = async () => {
-            const report = {
-                approve: false,
-                reject: true,
-                content: reported,
-                pin: pin,
-                userRatify: null,
-                userReport: user,
-            };
-            // console.log(report);
-            const result = await report_pinServices.save(report);
-            // console.log(result);
+            let result = false;
+            if (Object.keys(comment).length === 0) {
+                const report = {
+                    approve: false,
+                    reject: true,
+                    content: reported,
+                    pin: pin,
+                    userRatify: null,
+                    userReport: user,
+                };
+                console.log(report);
+                // result = await report_pinServices.save(report);
+                // console.log(result);
+            } else {
+                const report = {
+                    approve: false,
+                    reject: true,
+                    content: reported,
+                    comment: comment,
+                    userRatify: null,
+                    userReport: user,
+                };
+                result = await report_commentServices.save(report);
+            }
             handleSaveResult(result);
         };
         fetchApi();
@@ -58,7 +74,7 @@ function SelectReportOption({ handleTurnOnSelectReport, pin, user }) {
             <div className={cx('gray-background')} onClick={() => handleTurnOnSelectReport(false)}></div>
             <div className={cx('popup-container')}>
                 <div className={cx('popup-top')}>
-                    <h2>Báo cáo Ghim</h2>
+                    {Object.keys(comment).length === 0 ? <h2>Báo cáo Ghim</h2> : <h2>Báo cáo nhận xét</h2>}
                 </div>
                 <div className={cx('list-report')}>
                     {listReport.map((item, index) => {
@@ -92,7 +108,7 @@ function SelectReportOption({ handleTurnOnSelectReport, pin, user }) {
                         </Button>
                     )}
                 </div>
-                {statusSave && <ActionAlerts content={`Đã báo cáo`} action="UNDO" />}
+                {statusSave && <ActionAlerts content={`Đã báo cáo`} />}
             </div>
         </div>
     );

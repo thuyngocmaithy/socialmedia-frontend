@@ -1,31 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import classNames from 'classnames/bind';
 import style from './LabelTextBox.module.scss';
 import PropTypes from 'prop-types';
+import { ThemeContext } from '../../context/ThemeContext';
 
 function LabelTextBox({
     name,
     placeholder,
     label,
-    type,
-    text = '',
-    error = '',
-    customGetValue,
-    editable = true,
+    type, //type input
+    text = '', //value
+    error = '', // lỗi
+    customGetValue, //getValue của input khi không submit qua form
+    editable = true, //cho phép chỉnh sửa
     hoverable = true,
-    onChange,
-    selectedSize,
-    area = false,
+    onChange, //sự kiện onChange
+    selectedSize, //chọn size
+    area = false, //area thay cho input
+    setChange, //thay đổi khi nhập vào input lần đầu => dùng để hiển thị error rỗng
+    change, //nếu change là true => hiển thị error rỗng
     ...passProps
 }) {
     const cx = classNames.bind(style);
+    const { theme } = useContext(ThemeContext);
     const [inputValue, setInputValue] = useState(text); // Sử dụng giá trị text từ prop
-    const [change, setChange] = useState(false);
 
     const handleChange = (event) => {
         if (editable) {
             setInputValue(event.target.value);
-            setChange(true);
+            setChange && setChange(true);
             if (customGetValue) {
                 customGetValue(event.target.value);
             }
@@ -61,7 +64,7 @@ function LabelTextBox({
             break;
     }
 
-    const wrapperClasses = cx('wrapper');
+    const wrapperClasses = cx('wrapper', theme === 'dark' ? 'dark' : '');
     return (
         <div className={wrapperClasses}>
             <label>{label}</label>
@@ -74,7 +77,10 @@ function LabelTextBox({
                         placeholder={placeholder}
                         value={inputValue}
                         disabled={!editable}
-                        onChange={onChange ? onChange : handleChange}
+                        onChange={(event) => {
+                            onChange && onChange(event);
+                            handleChange(event);
+                        }}
                     ></textarea>
                     {error === '' && inputValue === '' && change ? `${label} rỗng` : error !== '' ? error : ''}
                 </>

@@ -11,10 +11,13 @@ import Button from '../../../components/Button';
 import Wrapper from '../Wrapper';
 import { AccountLoginContext } from '../../../context/AccountLoginContext';
 import ActionAlerts from '../../../components/Alert';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function AccountSetting({ admin = false }) {
+    const { theme } = useContext(ThemeContext);
+
     const label1 = { inputProps: { 'aria-label': 'Switch demo' } };
     const timeoutRef = useRef(null);
     const { userId } = useContext(AccountLoginContext);
@@ -168,54 +171,57 @@ function AccountSetting({ admin = false }) {
         userGender &&
         privateState !== null && (
             <Wrapper onSave={handlechangeAccountSetting} admin={admin}>
-                <div className={cx('container-accountsetting')}>
-                    <h1> Quản lý tài khoản</h1>
-                    <p className={cx('discription')}>
-                        Thực hiện thay đổi đối với thông tin cá nhân hoặc loại tài khoản của bạn.
-                    </p>
-                    <div className={cx('PrivateUserInfo')}>
-                        <LabelTextBox
-                            placeholder={'Ngày sinh '}
-                            label={'Ngày sinh: '}
-                            type={'date'}
-                            selectedSize={'small'}
-                            text={userBirthdate}
-                            onChange={handelchangeBirthday}
-                        />
-                        <Options
-                            type="gender"
-                            selectedSize={'medium'}
-                            select={userGender}
-                            onChange={handleChangeGender}
-                        />
-                        <Options
-                            type="language"
-                            selectedSize={'medium'}
-                            select={userLanguage}
-                            onChange={handlleChangeLanggue}
-                        />
+                <div className={cx('wrapper')}>
+                    <div className={cx('container-accountsetting')}>
+                        <h1 className={cx(theme === 'dark' ? 'dark' : '')}> Quản lý tài khoản</h1>
+                        <div className={cx('PrivateUserInfo')}>
+                            <LabelTextBox
+                                placeholder={'Ngày sinh '}
+                                label={'Ngày sinh: '}
+                                type={'date'}
+                                selectedSize={'small'}
+                                text={userBirthdate}
+                                onChange={handelchangeBirthday}
+                            />
+                            <Options
+                                type="gender"
+                                selectedSize={'medium'}
+                                select={userGender}
+                                onChange={handleChangeGender}
+                            />
+                            <Options
+                                type="language"
+                                selectedSize={'medium'}
+                                select={userLanguage}
+                                onChange={handlleChangeLanggue}
+                            />
 
-                        {admin === false && (
-                            <div className={cx('checkedPrivate')}>
-                                <div className={cx('leftDiscription')}>
-                                    <p className={cx('labelCheckPrivate')}>Tài khoản riêng tư:</p>
-                                </div>
+                            {admin === false && (
+                                <div className={cx('checkedPrivate')}>
+                                    <div className={cx('leftDiscription')}>
+                                        <p className={cx('labelCheckPrivate', theme === 'dark' ? 'dark' : '')}>
+                                            Tài khoản riêng tư:
+                                        </p>
+                                    </div>
 
-                                <div className={cx('rightDiscription')}>
-                                    <Button
-                                        switchToggle={
-                                            <Switch
-                                                defaultChecked={privateState}
-                                                {...label1}
-                                                onChange={handelchangePrivateState}
-                                            />
-                                        }
-                                    >
-                                        {' '}
-                                    </Button>
+                                    <div className={cx('rightDiscription')}>
+                                        <Button
+                                            className={cx(theme === 'dark' ? 'dark' : '')}
+                                            switchToggle={
+                                                <Switch
+                                                    defaultChecked={privateState}
+                                                    {...label1}
+                                                    onChange={handelchangePrivateState}
+                                                />
+                                            }
+                                        ></Button>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
+                    </div>
+                    <div className={cx('image-container')}>
+                        <img className={cx('image')} src="../../account-setting.png" alt="" />
                     </div>
                 </div>
                 {alertType === 'edit' && <ActionAlerts severity="success" content={`Lưu thành công`} />}

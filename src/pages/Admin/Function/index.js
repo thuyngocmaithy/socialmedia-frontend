@@ -16,6 +16,10 @@ const cx = classNames.bind(styles);
 
 function Function() {
     const { theme } = useContext(ThemeContext);
+
+    const [changeNameEdit, setChangeNameEdit] = useState(false);
+    const [changeNameAdd, setChangeNameAdd] = useState(false);
+
     const [listFunction, setListFunction] = useState([]);
 
     const [openCreate, setOpenCreate] = useState(false); //Mở dialog thêm
@@ -91,6 +95,9 @@ function Function() {
 
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
+
+        setChangeNameAdd(true);
+
         const name = event.target.elements.name.value !== '' ? event.target.elements.name.value : null;
 
         if (name !== null) {
@@ -141,6 +148,9 @@ function Function() {
     };
     const handleSubmitEdit = async (event) => {
         event.preventDefault();
+
+        setChangeNameEdit(true);
+
         const id = functionEdit.id;
         const name = event.target.elements.nameEdit.value !== '' ? event.target.elements.nameEdit.value : null;
 
@@ -192,6 +202,8 @@ function Function() {
                             label={'Tên chức năng'}
                             selectedSize={'medium'}
                             text={functionEdit.name ? functionEdit.name : ''}
+                            change={changeNameEdit}
+                            setChange={setChangeNameEdit}
                         />
                     </DialogContent>
                     <DialogActions sx={{ justifyContent: 'flex-end', margin: '10px' }}>
@@ -221,6 +233,8 @@ function Function() {
                             placeholder={'Tên chức năng'}
                             label={'Tên chức năng'}
                             selectedSize={'medium'}
+                            change={changeNameAdd}
+                            setChange={setChangeNameAdd}
                         />
                     </DialogContent>
                     <DialogActions sx={{ marginBottom: '10px' }}>

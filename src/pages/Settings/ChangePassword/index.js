@@ -7,10 +7,19 @@ import { useState, useEffect, useContext } from 'react';
 import { getUserById, changeUserPassword } from '../../../services/userServices';
 import { AccountLoginContext } from '../../../context/AccountLoginContext';
 import ActionAlerts from '../../../components/Alert';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function ChangePassword({ admin = false }) {
+    const { theme } = useContext(ThemeContext);
+
+    const [changeEmail, setChangeEmail] = useState(false);
+    const [changeOldPassword, setChangeOldPassword] = useState(false);
+    const [changeNewPassword, setChangeNewPassword] = useState(false);
+    const [changeConfirmPassword, setChangeConfirmPassword] = useState(false);
+
+    const [editSuccess, setEditSuccess] = useState(false);
     //Hiển thị hộp thoại thông báo
     const [alertType, setAlertType] = useState(null);
     const [alertVisible, setAlertVisible] = useState(false);
@@ -108,6 +117,11 @@ function ChangePassword({ admin = false }) {
         }
     };
     const handlePasswordChange = () => {
+        setChangeConfirmPassword(true);
+        setChangeEmail(true);
+        setChangeNewPassword(true);
+        setChangeOldPassword(true);
+
         try {
             if (
                 errorPassword === '' &&
@@ -119,7 +133,11 @@ function ChangePassword({ admin = false }) {
             ) {
                 changeUserPassword(userId, currentPassword, newPassword)
                     .then((response) => {
+                        setEditSuccess(true);
                         showAlert('editSuccess');
+                        setNewPassword('');
+                        setCurrentPassword('');
+                        setConfirmPassword('');
                     })
                     .catch((error) => {
                         console.log(error);
@@ -133,57 +151,69 @@ function ChangePassword({ admin = false }) {
 
     return (
         <Wrapper bottom={false} admin={admin}>
-            <div className={cx('container-changepassword')}>
-                <h1 className={cx('Title')}>Đổi mật khẩu</h1>
-                <p className={cx('discription')}>Thực hiện thay đổi đối với thông tin bảo mật tài khoản của bạn</p>
-                <LabelTextBox
-                    className={cx('EmailInfo')}
-                    label={'Email'}
-                    placeholder={'Email'}
-                    selectedSize={'medium'}
-                    text={userData.email}
-                />
-                <LabelTextBox
-                    className={cx('Password')}
-                    label={'Mật khẩu cũ'}
-                    placeholder={'Mật khẩu cũ'}
-                    selectedSize={'medium'}
-                    editable={true}
-                    type={'password'}
-                    text={currentPassword}
-                    customGetValue={handlgetPassword}
-                    error={errorPassword}
-                    onChange={handleErrorPassword}
-                />
+            <div className={cx('wrapper')}>
+                <div className={cx('container-changepassword')}>
+                    <h1 className={cx('Title', theme === 'dark' ? 'dark' : '')}>Đổi mật khẩu</h1>
+                    <LabelTextBox
+                        className={cx('EmailInfo')}
+                        label={'Email'}
+                        placeholder={'Email'}
+                        selectedSize={'medium'}
+                        text={userData.email}
+                        change={changeEmail}
+                        setChange={setChangeEmail}
+                    />
+                    <LabelTextBox
+                        className={cx('Password')}
+                        label={'Mật khẩu cũ'}
+                        placeholder={'Mật khẩu cũ'}
+                        selectedSize={'medium'}
+                        editable={true}
+                        type={'password'}
+                        text={currentPassword}
+                        customGetValue={handlgetPassword}
+                        error={errorPassword}
+                        onChange={handleErrorPassword}
+                        change={changeOldPassword}
+                        setChange={setChangeOldPassword}
+                    />
 
-                <LabelTextBox
-                    className={cx('Password')}
-                    label={'Mật khẩu mới'}
-                    placeholder={'Mật khẩu mới'}
-                    selectedSize={'medium'}
-                    type={'password'}
-                    text={newPassword}
-                    customGetValue={handlGetnewPassword}
-                    error={errorNewPassword}
-                    onChange={handleErrorNewPassword}
-                />
-                <LabelTextBox
-                    className={cx('Password')}
-                    label={'Xác nhận mật khẩu'}
-                    placeholder={'Xác nhận mật khẩu'}
-                    selectedSize={'medium'}
-                    type={'password'}
-                    text={confirmPassword}
-                    customGetValue={handlGetconfirmPassword}
-                    error={errorConfirmPassword}
-                    onChange={handleErrorConfirmPassword}
-                />
+                    <LabelTextBox
+                        className={cx('Password')}
+                        label={'Mật khẩu mới'}
+                        placeholder={'Mật khẩu mới'}
+                        selectedSize={'medium'}
+                        type={'password'}
+                        text={newPassword}
+                        customGetValue={handlGetnewPassword}
+                        error={errorNewPassword}
+                        onChange={handleErrorNewPassword}
+                        change={changeNewPassword}
+                        setChange={setChangeNewPassword}
+                    />
+                    <LabelTextBox
+                        className={cx('Password')}
+                        label={'Xác nhận mật khẩu'}
+                        placeholder={'Xác nhận mật khẩu'}
+                        selectedSize={'medium'}
+                        type={'password'}
+                        text={confirmPassword}
+                        customGetValue={handlGetconfirmPassword}
+                        error={errorConfirmPassword}
+                        onChange={handleErrorConfirmPassword}
+                        change={changeConfirmPassword}
+                        setChange={setChangeConfirmPassword}
+                    />
 
-                <Button className={cx('changeBtn')} primary onClick={handlePasswordChange}>
-                    Đổi mật khẩu
-                </Button>
+                    <Button className={cx('changeBtn')} red onClick={handlePasswordChange}>
+                        Đổi mật khẩu
+                    </Button>
+                </div>
+                <div className={cx('image-container')}>
+                    <img className={cx('image')} src="../../change-password.png" alt="" />
+                </div>
+                {alertType === 'editSuccess' && <ActionAlerts severity="success" content={`Thay đổi thành công`} />}
             </div>
-            {alertType === 'editSuccess' && <ActionAlerts severity="success" content={`Thay đổi thành công`} />}
         </Wrapper>
     );
 }

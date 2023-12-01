@@ -9,6 +9,19 @@ export const getAllUser = async () => {
     }
 };
 
+export const getAllUserByEmail = async (email) => {
+    try {
+        const res = await httpRequest.get(`users/checkEmail?email=${email}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const getUserByUsername = async (username) => {
     try {
         const res = await httpRequest.get(`users/username/${username}`);
@@ -78,10 +91,10 @@ export const getUserByPassword = async (password) => {
         console.log(error);
     }
 };
-export const login = async (username, password) => {
+export const login = async (email, password) => {
     try {
         const userlog = {
-            username: username,
+            email: email,
             password: password,
         };
 

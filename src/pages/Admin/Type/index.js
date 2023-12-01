@@ -16,6 +16,10 @@ const cx = classNames.bind(styles);
 
 function Type() {
     const { theme } = useContext(ThemeContext);
+
+    const [changeNameEdit, setChangeNameEdit] = useState(false);
+    const [changeNameAdd, setChangeNameAdd] = useState(false);
+
     const [listType, setListType] = useState([]);
 
     const [openCreate, setOpenCreate] = useState(false); //Mở dialog thêm
@@ -106,6 +110,9 @@ function Type() {
 
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
+
+        setChangeNameAdd(true);
+
         const typeName = event.target.elements.typeName.value !== '' ? event.target.elements.typeName.value : null;
 
         if (typeName !== null) {
@@ -156,6 +163,9 @@ function Type() {
     };
     const handleSubmitEdit = async (event) => {
         event.preventDefault();
+
+        setChangeNameEdit(true);
+
         const id = typeEdit.id;
         const typeName =
             event.target.elements.typeNameEdit.value !== '' ? event.target.elements.typeNameEdit.value : null;
@@ -192,6 +202,8 @@ function Type() {
                             label={'Tên loại'}
                             selectedSize={'medium'}
                             text={typeEdit.typeName ? typeEdit.typeName : ''}
+                            change={changeNameEdit}
+                            setChange={setChangeNameEdit}
                         />
                     </DialogContent>
                     <DialogActions sx={{ justifyContent: 'flex-end', margin: '10px' }}>
@@ -221,6 +233,8 @@ function Type() {
                             placeholder={'Tên loại'}
                             label={'Tên loại'}
                             selectedSize={'medium'}
+                            change={changeNameAdd}
+                            setChange={setChangeNameAdd}
                         />
                     </DialogContent>
                     <DialogActions sx={{ marginBottom: '10px' }}>

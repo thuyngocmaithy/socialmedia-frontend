@@ -18,23 +18,23 @@ root.render(
     // <React.StrictMode>
     <ThemeProvider>
         <GlobalStyles>
-            <AccountLoginProvider>
-                <AccountOtherProvider>
-                    <CountAccessProvider>
-                        <StompProvider>
-                            <ConversationProvider>
-                                <MessageProvider>
-                                    <ChatProvider>
-                                        <NotificationProvider>
-                                            <App />
-                                        </NotificationProvider>
-                                    </ChatProvider>
-                                </MessageProvider>
-                            </ConversationProvider>
-                        </StompProvider>
-                    </CountAccessProvider>
-                </AccountOtherProvider>
-            </AccountLoginProvider>
+            <StompProvider>
+                <AccountLoginProvider>
+                    <AccountOtherProvider>
+                        <CountAccessProvider>
+                                <ConversationProvider>
+                                    <MessageProvider>
+                                        <ChatProvider>
+                                            <NotificationProvider>
+                                                <App />
+                                            </NotificationProvider>
+                                        </ChatProvider>
+                                    </MessageProvider>
+                                </ConversationProvider>
+                        </CountAccessProvider>
+                    </AccountOtherProvider>
+                </AccountLoginProvider>
+            </StompProvider>
         </GlobalStyles>
     </ThemeProvider>,
     // </React.StrictMode>

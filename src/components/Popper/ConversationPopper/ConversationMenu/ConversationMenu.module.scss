@@ -1,6 +1,6 @@
 .wrapper-conservation-menu {
     overflow: hidden;
-    height: 475px;
+    height: 450px;
     width: 100%;
     position: relative;
 }
@@ -149,7 +149,7 @@
         cursor: pointer;
     }
     .delete-conversation-button {
-        &.dark {    
+        &.dark {
             color: var(--white-500);
         }
         &:hover {

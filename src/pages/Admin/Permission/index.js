@@ -19,6 +19,10 @@ const cx = classNames.bind(styles);
 
 function Permission() {
     const { theme } = useContext(ThemeContext);
+
+    const [changeNameEdit, setChangeNameEdit] = useState(false);
+    const [changeNameAdd, setChangeNameAdd] = useState(false);
+
     const [openSelectFunction, setOpenSelectFunction] = useState(false); //Mở dialog chọn quyền
     const [listPermission, setListPermission] = useState([]);
     const [listFunction, setListFunction] = useState([]);
@@ -108,6 +112,9 @@ function Permission() {
 
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
+
+        setChangeNameAdd(true);
+
         const name = event.target.elements.name.value !== '' ? event.target.elements.name.value : null;
 
         if (name !== null) {
@@ -158,6 +165,9 @@ function Permission() {
     };
     const handleSubmitEdit = async (event) => {
         event.preventDefault();
+
+        setChangeNameEdit(true);
+
         const id = functionEdit.id;
         const name = event.target.elements.nameEdit.value !== '' ? event.target.elements.nameEdit.value : null;
 
@@ -322,6 +332,8 @@ function Permission() {
                             label={'Tên quyền'}
                             selectedSize={'medium'}
                             text={functionEdit.name ? functionEdit.name : ''}
+                            change={changeNameEdit}
+                            setChange={setChangeNameEdit}
                         />
                     </DialogContent>
                     <DialogActions sx={{ justifyContent: 'flex-end', margin: '10px' }}>
@@ -351,6 +363,8 @@ function Permission() {
                             placeholder={'Tên quyền'}
                             label={'Tên quyền'}
                             selectedSize={'medium'}
+                            change={changeNameAdd}
+                            setChange={setChangeNameAdd}
                         />
                     </DialogContent>
                     <DialogActions sx={{ marginBottom: '10px' }}>

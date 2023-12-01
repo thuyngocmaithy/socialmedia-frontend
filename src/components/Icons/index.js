@@ -143,36 +143,41 @@ export const ArowRightIcon = ({ width = '3rem', height = '3rem', className }) =>
 );
 
 export const LogoPinterest = ({ width = '3rem', height = '3rem', className }) => (
-    <svg
-        className={className}
-        width={width}
-        height={height}
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-        aria-label=""
-        role="img"
-    >
-        <path d="M0 12c0 5.123 3.211 9.497 7.73 11.218-.11-.937-.227-2.482.025-3.566.217-.932 1.401-5.938 1.401-5.938s-.357-.715-.357-1.774c0-1.66.962-2.9 2.161-2.9 1.02 0 1.512.765 1.512 1.682 0 1.025-.653 2.557-.99 3.978-.281 1.189.597 2.159 1.769 2.159 2.123 0 3.756-2.239 3.756-5.471 0-2.861-2.056-4.86-4.991-4.86-3.398 0-5.393 2.549-5.393 5.184 0 1.027.395 2.127.889 2.726a.36.36 0 0 1 .083.343c-.091.378-.293 1.189-.332 1.355-.053.218-.173.265-.4.159-1.492-.694-2.424-2.875-2.424-4.627 0-3.769 2.737-7.229 7.892-7.229 4.144 0 7.365 2.953 7.365 6.899 0 4.117-2.595 7.431-6.199 7.431-1.211 0-2.348-.63-2.738-1.373 0 0-.599 2.282-.744 2.84-.282 1.084-1.064 2.456-1.549 3.235C9.584 23.815 10.77 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0 0 5.373 0 12"></path>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className={className} width={width} height={height}>
+        <path d="M5 1L5 7 14 11 19 8zM5 23L19 16 19 9zM5 8L9 11 5 23z" />
     </svg>
+    // <svg
+    //     className={className}
+    //     width={width}
+    //     height={height}
+    //     viewBox="0 0 24 24"
+    //     aria-hidden="true"
+    //     aria-label=""
+    //     role="img"
+    // >
+    //     <path d="M0 12c0 5.123 3.211 9.497 7.73 11.218-.11-.937-.227-2.482.025-3.566.217-.932 1.401-5.938 1.401-5.938s-.357-.715-.357-1.774c0-1.66.962-2.9 2.161-2.9 1.02 0 1.512.765 1.512 1.682 0 1.025-.653 2.557-.99 3.978-.281 1.189.597 2.159 1.769 2.159 2.123 0 3.756-2.239 3.756-5.471 0-2.861-2.056-4.86-4.991-4.86-3.398 0-5.393 2.549-5.393 5.184 0 1.027.395 2.127.889 2.726a.36.36 0 0 1 .083.343c-.091.378-.293 1.189-.332 1.355-.053.218-.173.265-.4.159-1.492-.694-2.424-2.875-2.424-4.627 0-3.769 2.737-7.229 7.892-7.229 4.144 0 7.365 2.953 7.365 6.899 0 4.117-2.595 7.431-6.199 7.431-1.211 0-2.348-.63-2.738-1.373 0 0-.599 2.282-.744 2.84-.282 1.084-1.064 2.456-1.549 3.235C9.584 23.815 10.77 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0 0 5.373 0 12"></path>
+    // </svg>
 );
 
-export const NotificationIcon = ({ width = '2.4rem', height = '2.4rem', className }) => (
-    <svg
-        className={className}
-        width={width}
-        height={height}
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-        aria-label=""
-        role="img"
-    >
-        <path d="M12 24c-1.66 0-3-1.34-3-3h6c0 1.66-1.34 3-3 3zm7-10.83c1.58 1.52 2.67 3.55 3 5.83H2c.33-2.28 1.42-4.31 3-5.83V7c0-3.87 3.13-7 7-7s7 3.13 7 7v6.17z"></path>
-    </svg>
-);
+export const NotificationIcon = ({ width = '2.4rem', height = '2.4rem', className }) => {
+    return (
+        <svg
+            className={className}
+            width={width}
+            height={height}
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            aria-label=""
+            role="img"
+        >
+            <path d="M12 24c-1.66 0-3-1.34-3-3h6c0 1.66-1.34 3-3 3zm7-10.83c1.58 1.52 2.67 3.55 3 5.83H2c.33-2.28 1.42-4.31 3-5.83V7c0-3.87 3.13-7 7-7s7 3.13 7 7v6.17z"></path>
+        </svg>
+    );
+};
 
 export const MessageIcon = ({ width = '2.4rem', height = '2.4rem', className, newMessageCount }) => (
-    <div style={{width: "48px", height: "48px", display: "flex"}}>
-        <div style={{position: "relative", boxSizing: "content-box", display: "block"}}>
+    <div style={{ width: '48px', height: '48px', display: 'flex' }}>
+        <div style={{ position: 'relative', boxSizing: 'content-box', display: 'block' }}>
             <svg
                 className={className}
                 width={width}
@@ -184,21 +189,22 @@ export const MessageIcon = ({ width = '2.4rem', height = '2.4rem', className, ne
             >
                 <path d="M18 12.5a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 18 12.5m-6 0a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 12 12.5m-6 0a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 6 12.5M12 0C5.925 0 1 4.925 1 11c0 2.653.94 5.086 2.504 6.986L2 24l5.336-3.049A10.93 10.93 0 0 0 12 22c6.075 0 11-4.925 11-11S18.075 0 12 0"></path>
             </svg>
-            {
-                newMessageCount > 0 &&
-                <div style={{
-                    position: "absolute", 
-                    right: "5px", 
-                    top: "2px", 
-                    background: "#e60023", 
-                    padding: "0.5px 5.5px", 
-                    borderRadius: "50%",
-                    fontSize: "11px",
-                    color: "white"
-                }}>
+            {newMessageCount > 0 && (
+                <div
+                    style={{
+                        position: 'absolute',
+                        right: '5px',
+                        top: '2px',
+                        background: '#e60023',
+                        padding: '0.5px 5.5px',
+                        borderRadius: '50%',
+                        fontSize: '11px',
+                        color: 'white',
+                    }}
+                >
                     {newMessageCount}
                 </div>
-            }
+            )}
         </div>
     </div>
 );
@@ -362,11 +368,21 @@ export const ReportContentIcon = ({ width = '3rem', height = '3rem', className }
         width={width}
         viewBox="0 0 25 25"
     >
-        <path
-            fillRule="evenodd"
-            d="M16,2 C16.2652165,2 16.5195704,2.10535684 16.7071068,2.29289322 L21.7071068,7.29289322 C21.8946432,7.4804296 22,7.73478351 22,8 L22,15 C22,15.2339365 21.9179838,15.4604694 21.7682213,15.6401844 L16.7682213,21.6401844 C16.5782275,21.868177 16.2967798,22 16,22 L8,22 C7.73478351,22 7.4804296,21.8946432 7.29289322,21.7071068 L2.29289322,16.7071068 C2.10535684,16.5195704 2,16.2652165 2,16 L2,8 C2,7.73478351 2.10535684,7.4804296 2.29289322,7.29289322 L7.29289322,2.29289322 C7.4804296,2.10535684 7.73478351,2 8,2 L16,2 Z M15.5857864,4 L8.41421356,4 L4,8.41421356 L4,15.5857864 L8.41421356,20 L15.5316251,20 L20,14.6379501 L20,8.41421356 L15.5857864,4 Z M12,16 C12.5522847,16 13,16.4477153 13,17 C13,17.5522847 12.5522847,18 12,18 C11.4477153,18 11,17.5522847 11,17 C11,16.4477153 11.4477153,16 12,16 Z M12,6 C12.5522847,6 13,6.44771525 13,7 L13,13 C13,13.5522847 12.5522847,14 12,14 C11.4477153,14 11,13.5522847 11,13 L11,7 C11,6.44771525 11.4477153,6 12,6 Z"
-        />
+        <path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z" />
     </svg>
+    // <svg
+    //     xmlns="http://www.w3.org/2000/svg"
+    //     fill="currentColor"
+    //     className={className}
+    //     height={height}
+    //     width={width}
+    //     viewBox="0 0 35 35"
+    // >
+    //     <path
+    //         fillRule="evenodd"
+    //         d="M16,2 C16.2652165,2 16.5195704,2.10535684 16.7071068,2.29289322 L21.7071068,7.29289322 C21.8946432,7.4804296 22,7.73478351 22,8 L22,15 C22,15.2339365 21.9179838,15.4604694 21.7682213,15.6401844 L16.7682213,21.6401844 C16.5782275,21.868177 16.2967798,22 16,22 L8,22 C7.73478351,22 7.4804296,21.8946432 7.29289322,21.7071068 L2.29289322,16.7071068 C2.10535684,16.5195704 2,16.2652165 2,16 L2,8 C2,7.73478351 2.10535684,7.4804296 2.29289322,7.29289322 L7.29289322,2.29289322 C7.4804296,2.10535684 7.73478351,2 8,2 L16,2 Z M15.5857864,4 L8.41421356,4 L4,8.41421356 L4,15.5857864 L8.41421356,20 L15.5316251,20 L20,14.6379501 L20,8.41421356 L15.5857864,4 Z M12,16 C12.5522847,16 13,16.4477153 13,17 C13,17.5522847 12.5522847,18 12,18 C11.4477153,18 11,17.5522847 11,17 C11,16.4477153 11.4477153,16 12,16 Z M12,6 C12.5522847,6 13,6.44771525 13,7 L13,13 C13,13.5522847 12.5522847,14 12,14 C11.4477153,14 11,13.5522847 11,13 L11,7 C11,6.44771525 11.4477153,6 12,6 Z"
+    //     />
+    // </svg>
 );
 export const ReportIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} width={width} height={height} viewBox="0 0 512 512">
@@ -486,84 +502,7 @@ export const PermissionIcon = ({ width = '3rem', height = '3rem', className }) =
         />
     </svg>
 );
-export const GoogleIcon = ({ width = '3rem', height = '3rem', className }) => (
-    <svg
-        className={className}
-        height={height}
-        width={width}
-        xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-        id="Capa_1"
-        style={{ enableBackground: 'new 0 0 150 150' }}
-        version="1.1"
-        viewBox="0 0 150 150"
-        xmlSpace="preserve"
-    >
-        <style type="text/css">
-            {`.st0{fill:#1A73E8;}
-	.st1{fill:#EA4335;}
-	.st2{fill:#4285F4;}
-	.st3{fill:#FBBC04;}
-	.st4{fill:#34A853;}
-	.st5{fill:#4CAF50;}
-	.st6{fill:#1E88E5;}
-	.st7{fill:#E53935;}
-	.st8{fill:#C62828;}
-	.st9{fill:#FBC02D;}
-	.st10{fill:#1565C0;}
-	.st11{fill:#2E7D32;}
-	.st12{fill:#F6B704;}
-	.st13{fill:#E54335;}
-	.st14{fill:#4280EF;}
-	.st15{fill:#34A353;}
-	.st16{clip-path:url(#SVGID_2_);}
-	.st17{fill:#188038;}
-	.st18{opacity:0.2;fill:#FFFFFF;enable-background:new    ;}
-	.st19{opacity:0.3;fill:#0D652D;enable-background:new    ;}
-	.st20{clip-path:url(#SVGID_4_);}
-	.st21{opacity:0.3;fill:url(#_45_shadow_1_);enable-background:new    ;}
-	.st22{clip-path:url(#SVGID_6_);}
-	.st23{fill:#FA7B17;}
-	.st24{opacity:0.3;fill:#174EA6;enable-background:new    ;}
-	.st25{opacity:0.3;fill:#A50E0E;enable-background:new    ;}
-	.st26{opacity:0.3;fill:#E37400;enable-background:new    ;}
-	.st27{fill:url(#Finish_mask_1_);}
-	.st28{fill:#FFFFFF;}
-	.st29{fill:#0C9D58;}
-	.st30{opacity:0.2;fill:#004D40;enable-background:new    ;}
-	.st31{opacity:0.2;fill:#3E2723;enable-background:new    ;}
-	.st32{fill:#FFC107;}
-	.st33{opacity:0.2;fill:#1A237E;enable-background:new    ;}
-	.st34{opacity:0.2;}
-	.st35{fill:#1A237E;}
-	.st36{fill:url(#SVGID_7_);}
-	.st37{fill:#FBBC05;}
-	.st38{clip-path:url(#SVGID_9_);fill:#E53935;}
-	.st39{clip-path:url(#SVGID_11_);fill:#FBC02D;}
-	.st40{clip-path:url(#SVGID_13_);fill:#E53935;}
-	.st41{clip-path:url(#SVGID_15_);fill:#FBC02D;}
-`}
-        </style>
-        <g>
-            <path
-                className="st14"
-                d="M120,76.1c0-3.1-0.3-6.3-0.8-9.3H75.9v17.7h24.8c-1,5.7-4.3,10.7-9.2,13.9l14.8,11.5   C115,101.8,120,90,120,76.1L120,76.1z"
-            />
-            <path
-                className="st15"
-                d="M75.9,120.9c12.4,0,22.8-4.1,30.4-11.1L91.5,98.4c-4.1,2.8-9.4,4.4-15.6,4.4c-12,0-22.1-8.1-25.8-18.9   L34.9,95.6C42.7,111.1,58.5,120.9,75.9,120.9z"
-            />
-            <path
-                className="st12"
-                d="M50.1,83.8c-1.9-5.7-1.9-11.9,0-17.6L34.9,54.4c-6.5,13-6.5,28.3,0,41.2L50.1,83.8z"
-            />
-            <path
-                className="st13"
-                d="M75.9,47.3c6.5-0.1,12.9,2.4,17.6,6.9L106.6,41C98.3,33.2,87.3,29,75.9,29.1c-17.4,0-33.2,9.8-41,25.3   l15.2,11.8C53.8,55.3,63.9,47.3,75.9,47.3z"
-            />
-        </g>
-    </svg>
-);
+
 export const SearchIcon = ({ className }) => (
     <div
         className={className}
@@ -635,6 +574,62 @@ export const LinkedIcon = ({ className }) => (
             role="img"
         >
             <path d="m21 7.24-4.05 4.05-1.06-1.06.67-.67a1.5 1.5 0 1 0-2.12-2.12l-.67.67-1.06-1.06L16.76 3zm-9.7 9.7L7.23 21 3 16.76l4.05-4.05 1.06 1.06-.67.67a1.5 1.5 0 0 0 2.12 2.12l.67-.67zM14.63.89l-4.05 4.05a3 3 0 0 0 0 4.24l1.06 1.06-1.42 1.42-1.06-1.06a3 3 0 0 0-4.24 0L.88 14.64a3 3 0 0 0 0 4.24l4.24 4.24a3 3 0 0 0 4.24 0l4.05-4.05a3 3 0 0 0 0-4.24l-1.06-1.06 1.42-1.42 1.06 1.06a3 3 0 0 0 4.24 0l4.05-4.05a3 3 0 0 0 0-4.24L18.88.88a3 3 0 0 0-4.24 0z"></path>
+        </svg>
+    </div>
+);
+
+export const LikeIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
+    <div
+        className={className}
+        style={{
+            display: 'flex',
+            justifyContent: 'center',
+            width: '48px',
+            height: '48px',
+            alignContent: 'center',
+            alignItems: 'center',
+            padding: '10px',
+            borderRadius: '50%',
+        }}
+    >
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className={className}
+            width={width}
+            height={height}
+            viewBox="0 0 512 512"
+        >
+            <path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8v-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5v3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20c0 0-.1-.1-.1-.1c0 0 0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5v3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2v-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" />
+        </svg>
+    </div>
+);
+
+export const LikedIcon = ({ width = '3.2rem', height = '3.2rem', className }) => (
+    <div
+        className={className}
+        style={{
+            display: 'flex',
+            justifyContent: 'center',
+            width: '48px',
+            height: '48px',
+            alignContent: 'center',
+            alignItems: 'center',
+            padding: '10px',
+            borderRadius: '50%',
+            backgroundColor: '#ffe0e0',
+        }}
+    >
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className={className}
+            width={width}
+            height={height}
+            viewBox="0 0 512 512"
+            style={{
+                fill: '#ff5246',
+            }}
+        >
+            <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" />
         </svg>
     </div>
 );

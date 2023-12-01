@@ -93,21 +93,20 @@ function Home() {
             }, 2500);
         }
     };
-
     return (
-        <div className={cx('wrapper')} style={{ height: loading ? 'calc(100vh - 70px)' : 'auto' }}>
+        <div className={cx('wrapper')} style={{ height: loading && 'calc(100vh - 70px)' }}>
             {loading && <CircularProgress sx={{ display: 'flex', margin: 'auto' }} />}
 
             {LIST_PIN.map((pin, index) => {
-                // console.log(pin);
                 const user = pin.user;
+
                 return (
                     <Pin
                         key={index}
                         stt={index + 1}
                         id={pin.id}
                         image={pin.image}
-                        // linkImage={pin.linkImage}
+                        linkImage={pin.link}
                         title={pin.title}
                         userImage={user.avatar}
                         username={user.username}
@@ -116,9 +115,11 @@ function Home() {
                     />
                 );
             })}
-            {statusSave && <ActionAlerts severity="success" content={`Đã lưu pin`} action="UNDO" />}
-            {alertType === 'warning' && <ActionAlerts severity="warning" content={`Chọn bảng trước khi lưu`} />}
+            {statusSave && <ActionAlerts severity="success" content={`Đã lưu pin`} />}
+            {alertType === 'warning' && <ActionAlerts severity="warning" content={`Chọn bảng bạn muốn lưu vào`} />}
             {alertType === 'errorSave' && <ActionAlerts severity="error" content={`Không thể lưu pin của chính bạn`} />}
+            {alertType === 'errorInfo' && <ActionAlerts severity="error" content={`Nhập đầy đủ thông tin`} />}
+            {alertType === 'create' && <ActionAlerts severity="success" content={`Đã thêm thành công`} />}
             {alertType === 'errorAdmin' && (
                 <ActionAlerts severity="error" content={`Hãy đăng nhập tài khoản user để lưu pin`} />
             )}

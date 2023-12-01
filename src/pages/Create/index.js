@@ -7,10 +7,7 @@ import AccountInfo from '../../components/AccountInfo';
 import Button from '../../components/Button';
 import LoadImage from '../../components/LoadImage';
 import Popper from '../../components/Popper';
-import SelectBoardPopper from '../../components/Popper/SelectBoardPopper';
-import CreateBoard from '../../components/CreateBoard';
 import SelectTypePopper from '../../components/Popper/SelectTypePopper';
-import CreateType from '../../components/CreateType';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import ActionAlerts from '../../components/Alert';
 import * as userServices from '../../services/userServices';
@@ -27,6 +24,9 @@ const cx = classNames.bind(styles);
 
 function Create() {
     const { theme } = useContext(ThemeContext);
+
+    const [changeName, setChangeName] = useState(false);
+
     const { userId } = useContext(AccountLoginContext);
     //select board
     const [activeOptionTop, setActiveOptionTop] = useState(false);
@@ -44,18 +44,27 @@ function Create() {
     const handleChooseType = (currentType) => {
         setType(currentType);
     };
+    //submit create type
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
+
+        setChangeName(true);
+
         const typeName = event.target.elements.typeName.value !== '' ? event.target.elements.typeName.value : null;
 
         const type = {
             typeName,
         };
-        const result = await typeServices.add(type);
-        if (result) {
-            setCreateSuccess(true);
-            setShowCreateType(false);
-            showAlert('createType');
+
+        if (typeName !== null) {
+            const result = await typeServices.add(type);
+            if (result) {
+                setCreateSuccess(true);
+                setShowCreateType(false);
+                showAlert('createType');
+            }
+        } else {
+            showAlert('errorInfo');
         }
     };
     //count length
@@ -115,6 +124,10 @@ function Create() {
                             const result = await pinServices.save(pin);
                             if (result) {
                                 showAlert('save');
+                                setTimeout(() => {
+                                    showAlert('save');
+                                }, 4500);
+                                window.location.reload(); //reload để xóa dữ liệu
                             }
                         } else {
                             showAlert('errorInfo');
@@ -205,7 +218,7 @@ function Create() {
 
     return (
         <div className={cx('wrapper-createPage')}>
-            <div className={cx('createBox')}>
+            <div className={cx('createBox', theme === 'dark' ? 'dark' : '')}>
                 <div className={cx('wrapperBtns')}>
                     <div className={cx('save-pin')}>
                         <Button className={cx('save-btn')} onClick={() => handleInsertPin()} red>
@@ -220,7 +233,7 @@ function Create() {
                     <div className={cx('insertData')}>
                         <div className={cx('title')}>
                             <textarea
-                                className={cx('inputTitle')}
+                                className={cx('inputTitle', theme === 'dark' ? 'dark' : '')}
                                 type="text"
                                 placeholder="Tạo tiêu đề"
                                 maxLength="100"
@@ -246,7 +259,7 @@ function Create() {
 
                         <div className={cx('content')}>
                             <textarea
-                                className={cx('inputContent')}
+                                className={cx('inputContent', theme === 'dark' ? 'dark' : '')}
                                 type="text"
                                 placeholder="Cho mọi người biết Ghim của bạn giới thiệu điều gì"
                                 maxLength="500"
@@ -269,7 +282,10 @@ function Create() {
                         {/* select type */}
                         <div className={cx('selectType', { active: activeOptionTop })}>
                             <ClickAwayListener onClickAway={handleClickAway}>
-                                <button className={cx('select-type-btn')} onClick={() => handleDisplay()}>
+                                <button
+                                    className={cx('select-type-btn', theme === 'dark' ? 'dark' : '')}
+                                    onClick={() => handleDisplay()}
+                                >
                                     <Popper
                                         // idPopper={id}
                                         contentTitle={currentType.typeName}
@@ -307,6 +323,8 @@ function Create() {
                             placeholder={'Tên loại'}
                             label={'Tên loại'}
                             selectedSize={'medium'}
+                            change={changeName}
+                            setChange={setChangeName}
                         />
                     </DialogContent>
                     <DialogActions sx={{ marginBottom: '10px' }}>

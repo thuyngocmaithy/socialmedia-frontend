@@ -83,7 +83,7 @@ function Button({
             {/* Sử dụng span trong button để khi thêm icon sẽ dễ xử lý */}
             {rightIcon && <span className={cx('icon')}>{rightIcon}</span>}
             {activeIcon && <span className={cx('activeIcon')}>{activeIcon}</span>}
-            {switchToggle && <span className={cx('switch')} >{switchToggle}</span>}
+            {switchToggle && <span className={cx('switch')}>{switchToggle}</span>}
         </Comp>
     );
 }
@@ -99,7 +99,6 @@ Button.propTypes = {
     disabled: PropTypes.bool,
     small: PropTypes.bool,
     large: PropTypes.bool,
-    children: PropTypes.node.isRequired,
     className: PropTypes.string,
     leftIcon: PropTypes.node,
     rightIcon: PropTypes.node,

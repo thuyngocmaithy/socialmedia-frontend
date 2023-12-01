@@ -16,6 +16,11 @@ function MessageProvider({ children }) {
     const [reloadFlag, setReloadFlag] = useState(false);
     let stompIdList = useRef([]);
     useEffect(() => {
+        if(userId !== 0) {
+            setTimeout(() => {
+                joinReloadRoom();
+            },1500);
+        }
         return () => {
             stompIdList.current.forEach((item) => {
                 stompClient.unsubscribe(item);
@@ -31,7 +36,9 @@ function MessageProvider({ children }) {
     }, [conversationJoined]);
 
     useEffect(() => {
-        countMessage();
+        if(Object.keys(newMessage).length > 0) {
+            countMessage();
+        }
     }, [newMessage]);
     
     const fetchApi = async () => {
@@ -53,6 +60,9 @@ function MessageProvider({ children }) {
             );
             stompIdList.current = [...stompIdList.current, stompObject.id];
         });
+    };
+
+    const joinReloadRoom = () => {
         const reloadStompObject = stompClient.subscribe(
             '/room/reload', 
             (response) => {
@@ -61,15 +71,15 @@ function MessageProvider({ children }) {
             }
         );
         stompIdList.current = [...stompIdList.current, reloadStompObject.id];
-    };
+    }
 
     const countMessage = () => {
         let count = 0;
         conversationList.current.forEach((item) => {
             if(item.messages && item.messages.length > 0) {
                 item.messages.forEach((message) => {
-                    if(!message.seen && message.user.id !== userId) {
-                        count ++;
+                    if (!message.seen && message.user.id !== userId) {
+                        count++;
                     }
                 });
             }
@@ -83,14 +93,20 @@ function MessageProvider({ children }) {
                 item.messages = [...item.messages, {...message}];
                 if(message.content !== '') {
                     item.lastAction = 'text';
+                } 
+                else if(message.pin !== null) {
+                    item.lastAction = 'pin';
+                }
+                else if(message.sharedUser !== null) {
+                    item.lastAction = 'user';
                 }
                 else {
-                    item.lastAction = item.pin !== null ? 'pin' : 'heart';
+                    item.lastAction = 'heart';
                 }
             }
         });
         setNewMessage(message);
-    }
+    };
 
     const setAllSeen = async (conversation_id) => {
         conversationList.current.forEach((item, convIndex) => {
@@ -103,7 +119,7 @@ function MessageProvider({ children }) {
                 })
             }
         });
-    }
+    };
 
     return <MessageContext.Provider value={{
                 messageCount: {state: messageCount, setState: setMessageCount}, 

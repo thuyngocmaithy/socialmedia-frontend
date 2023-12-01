@@ -16,6 +16,7 @@ function ConversationCard({ handleChange, isSeen , item}) {
     const [redMarkShown, setRedMarkShown] = useState(!isSeen);
     const haveMessage = item.messages.length > 0 ? true : false;
     const messageIsSeen = isSeen === false ? 'unSeen' : '';
+    const isMyMessage = item.messages.at(-1).user.id === userId; 
     const showButton = (isShown) => {
         setDeleteBtnIsShown(isShown);
         if(isSeen === false) {
@@ -35,14 +36,17 @@ function ConversationCard({ handleChange, isSeen , item}) {
                 {
                     haveMessage && (
                         item.messages.at(-1).content !== '' ?
-                        <h3 className={cx('lastMessage', messageIsSeen)}>{item.user.id === userId ? 'Bạn: ' + item.messages.at(-1).content : item.messages.at(-1).content}</h3>
+                        <h3 className={cx('lastMessage', messageIsSeen)}>{isMyMessage ? 'Bạn: ' + item.messages.at(-1).content : item.messages.at(-1).content}</h3>
                         : 
                             item.messages.at(-1).pin !== null ? 
-                                <h3 className={cx('lastMessage', messageIsSeen)}>{ item.user.id === userId ? "Bạn đã gửi 1 pin" : "Đã gửi 1 pin"}</h3>
+                                <h3 className={cx('lastMessage', messageIsSeen)}>{ isMyMessage ? "Bạn đã gửi 1 pin" : "Đã gửi 1 pin"}</h3>
                             : 
-                                <h3 className={cx('lastMessage', messageIsSeen)}>{ item.user.id === userId ? "Bạn: " : ''}
-                                    <FontAwesomeIcon icon={faHeart}/>
-                                </h3>
+                                item.messages.at(-1).sharedUser === null ?
+                                    <h3 className={cx('lastMessage', messageIsSeen)}>{ isMyMessage ? "Bạn: " : ''}
+                                        <FontAwesomeIcon icon={faHeart}/>
+                                    </h3>
+                                :
+                                    <h3 className={cx('lastMessage', messageIsSeen)}>{ isMyMessage ? "Bạn đã gửi 1 user" : "Đã gửi 1 user"}</h3>
                     )
                 }
             </div>

@@ -24,6 +24,12 @@ const cx = classNames.bind(styles);
 
 function PinSaved() {
     const { theme } = useContext(ThemeContext);
+
+    const [changeNameEdit, setChangeNameEdit] = useState(false);
+    const [changeDiscriptionEdit, setChangeDiscriptionEdit] = useState(false);
+    const [changeNameAdd, setChangeNameAdd] = useState(false);
+    const [changeDiscriptionAdd, setChangeDiscriptionAdd] = useState(false);
+
     const navigate = useNavigate();
     const { accountOther } = useContext(AccountOtherContext);
     //Open hộp thoại edit
@@ -84,6 +90,10 @@ function PinSaved() {
     };
     const handleSubmitEdit = async (event) => {
         event.preventDefault();
+
+        setChangeDiscriptionEdit(true);
+        setChangeNameEdit(true);
+
         const id = boardEdit.id;
         const user = boardEdit.user;
         const description =
@@ -92,12 +102,14 @@ function PinSaved() {
 
         const createdAt = null;
 
-        const board = { id, description, name, user, createdAt };
-        const result = await boardServices.update(id, board);
-        if (result) {
-            setOpenEdit(false);
-            setUpdateSuccess(true);
-            showAlert('edit');
+        if (description !== null && name !== null) {
+            const board = { id, description, name, user, createdAt };
+            const result = await boardServices.update(id, board);
+            if (result) {
+                setOpenEdit(false);
+                setUpdateSuccess(true);
+                showAlert('edit');
+            }
         }
     };
     // HANDLE DELETE
@@ -127,19 +139,25 @@ function PinSaved() {
 
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
+
+        setChangeDiscriptionAdd(true);
+        setChangeNameAdd(true);
+
         const user = await userServices.getUserByUsername(pathname);
         const description =
             event.target.elements.descriptionAdd.value !== '' ? event.target.elements.descriptionAdd.value : null;
         const name = event.target.elements.nameAdd.value !== '' ? event.target.elements.nameAdd.value : null;
         const createdAt = null;
 
-        const board = { description, name, user, createdAt };
-        const result = await boardServices.add(board);
+        if (description !== null && name !== null) {
+            const board = { description, name, user, createdAt };
+            const result = await boardServices.add(board);
 
-        if (result) {
-            setOpenCreateBoard(false);
-            setCreateSuccess(true);
-            showAlert('create');
+            if (result) {
+                setOpenCreateBoard(false);
+                setCreateSuccess(true);
+                showAlert('create');
+            }
         }
     };
 
@@ -244,7 +262,7 @@ function PinSaved() {
                             placement="bottom-end"
                         />
                     </div>
-                )}{' '}
+                )}
                 <div className={cx('pin-saved')}>
                     {listBoard.map((board, index) => {
                         return (
@@ -259,15 +277,15 @@ function PinSaved() {
                                 handleEdit={() => handleEdit(board.id)}
                             />
                         );
-                    })}{' '}
-                </div>{' '}
+                    })}
+                </div>
                 <Dialog className={cx('')} fullWidth={true} maxWidth="sm" open={openEdit}>
                     <form onSubmit={handleSubmitEdit}>
                         <DialogTitle
                             sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
                         >
-                            Chỉnh sửa{' '}
-                        </DialogTitle>{' '}
+                            Chỉnh sửa
+                        </DialogTitle>
                         <DialogContent>
                             <LabelTextBox
                                 name={'nameEdit'}
@@ -275,91 +293,91 @@ function PinSaved() {
                                 label={'Tên bảng'}
                                 selectedSize={'medium'}
                                 text={boardEdit.name ? boardEdit.name : ''}
-                            />{' '}
+                                change={changeNameEdit}
+                                setChange={setChangeNameEdit}
+                            />
                             <LabelTextBox
                                 name={'descriptionEdit'}
                                 placeholder={'Mô tả'}
                                 label={'Mô tả'}
                                 selectedSize={'medium'}
                                 text={boardEdit.description ? boardEdit.description : ''}
-                            />{' '}
-                        </DialogContent>{' '}
+                                change={changeDiscriptionEdit}
+                                setChange={setChangeDiscriptionEdit}
+                            />
+                        </DialogContent>
                         <DialogActions sx={{ justifyContent: 'space-between', margin: '10px' }}>
                             <Button style={{ fontSize: '14px' }} primary type="button" onClick={handleDelete}>
-                                Xóa{' '}
-                            </Button>{' '}
+                                Xóa
+                            </Button>
                             <div>
                                 <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseEdit}>
-                                    Hủy{' '}
-                                </Button>{' '}
+                                    Hủy
+                                </Button>
                                 <Button style={{ fontSize: '14px' }} red type="submit">
-                                    Sửa{' '}
-                                </Button>{' '}
-                            </div>{' '}
-                        </DialogActions>{' '}
-                    </form>{' '}
-                </Dialog>{' '}
-                <Dialog
-                    className={cx('')}
-                    fullWidth={true}
-                    maxWidth="sm"
-                    open={openCreateBoard}
-                    onClose={handleCloseCreateBoard}
-                >
+                                    Sửa
+                                </Button>
+                            </div>
+                        </DialogActions>
+                    </form>
+                </Dialog>
+                <Dialog fullWidth={true} maxWidth="sm" open={openCreateBoard} onClose={handleCloseCreateBoard}>
                     <form onSubmit={handleSubmitCreate}>
                         <DialogTitle
                             sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
                         >
-                            Tạo bảng{' '}
-                        </DialogTitle>{' '}
+                            Tạo bảng
+                        </DialogTitle>
                         <DialogContent>
                             <LabelTextBox
                                 name={'nameAdd'}
                                 placeholder={'Tiêu đề'}
                                 label={'Tên bảng'}
                                 selectedSize={'medium'}
-                                // text={boardEdit.name ? boardEdit.name : ''}
-                            />{' '}
+                                change={changeNameAdd}
+                                setChange={setChangeNameAdd}
+                            />
                             <LabelTextBox
                                 name={'descriptionAdd'}
                                 placeholder={'Mô tả'}
                                 label={'Mô tả'}
                                 selectedSize={'medium'}
-                                // text={boardEdit.description ? boardEdit.description : ''}
-                            />{' '}
-                        </DialogContent>{' '}
+                                change={changeDiscriptionAdd}
+                                setChange={setChangeDiscriptionAdd}
+                            />
+                        </DialogContent>
                         <DialogActions sx={{ marginBottom: '10px' }}>
                             <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseCreateBoard}>
-                                Hủy{' '}
-                            </Button>{' '}
+                                Hủy
+                            </Button>
                             <Button style={{ fontSize: '14px' }} red type="submit">
-                                Tạo{' '}
-                            </Button>{' '}
-                        </DialogActions>{' '}
-                    </form>{' '}
-                </Dialog>{' '}
+                                Tạo
+                            </Button>
+                        </DialogActions>
+                    </form>
+                </Dialog>
                 {confirmDelete && (
                     <Dialog className={cx('')} fullWidth={true} maxWidth="sm" open={confirmDelete}>
                         <DialogTitle
                             sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
                         >
                             Xóa Bảng này ?
-                        </DialogTitle>{' '}
+                        </DialogTitle>
                         <form onSubmit={handleSubmitDelete}>
                             <DialogContent>
-                                Bảng và tất cả các Ghim thuộc bảng này sẽ bị xóa khỏi hồ sơ của bạn.{' '}
-                            </DialogContent>{' '}
+                                Bảng và tất cả các Ghim thuộc bảng này sẽ bị xóa khỏi hồ sơ của bạn.
+                            </DialogContent>
                             <DialogActions sx={{ marginBottom: '10px' }}>
                                 <div>
                                     <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseConfirm}>
-                                        Hủy{' '}
-                                    </Button>{' '}
+                                        Hủy
+                                    </Button>
                                     <Button style={{ fontSize: '14px' }} red type="submit">
-                                        Xóa{' '}
-                                    </Button>{' '}
-                                </div>{' '}
-                            </DialogActions>{' '}
-                        </form>{' '}
+                                        Xóa
+                                    </Button>
+                                </div>
+                            </DialogActions>
+                        </form>
                     </Dialog>
                 )}
             </div>

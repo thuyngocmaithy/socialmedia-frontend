@@ -4,8 +4,6 @@ import { CreateBoardIcon } from '../../Icons';
 import Search from '../../Search';
 import { useState, useEffect } from 'react';
 import * as typeServices from '../../../services/typeServices';
-// import * as userSavePinServices from '../../../services/userSavePinServices';
-import CreateType from '../../CreateType';
 
 const cx = classNames.bind(styles);
 
@@ -21,7 +19,6 @@ function SelectTypePopper({ handleTurnOnCreateType, handleChooseType }) {
     }, []);
 
     //create Type
-    // const [createType, setCreateType] = useState(false);
     const handleCreateType = () => {
         handleTurnOnCreateType(true);
     };
@@ -45,7 +42,7 @@ function SelectTypePopper({ handleTurnOnCreateType, handleChooseType }) {
                                 selectType(item);
                             }}
                         >
-                            {/* <img src={item.detailType[0]} alt="" /> */}
+                            <img src={item.detailType[0]} alt="" />
                             <p>{item.typeName}</p>
                         </button>
                     );

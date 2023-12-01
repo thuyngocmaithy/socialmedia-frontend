@@ -57,6 +57,7 @@
 
 .clear-btn,
 .loading-btn {
+    background-color: transparent;
     position: absolute;
     right: calc(var(--search-button-width) + 16px);
     top: 50%;
@@ -85,6 +86,7 @@
     border-bottom-right-radius: var(--search-border-radius);
     font-size: 1.8rem;
     color: rgba(22, 24, 35, 0.34);
+    background-color: transparent;
 
     &:hover {
         cursor: pointer;
@@ -125,8 +127,7 @@
 }
 .searchUser {
     width: 100%;
-    margin-left: 60px;
-    margin-top: 30px;
+    padding: 5px 12px;
     display: flex;
     justify-content: flex-start;
     align-items: center;

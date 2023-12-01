@@ -17,6 +17,11 @@ const cx = classNames.bind(styles);
 
 function User() {
     const { theme } = useContext(ThemeContext);
+
+    const [changeFirstname, setChangeFirstname] = useState(false);
+    const [changeLastname, setChangeLastname] = useState(false);
+    const [changeEmail, setChangeEmail] = useState(false);
+
     const [listUser, setListUser] = useState([]);
     const [createSuccess, setCreateSuccess] = useState(false);
     const [openCreate, setOpenCreate] = useState(false);
@@ -128,6 +133,11 @@ function User() {
 
     const handleSubmitCreate = async (event) => {
         event.preventDefault();
+
+        setChangeFirstname(true);
+        setChangeLastname(true);
+        setChangeEmail(true);
+
         const firstname = event.target.elements.firstname.value !== '' ? event.target.elements.firstname.value : null;
         const lastname = event.target.elements.lastname.value !== '' ? event.target.elements.lastname.value : null;
         const fullname = firstname + ' ' + lastname;
@@ -214,11 +224,32 @@ function User() {
                     </DialogTitle>
                     <DialogContent>
                         <div style={{ display: 'flex' }}>
-                            <LabelTextBox name={'firstname'} placeholder={'Họ'} label={'Họ'} selectedSize={'small'} />
-                            <LabelTextBox name={'lastname'} placeholder={'Tên'} label={'Tên'} selectedSize={'small'} />
+                            <LabelTextBox
+                                name={'firstname'}
+                                placeholder={'Họ'}
+                                label={'Họ'}
+                                selectedSize={'small'}
+                                change={changeFirstname}
+                                setChange={setChangeFirstname}
+                            />
+                            <LabelTextBox
+                                name={'lastname'}
+                                placeholder={'Tên'}
+                                label={'Tên'}
+                                selectedSize={'small'}
+                                change={changeLastname}
+                                setChange={setChangeLastname}
+                            />
                         </div>
                         <div style={{ display: 'flex' }}>
-                            <LabelTextBox name={'email'} placeholder={'Email'} label={'Email'} selectedSize={'small'} />
+                            <LabelTextBox
+                                name={'email'}
+                                placeholder={'Email'}
+                                label={'Email'}
+                                selectedSize={'small'}
+                                change={changeEmail}
+                                setChange={setChangeEmail}
+                            />
                             <LabelTextBox
                                 name={'birthdate'}
                                 placeholder={'Ngày sinh'}

@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import ActionAlerts from '../../../components/Alert';
 import Button from '../../../components/Button';
-import { GoogleIcon } from '../../../components/Icons';
 import LabelTextBox from '../../../components/LabelTextBox';
 import { ThemeContext } from '../../../context/ThemeContext';
 import * as userServices from '../../../services/userServices';
@@ -13,6 +13,34 @@ const cx = classNames.bind(styles);
 
 function Login() {
     const { theme } = useContext(ThemeContext);
+    const [changeEmail, setChangeEmail] = useState(false);
+    const [changePassword, setChangePassword] = useState(false);
+    //Hiển thị hộp thoại thông báo
+    const [alertType, setAlertType] = useState(null);
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const showAlert = (type) => {
+        setAlertType(type);
+        setAlertVisible(true);
+
+        const timeoutId = setTimeout(() => {
+            setAlertVisible(false);
+            setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+        }, 2500);
+
+        return timeoutId;
+    };
+
+    useEffect(() => {
+        if (alertVisible) {
+            const timeoutId = setTimeout(() => {
+                setAlertVisible(false);
+                setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+            }, 2500);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [alertVisible]);
     // Hàm để đặt giá trị vào localStorage
     function setLocalStorageWithExpiration(key, value, expirationMinutes) {
         const expirationMS = expirationMinutes * 60 * 10000; // Chuyển đổi phút thành mili giây
@@ -30,19 +58,27 @@ function Login() {
     }, []);
     const handleSubmit = (e) => {
         e.preventDefault();
+        setChangeEmail(true);
+        setChangePassword(true);
+
         const fetchApi = async () => {
             const email = e.target.elements.email.value !== '' ? e.target.elements.email.value : null;
             const password = e.target.elements.password.value !== '' ? e.target.elements.password.value : null;
-            const username = email.split('@')[0]; // Trích xuất tên người dùng thành email
-            console.log(username);
-            const result = await userServices.login(username, password);
-            if (result !== undefined) {
-                // Sử dụng hàm đặt giá trị vào localStorage với thời gian hết hạn
-                setLocalStorageWithExpiration('userLogin', { id: result.id, permission: result.permission }, 60); // 60 phút
-                if (result.permission !== null) {
-                    window.location.href = '/admin/dashboard';
+            if (email !== null && password !== null) {
+                const result = await userServices.login(email, password);
+
+                if (result.a === 'errorEmail') {
+                    showAlert('errorEmail');
+                } else if (result.a === 'errorPassword') {
+                    showAlert('errorPassword');
                 } else {
-                    window.location.href = '/';
+                    // Sử dụng hàm đặt giá trị vào localStorage với thời gian hết hạn
+                    setLocalStorageWithExpiration('userLogin', { id: result.a, permission: result.b }, 60); // 60 phút
+                    if (result.b !== null) {
+                        window.location.href = '/admin/dashboard';
+                    } else {
+                        window.location.href = '/';
+                    }
                 }
             }
         };
@@ -54,26 +90,35 @@ function Login() {
             <div className={cx('container-form', theme === 'dark' ? 'dark' : '')}>
                 <h1 className={cx('title')}> Login account </h1>
                 <form onSubmit={handleSubmit}>
-                    {' '}
-                    {/* <form> */}{' '}
+                    {/* <form> */}
                     <div className={cx('infomation')}>
-                        <LabelTextBox placeholder={'Email'} name={'email'} label={'Email'} selectedSize={'small'} />{' '}
+                        <LabelTextBox
+                            placeholder={'Email'}
+                            name={'email'}
+                            label={'Email'}
+                            selectedSize={'small'}
+                            change={changeEmail}
+                            setChange={setChangeEmail}
+                        />
                         <LabelTextBox
                             placeholder={'Password'}
                             name={'password'}
                             type={'password'}
                             label={'Pasword'}
                             selectedSize={'small'}
-                        />{' '}
+                            change={changePassword}
+                            setChange={setChangePassword}
+                        />
                     </div>
                     <div className={cx('submit-btn')}>
-                        <Button red> Login </Button> <h4 className={cx('or')}> OR </h4>{' '}
-                        <Button className={cx('registerGoogle')} primary leftIcon={<GoogleIcon />}>
-                            Sign in with Google{' '}
-                        </Button>{' '}
-                    </div>{' '}
-                </form>{' '}
-            </div>{' '}
+                        <Button primary={theme === 'dark' ? true : false} red={theme === 'dark' ? false : true}>
+                            Login
+                        </Button>
+                    </div>
+                </form>
+            </div>
+            {alertType === 'errorEmail' && <ActionAlerts severity="error" content={`Email không chính xác`} />}
+            {alertType === 'errorPassword' && <ActionAlerts severity="error" content={`Mật khẩu không chính xác`} />}
         </Wrapper>
     );
 }

@@ -14,9 +14,9 @@
     margin-top: 8px;
     font-size: 3.6rem;
     font-weight: 600;
-    color: #111111;
+    color: var(--color-red-darker);
     &.dark {
-        color: var(--white-500);
+        color: var(--color-blue-pastel);
     }
 }
 .username {
@@ -47,6 +47,9 @@
 .count-friend-request {
     margin-left: 15px;
     color: #717171;
+    &.dark {
+        color: #b0b0b0;
+    }
 }
 .shareBtn {
     margin-top: 12px;

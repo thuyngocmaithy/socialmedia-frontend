@@ -11,7 +11,7 @@ function ChatProvider({ children }) {
     const { stompClient } = useContext(StompContext);
     useEffect(() => {
         if(userId !== 0) {
-            fetch();
+            fetch();   
         }
     }, [userId]);
 

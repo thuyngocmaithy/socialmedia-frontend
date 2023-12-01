@@ -10,10 +10,17 @@ import { getUserById, changeUserInfo, ChangeUserAvatar } from '../../../services
 import axios from 'axios';
 import ActionAlerts from '../../../components/Alert';
 import { AccountLoginContext } from '../../../context/AccountLoginContext';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function UserProfile({ admin = false }) {
+    const { theme } = useContext(ThemeContext);
+
+    const [changeName, setChangeName] = useState(false);
+    const [changeIntroduce, setChangeIntroduce] = useState(false);
+    const [changeWebsite, setChangeWebsite] = useState(false);
+
     const { userId } = useContext(AccountLoginContext);
     const [userData, setUserData] = useState({});
     const [saveSuccess, setSaveSuccess] = useState(false);
@@ -138,18 +145,24 @@ function UserProfile({ admin = false }) {
     };
 
     const handleSave = () => {
-        const updatedUser = {
-            fullname: userFullname,
-            introduce: userIntroduce,
-            website: userWebsite,
-            username: username,
-        };
+        setChangeIntroduce(true);
+        setChangeName(true);
+        setChangeWebsite(true);
 
-        changeUserInfo(userId, updatedUser)
-            .then((response) => {
-                showAlert('editSuccess');
-            })
-            .catch((error) => console.log(error));
+        if (userFullname !== '' && userIntroduce !== '' && userWebsite !== '') {
+            const updatedUser = {
+                fullname: userFullname,
+                introduce: userIntroduce,
+                website: userWebsite,
+                username: username,
+            };
+
+            changeUserInfo(userId, updatedUser)
+                .then((response) => {
+                    showAlert('editSuccess');
+                })
+                .catch((error) => console.log(error));
+        }
     };
     return (
         // userData && (
@@ -157,11 +170,7 @@ function UserProfile({ admin = false }) {
         <Wrapper onSave={handleSave} admin={admin}>
             <div className={cx('wrapper')}>
                 <div className={cx('container-infoProfile')}>
-                    <h1>Chỉnh sửa hồ sơ</h1>
-                    <p className={cx('discription')}>
-                        Hãy giữ riêng tư thông tin cá nhân của bạn. Thông tin bạn thêm vào đây hiển thị cho bất kỳ ai có
-                        thể xem hồ sơ của bạn.
-                    </p>
+                    <h1 className={cx(theme === 'dark' ? 'dark' : '')}>Chỉnh sửa hồ sơ</h1>
                     <div className={cx('setUserProfilePhoto')}>
                         <div className={cx('UserPhoto')}>
                             <Image src={userData.avatar && `data:image/jpeg;base64,${userData.avatar}`} />
@@ -186,6 +195,8 @@ function UserProfile({ admin = false }) {
                             selectedSize={'medium'}
                             text={userFullname}
                             customGetValue={handlGetUserFullname}
+                            change={changeName}
+                            setChange={setChangeName}
                         />
                     </div>
                     {admin === false && (
@@ -196,6 +207,8 @@ function UserProfile({ admin = false }) {
                                 selectedSize={'large'}
                                 text={userIntroduce}
                                 customGetValue={handlGetUserIntroduce}
+                                change={changeIntroduce}
+                                setChange={setChangeIntroduce}
                             />
                             <LabelTextBox
                                 placeholder={'Thêm liên kết để hướng lưu lượng vào trang web'}
@@ -203,6 +216,8 @@ function UserProfile({ admin = false }) {
                                 selectedSize={'medium'}
                                 text={userWebsite}
                                 customGetValue={handleGetUserWebsite}
+                                change={changeWebsite}
+                                setChange={setChangeWebsite}
                             />
                         </>
                     )}
@@ -214,6 +229,9 @@ function UserProfile({ admin = false }) {
                         text={username}
                         customGetValue={handleGetUsername}
                     />
+                </div>
+                <div className={cx('image-container')}>
+                    <img className={cx('image')} src="../../info-profile.png" alt="" />
                 </div>
                 {alertType === 'editAvatar' && <ActionAlerts severity="success" content={`Lưu ảnh thành công`} />}
                 {alertType === 'editSuccess' && <ActionAlerts severity="success" content={`Lưu thành công`} />}

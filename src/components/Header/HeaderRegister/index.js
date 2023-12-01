@@ -16,8 +16,8 @@ function HeaderRegister() {
             <div className={cx('inner')}>
                 {/* LOGO */}
                 <a href={config.routes.home} className={cx('logo-link')}>
-                    <LogoPinterest className={cx('gUZ', 'GjR', 'kVc')} />
-                    <h1 className={cx('name')}>DATH</h1>
+                    <LogoPinterest className={cx('gUZ', 'GjR', 'kVc', theme === 'dark' ? 'dark' : '')} />
+                    <h1 className={cx('name', theme === 'dark' ? 'dark' : '')}>DATH</h1>
                 </a>
                 <div className={cx('actions')}>
                     <Button red to={config.routes.login}>

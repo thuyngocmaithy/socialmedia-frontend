@@ -4,20 +4,55 @@ import Pin from '../../components/Pin';
 import Popper from '../../components/Popper';
 import { FilterIcon } from '../../components/Icons';
 import OptionPopper from '../../components/Popper/OptionPopper';
-import { useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
 import * as boardServices from '../../services/boardServices';
 import * as userSavePinServices from '../../services/userSavePinServices';
+import { ThemeContext } from '../../context/ThemeContext';
+import { CircularProgress } from '@mui/material';
+import ActionAlerts from '../../components/Alert';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import Button from '../../components/Button';
 
 const cx = classNames.bind(styles);
 
 function Board() {
     const location = useLocation();
+    const navigate = useNavigate();
+    const { theme } = useContext(ThemeContext);
     const [boardName, setBoardName] = useState('');
     const [listPin, setListPin] = useState([]);
     const [countPin, setCountPin] = useState(0);
     const [typeSort, setTypeSort] = useState('default');
     const [active, setActive] = useState('2');
+    const [loading, setLoading] = useState(true);
+    //Hiển thị hộp thoại thông báo
+    const [alertType, setAlertType] = useState(null);
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const showAlert = (type) => {
+        setAlertType(type);
+        setAlertVisible(true);
+
+        const timeoutId = setTimeout(() => {
+            setAlertVisible(false);
+            setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+        }, 2500);
+
+        return timeoutId;
+    };
+
+    useEffect(() => {
+        if (alertVisible) {
+            const timeoutId = setTimeout(() => {
+                setAlertVisible(false);
+                setAlertType(null); // Đặt alertType về null khi ẩn thông báo
+            }, 2500);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [alertVisible]);
 
     const handleActive = (id) => {
         setActive(id === active ? null : id);
@@ -36,9 +71,10 @@ function Board() {
                 resultPin = [...resultPin].sort((a, b) => b.id - a.id);
             }
             setListPin(resultPin);
+            setLoading(false);
         };
         fetchApi();
-    }, [location.pathname, typeSort]);
+    }, [location.pathname, typeSort, alertType]);
 
     const filterBoardPopper = {
         title: 'Sắp xếp theo thời gian lưu',
@@ -62,10 +98,21 @@ function Board() {
     };
     return (
         <div className={cx('wrapper')}>
-            <h1 className={cx('title')}>{boardName}</h1>
+            <div className={cx('container-title')}>
+                <Button
+                    onClick={() => {
+                        navigate(-1);
+                    }}
+                    style={{ cursor: 'pointer', color: 'var(--color-red)' }}
+                >
+                    <FontAwesomeIcon icon={faChevronLeft} />
+                </Button>
+                <h1 className={cx('title', theme === 'dark' ? 'dark' : '')}>{boardName}</h1>
+            </div>
+
             <div className={cx('option')}>
                 <Popper
-                    title={<FilterIcon className={cx('action', 'icon')} />}
+                    title={<FilterIcon className={cx('action', 'icon', theme === 'dark' ? 'dark' : '')} />}
                     body={<OptionPopper data={filterBoardPopper} />}
                     widthBody="maxContent"
                     placement="bottom-start"
@@ -74,7 +121,24 @@ function Board() {
             </div>
 
             <div className={cx('container-pins')}>
-                {listPin.length !== 0 &&
+                {loading && <CircularProgress sx={{ display: 'flex', margin: 'auto' }} />}
+                {listPin.map((pin, index) => {
+                    return (
+                        <Pin
+                            key={index}
+                            stt={index + 1}
+                            id={pin.pin.id}
+                            image={pin.pin.image}
+                            linkImage={pin.pin.link}
+                            title={pin.pin.title}
+                            userImage={pin.pin.user.avatar}
+                            username={pin.pin.user.username}
+                            showAlert={showAlert}
+                            pinSaved={true}
+                        />
+                    );
+                })}
+                {/* {listPin.length !== 0 &&
                     listPin.map((pin, index) => {
                         return (
                             <Pin
@@ -84,10 +148,13 @@ function Board() {
                                 title={pin.pin.title}
                                 userImage={pin.user.avatar}
                                 username={pin.user.username}
+                                
                             />
                         );
-                    })}
+                    })} */}
             </div>
+            {alertType === 'changeSuccess' && <ActionAlerts severity="success" content={`Đã thay đổi`} />}
+            {alertType === 'deleteSuccess' && <ActionAlerts severity="success" content={`Đã xóa pin khỏi bảng`} />}
         </div>
     );
 }
