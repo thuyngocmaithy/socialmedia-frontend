@@ -11,27 +11,30 @@ import { NotificationProvider } from './context/NotificationContext';
 import { StompProvider } from './context/StompContext';
 import { ThemeProvider } from './context/ThemeContext';
 import reportWebVitals from './reportWebVitals';
+import { ChatProvider } from './context/ChatContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     // <React.StrictMode>
     <ThemeProvider>
         <GlobalStyles>
-            <AccountLoginProvider>
-                <AccountOtherProvider>
-                    <CountAccessProvider>
-                        <StompProvider>
-                            <NotificationProvider>
+            <StompProvider>
+                <AccountLoginProvider>
+                    <AccountOtherProvider>
+                        <CountAccessProvider>
                                 <ConversationProvider>
                                     <MessageProvider>
-                                        <App />
+                                        <ChatProvider>
+                                            <NotificationProvider>
+                                                <App />
+                                            </NotificationProvider>
+                                        </ChatProvider>
                                     </MessageProvider>
                                 </ConversationProvider>
-                            </NotificationProvider>
-                        </StompProvider>
-                    </CountAccessProvider>
-                </AccountOtherProvider>
-            </AccountLoginProvider>
+                        </CountAccessProvider>
+                    </AccountOtherProvider>
+                </AccountLoginProvider>
+            </StompProvider>
         </GlobalStyles>
     </ThemeProvider>,
     // </React.StrictMode>

@@ -27,6 +27,7 @@ import { Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import LabelTextBox from '../../components/LabelTextBox';
+import SharePopper from '../../components/Popper/SharePopper';
 import { StompContext } from '../../context/StompContext';
 
 const cx = classNames.bind(styles);
@@ -284,7 +285,6 @@ function DisplayPin() {
                         <div className={cx('insertData')}>
                             <div className={cx('wrapperBtns')}>
                                 <div className={cx('option-bottom')}>
-                                    {console.log(JSON.stringify(pin))}
                                     {user.id !== userId && (
                                         <Tippy delay={[0, 100]} content="Báo cáo" placement="bottom">
                                             <button
@@ -299,7 +299,6 @@ function DisplayPin() {
                                             </button>
                                         </Tippy>
                                     )}
-
                                     <Tippy delay={[0, 100]} content="Chia sẻ" placement="bottom">
                                         <button className={cx('btn-end', 'share-btn')}>
                                             <ShareIcon

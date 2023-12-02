@@ -1,6 +1,6 @@
 import * as httpRequest from '../utils/httpRequest';
 
-export const getAllConversations = async () => {
+export const getAllMessage = async () => {
     try {
         const res = await httpRequest.get(`messages/getAll`);
         return res;

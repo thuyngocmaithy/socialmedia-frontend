@@ -6,6 +6,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
 import Image from '../../components/Image';
 import NavMenu from '../../components/NavMenu';
+import SharePopper from '../../components/Popper/SharePopper';
+import Popper from '../../components/Popper';
 import FriendRequest from '../../components/Popup/FriendRequest';
 import ListFriend from '../../components/Popup/ListFriend';
 import { AccountLoginContext } from '../../context/AccountLoginContext';
@@ -198,7 +200,15 @@ function Wrapper({ children, className }) {
                         )}
 
                         <Button className={cx('shareBtn')} primary>
-                            Chia sẻ
+                            <Popper
+                                idPopper={`share${info.id}`}
+                                contentTitle={
+                                    "Chia sẻ"
+                                }
+                                className={cx('share-menu')}
+                                body={<SharePopper user_id={info.id}/>}
+                                widthBody="maxContent"
+                            />
                         </Button>
                         {accountOther ? (
                             statusFriend !== 'ACCEPTED' && statusFriend !== 'PENDING' ? (

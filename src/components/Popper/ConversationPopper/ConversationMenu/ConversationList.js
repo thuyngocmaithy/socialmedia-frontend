@@ -20,7 +20,7 @@ function ConversationList({ handleChange, conversationList }) {
                             }
                         });
                     }
-                    return (
+                    return ( item.messages.length > 0 &&
                         <div key={index}>
                             <ConversationCard
                                 handleChange={handleChange}

@@ -5,6 +5,7 @@ import HeartMessage from './HeartMessage';
 import PinMessage from './PinMessage';
 import { useContext } from 'react';
 import { AccountLoginContext } from '../../../../../context/AccountLoginContext';
+import UserMessage from './UserMessage';
 
 const cx = className.bind(styles);
 
@@ -12,6 +13,7 @@ function MessageCard({ message }) {
     const { userId } = useContext(AccountLoginContext);
     const isPinMessage = message.pin !== null ? true : false;
     const isTextMessage = message.content !== '' ? true : false;
+    const isShareUserMessage = message.sharedUser !== null ? true : false;
     const messageOwner = message.user.id === userId ? 'my-message' : 'friend-message';
     return (
         <div className={cx('wrapper-message-card')}>
@@ -22,7 +24,10 @@ function MessageCard({ message }) {
                     isPinMessage ?
                         <PinMessage message={message} messageOwner={messageOwner}></PinMessage>
                     :
-                        <HeartMessage message={message} messageOwner={messageOwner}></HeartMessage>
+                        isShareUserMessage ?
+                            <UserMessage message={message} messageOwner={messageOwner}></UserMessage>
+                        :
+                            <HeartMessage message={message} messageOwner={messageOwner}></HeartMessage>
             }
         </div>
     );

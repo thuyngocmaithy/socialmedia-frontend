@@ -9,9 +9,9 @@ const NotificationContext = createContext({});
 
 function NotificationProvider({ children }) {
     const { userId } = useContext(AccountLoginContext);
-    const stompClient = useContext(StompContext);
-    const [res, setRes] = useState([]);
+    const { stompClient } = useContext(StompContext);
     const nots = useRef([]);
+    const [res, setRes] = useState([]);
     const [pinCount, setPinCount] = useState([]);
     const notType = { pin: 'Pin', like: 'Like', comment: 'Comment', friend: 'Friend' };
 

@@ -3,41 +3,32 @@ import classNames from 'classnames/bind';
 import styles from './SharePopper.module.scss';
 import { useContext, useEffect, useState } from 'react';
 import * as participantServices from '../../../services/participantServices';
-import Image from '../../Image';
+import * as userServices from '../../../services/userServices';
 import { AccountLoginContext } from '../../../context/AccountLoginContext';
 import { CircularProgress } from '@mui/material';
 import { StompContext } from '../../../context/StompContext';
 import { ConversationContext } from '../../../context/ConversationContext';
+import ShareResult from './ShareResult';
 
 const cx = classNames.bind(styles);
 
-function SharePopper({ pin_id }) {
+function SharePopper({ user_id, pin_id }) {
     const { userId } = useContext(AccountLoginContext);
     const [listUser, setListUser] = useState([]);
     const [loading, setLoading] = useState(true);
-    const stompClient = useContext(StompContext);
-    const {conversationList} = useContext(ConversationContext);
+    const { stompClient } = useContext(StompContext);
+    const { conversationList } = useContext(ConversationContext);
+    const [copyTitle, setCopyTitle] = useState('Sao chép liên kết');
 
     useEffect(() => {
         const fetchApi = async () => {
-            let result = await participantServices.getFriendChattingWith(userId);
-            result = result.map((item) => {return item.user});
-            // result = result.filter((item) => item.permission === null && item.id !== parseInt(userId));
-            setListUser(result);
-            setLoading(false);
-        };
-        let stompList = [];
-        const loginToChat = () => {
-            const conv = conversationList.current.map(e => e.conversation);
-            conv.forEach((e) => {
-                let stompObject = stompClient.subscribe(
-                    `/app/login/${e.id}`,
-                    (response) => {
-                        // console.log(`Conversation ID: ${JSON.parse(response.body)}`);
-                    }
-                );
-                stompList = [...stompList, stompObject.id];
-            });
+            if(listUser.length === 0) {
+                let result = await participantServices.getFriendChattingWith(userId);
+                result = result.map((item) => {return item.user});
+                // result = result.filter((item) => item.permission === null && item.id !== parseInt(userId));
+                setListUser(result);
+                setLoading(false);
+            }
         };
         if (userId !== 0) {
             fetchApi();
@@ -45,14 +36,40 @@ function SharePopper({ pin_id }) {
         } else {
             setLoading(false);
         }
+
         return () => {
-            stompList.forEach((id) => {
-                stompClient.unsubscribe(id);
-            })
+            logoutToChat();
         }
     }, [userId]);
 
-    const sharePin = (e) => {
+    const loginToChat = () => {
+        const conv = conversationList.current.map(e => e.conversation);
+        conv.forEach((item, index) => {
+            setTimeout(() => {
+                stompClient.send(
+                    `/app/login`,
+                    {},
+                    item.id
+                );
+            }, index*500);
+        });
+    };
+
+    const logoutToChat = () => {
+        const conv = conversationList.current.map(e => e.conversation);
+        conv.forEach((item, index) => {
+            setTimeout(() => {
+                stompClient.send(
+                    `/app/unsubscribe`,
+                    {},
+                    item.id
+                );
+            }, index*500);
+        });
+    }
+    
+    const share = (e) => {
+        const isPinShare = pin_id !== undefined ? true : false;
         const senderId = parseInt(e.target.getAttribute("value"));
         const conv = conversationList.current.find((conv) => conv.user.id === senderId);
         let tempList = [];
@@ -61,17 +78,48 @@ function SharePopper({ pin_id }) {
         });
         tempList.sort((a,b) => a.id - b.id);
         let messageID = tempList.at(-1).id+1;
+        if(isPinShare) {
+            stompClient.send(
+                `/app/chat/conversation_id/${conv.conversation.id}`,
+                {},
+                JSON.stringify({
+                    id: messageID,
+                    user_id: userId,
+                    conversation_id: conv.conversation.id,
+                    content: '',
+                    pin_id: pin_id,
+                    sharedUserId: -1
+                }),
+            );
+        } else {
+            stompClient.send(
+                `/app/chat/conversation_id/${conv.conversation.id}`,
+                {},
+                JSON.stringify({
+                    id: messageID,
+                    user_id: userId,
+                    conversation_id: conv.conversation.id,
+                    content: '',
+                    pin_id: -1,
+                    sharedUserId: user_id
+                }),
+            );
+        }
+    }
 
-        stompClient.publish({
-            destination: `/app/chat/conversation_id/${conv.conversation.id}`,
-            body: JSON.stringify({
-                id: messageID,
-                user_id: userId,
-                conversation_id: conv.conversation.id,
-                content: '',
-                pin_id: pin_id
-            }),
-        });
+    const handleCopy = async () => {
+        const isPinShare = pin_id !== undefined ? true : false;
+        if(isPinShare) {
+            navigator.clipboard.writeText("http://localhost:3000/pin/" + pin_id);
+        }
+        else {
+            const user = await userServices.getUserById(parseInt(user_id));
+            navigator.clipboard.writeText("http://localhost:3000/" + user.username);
+        }
+        setCopyTitle('Đã sao chép liên kết');
+        setTimeout(() => {
+            setCopyTitle('Sao chép liên kết');
+        }, 5000);
     }
 
     return (
@@ -90,28 +138,12 @@ function SharePopper({ pin_id }) {
                 {loading && <CircularProgress />}
                 {listUser.map((user, index) => {
                     return (
-                        <div 
-                            className={cx('people-option')} key={index}
-                            value={user.id}
-                            onClick={(e) => sharePin(e)}
-                        >
-                            <Image
-                                src={user.avatar && `data:image/jpeg;base64,${user.avatar}`}
-                                className={cx('user-avatar')}
-                                alt={user.username}
-                                value={user.id}
-                            />
-                            <span
-                                value={user.id}
-                            >
-                                {user.username}
-                            </span>
-                        </div>
+                        <ShareResult key={index} user={user} handleSelect={share}></ShareResult>
                     );
                 })}
-                <div className={cx('copy-link-option')}>
+                <div className={cx('copy-link-option')} onClick={handleCopy}>
                     <LinkedIcon className={cx('grey-button')} />
-                    <span>Sao chép liên kết</span>
+                    <span>{copyTitle}</span>
                 </div>
             </div>
         </div>

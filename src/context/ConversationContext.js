@@ -11,7 +11,7 @@ function ConversationProvider({ children }) {
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         if (userId !== 0) {
-            fetchApi();
+            // fetchApi();
         }
         setLoading(false);
     }, [userId]);
@@ -23,9 +23,15 @@ function ConversationProvider({ children }) {
             if(item.messages !== "") {
                 if(item.messages.at(-1).content !== '') {
                     item.lastAction = 'text';
+                } 
+                else if(item.messages.at(-1).pin !== null) {
+                    item.lastAction = 'pin';
+                }
+                else if(item.messages.at(-1).sharedUser !== null) {
+                    item.lastAction = 'user';
                 }
                 else {
-                    item.lastAction = item.messages.at(-1).pin !== null ? 'pin' : 'heart';
+                    item.lastAction = 'heart';
                 }
             }
             else {
@@ -33,6 +39,7 @@ function ConversationProvider({ children }) {
             }
             delete item.id;
         });
+        return true;
     };
 
     const reloadList = () => {
@@ -40,15 +47,9 @@ function ConversationProvider({ children }) {
         setLoading(false);
     }
 
-    const saveConversation = () => {
-        const newConv = {
-            
-        };
-    }
-
     return (
         loading === false && (
-            <ConversationContext.Provider value={userId !== 0 ? {conversationList: conversationList, reloadList: reloadList} : ''}>
+            <ConversationContext.Provider value={userId !== 0 ? {conversationList: conversationList, conversationLoad: {state: loading, setState: setLoading}, conversationFetchApi: fetchApi, reloadList: reloadList} : ''}>
                 {children}
             </ConversationContext.Provider>
         )

@@ -8,14 +8,15 @@ import styles from './NotificationPopper.module.scss';
 const cx = classNames.bind(styles);
 
 function NotificationPopper() {
+    const notificationList = useContext(NotificationContext);
+    const { userId } = useContext(AccountLoginContext);
     const { updatePinCount, res } = useContext(NotificationContext);
-    const UserID = useContext(AccountLoginContext);
     const [notifications, setNotifications] = useState([]);
     // userId lấy từ session
     useEffect(() => {
         const fetch = async () => {
             let result = [];
-            (UserID && res ? res : []).map((e, index) => {
+            (userId && res ? res : []).map((e, index) => {
                 return (result = [...result, e]);
             });
             return result;
@@ -23,7 +24,7 @@ function NotificationPopper() {
         fetch().then((e) => {
             setNotifications(e);
         });
-    }, [res, UserID]);
+    }, [res, userId]);
 
     return (
         <div className={cx('wrapper-notification-popper')}>

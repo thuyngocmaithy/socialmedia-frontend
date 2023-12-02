@@ -33,7 +33,7 @@ function HeaderDefault() {
     const [userLoaded, setUserLoaded] = useState(false);
     const [openConfirmLogin, setOpenConfirmLogin] = useState(false);
     const [openSearch, setOpenSearch] = useState(false);
-    const newMessageCount = useContext(MessageContext).messageCount;
+    const { messageCount } = useContext(MessageContext);
 
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
@@ -156,12 +156,8 @@ function HeaderDefault() {
                                 widthBody="maxContent"
                             />
                             <Popper
-                                title={
-                                    <MessageIcon
-                                        newMessageCount={newMessageCount}
-                                        className={cx('action', theme === 'dark' ? 'dark' : '')}
-                                    />
-                                }
+
+                                title={<MessageIcon newMessageCount={messageCount.state} className={cx('action', theme === 'dark' ? 'dark' : '')} />}
                                 body={<ConversationPopper />}
                                 left="-48px"
                                 widthBody="maxContent"
