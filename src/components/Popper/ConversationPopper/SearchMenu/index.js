@@ -28,12 +28,9 @@ function SearchMenu({ handleChange }) {
     useEffect(() => {
         const fetchFriendList = async () => {
             const temp = await friendshipServices.getListFriend(userId);
+            console.log(temp);
             temp.forEach((item) => {
-                if (item.user1.id === userId) {
-                    setSearchResult([...searchResult, item.user2]);
-                } else {
-                    setSearchResult([...searchResult, item.user1]);
-                }
+                setSearchResult((prev) => [...prev, item.user2]);
             });
             inputRef.current.focus();
             setLoading(false);
@@ -49,7 +46,6 @@ function SearchMenu({ handleChange }) {
             setSearchResult([]);
             return;
         }
-
         fetch(`http://localhost:8080/users/getAll`)
             .then((res) => res.json())
             .then((res) => {
@@ -59,6 +55,7 @@ function SearchMenu({ handleChange }) {
                         temp.push(res[i]);
                     }
                 }
+                console.log(temp);
                 setSearchResult(temp);
                 setLoading(false); //bỏ loading sau khi gọi api
             })
@@ -69,10 +66,14 @@ function SearchMenu({ handleChange }) {
 
     const handleChangeInput = (e) => {
         const searchValue = e.target.value;
+
         if (!searchValue.startsWith(' ')) {
             // Không cho người dùng gõ dấu cách đầu tiên
             setSearchValue(searchValue);
             setLoading(true);
+        }
+        if (searchValue === '') {
+            setLoading(false);
         }
     };
 
