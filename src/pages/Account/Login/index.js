@@ -13,6 +13,7 @@ import Wrapper from '../Wrapper';
 const cx = classNames.bind(styles);
 
 function Login() {
+
     const { theme } = useContext(ThemeContext);
     //Hiển thị hộp thoại thông báo
     const [alertType, setAlertType] = useState(null);
@@ -59,7 +60,7 @@ function Login() {
         e.preventDefault();
         const fetchApi = async () => {
             const email = e.target.elements.email.value !== '' ? e.target.elements.email.value : null;
-            const password = e.target.elements.password.value !== '' ? e.target.elements.password.value : null;
+            const password = e.target.elements.password.value !== '' ? btoa(e.target.elements.password.value) : null;
             console.log({ email, password });
             const result = await userServices.login(email, password);
 
@@ -78,6 +79,8 @@ function Login() {
             }
         };
         fetchApi();
+
+
     };
 
     return (

@@ -62,7 +62,7 @@ function NotificationProvider({ children }) {
         (userId && fetch2().then(() => {
             fetch1();
         }));
-    }, [notType.comment, notType.friend, notType.like, pinCount, stompClient]);
+    }, [notType.comment, notType.friend, notType.like, pinCount, stompClient, userId]);
     return <NotificationContext.Provider value={{ updatePinCount, res }}> {children} </NotificationContext.Provider>;
 }
 export { NotificationContext, NotificationProvider };

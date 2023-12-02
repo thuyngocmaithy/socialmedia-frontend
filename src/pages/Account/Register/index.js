@@ -1,12 +1,12 @@
-import React, { useContext, useState } from 'react';
 import classNames from 'classnames/bind';
-import styles from '../Account.module.scss';
-import LabelTextBox from '../../../components/LabelTextBox';
-import Wrapper from '../Wrapper';
+import React, { useContext } from 'react';
 import Button from '../../../components/Button';
+import LabelTextBox from '../../../components/LabelTextBox';
+import styles from '../Account.module.scss';
+import Wrapper from '../Wrapper';
 
-import * as userServices from '../../../services/userServices';
 import { ThemeContext } from '../../../context/ThemeContext';
+import * as userServices from '../../../services/userServices';
 
 // logout xử lý ở phần header
 const cx = classNames.bind(styles);
@@ -38,7 +38,7 @@ function Register() {
             username: email.split('@')[0],
             fullname: fullname,
             birthdate: birthdate,
-            password: password,
+            password: btoa(password),
             introduce: null,
             avatar: null,
             website: null,
