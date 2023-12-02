@@ -31,6 +31,7 @@ function Wrapper({ children, className }) {
     const [statusFriend, setSatusFriend] = useState('');
     const [frienshipCurrent, setFriendshipCurrent] = useState(false);
     const [updateFriend, setUpdateFriend] = useState(false);
+    const [updateSuccess, setUpdateSuccess] = useState(false);
 
     const { userId } = useContext(AccountLoginContext);
 
@@ -76,7 +77,7 @@ function Wrapper({ children, className }) {
         };
 
         fetchApi();
-    }, [pathname, accountOther, userId, handleAccount, updateFriend]);
+    }, [pathname, accountOther, userId, handleAccount, updateFriend, updateSuccess]);
 
     const handleRenderFriend = () => {
         setRenderFriend(true);
@@ -91,6 +92,23 @@ function Wrapper({ children, className }) {
 
     const handleCloseRequest = () => {
         setRenderFriendRequest(false);
+    };
+
+    const handleAcceptFriend = async () => {
+        const status = 'ACCEPTED';
+        const user1 = await userServices.getUserById(userId); //User đang login
+        const user2 = await userServices.getUserByUsername(pathname); //User nhận lời mời
+
+        setSatusFriend('ACCEPTED');
+        const data = JSON.stringify({
+            notifications: { notificationType: 'Friend' },
+            friendships: { status, user1: { id: user1.id }, user2: { id: user2.id } },
+        });
+        setFriendshipCurrent(data.friendships);
+        console.log('data.friendships:' + data);
+        stompClient.send(`/app/sendNot/${user2.id}`, {}, data);
+        setUpdateSuccess(true);
+        setUpdateFriend(true);
     };
 
     const menuPins = [
@@ -143,8 +161,12 @@ function Wrapper({ children, className }) {
                             <p className={cx('website', theme === 'dark' ? 'dark' : '')}>
                                 <a href={`${info.website}`}>{info.website}</a>
                             </p>
-                            <p className={cx('dash')}>-</p>
-                            <p className={cx('introduce', theme === 'dark' ? 'dark' : '')}>{info.introduce}</p>
+                            {info.introduce && (
+                                <>
+                                    <p className={cx('dash')}>-</p>
+                                    <p className={cx('introduce', theme === 'dark' ? 'dark' : '')}>{info.introduce}</p>
+                                </>
+                            )}
                         </div>
                         <div className={cx('container-friend')}>
                             <h4
@@ -153,14 +175,17 @@ function Wrapper({ children, className }) {
                             >
                                 {countFriend} Bạn bè
                             </h4>
-                            <h4 className={cx('dash')}>-</h4>
+
                             {accountOther === false && (
-                                <h4
-                                    className={cx('count-friend-request', theme === 'dark' ? 'dark' : '')}
-                                    onClick={() => handleRenderFriendRequest()}
-                                >
-                                    {countRequest} Lời mời kết bạn
-                                </h4>
+                                <>
+                                    <h4 className={cx('dash')}>-</h4>
+                                    <h4
+                                        className={cx('count-friend-request', theme === 'dark' ? 'dark' : '')}
+                                        onClick={() => handleRenderFriendRequest()}
+                                    >
+                                        {countRequest} Lời mời kết bạn
+                                    </h4>
+                                </>
                             )}
                         </div>
                         {renderFriend && <ListFriend onClose={handleClose} idUser={info.id} />}
@@ -176,13 +201,17 @@ function Wrapper({ children, className }) {
                             Chia sẻ
                         </Button>
                         {accountOther ? (
-                            statusFriend === 'ACCEPTED' || statusFriend === 'PENDING' ? (
+                            statusFriend !== 'ACCEPTED' && statusFriend !== 'PENDING' ? (
+                                <Button className={cx('addFriendBtn')} primary onClick={handleAddFriend}>
+                                    Kết bạn
+                                </Button>
+                            ) : statusFriend === 'ACCEPTED' ? (
                                 <Button className={cx('addFriendBtn')} primary onClick={handleCancelFriend}>
                                     Hủy kết bạn
                                 </Button>
                             ) : (
-                                <Button className={cx('addFriendBtn')} primary onClick={handleAddFriend}>
-                                    Kết bạn
+                                <Button className={cx('addFriendBtn')} primary onClick={handleAcceptFriend}>
+                                    Chấp nhận
                                 </Button>
                             )
                         ) : (
