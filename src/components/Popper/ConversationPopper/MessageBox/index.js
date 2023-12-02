@@ -9,6 +9,7 @@ import { AccountLoginContext } from '../../../../context/AccountLoginContext';
 import { StompContext } from '../../../../context/StompContext';
 import { MessageContext } from '../../../../context/MessageContext';
 import { ConversationContext } from '../../../../context/ConversationContext';
+import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
@@ -16,6 +17,7 @@ function MessageBox({ handleChange, chatWith }) {
     const { stompClient } = useContext(StompContext);
     const { userId } = useContext(AccountLoginContext);
     const { newMessage } = useContext(MessageContext);
+    const [sending, setSending] = useState(false);
     const messagesEndRef = useRef(null);
     const scrollToBottom = () => {
         messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -52,6 +54,7 @@ function MessageBox({ handleChange, chatWith }) {
                 setCurrentMessage('');
                 setIsEntering(false);
                 setLastestMessageId((lastestMessageId) => lastestMessageId + 1);
+                setSending(false);
             }
         }
     }, [newMessage]);
@@ -79,6 +82,7 @@ function MessageBox({ handleChange, chatWith }) {
     // Add new message
     const [currentMessage, setCurrentMessage] = useState('');
     const sendMessage = () => {
+        setSending(true);
         stompClient.send(
             `/app/chat/conversation_id/${chatWith.conversation_id}`,
             {},
@@ -140,7 +144,9 @@ function MessageBox({ handleChange, chatWith }) {
                     }}
                 >
                     <button className={cx('send_heart-btn')}>
-                        {isEntering ? (
+                        {sending ? (
+                            <CircularProgress style={{ width: '16px', height: '16px' }} />
+                        ) : isEntering ? (
                             <FontAwesomeIcon style={{ color: 'red' }} icon={faCircleArrowRight} />
                         ) : (
                             <FontAwesomeIcon icon={faHeart} />
