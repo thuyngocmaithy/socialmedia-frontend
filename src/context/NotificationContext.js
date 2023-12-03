@@ -31,6 +31,7 @@ function NotificationProvider({ children }) {
                 try {
                     setTimeout(() => {
                         const data = JSON.stringify({ notifications: { notificationType: 'Pin' }, listPins: pinCount });
+                        console.log(JSON.parse(data).listPins);
                         stompClient.send(`/app/sendNot/${userId}`, {}, data);
                     }, 5000);
                 } catch (error) {
@@ -42,6 +43,7 @@ function NotificationProvider({ children }) {
         // Load bảng thông báo
         const fetch2 = async () => {
             nots.current = await getAllNotifications(userId);
+            console.log(nots.current);
             let result = [];
             const promise = nots.current.map(async (not, index) => {
                 let related = [];
@@ -57,7 +59,21 @@ function NotificationProvider({ children }) {
                 return (result = [...result, { not, related }]);
             });
             Promise.all(promise).then((e) => {
-                setRes(result);
+                let sortedArray = [...result].sort((a, b) => {
+                    const nameA = a.not.notificationAt;
+                    const nameB = b.not.notificationAt;
+                    return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
+                });
+                let filterSort = sortedArray.filter(
+                    (item) =>
+                        (item.not.notificationType === notType.like || item.not.notificationType === notType.comment) &&
+                        item.related.pin.user.id === userId &&
+                        item.related.user.id === userId,
+                );
+
+                sortedArray = sortedArray.filter((item) => !filterSort.includes(item));
+
+                setRes(sortedArray);
             });
         };
         if (userId !== 0) {

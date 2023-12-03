@@ -18,17 +18,17 @@ function NotificationCard({ time, detail, id, type }) {
     console.log(detail);
     const contents = [
         {
-            content: <Cards detail={detail.user} title="đã thích bài viết của bạn" />,
+            content: <Cards detail={detail.user} title="đã thích bài đăng của bạn" />,
             link: '/pin/' + (detail !== undefined) ? detail.id : '',
         },
-        { content: <Cards detail={detail.user} title="đã bình luận về bài viết của bạn" /> },
+        { content: <Cards detail={detail.user} title="đã bình luận về bài đăng của bạn" /> },
         {
             content: (
                 <Cards
                     detail={detail.user1}
                     title={
                         detail.status === 'ACCEPTED'
-                            ? ' đã chấp nhận lời mời kết bạn'
+                            ? ' đã chấp nhận lời mời kết bạn của bạn'
                             : 'đã gửi cho bạn lời mời kết bạn'
                     }
                 />

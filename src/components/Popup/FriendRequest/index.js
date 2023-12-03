@@ -44,7 +44,7 @@ function a11yProps(index) {
     };
 }
 function FriendRequest({ idUser, onClose, setUpdateFriend }) {
-    const stompClient = useContext(StompContext);
+    const { stompClient } = useContext(StompContext);
     const { theme } = useContext(ThemeContext);
     const [listRequest, setListRequest] = useState([]);
     const [listSent, setListSent] = useState([]);

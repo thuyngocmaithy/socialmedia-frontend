@@ -22,7 +22,7 @@ const cx = classNames.bind(styles);
 
 function Wrapper({ children, className }) {
     const navigate = useNavigate();
-    const stompClient = useContext(StompContext);
+    const { stompClient } = useContext(StompContext);
     const { theme } = useContext(ThemeContext);
     const [loading, setLoading] = useState(true);
     const [info, setInfo] = useState({});
@@ -79,7 +79,7 @@ function Wrapper({ children, className }) {
         };
 
         fetchApi();
-    }, [pathname, accountOther, userId, handleAccount, updateFriend, updateSuccess]);
+    }, [pathname, accountOther, userId, handleAccount, updateFriend, updateSuccess, renderFriend, renderFriendRequest]);
 
     const handleRenderFriend = () => {
         setRenderFriend(true);
@@ -138,6 +138,7 @@ function Wrapper({ children, className }) {
         console.log('data.friendships:' + data);
         stompClient.send(`/app/sendNot/${user2.id}`, {}, data);
     };
+    // stompClient.send(console.log(22222222222222));
     //cancel friend
     const handleCancelFriend = async () => {
         const result = await friendshipServices.deleteFriendship(frienshipCurrent);
@@ -202,11 +203,9 @@ function Wrapper({ children, className }) {
                         <Button className={cx('shareBtn')} primary>
                             <Popper
                                 idPopper={`share${info.id}`}
-                                contentTitle={
-                                    "Chia sẻ"
-                                }
+                                contentTitle={'Chia sẻ'}
                                 className={cx('share-menu')}
-                                body={<SharePopper user_id={info.id}/>}
+                                body={<SharePopper user_id={info.id} />}
                                 widthBody="maxContent"
                             />
                         </Button>
@@ -218,6 +217,10 @@ function Wrapper({ children, className }) {
                             ) : statusFriend === 'ACCEPTED' ? (
                                 <Button className={cx('addFriendBtn')} primary onClick={handleCancelFriend}>
                                     Hủy kết bạn
+                                </Button>
+                            ) : statusFriend === 'PENDING' ? (
+                                <Button className={cx('addFriendBtn')} primary onClick={handleCancelFriend}>
+                                    Hủy lời mời
                                 </Button>
                             ) : (
                                 <Button className={cx('addFriendBtn')} primary onClick={handleAcceptFriend}>

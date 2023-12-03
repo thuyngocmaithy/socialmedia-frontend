@@ -12,7 +12,7 @@ const cx = classNames.bind(styles);
 
 function LikeCard({ pinID, currentUser }) {
     // console.log(currentUser);
-    const stompClient = useContext(StompContext);
+    const { stompClient } = useContext(StompContext);
     const [count, setCount] = useState(0);
     const [pin, setPin] = useState([]);
     useEffect(() => {

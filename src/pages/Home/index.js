@@ -117,12 +117,15 @@ function Home() {
             })}
             {statusSave && <ActionAlerts severity="success" content={`Đã lưu pin`} />}
             {alertType === 'warning' && <ActionAlerts severity="warning" content={`Chọn bảng bạn muốn lưu vào`} />}
-            {alertType === 'errorSave' && <ActionAlerts severity="error" content={`Không thể lưu pin của chính bạn`} />}
+            {alertType === 'errorSave' && (
+                <ActionAlerts severity="error" content={`Không thể lưu bài đăng của chính bạn`} />
+            )}
             {alertType === 'errorInfo' && <ActionAlerts severity="error" content={`Nhập đầy đủ thông tin`} />}
             {alertType === 'create' && <ActionAlerts severity="success" content={`Đã thêm thành công`} />}
             {alertType === 'errorAdmin' && (
                 <ActionAlerts severity="error" content={`Hãy đăng nhập tài khoản user để lưu pin`} />
             )}
+            {alertType === 'errorSavePinSaved' && <ActionAlerts severity="error" content={`Bạn đã lưu bài đăng này`} />}
         </div>
     );
 }

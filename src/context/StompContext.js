@@ -9,10 +9,10 @@ function StompProvider({ children }) {
     let stompClient = Stomp.over(socket);
     // stompClient.debug = () => {}; // Không log thông tin khi connect với websocket ở server
     stompClient.connect({}, (frame) => {
-        alert("Oke");
+        alert('Oke');
     });
 
-    return <StompContext.Provider value={{stompClient}}>{children}</StompContext.Provider>;
+    return <StompContext.Provider value={{ stompClient }}>{children}</StompContext.Provider>;
 }
 
 export { StompContext, StompProvider };

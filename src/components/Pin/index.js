@@ -68,33 +68,41 @@ function Pin({
     const handleSave = () => {
         const fetchApi = async () => {
             const user = await userServices.getUserById(userId);
-            {
-                // Tăng biến đếm để tạo thông báo bài pin liên quan
-                const pinCount = localStorage.getItem('pinCount');
-                const existingArray = pinCount ? JSON.parse(pinCount) : [];
-                const pinCountList = [...existingArray, { id: id }];
-
-                localStorage.setItem('pinCount', JSON.stringify(pinCountList));
-                console.log(pinCountList.length);
-                if (pinCountList.length === 4) {
-                    updatePinCount(pinCountList);
-                    localStorage.setItem('pinCount', []);
-                }
-                console.log(pinCount);
-            }
 
             const pinId = id;
             const boardId = data.id;
             const pin = await pinServices.getPinById(pinId);
             const board = await boardServices.getBoardById(boardId);
-            if (pin.user.id === userId) {
-                showAlert('errorSave');
+
+            const listPinSaved = await userSavePinServices.getPinByUserIdAndBoardId(user.username, boardId);
+            const foundPin = listPinSaved.find((obj) => obj.id === pinId);
+            if (foundPin) {
+                showAlert('errorSavePinSaved');
             } else {
-                const userSavePin = { user, pin, board };
-                const result = await userSavePinServices.save(userSavePin);
-                if (result) {
-                    onSaveResult(true);
-                    setData({ name: 'Chọn bảng' });
+                if (pin.user.id === userId) {
+                    showAlert('errorSave');
+                } else {
+                    const userSavePin = { user, pin, board };
+                    const result = await userSavePinServices.save(userSavePin);
+                    if (result) {
+                        onSaveResult(true);
+                        setData({ name: 'Chọn bảng' });
+
+                        {
+                            // Tăng biến đếm để tạo thông báo bài pin liên quan
+                            const pinCount = localStorage.getItem('pinCount');
+                            const existingArray = pinCount ? JSON.parse(pinCount) : [];
+                            const pinCountList = [...existingArray, { id: id }];
+
+                            localStorage.setItem('pinCount', JSON.stringify(pinCountList));
+                            console.log(pinCountList.length);
+                            if (pinCountList.length === 4) {
+                                updatePinCount(pinCountList);
+                                localStorage.setItem('pinCount', []);
+                            }
+                            console.log(pinCount);
+                        }
+                    }
                 }
             }
         };
