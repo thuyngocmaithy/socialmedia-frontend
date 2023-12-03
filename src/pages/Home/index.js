@@ -74,6 +74,11 @@ function Home() {
         const fetchApi = async () => {
             let result = await pinServices.getAllPins();
             result = result.filter((item) => item.user.privateBool === false);
+            result = [...result].sort((a, b) => {
+                const nameA = a.createdAt;
+                const nameB = b.createdAt;
+                return nameA > nameB ? -1 : nameA < nameB ? 1 : 0;
+            });
             setListPin(result);
             setLoading(false);
         };
