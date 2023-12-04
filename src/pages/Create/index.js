@@ -352,7 +352,7 @@ function Create() {
                             name={'typeName'}
                             placeholder={'Tên loại'}
                             label={'Tên loại'}
-                            selectedSize={'medium'}
+                            selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                             change={changeName}
                             setChange={setChangeName}
                         />

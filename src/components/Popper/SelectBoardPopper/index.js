@@ -17,6 +17,24 @@ import { AccountLoginContext } from '../../../context/AccountLoginContext';
 const cx = classNames.bind(styles);
 
 function SelectBoardPopper({ handleTurnOnCreateBoard, getData, idBoardCurrent = null }) {
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    // Sử dụng useEffect để theo dõi thay đổi của screenWidth
+    useEffect(() => {
+        // Hàm xử lý khi screenWidth thay đổi
+        function handleResize() {
+            setScreenWidth(window.innerWidth);
+        }
+
+        // Thêm một sự kiện lắng nghe sự thay đổi của cửa sổ
+        window.addEventListener('resize', handleResize);
+
+        // Loại bỏ sự kiện lắng nghe khi component bị hủy
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     const { theme } = useContext(ThemeContext);
     const [changeName, setChangeName] = useState(false);
     const [changeDiscription, setChangeDiscription] = useState(false);
@@ -158,7 +176,7 @@ function SelectBoardPopper({ handleTurnOnCreateBoard, getData, idBoardCurrent = 
                             name={'nameAdd'}
                             placeholder={'Tiêu đề'}
                             label={'Tên bảng'}
-                            selectedSize={'medium'}
+                            selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                             change={changeName}
                             setChange={setChangeName}
                             // text={boardEdit.name ? boardEdit.name : ''}
@@ -167,7 +185,7 @@ function SelectBoardPopper({ handleTurnOnCreateBoard, getData, idBoardCurrent = 
                             name={'descriptionAdd'}
                             placeholder={'Mô tả'}
                             label={'Mô tả'}
-                            selectedSize={'medium'}
+                            selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                             change={changeDiscription}
                             setChange={setChangeDiscription}
                             // text={boardEdit.description ? boardEdit.description : ''}

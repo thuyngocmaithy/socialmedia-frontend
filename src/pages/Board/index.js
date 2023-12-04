@@ -103,7 +103,13 @@ function Board() {
                     onClick={() => {
                         navigate(-1);
                     }}
-                    style={{ cursor: 'pointer', color: 'var(--color-red)' }}
+                    style={{
+                        cursor: 'pointer',
+                        color: 'var(--color-red)',
+                        marginRight: '15px',
+                        padding: '3px',
+                        minWidth: '30px',
+                    }}
                 >
                     <FontAwesomeIcon icon={faChevronLeft} />
                 </Button>

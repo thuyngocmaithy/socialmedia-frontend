@@ -12,7 +12,6 @@ function SelectTypePopper({ handleTurnOnCreateType, handleChooseType }) {
     useEffect(() => {
         const fetchApi = async () => {
             const result = await typeServices.getAllType();
-            console.log(result);
             setListType(result);
         };
         fetchApi();
@@ -46,12 +45,9 @@ function SelectTypePopper({ handleTurnOnCreateType, handleChooseType }) {
                 })}
             </div>
 
-            <div className={cx('bottom-create')} onClick={() => handleCreateType()}>
-                <button className={cx('createBtn')}>
-                    <CreateBoardIcon className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')} />
-                </button>
+            <button className={cx('item-type', 'bottom-create')} onClick={() => handleCreateType()}>
                 <p>Tạo Thể Loại</p>
-            </div>
+            </button>
         </div>
     );
 }

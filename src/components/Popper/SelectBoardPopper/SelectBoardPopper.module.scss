@@ -11,7 +11,7 @@
     display: flex;
     position: relative;
     padding: 4px;
-    width: 100%;
+    width: 98%;
     margin-bottom: 15px;
     border-radius: 5px;
     cursor: pointer;
@@ -81,4 +81,11 @@
 .list-board {
     overflow-y: auto;
     height: 166px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    button:first-child {
+        margin-top: 0.2px;
+    }
 }

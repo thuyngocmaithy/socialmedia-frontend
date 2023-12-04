@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
@@ -21,6 +21,7 @@ import DialogConfirmLogin from '../DialogConfirmLogin';
 import { NotificationContext } from '../../context/NotificationContext';
 import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import LabelTextBox from '../LabelTextBox';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
@@ -38,6 +39,25 @@ function Pin({
     onSaveResult,
     showAlert,
 }) {
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    // Sử dụng useEffect để theo dõi thay đổi của screenWidth
+    useEffect(() => {
+        // Hàm xử lý khi screenWidth thay đổi
+        function handleResize() {
+            setScreenWidth(window.innerWidth);
+        }
+
+        // Thêm một sự kiện lắng nghe sự thay đổi của cửa sổ
+        window.addEventListener('resize', handleResize);
+
+        // Loại bỏ sự kiện lắng nghe khi component bị hủy
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    const { theme } = useContext(ThemeContext);
     const [changeName, setChangeName] = useState(false);
     const [changeDiscription, setChangeDiscription] = useState(false);
     const { userId, permission } = useContext(AccountLoginContext);
@@ -334,7 +354,13 @@ function Pin({
             </div>
             {openConfirmLogin && <DialogConfirmLogin open={openConfirmLogin} setOpen={setOpenConfirmLogin} />}
 
-            <Dialog fullWidth={true} maxWidth="sm" open={showCreateBoard} onClose={handleCloseCreateBoard}>
+            <Dialog
+                className={cx(theme === 'dark' ? 'dark' : '')}
+                fullWidth={true}
+                maxWidth="sm"
+                open={showCreateBoard}
+                onClose={handleCloseCreateBoard}
+            >
                 <form onSubmit={handleSubmitCreate}>
                     <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
                         Tạo bảng
@@ -344,7 +370,7 @@ function Pin({
                             name={'nameAdd'}
                             placeholder={'Tiêu đề'}
                             label={'Tên bảng'}
-                            selectedSize={'medium'}
+                            selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                             change={changeName}
                             setChange={setChangeName}
                             // text={boardEdit.name ? boardEdit.name : ''}
@@ -353,7 +379,7 @@ function Pin({
                             name={'descriptionAdd'}
                             placeholder={'Mô tả'}
                             label={'Mô tả'}
-                            selectedSize={'medium'}
+                            selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                             change={changeDiscription}
                             setChange={setChangeDiscription}
                             // text={boardEdit.description ? boardEdit.description : ''}

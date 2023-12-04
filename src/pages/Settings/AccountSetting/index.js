@@ -79,7 +79,7 @@ function AccountSetting({ admin = false }) {
         clearTimeout(timeoutRef.current);
         changePrivate(userId, event.target.checked)
             .then((response) => {
-                if (event.target.checked) {
+                if (!event.target.checked) {
                     showAlert('changePublic');
                 } else {
                     showAlert('changePrivate');
@@ -209,7 +209,7 @@ function AccountSetting({ admin = false }) {
                                             className={cx(theme === 'dark' ? 'dark' : '')}
                                             switchToggle={
                                                 <Switch
-                                                    defaultChecked={privateState}
+                                                    defaultChecked={!!privateState}
                                                     {...label1}
                                                     onChange={handelchangePrivateState}
                                                 />

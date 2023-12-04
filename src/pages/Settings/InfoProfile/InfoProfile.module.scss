@@ -5,6 +5,7 @@ $circle-radius: 50%;
 .wrapper {
     display: flex;
     width: calc(100vw - 270px);
+    height: fit-content;
 }
 .container-infoProfile {
     margin-top: 20px;

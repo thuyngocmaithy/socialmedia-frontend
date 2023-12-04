@@ -29,11 +29,31 @@ import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material
 import LabelTextBox from '../../components/LabelTextBox';
 import SharePopper from '../../components/Popper/SharePopper';
 import { StompContext } from '../../context/StompContext';
+import { AccountOtherContext } from '../../context/AccountOtherContext';
 
 const cx = classNames.bind(styles);
 let stompClient = null;
 
 function DisplayPin() {
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    // Sử dụng useEffect để theo dõi thay đổi của screenWidth
+    useEffect(() => {
+        // Hàm xử lý khi screenWidth thay đổi
+        function handleResize() {
+            setScreenWidth(window.innerWidth);
+        }
+
+        // Thêm một sự kiện lắng nghe sự thay đổi của cửa sổ
+        window.addEventListener('resize', handleResize);
+
+        // Loại bỏ sự kiện lắng nghe khi component bị hủy
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    const { accountOther } = useContext(AccountOtherContext);
     const [currentUser, setCurrentUser] = useState('');
 
     const [changeName, setChangeName] = useState(false);
@@ -323,47 +343,55 @@ function DisplayPin() {
                                         </button>
                                     </Tippy>
                                 </div>
-
-                                <div className={cx('wrapperBoardandSaveBtn')}>
-                                    <div className={cx('option-top', { active: activeOptionTop })}>
-                                        <ClickAwayListener onClickAway={handleClickAway}>
-                                            <button className={cx('select-board-btn')} onClick={() => handleDisplay()}>
-                                                <Popper
-                                                    contentTitle={currentBoard.name}
-                                                    // contentTitle={currentBoard.name}
-                                                    title={<FontAwesomeIcon icon={faChevronDown} />}
-                                                    className={cx('select-board')}
-                                                    body={
-                                                        <SelectBoardPopper
-                                                            getData={handleChooseBoard}
-                                                            handleTurnOnCreateBoard={handleTurnOnCreateBoard}
-                                                        />
-                                                    }
-                                                    widthBody="maxContent"
-                                                />
-                                            </button>
-                                        </ClickAwayListener>
+                                {!accountOther ? null : (
+                                    <div className={cx('wrapperBoardandSaveBtn')}>
+                                        <div className={cx('option-top', { active: activeOptionTop })}>
+                                            <ClickAwayListener onClickAway={handleClickAway}>
+                                                <button
+                                                    className={cx('select-board-btn')}
+                                                    onClick={() => handleDisplay()}
+                                                >
+                                                    <Popper
+                                                        contentTitle={currentBoard.name}
+                                                        // contentTitle={currentBoard.name}
+                                                        title={<FontAwesomeIcon icon={faChevronDown} />}
+                                                        className={cx('select-board')}
+                                                        body={
+                                                            <SelectBoardPopper
+                                                                getData={handleChooseBoard}
+                                                                handleTurnOnCreateBoard={handleTurnOnCreateBoard}
+                                                            />
+                                                        }
+                                                        widthBody="maxContent"
+                                                    />
+                                                </button>
+                                            </ClickAwayListener>
+                                        </div>
+                                        <div className={cx('save-pin')}>
+                                            <Button className={cx('save-btn')} onClick={() => handleInsertPin()} red>
+                                                Lưu
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <div className={cx('save-pin')}>
-                                        <Button className={cx('save-btn')} onClick={() => handleInsertPin()} red>
-                                            Lưu
-                                        </Button>
-                                    </div>
-                                </div>
+                                )}
                             </div>
                             {/* end header  */}
                             <div className={cx('info-pin-container')}>
                                 <div className={cx('title')}>
-                                    <div className={cx('inputTitle')}>{valTitle}</div>
+                                    <div className={cx('inputTitle', theme === 'dark' ? 'dark' : '')}>{valTitle}</div>
                                 </div>
                                 <div className={cx('content')}>
-                                    <div className={cx('inputContent')}>{valContent}</div>
+                                    <div className={cx('inputContent', theme === 'dark' ? 'dark' : '')}>
+                                        {valContent}
+                                    </div>
                                 </div>
                                 <div className={cx('container-user')}>
                                     <AccountInfo userImage={user.avatar} username={user.username} />
-                                    <Button className={cx('addFriendBtn')} primary>
-                                        Kết bạn
-                                    </Button>
+                                    {!accountOther ? null : (
+                                        <Button className={cx('addFriendBtn')} primary>
+                                            Kết bạn
+                                        </Button>
+                                    )}container-title
                                 </div>
                                 {/* comment & like  */}
                                 <div className={cx('comment-container')}>
@@ -415,7 +443,13 @@ function DisplayPin() {
                 )}
             </div>
 
-            <Dialog fullWidth={true} maxWidth="sm" open={showCreateBoard} onClose={handleCloseCreateBoard}>
+            <Dialog
+                className={cx(theme === 'dark' ? 'dark' : '')}
+                fullWidth={true}
+                maxWidth="sm"
+                open={showCreateBoard}
+                onClose={handleCloseCreateBoard}
+            >
                 <form onSubmit={handleSubmitCreate}>
                     <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
                         Tạo bảng
@@ -425,7 +459,7 @@ function DisplayPin() {
                             name={'nameAdd'}
                             placeholder={'Tiêu đề'}
                             label={'Tên bảng'}
-                            selectedSize={'medium'}
+                            selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                             change={changeName}
                             setChange={setChangeName}
                         />
@@ -433,7 +467,7 @@ function DisplayPin() {
                             name={'descriptionAdd'}
                             placeholder={'Mô tả'}
                             label={'Mô tả'}
-                            selectedSize={'medium'}
+                            selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                             change={changeDiscription}
                             setChange={setChangeDiscription}
                         />

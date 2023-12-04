@@ -163,9 +163,13 @@ function PinCreated() {
                         return (
                             <Pin
                                 key={index}
+                                stt={index + 1}
+                                id={pin.id}
                                 image={pin.image}
                                 linkImage={pin.link}
                                 title={pin.title}
+                                userImage={pin.user.avatar}
+                                username={pin.user.username}
                                 pinCreated={!accountOther}
                                 handleEdit={() => handleEdit(pin.id)}
                             />

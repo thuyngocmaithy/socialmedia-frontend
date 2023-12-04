@@ -66,9 +66,7 @@ function HeaderDefault() {
             },
             {
                 icon: <FontAwesomeIcon icon={faMoon} />,
-                switchToggle: (
-                    <Switch defaultChecked={theme === 'dark' ? true : false} {...label} onChange={toggleTheme} />
-                ),
+                switchToggle: <Switch defaultChecked={!!theme !== 'dark'} {...label} onChange={toggleTheme} />,
                 title: 'Dark Mode',
             },
         ];
@@ -76,9 +74,7 @@ function HeaderDefault() {
         MENU_ITEMS = [
             {
                 icon: <FontAwesomeIcon icon={faMoon} />,
-                switchToggle: (
-                    <Switch defaultChecked={theme === 'dark' ? true : false} {...label} onChange={toggleTheme} />
-                ),
+                switchToggle: <Switch defaultChecked={!!theme !== 'dark'} {...label} onChange={toggleTheme} />,
                 title: 'Dark Mode',
             },
         ];
@@ -156,8 +152,12 @@ function HeaderDefault() {
                                 widthBody="maxContent"
                             />
                             <Popper
-
-                                title={<MessageIcon newMessageCount={messageCount.state} className={cx('action', theme === 'dark' ? 'dark' : '')} />}
+                                title={
+                                    <MessageIcon
+                                        newMessageCount={messageCount.state}
+                                        className={cx('action', theme === 'dark' ? 'dark' : '')}
+                                    />
+                                }
                                 body={<ConversationPopper />}
                                 left="-48px"
                                 widthBody="maxContent"
@@ -173,12 +173,16 @@ function HeaderDefault() {
                     )}
 
                     {userId === 0 && (
-                        <Button red to={config.routes.login}>
+                        <Button style={{ marginRight: '10px' }} red to={config.routes.login}>
                             Login
                         </Button>
                     )}
 
-                    <MenuSettingHeader className={cx('action')} items={userMenu} onChange={handleMenuChange}>
+                    <MenuSettingHeader
+                        className={cx('action')}
+                        items={userId === 0 ? MENU_ITEMS : userMenu}
+                        onChange={handleMenuChange}
+                    >
                         <button className={cx('more-btn', theme === 'dark' ? 'dark' : '')}>
                             <FontAwesomeIcon icon={faChevronDown} />
                         </button>
