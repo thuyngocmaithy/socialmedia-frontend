@@ -98,7 +98,6 @@ function FriendRequest({ idUser, onClose, setUpdateFriend }) {
 
     return (
         <div className={cx('wrapper')}>
-            {loading && <CircularProgress sx={{ display: 'flex', margin: '0 auto' }} />}
             <div className={cx('container', theme === 'dark' ? 'dark' : '')}>
                 <div className={cx('header')}>
                     <h2 className={cx('title')}>Bạn bè</h2>
@@ -126,6 +125,7 @@ function FriendRequest({ idUser, onClose, setUpdateFriend }) {
                 </div>
                 <CustomTabPanel value={value} index={0}>
                     <div className={cx('body')}>
+                        {loading && <CircularProgress sx={{ display: 'flex', margin: '0 auto' }} />}
                         {listRequest &&
                             listRequest.map((item, index) => {
                                 return (

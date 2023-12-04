@@ -16,7 +16,6 @@ import {
     CommentIcon,
     ChartLineIcon,
     PermissionIcon,
-    ReportIcon,
     ReportContentIcon,
 } from '../../components/Icons';
 import { Link } from 'react-router-dom';

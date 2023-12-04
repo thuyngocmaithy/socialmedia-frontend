@@ -10,7 +10,7 @@ $circle-radius: 50%;
 .container-infoProfile {
     margin-top: 20px;
     margin-left: 80px;
-    width: 33%;
+    width: 50%;
     margin-bottom: 70px;
 
     h1 {
@@ -110,8 +110,8 @@ $circle-radius: 50%;
     align-items: center;
 }
 .image {
-    width: 400px;
-    height: 200px;
+    width: 430px;
+    height: 230px;
     object-fit: cover;
 }
 @media screen and (max-width: 1030px) {
@@ -120,8 +120,8 @@ $circle-radius: 50%;
             width: 45%;
         }
         .image {
-            width: 300px;
-            height: 150px;
+            width: 350px;
+            height: 200px;
         }
     }
 }

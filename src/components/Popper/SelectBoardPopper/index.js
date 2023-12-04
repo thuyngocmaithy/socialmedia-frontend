@@ -1,7 +1,6 @@
 import styles from './SelectBoardPopper.module.scss';
 import classNames from 'classnames/bind';
 import { CreateBoardIcon } from '../../Icons';
-import Search from '../../Search';
 import React, { useState, useEffect, useContext } from 'react';
 import * as boardServices from '../../../services/boardServices';
 import * as userSavePinServices from '../../../services/userSavePinServices';
@@ -13,6 +12,7 @@ import LabelTextBox from '../../LabelTextBox';
 import Button from '../../Button';
 import ActionAlerts from '../../Alert';
 import { AccountLoginContext } from '../../../context/AccountLoginContext';
+import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
@@ -36,6 +36,7 @@ function SelectBoardPopper({ handleTurnOnCreateBoard, getData, idBoardCurrent = 
     }, []);
 
     const { theme } = useContext(ThemeContext);
+    const [loading, setLoading] = useState(true);
     const [changeName, setChangeName] = useState(false);
     const [changeDiscription, setChangeDiscription] = useState(false);
     const [listBoard, setListBoard] = useState([]);
@@ -63,6 +64,7 @@ function SelectBoardPopper({ handleTurnOnCreateBoard, getData, idBoardCurrent = 
                             };
                         }),
                     );
+                    setLoading(false);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -138,6 +140,7 @@ function SelectBoardPopper({ handleTurnOnCreateBoard, getData, idBoardCurrent = 
             <div className={cx('wrapper')}>
                 <p className={cx('information')}>Tất cả các bảng</p>
                 <div className={cx('list-board')}>
+                    {loading && <CircularProgress sx={{ display: 'flex', margin: '0 auto' }} />}
                     {listBoard.map((item, index) => {
                         return (
                             <button

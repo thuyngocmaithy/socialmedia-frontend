@@ -1,6 +1,11 @@
 .search-body {
     overflow-y: auto;
 }
+.search-result-wrapper {
+    &.dark {
+        background-color: #f1f1f2;
+    }
+}
 .search {
     position: relative;
     height: var(--search-height);

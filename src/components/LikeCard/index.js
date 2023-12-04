@@ -35,15 +35,7 @@ function LikeCard({ pinID, currentUser }) {
     const [like, setLike] = useState(false);
 
     const liked = () => {
-        let createdAt = new Date();
-        const like = {
-            createdAt,
-            user: currentUser,
-            pin,
-        };
-        console.log(like);
         const fetchApi = async () => {
-            const result = await likeServices.save(like);
             stompClient.publish({
                 destination: `/app/sendNot/${pin.user.id}`,
                 body: JSON.stringify({

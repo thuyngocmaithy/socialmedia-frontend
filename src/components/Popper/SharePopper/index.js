@@ -22,9 +22,11 @@ function SharePopper({ user_id, pin_id }) {
 
     useEffect(() => {
         const fetchApi = async () => {
-            if(listUser.length === 0) {
+            if (listUser.length === 0) {
                 let result = await participantServices.getFriendChattingWith(userId);
-                result = result.map((item) => {return item.user});
+                result = result.map((item) => {
+                    return item.user;
+                });
                 // result = result.filter((item) => item.permission === null && item.id !== parseInt(userId));
                 setListUser(result);
                 setLoading(false);
@@ -39,46 +41,38 @@ function SharePopper({ user_id, pin_id }) {
 
         return () => {
             logoutToChat();
-        }
+        };
     }, [userId]);
 
     const loginToChat = () => {
-        const conv = conversationList.current.map(e => e.conversation);
+        const conv = conversationList.current.map((e) => e.conversation);
         conv.forEach((item, index) => {
             setTimeout(() => {
-                stompClient.send(
-                    `/app/login`,
-                    {},
-                    item.id
-                );
-            }, index*500);
+                stompClient.send(`/app/login`, {}, item.id);
+            }, index * 500);
         });
     };
 
     const logoutToChat = () => {
-        const conv = conversationList.current.map(e => e.conversation);
+        const conv = conversationList.current.map((e) => e.conversation);
         conv.forEach((item, index) => {
             setTimeout(() => {
-                stompClient.send(
-                    `/app/unsubscribe`,
-                    {},
-                    item.id
-                );
-            }, index*500);
+                stompClient.send(`/app/unsubscribe`, {}, item.id);
+            }, index * 500);
         });
-    }
-    
+    };
+
     const share = (e) => {
         const isPinShare = pin_id !== undefined ? true : false;
-        const senderId = parseInt(e.target.getAttribute("value"));
+        const senderId = parseInt(e.target.getAttribute('value'));
         const conv = conversationList.current.find((conv) => conv.user.id === senderId);
         let tempList = [];
         conversationList.current.forEach((item) => {
             tempList = [...tempList, ...item.messages];
         });
-        tempList.sort((a,b) => a.id - b.id);
-        let messageID = tempList.at(-1).id+1;
-        if(isPinShare) {
+        tempList.sort((a, b) => a.id - b.id);
+        let messageID = tempList.at(-1).id + 1;
+        if (isPinShare) {
             stompClient.send(
                 `/app/chat/conversation_id/${conv.conversation.id}`,
                 {},
@@ -88,7 +82,7 @@ function SharePopper({ user_id, pin_id }) {
                     conversation_id: conv.conversation.id,
                     content: '',
                     pin_id: pin_id,
-                    sharedUserId: -1
+                    sharedUserId: -1,
                 }),
             );
         } else {
@@ -101,45 +95,36 @@ function SharePopper({ user_id, pin_id }) {
                     conversation_id: conv.conversation.id,
                     content: '',
                     pin_id: -1,
-                    sharedUserId: user_id
+                    sharedUserId: user_id,
                 }),
             );
         }
-    }
+    };
 
     const handleCopy = async () => {
         const isPinShare = pin_id !== undefined ? true : false;
-        if(isPinShare) {
-            navigator.clipboard.writeText("http://localhost:3000/pin/" + pin_id);
-        }
-        else {
+        if (isPinShare) {
+            navigator.clipboard.writeText('http://localhost:3000/pin/' + pin_id);
+        } else {
             const user = await userServices.getUserById(parseInt(user_id));
-            navigator.clipboard.writeText("http://localhost:3000/" + user.username);
+            navigator.clipboard.writeText('http://localhost:3000/' + user.username);
         }
         setCopyTitle('Đã sao chép liên kết');
         setTimeout(() => {
             setCopyTitle('Sao chép liên kết');
         }, 5000);
-    }
+    };
 
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('title')}>Gửi trên Pinterest </div>
+            <div className={cx('title')}>Chia sẻ với bạn bè</div>
             <div
                 className={cx('option-share-container')}
                 style={{ justifyContent: listUser.length !== 0 ? '' : 'center' }}
             >
-                {listUser.length !== 0 && (
-                    <div className={cx('find-option')}>
-                        <SearchIcon className={cx('grey-button')} />
-                        <span>Tìm kiếm</span>
-                    </div>
-                )}
                 {loading && <CircularProgress />}
                 {listUser.map((user, index) => {
-                    return (
-                        <ShareResult key={index} user={user} handleSelect={share}></ShareResult>
-                    );
+                    return <ShareResult key={index} user={user} handleSelect={share}></ShareResult>;
                 })}
                 <div className={cx('copy-link-option')} onClick={handleCopy}>
                     <LinkedIcon className={cx('grey-button')} />

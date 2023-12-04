@@ -32,7 +32,10 @@ function LoadImage({ height = '300px', width = '292px', onSelectImage }) {
     return (
         <div className={cx('imgFrame')} onClick={() => document.querySelector('.inputIMG').click()}>
             {showDiv && (
-                <div style={{ height: height, width: width }} className={cx('upload-text')}>
+                <div
+                    style={{ height: height, width: width }}
+                    className={cx('upload-text', theme === 'dark' ? 'dark' : '')}
+                >
                     <button className={cx('upload-btn')}>
                         <FontAwesomeIcon icon={faCircleArrowUp} />
                     </button>
@@ -41,7 +44,7 @@ function LoadImage({ height = '300px', width = '292px', onSelectImage }) {
                 </div>
             )}
             <input
-                className={cx('inputIMG', 'uploadText', theme === 'dark' ? 'dark' : '')}
+                className={cx('inputIMG', 'uploadText')}
                 hidden
                 name="uploadPhoto"
                 type="file"

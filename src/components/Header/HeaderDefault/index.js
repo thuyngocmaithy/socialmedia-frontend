@@ -66,7 +66,7 @@ function HeaderDefault() {
             },
             {
                 icon: <FontAwesomeIcon icon={faMoon} />,
-                switchToggle: <Switch defaultChecked={!!theme !== 'dark'} {...label} onChange={toggleTheme} />,
+                switchToggle: <Switch checked={!!(theme === 'dark')} {...label} onChange={toggleTheme} />,
                 title: 'Dark Mode',
             },
         ];
@@ -74,7 +74,7 @@ function HeaderDefault() {
         MENU_ITEMS = [
             {
                 icon: <FontAwesomeIcon icon={faMoon} />,
-                switchToggle: <Switch defaultChecked={!!theme !== 'dark'} {...label} onChange={toggleTheme} />,
+                switchToggle: <Switch checked={!!(theme === 'dark')} {...label} onChange={toggleTheme} />,
                 title: 'Dark Mode',
             },
         ];

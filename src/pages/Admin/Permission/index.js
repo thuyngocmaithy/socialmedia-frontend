@@ -319,6 +319,7 @@ function Permission() {
                                                     checkedItems[`id${item.id}`] !== undefined &&
                                                     checkedItems[`id${item.id}`]
                                                 }
+                                                sx={{ color: theme === 'dark' ? 'white' : 'black' }}
                                                 onChange={(event) => handleCheckboxChange(event)}
                                                 value={item.id}
                                             />

@@ -113,7 +113,7 @@ function MessageBox({ handleChange, chatWith }) {
                         <FontAwesomeIcon icon={faAngleLeft} />
                     </button>
                 </div>
-                <h3 className={cx('sender-name')}>{chatWith.name}</h3>
+                <h3 className={cx('sender-name', theme === 'dark' ? 'dark' : '')}>{chatWith.name}</h3>
             </div>
 
             <div className={cx('wrapper-message-list')}>

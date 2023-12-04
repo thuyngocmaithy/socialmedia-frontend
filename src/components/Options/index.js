@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import classNames from 'classnames/bind';
 import style from './Option.module.scss';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const cx = classNames.bind(style);
 
 function Options({ name, type, title = '', data = [], select, onChange }) {
+    const { theme } = useContext(ThemeContext);
     const options =
         type === 'country'
             ? ['Vietnam', 'United States', 'Canada', 'United Kingdom', 'Australia']
@@ -35,7 +37,12 @@ function Options({ name, type, title = '', data = [], select, onChange }) {
     return (
         <div className={cx('Options')}>
             <label className={cx('OptionsLabel')}>{label}:</label>
-            <select name={name} value={selectedValue} onChange={onChange ? onChange : handleSelectChange}>
+            <select
+                className={cx(theme === 'dark' ? 'dark' : '')}
+                name={name}
+                value={selectedValue}
+                onChange={onChange ? onChange : handleSelectChange}
+            >
                 <option value="">Chọn {label.toLowerCase()}</option>
                 {options.map((option, index) => {
                     return (

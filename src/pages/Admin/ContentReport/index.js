@@ -15,6 +15,23 @@ import { ThemeContext } from '../../../context/ThemeContext';
 const cx = classNames.bind(styles);
 
 function ContentReport() {
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    // Sử dụng useEffect để theo dõi thay đổi của screenWidth
+    useEffect(() => {
+        // Hàm xử lý khi screenWidth thay đổi
+        function handleResize() {
+            setScreenWidth(window.innerWidth);
+        }
+
+        // Thêm một sự kiện lắng nghe sự thay đổi của cửa sổ
+        window.addEventListener('resize', handleResize);
+
+        // Loại bỏ sự kiện lắng nghe khi component bị hủy
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
     const { theme } = useContext(ThemeContext);
     //change input
     const [changeNameEdit, setChangeNameEdit] = useState(false);
@@ -221,7 +238,7 @@ function ContentReport() {
                             name={'contentEdit'}
                             placeholder={'Tên nội dung báo cáo'}
                             label={'Tên nội dung báo cáo'}
-                            selectedSize={'medium'}
+                            selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                             text={contentEdit.content ? contentEdit.content : ''}
                             change={changeNameEdit}
                             setChange={setChangeNameEdit}
@@ -230,7 +247,7 @@ function ContentReport() {
                             name={'descriptionEdit'}
                             placeholder={'Mô tả'}
                             label={'Mô tả'}
-                            selectedSize={'medium'}
+                            selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                             text={contentEdit.description ? contentEdit.description : ''}
                             change={changeDiscriptionEdit}
                             setChange={setChangeDiscriptionEdit}
@@ -262,7 +279,7 @@ function ContentReport() {
                             name={'content'}
                             placeholder={'Tên nội dung báo cáo'}
                             label={'Tên nội dung báo cáo'}
-                            selectedSize={'medium'}
+                            selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                             change={changeNameAdd}
                             setChange={setChangeNameAdd}
                         />
@@ -271,7 +288,7 @@ function ContentReport() {
                             name={'description'}
                             placeholder={'Mô tả'}
                             label={'Mô tả'}
-                            selectedSize={'medium'}
+                            selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                             change={changeDiscriptionAdd}
                             setChange={setChangeDiscriptionAdd}
                         />

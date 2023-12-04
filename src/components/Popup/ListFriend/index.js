@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import { CircularProgress } from '@mui/material';
 import { AccountOtherContext } from '../../../context/AccountOtherContext';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 function CustomTabPanel(props) {
@@ -36,6 +37,7 @@ CustomTabPanel.propTypes = {
 
 function ListFriend({ idUser, onClose }) {
     const { accountOther } = useContext(AccountOtherContext);
+    const { theme } = useContext(ThemeContext);
     const [listFriend, setListFriend] = useState([]);
     const [listRequest, setListRequest] = useState([]);
     const [updateSuccess, setUpdateSuccess] = useState(false);
@@ -86,8 +88,7 @@ function ListFriend({ idUser, onClose }) {
 
     return (
         <div className={cx('wrapper')}>
-            {loading && <CircularProgress sx={{ display: 'flex', margin: '0 auto' }} />}
-            <div className={cx('container')}>
+            <div className={cx('container', theme === 'dark' ? 'dark' : '')}>
                 <div className={cx('header')}>
                     <h2 className={cx('title')}>Bạn bè</h2>
                     <button className={cx('closeBtn')} onClick={onClose}>
@@ -96,7 +97,9 @@ function ListFriend({ idUser, onClose }) {
                         </span>
                     </button>
                 </div>
+
                 <div className={cx('option-container')}>
+                    {loading && <CircularProgress sx={{ display: 'flex', margin: '0 auto' }} />}
                     <div className={cx('body')}>
                         {listFriend &&
                             listFriend.map((item, index) => {

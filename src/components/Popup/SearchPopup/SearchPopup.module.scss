@@ -19,6 +19,9 @@
     border-radius: 20px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     text-align: center;
+    &.dark {
+        background-color: var(--background-popup-dark);
+    }
 }
 .header {
     display: flex;

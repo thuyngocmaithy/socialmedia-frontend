@@ -146,7 +146,7 @@ function Search({ className, width = '750px', display = 'block' }) {
                 // Hiển thị khi kết quả tìm kiếm có length > 0
                 render={(attrs) => (
                     <div style={{ width: width }} className={cx('search-result')} tabIndex="-1" {...attrs}>
-                        <PopperWrapper>
+                        <PopperWrapper className={cx('search-result-wrapper', theme === 'dark' ? 'dark' : '')}>
                             {!username ? (
                                 <div className={cx('search-body')}>
                                     {searchResult.length > 0 && (

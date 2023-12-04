@@ -117,6 +117,9 @@
 
     &:hover {
         background-color: rgba(22, 24, 35, 0.06);
+        &.dark {
+            background-color: var(--background-popup-dark-hover);
+        }
     }
 }
 .icon {
@@ -124,6 +127,9 @@
     color: #111111;
     fill: currentColor;
     stroke-width: 0;
+    &.dark {
+        color: var(--white-200);
+    }
 }
 .option {
     display: flex;

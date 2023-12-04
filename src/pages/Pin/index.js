@@ -53,7 +53,6 @@ function DisplayPin() {
         };
     }, []);
 
-    const { accountOther } = useContext(AccountOtherContext);
     const [currentUser, setCurrentUser] = useState('');
 
     const [changeName, setChangeName] = useState(false);
@@ -82,6 +81,7 @@ function DisplayPin() {
     const [valTitle, setValTitle] = useState('');
     const [user, setUser] = useState('');
     const [load, setLoad] = useState(true);
+    const [loadUser, setLoadUser] = useState(true);
     const [loadComment, setLoadComment] = useState(false);
     //load tất cả comment lần đầu
     //Hiển thị hộp thoại thông báo
@@ -119,6 +119,8 @@ function DisplayPin() {
             setValContent(pin.description);
             setValTitle(pin.title);
             setUser(pin.user);
+
+            setLoadUser(false);
         };
         fetchApi();
     }, []);
@@ -164,7 +166,6 @@ function DisplayPin() {
         } else if (currentBoard.name !== 'Chọn bảng') {
             const board = currentBoard;
             const pinSaved = { board, pin, user };
-            console.log(pinSaved);
             const result = await userSavePinServices.save(pinSaved);
 
             showAlert('saveSuccess');
@@ -294,7 +295,7 @@ function DisplayPin() {
     return (
         <div className={cx('wrapper-createPage')}>
             <div className={cx('createBox')}>
-                {load ? (
+                {loadUser ? (
                     <CircularProgress sx={{ display: 'flex', margin: '0 auto' }} />
                 ) : (
                     <div className={cx('mainContent')}>
@@ -343,7 +344,7 @@ function DisplayPin() {
                                         </button>
                                     </Tippy>
                                 </div>
-                                {!accountOther ? null : (
+                                {userId !== user.id && (
                                     <div className={cx('wrapperBoardandSaveBtn')}>
                                         <div className={cx('option-top', { active: activeOptionTop })}>
                                             <ClickAwayListener onClickAway={handleClickAway}>
@@ -387,11 +388,11 @@ function DisplayPin() {
                                 </div>
                                 <div className={cx('container-user')}>
                                     <AccountInfo userImage={user.avatar} username={user.username} />
-                                    {!accountOther ? null : (
+                                    {userId === user.id ? null : (
                                         <Button className={cx('addFriendBtn')} primary>
                                             Kết bạn
                                         </Button>
-                                    )}container-title
+                                    )}
                                 </div>
                                 {/* comment & like  */}
                                 <div className={cx('comment-container')}>

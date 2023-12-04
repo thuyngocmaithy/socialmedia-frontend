@@ -44,6 +44,9 @@ select {
         box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
         /* Hiệu ứng bóng đổ */
     }
+    &.dark {
+        background-color: #dfdfdf;
+    }
 }
 
 select::placeholder {

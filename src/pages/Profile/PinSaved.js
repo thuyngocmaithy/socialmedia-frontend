@@ -23,6 +23,24 @@ import Wrapper from './Wrapper';
 const cx = classNames.bind(styles);
 
 function PinSaved() {
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    // Sử dụng useEffect để theo dõi thay đổi của screenWidth
+    useEffect(() => {
+        // Hàm xử lý khi screenWidth thay đổi
+        function handleResize() {
+            setScreenWidth(window.innerWidth);
+        }
+
+        // Thêm một sự kiện lắng nghe sự thay đổi của cửa sổ
+        window.addEventListener('resize', handleResize);
+
+        // Loại bỏ sự kiện lắng nghe khi component bị hủy
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     const { theme } = useContext(ThemeContext);
 
     const [changeNameEdit, setChangeNameEdit] = useState(false);
@@ -250,13 +268,13 @@ function PinSaved() {
                 {accountOther ? null : (
                     <div className={cx('option')}>
                         <Popper
-                            title={<FilterIcon className={cx('action', 'icon')} />}
+                            title={<FilterIcon className={cx('action', 'icon', theme === 'dark' ? 'dark' : '')} />}
                             body={<OptionPopper data={filterBoardPopper} />}
                             widthBody="maxContent"
                             placement="bottom-start"
                         />
                         <Popper
-                            title={<CreateBoardIcon className={cx('action', 'icon')} />}
+                            title={<CreateBoardIcon className={cx('action', 'icon', theme === 'dark' ? 'dark' : '')} />}
                             body={<OptionPopper data={createBoardPopper} />}
                             widthBody="maxContent"
                             placement="bottom-end"
@@ -279,7 +297,7 @@ function PinSaved() {
                         );
                     })}
                 </div>
-                <Dialog className={cx('')} fullWidth={true} maxWidth="sm" open={openEdit}>
+                <Dialog className={theme === 'dark' ? 'dark' : ''} fullWidth={true} maxWidth="sm" open={openEdit}>
                     <form onSubmit={handleSubmitEdit}>
                         <DialogTitle
                             sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
@@ -291,7 +309,7 @@ function PinSaved() {
                                 name={'nameEdit'}
                                 placeholder={'Tiêu đề'}
                                 label={'Tên bảng'}
-                                selectedSize={'medium'}
+                                selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                                 text={boardEdit.name ? boardEdit.name : ''}
                                 change={changeNameEdit}
                                 setChange={setChangeNameEdit}
@@ -300,7 +318,7 @@ function PinSaved() {
                                 name={'descriptionEdit'}
                                 placeholder={'Mô tả'}
                                 label={'Mô tả'}
-                                selectedSize={'medium'}
+                                selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                                 text={boardEdit.description ? boardEdit.description : ''}
                                 change={changeDiscriptionEdit}
                                 setChange={setChangeDiscriptionEdit}
@@ -311,7 +329,11 @@ function PinSaved() {
                                 Xóa
                             </Button>
                             <div>
-                                <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseEdit}>
+                                <Button
+                                    style={{ fontSize: '14px', marginRight: '8px' }}
+                                    type="button"
+                                    onClick={handleCloseEdit}
+                                >
                                     Hủy
                                 </Button>
                                 <Button style={{ fontSize: '14px' }} red type="submit">
@@ -321,7 +343,13 @@ function PinSaved() {
                         </DialogActions>
                     </form>
                 </Dialog>
-                <Dialog fullWidth={true} maxWidth="sm" open={openCreateBoard} onClose={handleCloseCreateBoard}>
+                <Dialog
+                    className={theme === 'dark' ? 'dark' : ''}
+                    fullWidth={true}
+                    maxWidth="sm"
+                    open={openCreateBoard}
+                    onClose={handleCloseCreateBoard}
+                >
                     <form onSubmit={handleSubmitCreate}>
                         <DialogTitle
                             sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
@@ -333,7 +361,7 @@ function PinSaved() {
                                 name={'nameAdd'}
                                 placeholder={'Tiêu đề'}
                                 label={'Tên bảng'}
-                                selectedSize={'medium'}
+                                selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                                 change={changeNameAdd}
                                 setChange={setChangeNameAdd}
                             />
@@ -341,13 +369,17 @@ function PinSaved() {
                                 name={'descriptionAdd'}
                                 placeholder={'Mô tả'}
                                 label={'Mô tả'}
-                                selectedSize={'medium'}
+                                selectedSize={screenWidth < 650 ? 'medium' : 'medium2'}
                                 change={changeDiscriptionAdd}
                                 setChange={setChangeDiscriptionAdd}
                             />
                         </DialogContent>
                         <DialogActions sx={{ marginBottom: '10px' }}>
-                            <Button style={{ fontSize: '14px' }} type="button" onClick={handleCloseCreateBoard}>
+                            <Button
+                                style={{ fontSize: '14px', marginRight: '8px' }}
+                                type="button"
+                                onClick={handleCloseCreateBoard}
+                            >
                                 Hủy
                             </Button>
                             <Button style={{ fontSize: '14px' }} red type="submit">
@@ -357,7 +389,12 @@ function PinSaved() {
                     </form>
                 </Dialog>
                 {confirmDelete && (
-                    <Dialog className={cx('')} fullWidth={true} maxWidth="sm" open={confirmDelete}>
+                    <Dialog
+                        className={theme === 'dark' ? 'dark' : ''}
+                        fullWidth={true}
+                        maxWidth="sm"
+                        open={confirmDelete}
+                    >
                         <DialogTitle
                             sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}
                         >

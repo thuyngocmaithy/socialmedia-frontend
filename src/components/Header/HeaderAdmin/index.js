@@ -29,7 +29,7 @@ function HeaderAdmin({ className, account = false, handleOpenMenu }) {
     // MENU KHI CHƯA ĐĂNG NHẬP
     const MENU_ITEMS = [
         {
-            switchToggle: <Switch defaultChecked={theme === 'dark' ? true : false} {...label} onChange={toggleTheme} />,
+            switchToggle: <Switch checked={!!(theme === 'dark')} {...label} onChange={toggleTheme} />,
             title: 'Dark Mode',
         },
     ];
