@@ -8,6 +8,7 @@ import { getUserById, changeUserPassword } from '../../../services/userServices'
 import { AccountLoginContext } from '../../../context/AccountLoginContext';
 import ActionAlerts from '../../../components/Alert';
 import { ThemeContext } from '../../../context/ThemeContext';
+import bcrypt from 'bcryptjs';
 
 const cx = classNames.bind(styles);
 
@@ -85,11 +86,19 @@ function ChangePassword({ admin = false }) {
         if (event.target.value === '') {
             setErrorPassword('');
         } else {
-            if (currentPasswordFromServer !== event.target.value) {
-                setErrorPassword('Mật khẩu cũ không chính xác');
-            } else {
-                setErrorPassword('');
-            }
+            bcrypt.compare(event.target.value, currentPasswordFromServer, function (err, result) {
+                if (result) {
+                    setErrorPassword('');
+                } else {
+                    setErrorPassword('Mật khẩu cũ không chính xác');
+                }
+            });
+
+            // if (currentPasswordFromServer !== event.target.value) {
+
+            // } else {
+
+            // }
         }
     };
 
@@ -121,7 +130,8 @@ function ChangePassword({ admin = false }) {
         setChangeEmail(true);
         setChangeNewPassword(true);
         setChangeOldPassword(true);
-
+        console.log(currentPassword);
+        console.log(newPassword);
         try {
             if (
                 errorPassword === '' &&
@@ -138,6 +148,9 @@ function ChangePassword({ admin = false }) {
                         setNewPassword('');
                         setCurrentPassword('');
                         setConfirmPassword('');
+                        setChangeConfirmPassword(false);
+                        setChangeNewPassword(false);
+                        setChangeOldPassword(false);
                     })
                     .catch((error) => {
                         console.log(error);
