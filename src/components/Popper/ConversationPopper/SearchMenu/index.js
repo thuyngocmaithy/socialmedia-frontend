@@ -9,6 +9,7 @@ import * as friendshipServices from '../../../../services/friendshipServices';
 import { ConversationContext } from '../../../../context/ConversationContext';
 import { AccountLoginContext } from '../../../../context/AccountLoginContext';
 import { StompContext } from '../../../../context/StompContext';
+import { ThemeContext } from '../../../../context/ThemeContext';
 import { useDebounce } from '../../../../hooks';
 import * as userServices from '../../../../services/userServices';
 import * as conversationServices from '../../../../services/conversationServices';
@@ -17,7 +18,8 @@ import * as participantServices from '../../../../services/participantServices';
 const cx = classNames.bind(styles);
 
 function SearchMenu({ handleChange }) {
-    const { conversationList, reloadList } = useContext(ConversationContext);
+    const { theme } = useContext(ThemeContext);
+    const { conversationList } = useContext(ConversationContext);
     const { stompClient } = useContext(StompContext);
     const { userId } = useContext(AccountLoginContext);
     const [searchResult, setSearchResult] = useState([]);
@@ -28,7 +30,6 @@ function SearchMenu({ handleChange }) {
     useEffect(() => {
         const fetchFriendList = async () => {
             const temp = await friendshipServices.getListFriend(userId);
-            console.log(temp);
             temp.forEach((item) => {
                 setSearchResult((prev) => [...prev, item.user2]);
             });
@@ -55,7 +56,6 @@ function SearchMenu({ handleChange }) {
                         temp.push(res[i]);
                     }
                 }
-                console.log(temp);
                 setSearchResult(temp);
                 setLoading(false); //bỏ loading sau khi gọi api
             })
@@ -128,20 +128,20 @@ function SearchMenu({ handleChange }) {
                 <div className={cx('title-container')}>
                     <span>Tin nhắn mới</span>
                 </div>
-                <button className={cx('cancel-search-btn')} onClick={() => handleChange('', false, 0)}>
+                <button className={cx('cancel-search-btn', theme === 'dark' ? 'dark' : '')} onClick={() => handleChange('', false, 0)}>
                     Huỷ
                 </button>
             </div>
             <div className={cx('search-bar')}>
                 <input
-                    className={cx('search-input')}
+                    className={cx('search-input', theme === 'dark' ? 'dark' : '')}
                     placeholder="Nhập tên hoặc username"
                     value={searchValue}
                     onChange={handleChangeInput}
                     spellCheck={false}
                     ref={inputRef}
                 />
-                <div className={cx('search-icon')}>
+                <div className={cx('search-icon', theme === 'dark' ? 'dark' : '')}>
                     <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </div>
             </div>

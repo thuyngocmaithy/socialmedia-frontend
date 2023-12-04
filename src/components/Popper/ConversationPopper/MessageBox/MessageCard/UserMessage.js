@@ -4,11 +4,13 @@ import Image from '../../../../Image';
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import * as pinServices from '../../../../../services/pinServices';
+import { ThemeContext } from '../../../../../context/ThemeContext';
+import { useContext } from 'react';
 
 const cx = className.bind(styles);
 
 function UserMessage({ message, messageOwner }) {
-    // const { userId } = useContext(AccountLoginContext);
+    const { theme } = useContext(ThemeContext);
     const avatar = message.user.avatar;
     const sharedUserId = message.sharedUser.id;
     const sharedUserName = message.sharedUser.username;
@@ -38,9 +40,9 @@ function UserMessage({ message, messageOwner }) {
                     :
                         <div className={cx('message-name')}>You</div>
                 }
-                <div className={cx('message-body')}>
+                <div className={cx('message-body', theme === 'dark' ? 'dark' : '')}>
                         <NavLink className={(nav) => cx('menu-item')} to={`/${sharedUserName}`}>
-                            <div className={cx('user-message-body')}>
+                            <div className={cx('user-message-body', theme === 'dark' ? 'dark' : '')}>
                                 <Image src={sharedUserAvatar && `data:image/jpeg;base64,${sharedUserAvatar}`} alt={sharedUserName} className={cx('sharedUser-avatar')}></Image>
                                 <div className={cx('user-message-fullname')}>{sharedUserFullName}</div>
                                 <div className={cx('user-message-username')}>{'@'+sharedUserName}</div>

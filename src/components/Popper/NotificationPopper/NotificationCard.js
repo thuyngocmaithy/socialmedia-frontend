@@ -14,8 +14,6 @@ const cx = classNames.bind(styles);
 
 function NotificationCard({ time, detail, id, type }) {
     const [appear, setAppear] = useState(true);
-
-    console.log(detail);
     const contents = [
         {
             content: <Cards detail={detail.user} title="đã thích bài đăng của bạn" />,

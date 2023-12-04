@@ -1,9 +1,12 @@
 import styles from './MessageCard.module.scss';
 import className from 'classnames/bind';
 import Image from '../../../../Image';
+import { ThemeContext } from '../../../../../context/ThemeContext';
+import { useContext } from 'react';
 
 const cx = className.bind(styles);
 function TextMessage({ message, messageOwner }) {
+    const { theme } = useContext(ThemeContext);
     const avatar = message.user.avatar;
     const content = message.content;
     const haveImage = messageOwner === 'my-message' ? false : true;
@@ -21,7 +24,7 @@ function TextMessage({ message, messageOwner }) {
                     :
                         <div className={cx('message-name')}>You</div>
                 }
-                <div className={cx('message-body')}>{content}</div>
+                <div className={cx('message-body', theme === 'dark' ? 'dark' : '')}>{content}</div>
             </div>
         </div>
     );

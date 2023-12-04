@@ -24,6 +24,9 @@
     border-radius: 12px;
     word-break: break-all;
     max-width: 286px;
+    &.dark {
+        background-color: #5f5f5f;
+    }
 }
 
 .friend-message {
@@ -59,8 +62,11 @@
     justify-content: center;
     align-items: center;
     .heart-icon {
-        width: 34px;
-        height: 34px;
+        width: 24px;
+        height: 24px;
+    }
+    &.dark {
+        background-color: #5f5f5f;
     }
 }
 .pin-message-content {
@@ -88,6 +94,9 @@
             padding: 8px;
             text-align: left;
             background-color: var(--white-200);
+            &.dark {
+                background-color: #8a8a8a;
+            }
         }
     }
 }
@@ -100,6 +109,7 @@
     text-align: center;
     background-color: var(--white-200);
     border-radius: 12px;
+    margin-bottom: 0.2rem;
     &>* {
         margin: 1rem 1.7rem 0.4rem 1.7rem;
     }
@@ -110,7 +120,7 @@
         border-radius: 50%;
     }
     .user-message-fullname {
-        font-size: 3    rem;
+        font-size: 3rem;
         font-weight: 600;
         color: var(--color-red-darker);
     }

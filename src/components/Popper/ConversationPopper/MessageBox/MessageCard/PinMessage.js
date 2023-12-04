@@ -3,11 +3,12 @@ import className from 'classnames/bind';
 import Image from '../../../../Image';
 import { NavLink } from 'react-router-dom';
 import { useContext } from 'react';
+import { ThemeContext } from '../../../../../context/ThemeContext';
 import { AccountLoginContext } from '../../../../../context/AccountLoginContext'
 const cx = className.bind(styles);
 
 function PinMessage({ message, messageOwner }) {
-    const { userId } = useContext(AccountLoginContext);
+    const { theme } = useContext(ThemeContext);
     let title = '*no title';
     const haveImage = messageOwner === 'my-message' ? false : true;
     const avatar = message.user.avatar;
@@ -31,7 +32,7 @@ function PinMessage({ message, messageOwner }) {
                         :
                             <div className={cx('message-name')}>You</div>
                     }
-                    <div className={cx('message-body')}>
+                    <div className={cx('message-body', theme === 'dark' ? 'dark' : '')}>
                         <NavLink className={(nav) => cx('menu-item')} to={`/pin/${message.pin.id}`}>
                             <div style={{ textAlign: 'right', minWidth: 'auto' }} className={cx('pin-message-body')}>
                                 <Image 
@@ -39,7 +40,7 @@ function PinMessage({ message, messageOwner }) {
                                     src={message.pin && `data:image/jpeg;base64,${pinImage}`}
                                     alt={pinDescription}
                                 />
-                                <div className={cx('pin-message-title')}>{title}</div>
+                                <div className={cx('pin-message-title', theme === 'dark' ? 'dark' : '')}>{title}</div>
                             </div>
                         </NavLink>
                     </div>

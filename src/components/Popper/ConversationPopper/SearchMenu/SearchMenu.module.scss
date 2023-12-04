@@ -23,9 +23,15 @@
         margin-right: 8px;
         border-radius: 14px;
         background-color: var(--white);
+        cursor: pointer;
+        &.dark {
+            color: #e9e9e9;
+        }
         &:hover {
-            cursor: pointer;
-            background-color: var(--normal-button-hover-background-color);
+            background-color: #e9e9e9;
+            &.dark {
+                color: rgba(22, 24, 35);
+            }
         }
     }
 }
@@ -33,7 +39,6 @@
 .search-bar {
     position: relative;
     height: var(--search-height);
-    padding-left: 16px;
     display: flex;
     margin-bottom: 10px;
     background-color: rgba(22, 24, 35, 0.06);
@@ -56,6 +61,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        border-radius: 0 12px 12px 0;
+        &.dark {
+            background-color: var(--input-dark-mode-background-color);
+        }
     }
     .search-input {
         flex: 9;
@@ -65,7 +74,11 @@
         height: 100%;
         background-color: transparent;
         font-family: var(--font-family);
-        padding-right: 10px;
+        padding: 0 10px;
+        border-radius: 12px 0 0 12px;
+        &.dark {
+            background-color: var(--input-dark-mode-background-color);
+        }
     }
 }
 
@@ -81,7 +94,10 @@
     cursor: pointer;
 
     &:hover {
-        background: rgba(22, 24, 35, 0.03);
+        background-color: #e9e9e9;
+        &.dark {
+            background-color: var(--background-popup-dark-hover);
+        }
     }
     .user-avatar {
         height: 32px;
@@ -97,6 +113,9 @@
         }
         .user-username {
             color: rgba(22, 24, 35, 0.5);
+            &.dark {
+                color: rgba(200, 200, 200, 0.5);
+            }
         }
     }
 }

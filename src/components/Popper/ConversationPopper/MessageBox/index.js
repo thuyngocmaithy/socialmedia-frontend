@@ -8,12 +8,13 @@ import * as messageServices from '../../../../services/messageServices';
 import { AccountLoginContext } from '../../../../context/AccountLoginContext';
 import { StompContext } from '../../../../context/StompContext';
 import { MessageContext } from '../../../../context/MessageContext';
-import { ConversationContext } from '../../../../context/ConversationContext';
+import { ThemeContext } from '../../../../context/ThemeContext';
 import { CircularProgress } from '@mui/material';
 
 const cx = classNames.bind(styles);
 
 function MessageBox({ handleChange, chatWith }) {
+    const { theme } = useContext(ThemeContext);
     const { stompClient } = useContext(StompContext);
     const { userId } = useContext(AccountLoginContext);
     const { newMessage } = useContext(MessageContext);
@@ -106,7 +107,7 @@ function MessageBox({ handleChange, chatWith }) {
 
     return (
         <div className={cx('wrapper-message')}>
-            <div className={cx('message-header')}>
+            <div className={cx('message-header', theme === 'dark' ? 'dark' : '')}>
                 <div className={cx('wrapper-back-btn')} onClick={() => handleChange()}>
                     <button className={cx('back-btn')}>
                         <FontAwesomeIcon icon={faAngleLeft} />
@@ -120,7 +121,7 @@ function MessageBox({ handleChange, chatWith }) {
                     {chatWith.messages && chatWith.messages.length !== 0
                         ? chatWith.messages.map((message) => {
                               return <MessageCard key={message.id} message={message}></MessageCard>;
-                          })
+                          })    
                         : ''}
                     <div ref={messagesEndRef} />
                 </div>
@@ -128,7 +129,7 @@ function MessageBox({ handleChange, chatWith }) {
 
             <div className={cx('message-send-option')}>
                 <input
-                    className={cx('message-input')}
+                    className={cx('message-input', theme === 'dark' ? 'dark' : '')}
                     type="text"
                     placeholder="Send a message"
                     onKeyDown={(e) => {
