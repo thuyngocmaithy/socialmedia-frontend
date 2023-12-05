@@ -51,13 +51,13 @@ function Post() {
             id: 'reject',
             numeric: true,
             disablePadding: false,
-            label: 'Không duyệt',
+            label: 'Duyệt',
         },
         {
             id: 'approve',
             numeric: true,
             disablePadding: false,
-            label: 'Duyệt',
+            label: 'Không duyệt',
         },
     ];
     // const base64ToImageUrl = (base64) => `data:image/png;base64,${base64}`;

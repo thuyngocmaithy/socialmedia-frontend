@@ -61,7 +61,7 @@ function CommentCard({ handleTurnOnSelectReport, comment, currentUser }) {
                     <Tippy delay={[0, 100]} content="Xóa nhận xét" placement="bottom">
                         <div className={cx('action-comment')}>
                             <button
-                                className={cx('action-button', 'delete-button')}
+                                className={cx('action-button', 'delete-button', theme === 'dark' ? 'dark' : '')}
                                 onClick={() => confirmDeleteComment(comment)}
                             >
                                 <FontAwesomeIcon icon={faTrash} />
@@ -72,7 +72,7 @@ function CommentCard({ handleTurnOnSelectReport, comment, currentUser }) {
                     <Tippy delay={[0, 100]} content="Báo cáo nhận xét" placement="bottom">
                         <div className={cx('action-comment')}>
                             <button
-                                className={cx('action-button', 'report-button')}
+                                className={cx('action-button', 'report-button', theme === 'dark' ? 'dark' : '')}
                                 onClick={() => handleTurnOnSelectReport(true, comment)}
                                 // onClick={() => turnOnReportComment(comment)}
                             >
@@ -83,12 +83,7 @@ function CommentCard({ handleTurnOnSelectReport, comment, currentUser }) {
                 )}
             </div>
             {confirmDelete && (
-                <Dialog
-                    className={cx(theme === 'dark' ? 'dark' : '')}
-                    fullWidth={true}
-                    maxWidth="sm"
-                    open={confirmDelete}
-                >
+                <Dialog className={theme === 'dark' ? 'dark' : ''} fullWidth={true} maxWidth="sm" open={confirmDelete}>
                     <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
                         Xóa nhận xét?
                     </DialogTitle>

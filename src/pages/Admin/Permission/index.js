@@ -341,7 +341,7 @@ function Permission() {
                     </DialogActions>
                 </form>
             </Dialog>
-            <Dialog className={cx(theme === 'dark' ? 'dark' : '')} fullWidth={true} maxWidth="sm" open={openEdit}>
+            <Dialog className={theme === 'dark' ? 'dark' : ''} fullWidth={true} maxWidth="sm" open={openEdit}>
                 <form onSubmit={handleSubmitEdit}>
                     <DialogTitle sx={{ marginTop: '10px', fontSize: '20px', fontWeight: '700', textAlign: 'center' }}>
                         Chỉnh sửa

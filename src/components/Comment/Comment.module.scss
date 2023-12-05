@@ -85,4 +85,9 @@
     font-size: 14px;
     background-color: #ffff;
     cursor: pointer;
+    fill: currentColor;
+    &.dark {
+        background-color: var(--black);
+        color: #ffff;
+    }
 }

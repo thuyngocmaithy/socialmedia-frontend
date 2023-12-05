@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import classNames from 'classnames/bind';
 import styles from './SelectReportOption.module.scss';
 import Button from '../Button';
@@ -6,11 +6,12 @@ import * as contentReportServices from '../../services/contentReportServices';
 import * as report_pinServices from '../../services/report_pinServices';
 import * as report_commentServices from '../../services/report_commentServices';
 import ActionAlerts from '../Alert';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function SelectReportOption({ handleTurnOnSelectReport, pin, user, comment }) {
-    // const [turnOnSelectReport, handleTurnOnSelectReport] = useState(true);
+    const { theme } = useContext(ThemeContext);
 
     const [listReport, setListReport] = useState([]);
     useEffect(() => {
@@ -50,9 +51,7 @@ function SelectReportOption({ handleTurnOnSelectReport, pin, user, comment }) {
                     userRatify: null,
                     userReport: user,
                 };
-                console.log(report);
-                // result = await report_pinServices.save(report);
-                // console.log(result);
+                result = await report_pinServices.save(report);
             } else {
                 const report = {
                     approve: false,
@@ -72,14 +71,18 @@ function SelectReportOption({ handleTurnOnSelectReport, pin, user, comment }) {
     return (
         <div className={cx('popup-background')}>
             <div className={cx('gray-background')} onClick={() => handleTurnOnSelectReport(false)}></div>
-            <div className={cx('popup-container')}>
+            <div className={cx('popup-container', theme === 'dark' ? 'dark' : '')}>
                 <div className={cx('popup-top')}>
-                    {Object.keys(comment).length === 0 ? <h2>Báo cáo Ghim</h2> : <h2>Báo cáo nhận xét</h2>}
+                    {Object.keys(comment).length === 0 ? (
+                        <h2 className={cx(theme === 'dark' ? 'dark' : '')}>Báo cáo bài đăng</h2>
+                    ) : (
+                        <h2 className={cx(theme === 'dark' ? 'dark' : '')}>Báo cáo nhận xét</h2>
+                    )}
                 </div>
                 <div className={cx('list-report')}>
                     {listReport.map((item, index) => {
                         return (
-                            <div className={cx('item-report')} key={index}>
+                            <div className={cx('item-report', theme === 'dark' ? 'dark' : '')} key={index}>
                                 <div className={cx('wrapper')}>
                                     <input
                                         className={cx('radioBTN')}

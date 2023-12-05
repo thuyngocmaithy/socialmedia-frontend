@@ -21,6 +21,11 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import { ThemeContext } from '../../context/ThemeContext';
 import Button from '../Button';
+import classNames from 'classnames/bind';
+import styles from './Table.module.scss';
+import { useContext } from 'react';
+
+const cx = classNames.bind(styles);
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -138,6 +143,8 @@ EnhancedTableHead.propTypes = {
 function EnhancedTableToolbar(props) {
     const { noedit, title, numSelected, selected, handleAdd, handleDelete } = props;
 
+    const { theme } = useContext(ThemeContext);
+
     return (
         <Toolbar
             sx={{
@@ -161,7 +168,7 @@ function EnhancedTableToolbar(props) {
 
             {numSelected > 0 ? (
                 <IconButton onClick={() => handleDelete(selected)}>
-                    <FontAwesomeIcon icon={faTrash} />
+                    <FontAwesomeIcon className={cx(theme === 'dark' ? 'dark' : '')} icon={faTrash} />
                 </IconButton>
             ) : !noedit ? (
                 <Button red onClick={handleAdd}>
