@@ -139,12 +139,12 @@ function MessageBox({ handleChange, chatWith }) {
                     value={currentMessage}
                 ></input>
                 <div
-                    className={cx('wrapper-send_heart-btn')}
+                    className={cx('wrapper-send_heart-btn', theme === 'dark' ? 'dark' : '')}
                     onClick={() => {
                         sendMessage();
                     }}
                 >
-                    <button className={cx('send_heart-btn')}>
+                    <button className={cx('send_heart-btn', theme === 'dark' ? 'dark' : '')}>
                         {sending ? (
                             <CircularProgress style={{ width: '16px', height: '16px' }} />
                         ) : isEntering ? (

@@ -551,7 +551,7 @@ export const LinkedIcon = ({ className }) => (
             alignContent: 'center',
             alignItems: 'center',
             padding: '10px',
-            borderRadius: '50%',
+            borderRadius: '50%',        
         }}
     >
         <svg

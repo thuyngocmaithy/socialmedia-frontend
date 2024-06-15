@@ -3,16 +3,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import 'tippy.js/dist/tippy.css';
 import { notificationDeleted } from '../../../services/notificationService';
 import Cards from './Card';
 import styles from './NotificationPopper.module.scss';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function NotificationCard({ time, detail, id, type }) {
+    const { theme } = useContext(ThemeContext);
     const [appear, setAppear] = useState(true);
     const contents = [
         {
@@ -31,7 +33,6 @@ function NotificationCard({ time, detail, id, type }) {
                     }
                 />
             ),
-            link: '/friendship/' + detail.id,
         },
     ];
 
@@ -82,11 +83,11 @@ function NotificationCard({ time, detail, id, type }) {
     }
     return (
         appear && (
-            <div className={cx('wrapper-card')}>
+            <div className={cx('wrapper-card', theme === 'dark' ? 'dark' : '')}>
                 <Link to={type.link}>
                     <div className={cx('info')}>
                         <div>
-                            {type.title} <div className={cx('time')}>{time}</div>
+                            {type.title} <div className={cx('time', theme === 'dark' ? 'dark' : '')}>{time}</div>
                         </div>
                         <Tippy
                             interactive

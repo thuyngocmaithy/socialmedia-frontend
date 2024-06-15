@@ -1,5 +1,6 @@
 .search-menu-container {
     height: 100%;
+    overflow-x: hidden;
 }
 
 .header-container {
@@ -84,6 +85,7 @@
 }
 
 .search-result-container {
+    overflow-y: auto;
     max-height: 240px;
     padding-top: 0.8rem;
 }

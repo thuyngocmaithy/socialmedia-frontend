@@ -291,7 +291,6 @@ function DisplayPin() {
         downloadLink.download = `${valTitle}.png`;
         downloadLink.click();
     };
-
     return (
         <div className={cx('wrapper-createPage')}>
             <div className={cx('createBox')}>
@@ -322,10 +321,18 @@ function DisplayPin() {
                                     )}
                                     <Tippy delay={[0, 100]} content="Chia sẻ" placement="bottom">
                                         <button className={cx('btn-end', 'share-btn')}>
-                                            <ShareIcon
-                                                width="2.0rem"
-                                                height="2.0rem"
-                                                className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')}
+                                            <Popper
+                                                idPopper={`share${pinID}`}
+                                                contentTitle={
+                                                    <ShareIcon
+                                                        width="2.0rem"
+                                                        height="2.0rem"
+                                                        className={cx('action', 'gUZ', 'R19', 'U9O', 'kVc')}
+                                                    />
+                                                }
+                                                className={cx('share-menu')}
+                                                body={<SharePopper pin_id={pinID} />}
+                                                widthBody="maxContent"
                                             />
                                         </button>
                                     </Tippy>
@@ -388,11 +395,6 @@ function DisplayPin() {
                                 </div>
                                 <div className={cx('container-user')}>
                                     <AccountInfo userImage={user.avatar} username={user.username} />
-                                    {userId === user.id ? null : (
-                                        <Button className={cx('addFriendBtn')} primary>
-                                            Kết bạn
-                                        </Button>
-                                    )}
                                 </div>
                                 {/* comment & like  */}
                                 <div className={cx('comment-container')}>

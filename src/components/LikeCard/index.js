@@ -54,10 +54,12 @@ function LikeCard({ pinID, currentUser }) {
         const fetchApi = async () => {
             const result = await likeServices.getLikeByPinId(pinID);
 
+            console.log(result);
             for (let i = 0; i < result.length; i++) {
                 if (result[i].user.id === currentUser.id) {
                     const rs = await likeServices.del(result[i]);
-                    notificationDeleted(result.id);
+                    notificationDeleted(result[0].notification.id);
+
                     break;
                 }
             }

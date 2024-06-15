@@ -52,7 +52,11 @@ function SearchMenu({ handleChange }) {
             .then((res) => {
                 let temp = [];
                 for (let i = 0; i < res.length; i++) {
-                    if (res[i].username.includes(debouncedValue) && res[i].id !== userId) {
+                    if (
+                        (res[i].username.toLowerCase().includes(debouncedValue.toLowerCase()) ||
+                            res[i].fullname.toLowerCase().includes(debouncedValue.toLowerCase())) &&
+                        res[i].id !== userId
+                    ) {
                         temp.push(res[i]);
                     }
                 }

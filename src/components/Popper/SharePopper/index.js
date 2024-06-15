@@ -9,10 +9,12 @@ import { CircularProgress } from '@mui/material';
 import { StompContext } from '../../../context/StompContext';
 import { ConversationContext } from '../../../context/ConversationContext';
 import ShareResult from './ShareResult';
+import { ThemeContext } from '../../../context/ThemeContext';
 
 const cx = classNames.bind(styles);
 
 function SharePopper({ user_id, pin_id }) {
+    const { theme } = useContext(ThemeContext);
     const { userId } = useContext(AccountLoginContext);
     const [listUser, setListUser] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -127,7 +129,7 @@ function SharePopper({ user_id, pin_id }) {
                     return <ShareResult key={index} user={user} handleSelect={share}></ShareResult>;
                 })}
                 <div className={cx('copy-link-option')} onClick={handleCopy}>
-                    <LinkedIcon className={cx('grey-button')} />
+                    <LinkedIcon className={cx('grey-button', theme === 'dark' ? 'dark' : '')} />
                     <span>{copyTitle}</span>
                 </div>
             </div>

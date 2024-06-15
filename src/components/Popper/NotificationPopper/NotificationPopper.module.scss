@@ -17,6 +17,9 @@
     & + .wrapper-card {
         margin-top: 10px;
     }
+    &.dark {
+        background-color: var(--background-popup-dark-hover);
+    }
 }
 
 .title {
@@ -37,6 +40,9 @@
     margin-left: 5px;
     white-space: nowrap; /* Không ngắt dòng ngay tại đây */
     overflow: hidden; /* Ẩn nội dung vượt ra khỏi khung container */
+    &.dark {
+        color: var(--white-500);
+    }
 }
 
 .action {
